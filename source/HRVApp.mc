@@ -6,7 +6,7 @@ using Toybox.Timer;
 using Toybox.Attention;
 
 enum {
-
+	//test
 	// Settings memory locations
 	TIMESTAMP = 0,
 	APP_NAME = 1,
