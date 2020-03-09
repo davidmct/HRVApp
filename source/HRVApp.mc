@@ -69,6 +69,7 @@ enum {
 	FENIX = 1,
 	FORERUNNER = 2,
 	VIVOACTIVE = 3,
+	FENIX6 = 4,
 
 	// Views
 	TEST_VIEW = 0,

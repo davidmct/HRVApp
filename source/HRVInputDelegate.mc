@@ -75,7 +75,7 @@ class HRVInputDelegate extends Ui.InputDelegate {
 
     function onUp() {
 
-		if(FENIX == app.device || FORERUNNER == app.device) {
+		if(FENIX == app.device || FORERUNNER == app.device || FENIX6 == app.device) {
 
 			Ui.switchToView(app.plusView(), new HRVInputDelegate(), slide(Ui.SLIDE_LEFT));
 		}
@@ -87,7 +87,7 @@ class HRVInputDelegate extends Ui.InputDelegate {
 
     function onDown() {
 
-		if(FENIX == app.device || FORERUNNER == app.device) {
+		if(FENIX == app.device || FORERUNNER == app.device || FENIX6 == app.device) {
 
 			Ui.switchToView(app.subView(), new HRVInputDelegate(), slide(Ui.SLIDE_RIGHT));
 		}

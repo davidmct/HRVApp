@@ -44,6 +44,15 @@ class WatchView extends Ui.View {
 			line1Y = 94;
 			line2Y = 124;
 			col1 = 109;
+        } else if(FENIX6 == app.device) {
+        	meridiemFont = 2;		// Gfx.FONT_SMALL
+			timeY = 104;
+			titleY = 176;
+			meridiemX = 0;
+			meridiemY = 109;
+			line1Y = 94;
+			line2Y = 124;
+			col1 = 109;
         }
 
 		var font = 1;		// Gfx.FONT_TINY

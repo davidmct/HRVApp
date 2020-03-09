@@ -77,6 +77,22 @@ class TestView extends Ui.View {
 			col1 = 80;
 			col2 = 109;
 			col3 = 154;
+        } else if(FENIX6 == app.device) {
+        	numFont = 5;		// Gfx.FONT_NUMBER_MEDIUM
+        	titleFont = 3;		// Gfx.FONT_MEDIUM
+			titleY = 47;
+			strapY = 67;
+			pulseY = 83;
+			pulseLblY = 50;
+			pulseTxtY = 73;
+			msgTxtY = 108;
+			resLblY = 134;
+			resTxtY = 157;
+			line1Y = 94;
+			line2Y = 124;
+			col1 = 80;
+			col2 = 109;
+			col3 = 154;
         }
 
         var font = 1;		// Gfx.FONT_TINY
