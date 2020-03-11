@@ -1,101 +1,59 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System as Sys;
 
-class HRVInputDelegate extends Ui.InputDelegate {
+class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     var app;
+    
+    function initialize() {
+		BehaviorDelegate.initialize();
+		app = App.getApp();
+	}
+       
+    function onSelect() {
+    	// same as enter, tap or click
+    	return onEnter();  
+    }
+    
+    function onBack() {
+    	// same as escape
+    	return onEscape();
+    }
+	
+	function onNextPage() {
+		// down or swipe UP
+		Ui.switchToView(app.plusView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_LEFT));
+		return true;
+    }
 
+    function onPreviousPage() {
+		// Up or swipe down
+		Ui.switchToView(app.subView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_RIGHT));
+		return true;
+    }
+
+
+    // handle other key presses
     function onKey(event) {
 
     	if(Ui.KEY_ENTER == event.getKey()) {
-
+			// menu key
 			onEnter();
 		}
 		else if(Ui.KEY_ESC == event.getKey()) {
-
+			// same as back
 			onEscape();
       	}
       	else if(Ui.KEY_MENU == event.getKey()) {
-
 			onMenu();
       	}
-		else if(Ui.KEY_UP == event.getKey()) {
-
-			onDown();
-		}
-		else if(Ui.KEY_DOWN == event.getKey()) {
-
-			onUp();
-		}
       	else if(Ui.KEY_POWER == event.getKey()) {
-
 			onPower();
 		}
 		return true;
 	}
-
-	function onSwipe(event) {
-
-        if(Ui.SWIPE_LEFT == event.getDirection()) {
-
-            onNextPage();
-        }
-        else if(Ui.SWIPE_RIGHT == event.getDirection()) {
-
-            onPreviousPage();
-        }
-        //else if(Ui.SWIPE_UP == event.getDirection()) {
-
-		//		onUp();
-        //}
-        //else if(Ui.SWIPE_DOWN == event.getDirection()) {
-
-		//	onDown();
-        //}
-
-        return true;
-    }
-
-    function onTap(event) {
-
-        onEnter();
-        return true;
-    }
-
-    function onNextPage() {
-
-		Ui.switchToView(app.plusView(), new HRVInputDelegate(), slide(Ui.SLIDE_LEFT));
-    }
-
-    function onPreviousPage() {
-
-		Ui.switchToView(app.subView(), new HRVInputDelegate(), slide(Ui.SLIDE_RIGHT));
-    }
-
-    function onUp() {
-
-		if(FENIX == app.device || FORERUNNER == app.device || FENIX6 == app.device) {
-
-			Ui.switchToView(app.plusView(), new HRVInputDelegate(), slide(Ui.SLIDE_LEFT));
-		}
-		else {
-
-			Ui.switchToView(app.plusView(), new HRVInputDelegate(), slide(Ui.SLIDE_UP));
-		}
-    }
-
-    function onDown() {
-
-		if(FENIX == app.device || FORERUNNER == app.device || FENIX6 == app.device) {
-
-			Ui.switchToView(app.subView(), new HRVInputDelegate(), slide(Ui.SLIDE_RIGHT));
-		}
-		else {
-
-			Ui.switchToView(app.subView(), new HRVInputDelegate(), slide(Ui.SLIDE_DOWN));
-		}
-    }
 
     function slide(direction) {
 
@@ -119,13 +77,13 @@ class HRVInputDelegate extends Ui.InputDelegate {
 
 		if(0 < app.viewNum) {
 
-			Ui.switchToView(app.getView(TEST_VIEW), new HRVInputDelegate(), Ui.SLIDE_RIGHT);
-			return;
+			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+			return true;
 		}
 		else if(app.isNotSaved && MIN_SAMPLES < app.dataCount) {
 
 			Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
-			return;
+			return true;
     	}
     	else if(app.isFinished) {
 
@@ -149,6 +107,7 @@ class HRVInputDelegate extends Ui.InputDelegate {
     	}
 
     	app.resetGreenTimer();
+    	return true;
 	}
 
 	function onMenu() {
@@ -156,6 +115,7 @@ class HRVInputDelegate extends Ui.InputDelegate {
 		app.stopGreenTimer();
 		app.stopViewTimer();
 		Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT);
+		return true;
     }
 
 	function onEscape() {
@@ -167,29 +127,26 @@ class HRVInputDelegate extends Ui.InputDelegate {
 				app.stopTest();
 			}
 			if(app.isFinished && app.isNotSaved && MIN_SAMPLES < app.dataCount) {
-
 				app.isClosing = true;
 				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 			}
 			else {
-
 				app.onStop( null);
 				Ui.popView(Ui.SLIDE_RIGHT);
 			}
 		}
 		else {
 
-			Ui.switchToView(app.getView(TEST_VIEW), new HRVInputDelegate(), Ui.SLIDE_RIGHT);
+			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 		}
+		return true;
 	}
 
 	function onPower() {
 
 		app.resetGreenTimer();
+		return true;
 	}
 
-	function initialize() {
-		InputDelegate.initialize();
-		app = App.getApp();
-	}
+
 }

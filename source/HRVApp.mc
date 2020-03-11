@@ -595,7 +595,7 @@ class HRVApp extends App.AppBase {
     //! Return the initial view of your application here
     function getInitialView() {
 
-		return [ new TestView(), new HRVInputDelegate() ];
+		return [ new TestView(), new HRVBehaviourDelegate() ];
     }
 
     function onAntMsg(msg)
@@ -733,7 +733,7 @@ class HRVApp extends App.AppBase {
     		closeCh();
     	}
     	if(WATCH_VIEW != viewNum) {
-    		Ui.switchToView(getView(WATCH_VIEW), new HRVInputDelegate(), Ui.SLIDE_LEFT);
+    		Ui.switchToView(getView(WATCH_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_LEFT);
     	}
     }
 
