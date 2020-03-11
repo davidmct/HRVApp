@@ -15,16 +15,16 @@
     <string id="TimerTime">60</string>
     <string id="AutoStart">3600</string>
     <string id="AutoTime">3600</string>
-    <string id="BgCol">4</string>
-    <string id="LblCol">11</string>
-    <string id="TxtCol">14</string>
-    <string id="HrvCol">11</string>
+    <string id="BgCol">3</string>
+    <string id="LblCol">10</string>
+    <string id="TxtCol">13</string>
+    <string id="HrvCol">10</string>
     <string id="AvgHrvCol">12</string>
-    <string id="PulseCol">14</string>
+    <string id="PulseCol">13</string>
     <string id="AvgPulseCol">6</string>
     
-    <string id="inhaleTime">3</string>
-    <string id="exhaleTime">3</string>
+    <string id="inhaleTime">4</string>
+    <string id="exhaleTime">4</string>
     <string id="relaxTime">2</string>
 
 </resources>

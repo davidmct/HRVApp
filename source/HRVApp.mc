@@ -35,6 +35,8 @@ enum {
 	INHALE_TIME = 20,
 	EXHALE_TIME = 21,
 	RELAX_TIME = 22,
+	
+	INITIAL_RUN = 23,
 
 	// Results memory locations. (X) <> (X + 29)
 	RESULTS = 100,
@@ -202,82 +204,89 @@ class HRVApp extends App.AppBase {
 
 		// Retrieve saved settings from memory
 		resetSettings();
-    	var value;
-
-    	value = getProperty(GREEN_TIME);
-		if(null != value) {
-			// ensure a reasonable minimum
-			if(10 > value){
-				value = 10;
-			}
-    		greenTimeSet = value;
-    	}
-    	value = getProperty(SOUND);
-		if(null != value) {
-    		soundSet = value;
-    	}
-    	value = getProperty(VIBE);
-		if(null != value) {
-    		vibeSet = value;
-    	}
-    	value = getProperty(TEST_TYPE);
-		if(null != value) {
-    		testTypeSet = value;
-    	}
-    	value = getProperty(TIMER_TIME);
-		if(null != value) {
-    		timerTimeSet = value;
-    	}
-    	value = getProperty(AUTO_START);
-		if(null != value) {
-    		autoStartSet = value;
-    	}
-    	value = getProperty(AUTO_TIME);
-		if(null != value) {
-    		autoTimeSet = value;
-    	}
-    	value = getProperty(BG_COL);
-		if(null != value) {
-    		bgColSet = value;
-    	}
-    	value = getProperty(LABEL_COL);
-		if(null != value) {
-    		lblColSet = value;
-    	}
-    	value = getProperty(TEXT_COL);
-		if(null != value) {
-    		txtColSet = value;
-    	}
-    	//value = getProperty(HRV_COL);
-		//if(null != value) {
-    	//	hrvColSet = value;
-    	//}
-    	//value = getProperty(AVG_HRV_COL);
-		//if(null != value) {
-    	//	avgHrvColSet = value;
-    	//}
-    	//value = getProperty(PULSE_COL);
-		//if(null != value) {
-    	//	pulseColSet = value;
-    	//}
-    	//value = getProperty(AVG_PULSE_COL);
-		//if(null != value) {
-    	//	avgPulseColSet = value;
-    	//}
-
-    	value = getProperty(INHALE_TIME);
-		if(null != value) {
-    		inhaleTimeSet = value;
-    	}
-    	value = getProperty(EXHALE_TIME);
-		if(null != value) {
-    		exhaleTimeSet = value;
-    	}
-    	value = getProperty(RELAX_TIME);
-		if(null != value) {
-    		relaxTimeSet = value;
-    	}
-
+		
+		// On very first use of app don't read in properties!
+		var value;
+		
+		value = getProperty(INITIAL_RUN);
+		if (value == null) {
+			setProperty(INITIAL_RUN, true);
+		} else {
+	    	value = getProperty(GREEN_TIME);
+			if(null != value) {
+				// ensure a reasonable minimum
+				if(10 > value){
+					value = 10;
+				}
+	    		greenTimeSet = value;
+	    	}
+	    	value = getProperty(SOUND);
+			if(null != value) {
+	    		soundSet = value;
+	    	}
+	    	value = getProperty(VIBE);
+			if(null != value) {
+	    		vibeSet = value;
+	    	}
+	    	value = getProperty(TEST_TYPE);
+			if(null != value) {
+	    		testTypeSet = value;
+	    	}
+	    	value = getProperty(TIMER_TIME);
+			if(null != value) {
+	    		timerTimeSet = value;
+	    	}
+	    	value = getProperty(AUTO_START);
+			if(null != value) {
+	    		autoStartSet = value;
+	    	}
+	    	value = getProperty(AUTO_TIME);
+			if(null != value) {
+	    		autoTimeSet = value;
+	    	}
+	    	value = getProperty(BG_COL);
+			if(null != value) {
+	    		bgColSet = value;
+	    	}
+	    	value = getProperty(LABEL_COL);
+			if(null != value) {
+	    		lblColSet = value;
+	    	}
+	    	value = getProperty(TEXT_COL);
+			if(null != value) {
+	    		txtColSet = value;
+	    	}
+	    	//value = getProperty(HRV_COL);
+			//if(null != value) {
+	    	//	hrvColSet = value;
+	    	//}
+	    	//value = getProperty(AVG_HRV_COL);
+			//if(null != value) {
+	    	//	avgHrvColSet = value;
+	    	//}
+	    	//value = getProperty(PULSE_COL);
+			//if(null != value) {
+	    	//	pulseColSet = value;
+	    	//}
+	    	//value = getProperty(AVG_PULSE_COL);
+			//if(null != value) {
+	    	//	avgPulseColSet = value;
+	    	//}
+	
+	    	value = getProperty(INHALE_TIME);
+			if(null != value) {
+	    		inhaleTimeSet = value;
+	    	}
+	    	value = getProperty(EXHALE_TIME);
+			if(null != value) {
+	    		exhaleTimeSet = value;
+	    	}
+	    	value = getProperty(RELAX_TIME);
+			if(null != value) {
+	    		relaxTimeSet = value;
+	    	}
+		}
+		
     	 if(VIVOACTIVE == device) {
     	 	soundSet = 0;
     	 }
