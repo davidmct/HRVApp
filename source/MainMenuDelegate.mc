@@ -1,25 +1,21 @@
 using Toybox.WatchUi as Ui;
 
-class MainMenuDelegate extends Ui.MenuInputDelegate {
+class MainMenuDelegate extends Ui.Menu2InputDelegate {
+    function initialize() {
+        Menu2InputDelegate.initialize();
+    }
 
-	function initialize() { MenuInputDelegate.initialize();}
-	
-    function onMenuItem(item) {
-
-        if(item == :MiTestType) {
-
+    function onSelect(item) {
+        var id = item.getId();
+    
+     	if( item.getId().equals("test")) {
             Ui.pushView(new Rez.Menus.TestTypeMenu(), new TestTypeMenuDelegate(), Ui.SLIDE_LEFT);
         }
-        else if(item == :MiSettings) {
+        else if( item.getId().equals("settings") ) {
 
             Ui.pushView(new Rez.Menus.SettingsMenu(), new SettingsMenuDelegate(), Ui.SLIDE_LEFT);
         }
-        //else if(item == :MiColor) {
-		//
-        //    Ui.pushView(new Rez.Menus.ColorMenu(), new ColorMenuDelegate(), Ui.SLIDE_LEFT);
-        //}
-        else if(item == :MiAbout) {
-
+        else if( item.getId().equals("about"))  {
             Ui.pushView(new Rez.Menus.AboutMenu(), new EmptyMenuDelegate(), Ui.SLIDE_LEFT);
         }
     }

@@ -103,7 +103,15 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onMenu() {
 		app.stopGreenTimer();
 		app.stopViewTimer();
-		Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT);
+		
+		// Generate a new Menu for mainmenu
+        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main")});
+        // add items
+        menu.addItem(new Ui.MenuItem("Test type", null, "test", null));
+        menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
+        menu.addItem(new Ui.MenuItem("About", null, "about", null));
+        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_LEFT );
+		//Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT);
 		return true;
     }
 
@@ -135,4 +143,40 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 
+}
+
+// This is the custom drawable we will use for our main menu title
+class DrawableMenuTitle extends Ui.Drawable {
+    var mIsTitleSelected = false;
+    hidden var mTitle = "unset";
+
+    function initialize(label) {
+        Drawable.initialize({});
+        mTitle = label;
+    }
+
+    function setSelected(isTitleSelected) {
+        mIsTitleSelected = isTitleSelected;
+    }
+
+    // Draw the application icon and main menu title
+    function draw(dc) {
+        var spacing = 2;
+        var appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
+        var bitmapWidth = appIcon.getWidth();
+        var labelWidth = dc.getTextWidthInPixels(mTitle, Graphics.FONT_MEDIUM);
+
+        var bitmapX = (dc.getWidth() - (bitmapWidth + spacing + labelWidth)) / 2;
+        var bitmapY = (dc.getHeight() - appIcon.getHeight()) / 2;
+        var labelX = bitmapX + bitmapWidth + spacing;
+        var labelY = dc.getHeight() / 2;
+
+        var bkColor = mIsTitleSelected ? Graphics.COLOR_BLUE : Graphics.COLOR_BLACK;
+        dc.setColor(bkColor, bkColor);
+        dc.clear();
+
+        dc.drawBitmap(bitmapX, bitmapY, appIcon);
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(labelX, labelY, Graphics.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
 }
