@@ -49,55 +49,9 @@ class TestView extends Ui.View {
 	    var col2 = 102;
 	    var col3 = 164;
 
-		if(FORERUNNER == app.device) {
-        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-			resLblY = 100;
-			pulseLblY = 12;
-	    	pulseTxtY = 40;
-        }
-        else if(VIVOACTIVE == app.device) {
-        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-        }
-        else if(EPIX == app.device) {
-        	numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-        }
-        else if(FENIX == app.device) {
-        	numFont = 5;		// Gfx.FONT_NUMBER_MEDIUM
-        	titleFont = 3;		// Gfx.FONT_MEDIUM
-			titleY = 47;
-			strapY = 67;
-			pulseY = 83;
-			pulseLblY = 50;
-			pulseTxtY = 73;
-			msgTxtY = 108;
-			resLblY = 134;
-			resTxtY = 157;
-			line1Y = 94;
-			line2Y = 124;
-			col1 = 80;
-			col2 = 109;
-			col3 = 154;
-        } else if(FENIX6 == app.device) {
-        	numFont = 5;		// Gfx.FONT_NUMBER_MEDIUM
-        	titleFont = 3;		// Gfx.FONT_MEDIUM
-			titleY = 47;
-			strapY = 67;
-			pulseY = 83;
-			pulseLblY = 50;
-			pulseTxtY = 73;
-			msgTxtY = 108;
-			resLblY = 134;
-			resTxtY = 157;
-			line1Y = 94;
-			line2Y = 124;
-			col1 = 80;
-			col2 = 109;
-			col3 = 154;
-        }
-
-        var font = 1;		// Gfx.FONT_TINY
-		var msgFont = 3;	// Gfx.FONT_MEDIUM
-		var just = 5;		// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER
+        var font = Gfx.FONT_TINY;		// Gfx.FONT_TINY 1
+		var msgFont = Gfx.FONT_MEDIUM;	// Gfx.FONT_MEDIUM 3
+		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER;		// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER 5
 
     	// HRV
 		var hrv = app.hrv;
@@ -220,6 +174,70 @@ class TestView extends Ui.View {
 	    		pulseCol = GREEN;
 	    	}
     	}
+    	
+    	// adjust defaults for actual device now we have text strings
+    	if(FORERUNNER == app.device) {
+        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
+			resLblY = 100;
+			pulseLblY = 12;
+	    	pulseTxtY = 40;
+        }
+        else if(VIVOACTIVE == app.device) {
+        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
+        }
+        else if(EPIX == app.device) {
+        	numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
+        }
+        else if(FENIX == app.device) {
+        	numFont = Gfx.FONT_NUMBER_MEDIUM;	
+        	titleFont = Gfx.FONT_MEDIUM;
+			titleY = 47;
+			strapY = 67;
+			pulseY = 83;
+			pulseLblY = 50;
+			pulseTxtY = 73;
+			msgTxtY = 108;
+			resLblY = 134;
+			resTxtY = 157;
+			line1Y = 94;
+			line2Y = 124;
+			col1 = 80;
+			col2 = 109;
+			col3 = 154;
+        } else if(FENIX6 == app.device) {
+        	numFont =  Gfx.FONT_NUMBER_MILD; // was medium
+        	titleFont = Gfx.FONT_MEDIUM;
+        	
+			titleY = 45;
+			// text about strap and pulse
+			var txt_size = [null, null];
+			txt_size = dc.getTextDimensions("HRV TEST", titleFont);
+			strapY = titleY + txt_size[1] + 5;
+			// actual heart rate and label
+			pulseLblY = titleY + txt_size[1]/2 + 5;			
+			txt_size = dc.getTextDimensions( strapTxt, font);
+			pulseY = strapY + txt_size[1] -5;
+			pulseTxtY = strapY+(pulseY-strapY)/2;			
+			
+			// status message
+			txt_size = dc.getTextDimensions( pulseTxt, font);
+			var heightPulse = txt_size[1];
+			msgTxtY = pulseY + heightPulse;
+			
+			// results strip under titles TIMER and HRV
+			txt_size = dc.getTextDimensions( msgTxt, msgFont);
+			resLblY = msgTxtY + txt_size[1] - 2;
+			txt_size = dc.getTextDimensions( "TIMER", font);
+			resTxtY = resLblY + txt_size[1];
+			// lines splitting fields
+			line1Y = msgTxtY - 15;
+			line2Y = resLblY - 20;
+			// Columns to display fields in
+			col1 = dc.getWidth() /4 ;
+			col2 = dc.getWidth() / 2;
+			col3 = col1 + dc.getWidth() / 2 ;
+        }
+    	
 
 		// Draw the view
         MapSetColour(dc, TRANSPARENT, app.bgColSet);
@@ -228,7 +246,7 @@ class TestView extends Ui.View {
         MapSetColour( dc, app.lblColSet, TRANSPARENT);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
-		dc.drawText(col1, titleY, titleFont, "HRV TEST", just);
+		dc.drawText(col2, titleY, titleFont, "HRV TEST", just);
 		dc.drawText(col3, pulseLblY, font, "BPM", just);
 		dc.drawText(col1, resLblY, font, "TIMER", just);
 		dc.drawText(col3, resLblY, font, "HRV", just);

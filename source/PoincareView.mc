@@ -113,7 +113,9 @@ class PoincareView extends Ui.View {
 		}
 
 		// add code here
-		
+		// Draw the view
+		MapSetColour(dc, TRANSPARENT, app.bgColSet);
+		dc.clear();
 		
 		Sys.println("In POINCARE VIEW");
 		

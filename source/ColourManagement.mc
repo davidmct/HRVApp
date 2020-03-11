@@ -41,7 +41,7 @@ enum {
 		} else {
 			col = index;
 		}
-		Sys.println("mapColour from " + index + " to " + col);
+		//Sys.println("mapColour from " + index + " to " + col);
 		return colours[col];
 		
 	}
