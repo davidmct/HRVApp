@@ -60,10 +60,10 @@ class ResultView extends Ui.View {
 		expected = (((1 + time) / 60.0) * app.avgPulse).toNumber();
 
     	// Draw the view
-        dc.setColor(-1, app.bgColSet);
+        MapSetColour( dc, TRANSPARENT, app.bgColSet);
         dc.clear();
 
-        dc.setColor(app.lblColSet, -1);
+        MapSetColour( dc, app.lblColSet, TRANSPARENT);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 		dc.drawText(col1, timeY, font, "Time :", justR);
@@ -72,7 +72,7 @@ class ResultView extends Ui.View {
 		dc.drawText(col1, samplesY, font, "Samples :", justR);
 		dc.drawText(col1, expectedY, font, "Expected :", justR);
 
-		dc.setColor(app.txtColSet, -1);
+		MapSetColour( dc, app.txtColSet, TRANSPARENT);
 		dc.drawText(col2, timeY, font, app.timerFormat(time), justL);
 		dc.drawText(col2, pulseY, font, app.avgPulse.toString(), justL);
 		dc.drawText(col2, hrvY, font, app.hrv.toString(), justL);

@@ -222,10 +222,10 @@ class TestView extends Ui.View {
     	}
 
 		// Draw the view
-        dc.setColor(-1, app.bgColSet);
+        MapSetColour(dc, TRANSPARENT, app.bgColSet);
         dc.clear();
 
-        dc.setColor(app.lblColSet, -1);
+        MapSetColour( dc, app.lblColSet, TRANSPARENT);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 		dc.drawText(col1, titleY, titleFont, "HRV TEST", just);
@@ -233,16 +233,16 @@ class TestView extends Ui.View {
 		dc.drawText(col1, resLblY, font, "TIMER", just);
 		dc.drawText(col3, resLblY, font, "HRV", just);
 
-		dc.setColor(app.txtColSet, -1);
+		MapSetColour( dc, app.txtColSet, TRANSPARENT);
 		dc.drawText(col3, pulseTxtY, numFont, pulse.toString(), just);
 		dc.drawText(col2, msgTxtY, msgFont, msgTxt, just);
 		dc.drawText(col1, resTxtY, numFont, app.timerFormat(timerTime), just);
 		dc.drawText(col3, resTxtY, numFont, hrv.toString(), just);
 
-		dc.setColor(strapCol, -1);
+		MapSetColour( dc, strapCol, TRANSPARENT);
 		dc.drawText(col1, strapY, font, strapTxt, just);
 
-		dc.setColor(pulseCol, -1);
+		MapSetColour( dc, pulseCol, TRANSPARENT);
 		dc.drawText(col1, pulseY, font, pulseTxt, just);
 
 		// Testing only. Draw used memory

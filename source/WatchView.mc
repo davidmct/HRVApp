@@ -94,21 +94,21 @@ class WatchView extends Ui.View {
 		var col2 = col1 + meridiemX + textW / 2;
 
 		// Draw the view
-		dc.setColor(-1, app.bgColSet);
+		MapSetColour(dc, TRANSPARENT, app.bgColSet);
 		dc.clear();
 
 		// Draw the lines
-		dc.setColor(app.lblColSet, app.bgColSet);
+		MapSetColour(dc, app.lblColSet, app.bgColSet);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 
 		// Fix for Forerunner. Text doesn't leave gap to lines
 		if(FORERUNNER == app.device) {
 			var x = (dc.getWidth() / 2) - (textW / 2) - 3;
-			dc.setColor(app.bgColSet, app.bgColSet);
+			MapSetColour(dc, app.bgColSet, app.bgColSet);
 			dc.drawLine(x, line1Y, x + textW + 6, line1Y);
 			dc.drawLine(x, line2Y, x + textW + 6, line2Y);
-			dc.setColor(app.lblColSet, app.bgColSet);
+			MapSetColour(dc, lblColSet, app.bgColSet);
         }
 
 		dc.drawText(col1, timeY, numFont, timeStr, just);

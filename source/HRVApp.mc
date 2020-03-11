@@ -1,9 +1,14 @@
 using Toybox.Application as App;
+using Toybox.Application.Storage as Store;
 using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Ant as Ant;
 using Toybox.Timer;
 using Toybox.Attention;
+using Toybox.System as Sys;
+
+// we should be saving results to storage NOT properties
+//Storage.setValue( tag, value) eg ("results_array", results); where results is an array
 
 enum {
 	//test
@@ -34,22 +39,6 @@ enum {
 	// Results memory locations. (X) <> (X + 29)
 	RESULTS = 100,
 
-	// Colors
-	WHITE = 16777215,
-	LT_GRAY = 11184810,
-	DK_GRAY = 5592405,
-	BLACK = 0,
-	RED = 16711680,
-	DK_RED = 11141120,
-	ORANGE = 16733440,
-	YELLOW = 16755200,
-	GREEN = 65280,
-	DK_GREEN = 43520,
-	BLUE = 43775,
-	DK_BLUE = 255,
-	PURPLE = 11141375,
-	PINK = 16711935,
-
 	// Tones
 	TONE_KEY = 0,
 	TONE_START = 1,
@@ -76,6 +65,8 @@ enum {
 	RESULT_VIEW = 1,
 	GRAPH_VIEW = 2,
 	WATCH_VIEW = 3,
+	POINCARE_VIEW = 4,
+	NUM_VIEWS = 5,
 
 	// Test minimum
 	MIN_SAMPLES = 20
@@ -180,6 +171,7 @@ class HRVApp extends App.AppBase {
 		timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
 		autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
 		autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
+		// ColSet are index into colour map
 		bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
 		lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
 		txtColSet = Ui.loadResource(Rez.Strings.TxtCol).toNumber();
@@ -848,7 +840,7 @@ class HRVApp extends App.AppBase {
 
     function plusView() {
 
-    	var plusView = (viewNum + 1) % 4;
+    	var plusView = (viewNum + 1) % NUM_VIEWS;
     	return getView(plusView);
     }
 
@@ -859,7 +851,7 @@ class HRVApp extends App.AppBase {
 
     function subView() {
 
-    	var subView = (viewNum + 7) % 4;
+    	var subView = (viewNum + 7) % NUM_VIEWS;
     	return getView(subView);
     }
 
@@ -876,6 +868,9 @@ class HRVApp extends App.AppBase {
 		}
 		else if(WATCH_VIEW == viewNum) {
 			return new WatchView();
+		}
+		else if(POINCARE_VIEW == viewNum) {
+			return new PoincareView();
 		}
 		else {
 			return new TestView();

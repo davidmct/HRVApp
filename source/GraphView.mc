@@ -112,22 +112,22 @@ class GraphView extends Ui.View {
 		}
 
 		// Prepare the screen
-		dc.setColor(-1, app.bgColSet);
+		MapSetColour(dc, TRANSPARENT, app.bgColSet);
 		dc.clear();
 
 		// Draw the lines
-		dc.setColor(DK_GRAY, app.bgColSet);
+		MapSetColour(dc,DK_GRAY, app.bgColSet);
 		for(var i = 0; i < 7; i++) {
 
 			var y = line1Y - 30 + i * 15;
 			dc.drawLine(leftX, y, rightX, y);
 		}
-		dc.setColor(app.lblColSet, -1);
+		MapSetColour(dc, app.lblColSet, TRANSPARENT);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 
 		// Draw the numbers
-		dc.setColor(DK_GRAY, app.bgColSet);
+		MapSetColour(dc, DK_GRAY, app.bgColSet);
 		for(var i = 1; i < 6; i += 2) {
 
 			var y = ceilY + (((i * gap) * scaleY) / 2);
@@ -177,17 +177,17 @@ class GraphView extends Ui.View {
 			 			var avgPulse2 = scale(app.results[iiii + 4]);
 
 						dc.setPenWidth(2);
-						dc.setColor(DK_RED, app.bgColSet);
+						MapSetColour(dc, DK_RED, app.bgColSet);
 						dc.drawLine(leftX + index1, floorY - avgPulse1, leftX + index2, floorY - avgPulse2);
 
-						dc.setColor(DK_BLUE, app.bgColSet);
+						MapSetColour(dc, DK_BLUE, app.bgColSet);
 						dc.drawLine(leftX + index1, floorY - avgHrv1, leftX + index2, floorY - avgHrv2);
 
 						dc.setPenWidth(3);
-						dc.setColor(ORANGE, app.bgColSet);
+						MapSetColour(dc, ORANGE, app.bgColSet);
 						dc.drawLine(leftX + index1, floorY - pulse1, leftX + index2, floorY - pulse2);
 
-						dc.setColor(BLUE, app.bgColSet);
+						MapSetColour(dc, BLUE, app.bgColSet);
 						dc.drawLine(leftX + index1, floorY - hrv1, leftX + index2, floorY - hrv2);
 
 						// Change the value of i. So that it starts back at this point. Break loop
@@ -199,10 +199,10 @@ class GraphView extends Ui.View {
 				// If only one reading then draw dots. There are no averages
 				if(1 == drawDots) {
 
-					dc.setColor(ORANGE, app.bgColSet);
+					MapSetColour(dc, ORANGE, app.bgColSet);
 					dc.fillCircle(leftX + index1, floorY - pulse1, 2);
 
-					dc.setColor(BLUE, app.bgColSet);
+					MapSetColour(dc, BLUE, app.bgColSet);
 					dc.fillCircle(leftX + index1, floorY - hrv1, 2);
 				}
 			}
@@ -211,16 +211,16 @@ class GraphView extends Ui.View {
 		// Draw the labels
 		dc.setPenWidth(1);
 
-		dc.setColor(DK_RED, app.bgColSet);
+		MapSetColour(dc, DK_RED, app.bgColSet);
 		dc.drawText(ctrX, floorY + 20, font, " AVG PULSE", 6);
 
-		dc.setColor(ORANGE, app.bgColSet);
+		MapSetColour(dc, ORANGE, app.bgColSet);
 		dc.drawText(ctrX, ceilY - 20, font, " PULSE", 6);
 
-		dc.setColor(DK_BLUE, app.bgColSet);
+		MapSetColour(dc, DK_BLUE, app.bgColSet);
 		dc.drawText(ctrX, floorY + 20, font, "AVG HRV ", 4);
 
-		dc.setColor(BLUE, app.bgColSet);
+		MapSetColour(dc, BLUE, app.bgColSet);
 		dc.drawText(ctrX, ceilY - 20, font, "HRV ", 4);
 
 		// Testing only. Draw used memory

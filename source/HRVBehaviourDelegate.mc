@@ -34,7 +34,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		return true;
     }
 
-
     // handle other key presses
     function onKey(event) {
 
@@ -59,24 +58,19 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     	//if((Ui.SLIDE_LEFT == direction || Ui.SLIDE_UP == direction) && GRAPH_VIEW == app.viewNum) {
     	if(Ui.SLIDE_LEFT == direction && GRAPH_VIEW == app.viewNum) {
-
     		return Ui.SLIDE_IMMEDIATE;
 		}
     	//else if((Ui.SLIDE_RIGHT == direction || Ui.SLIDE_DOWN == direction) && GRAPH_VIEW == app.viewNum) {
     	else if(Ui.SLIDE_RIGHT == direction && GRAPH_VIEW == app.viewNum) {
-
     		return Ui.SLIDE_IMMEDIATE;
     	}
     	else {
-
     		return direction;
     	}
     }
 
     function onEnter() {
-
 		if(0 < app.viewNum) {
-
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
@@ -86,21 +80,17 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			return true;
     	}
     	else if(app.isFinished) {
-
     		app.resetTest();
     		Ui.requestUpdate();
     	}
     	else if(app.isTesting || app.isWaiting) {
-
     		app.stopTest();
     		Ui.requestUpdate();
     	}
     	else if(!app.isAntRx){
-
     		app.alert(TONE_ERROR);
     	}
     	else {
-
     		app.startTest();
     		app.stopViewTimer();
     		app.updateSeconds();
@@ -111,7 +101,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onMenu() {
-
 		app.stopGreenTimer();
 		app.stopViewTimer();
 		Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT);
@@ -121,9 +110,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onEscape() {
 
 		if(TEST_VIEW == app.viewNum) {
-
 			if(app.isTesting) {
-
 				app.stopTest();
 			}
 			if(app.isFinished && app.isNotSaved && MIN_SAMPLES < app.dataCount) {
@@ -143,7 +130,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onPower() {
-
 		app.resetGreenTimer();
 		return true;
 	}
