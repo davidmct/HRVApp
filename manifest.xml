@@ -2,7 +2,6 @@
     <iq:application entry="HRVApp" id="0966ae01629d481b87e45765aedee552" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="3.1.0" name="@Strings.AppName" type="watch-app">
         <iq:products>
             <iq:product id="fenix6xpro"/>
-            <iq:product id="fr945"/>
         </iq:products>
         <iq:permissions>
             <iq:uses-permission id="Ant"/>

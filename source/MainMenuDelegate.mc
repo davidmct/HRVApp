@@ -1,6 +1,7 @@
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 using Toybox.Application as App;
+using Toybox.Graphics;
 
 class MainMenuDelegate extends Ui.Menu2InputDelegate {
     function initialize() {
@@ -20,10 +21,11 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
             //toggleMenu.addItem(new Ui.ToggleMenuItem("AutoT", {:enabled=>"Auto Toggle: on", :disabled=>"Auto Toggle: off"}, "Auto", (TYPE_AUTO== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
             //WatchUi.pushView(toggleMenu, new TestTypeMenuDelegate(), Ui.SLIDE_LEFT );
   
+  			var mForeGround = findDrawableById("MenuForeground_id"); 			
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
-		        :foreground=>new Rez.Drawables.MenuForeground(),
+		        :foreground=>mForeGround,
 		        :title=>new DrawableMenuTitle("Test"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
