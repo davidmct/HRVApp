@@ -21,11 +21,14 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
             //toggleMenu.addItem(new Ui.ToggleMenuItem("AutoT", {:enabled=>"Auto Toggle: on", :disabled=>"Auto Toggle: off"}, "Auto", (TYPE_AUTO== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
             //WatchUi.pushView(toggleMenu, new TestTypeMenuDelegate(), Ui.SLIDE_LEFT );
   
-  			var mForeGround = findDrawableById("MenuForeground_id"); 			
+  			// test
+  			var obj;
+  			obj = Rez.Drawables.MenuForeground_id;
+  					
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
-		        :foreground=>mForeGround,
+		        :foreground=>new Rez.Drawables.MenuForeground_id(),
 		        :title=>new DrawableMenuTitle("Test"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
