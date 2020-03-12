@@ -63,22 +63,27 @@ class BasicCustomMenu extends WatchUi.CustomMenu {
 // It draws the label it is initialized with at the center of the region
 class CustomItem extends WatchUi.CustomMenuItem {
     var mLabel;
+    var mAmSelected;
 
-    function initialize(id, label) {
+    function initialize(id, label, selected) {
         CustomMenuItem.initialize(id, {});
         mLabel = label;
+        mAmSelected = selected;
     }
-
+    
+	function setSelected (state) { mAmSelected = state;}
+	
     // draw the item string at the center of the item.
     function draw(dc) {
         var font;
+        
         if( isFocused() ) {
             font = Graphics.FONT_LARGE;
         } else {
             font = Graphics.FONT_SMALL;
         }
 
-        if( isSelected() ) {
+        if( isSelected() || (mAmSelected == true) ) {
             dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLUE);
             dc.clear();
         }

@@ -3,8 +3,10 @@ using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 
 class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
-	
-    function initialize() { 
+	// menu we are working in
+	var mSrcMenu;
+    function initialize(srcMenu) {
+    	mSrcMenu = srcMenu; 
     	Menu2InputDelegate.initialize();
     }
 
@@ -18,20 +20,32 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
  
     function onSelect(item) {
 		var app = App.getApp();
+		var mId = item.getId();
 		
-		if( item.mLabel == "Timer")  {
+		if( mId == :Timer ) {
             app.testTypeSet = TYPE_TIMER;
+            Sys.println("Timer selected");
+            item.setSelected(true);
+            mSrcMenu.getItem(:Manual).setSelected(false);
         }
-        else if( item.mLabel == "Manual") {
+        else if( mId == :Manual) {
             app.testTypeSet = TYPE_MANUAL;
+            item.setSelected(true);
         }
-        else if( item.mLabel == "Auto")  {
+        else if( mId == :Auto)  {
             app.testTypeSet = TYPE_AUTO;
+            item.setSelected(true);
         }
-
-        if(item != :MiAuto && app.isWaiting) {
+        
+        // this should turn item blue...
+        Sys.println("calling request update in TestTYpeMenuDelegate");       
+        requestUpdate();
+        //item.forceDraw();
+        
+        if(mId != :Auto && app.isWaiting) {
         	app.endTest();
         }
+
     }
     
 }

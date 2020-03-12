@@ -11,20 +11,21 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     function onSelect(item) {
         var id = item.getId();
     
-     	if( item.getId().equals("test")) {
+     	if( id.equals("test")) {
      		//build test type menu
-     		var app = App.getApp();
-     		var mTestSelected = app.testTypeSet;
+     		//var app = App.getApp();
+     		//var mTestSelected = app.testTypeSet;
      		//var toggleMenu = new Ui.Menu2({:title=>"Test"});
             //toggleMenu.addItem(new Ui.ToggleMenuItem("TimerT", {:enabled=>"Timer Toggle: on", :disabled=>"Timer Toggle: off"}, "timer", (TYPE_TIMER == mTestSelected ), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
             //toggleMenu.addItem(new Ui.ToggleMenuItem("ManualT", {:enabled=>"Manual Toggle: on", :disabled=>"Manual Toggle: off"}, "manual", (TYPE_MANUAL== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
             //toggleMenu.addItem(new Ui.ToggleMenuItem("AutoT", {:enabled=>"Auto Toggle: on", :disabled=>"Auto Toggle: off"}, "Auto", (TYPE_AUTO== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
             //WatchUi.pushView(toggleMenu, new TestTypeMenuDelegate(), Ui.SLIDE_LEFT );
   
-  			// test
-  			var obj;
-  			obj = Rez.Drawables.MenuForeground_id;
-  					
+
+  			//var obj;
+  			//obj = Rez.Drawables.MenuForeground_id;
+  			var app = App.getApp();
+  			var mTestSelected = app.testTypeSet;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -32,17 +33,17 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		        :title=>new DrawableMenuTitle("Test"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
-		    customMenu.addItem(new CustomItem(:item1, "Timer"));
-		    customMenu.addItem(new CustomItem(:item2, "Manual"));
-		    customMenu.addItem(new CustomItem(:item3, "Auto"));				
-     		Ui.pushView(customMenu, new TestTypeMenuDelegate(), Ui.SLIDE_LEFT );    		
+		    customMenu.addItem(new CustomItem(:Timer, "Timer", (TYPE_TIMER == mTestSelected )) );
+		    customMenu.addItem(new CustomItem(:Manual, "Manual", (TYPE_MANUAL== mTestSelected)) );
+		    customMenu.addItem(new CustomItem(:Auto, "Auto", (TYPE_AUTO== mTestSelected)) );				
+     		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
-        else if( item.getId().equals("settings") ) {
+        else if( id.equals("settings") ) {
         	// create long sub-menus
 
             Ui.pushView(new Rez.Menus.SettingsMenu(), new SettingsMenuDelegate(), Ui.SLIDE_LEFT);
         }
-        else if( item.getId().equals("about"))  {
+        else if( id.equals("about"))  {
         	// build simple menu with version from system file
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
