@@ -27,18 +27,22 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             Sys.println("Timer selected");
             item.setSelected(true);
             // test var
-            var xxx = mSrcMenu.findItemById(:Manual);
-            mSrcMenu.getItem(xxx).setSelected(false);
-            //mSrcMenu.findItemById(:Manual).setSelected(false);
-            Sys.println(" end timer" + xxx);
+            //var xxx = mSrcMenu.findItemById(:Manual);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Auto)).setSelected(false);
+            Sys.println(" end timer");
         }
         else if( mId == :Manual) {
             app.testTypeSet = TYPE_MANUAL;
             item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Auto)).setSelected(false);           
         }
         else if( mId == :Auto)  {
             app.testTypeSet = TYPE_AUTO;
             item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }
         
         // this should turn item blue...
