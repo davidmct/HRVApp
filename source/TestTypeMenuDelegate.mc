@@ -26,7 +26,11 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             app.testTypeSet = TYPE_TIMER;
             Sys.println("Timer selected");
             item.setSelected(true);
-            mSrcMenu.getItem(:Manual).setSelected(false);
+            // test var
+            var xxx = mSrcMenu.findItemById(:Manual);
+            mSrcMenu.getItem(xxx).setSelected(false);
+            //mSrcMenu.findItemById(:Manual).setSelected(false);
+            Sys.println(" end timer" + xxx);
         }
         else if( mId == :Manual) {
             app.testTypeSet = TYPE_MANUAL;
