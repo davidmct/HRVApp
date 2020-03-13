@@ -13,7 +13,7 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
     
      	if( id.equals("duration")) {    
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.timerTimeSet, app.mMaxTimerTimeSet), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.timerTimeSet, app.mMaxTimerTimeSet, 60), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
     	}
     }
 }
