@@ -10,6 +10,8 @@ using Toybox.System as Sys;
 // we should be saving results to storage NOT properties
 //Storage.setValue( tag, value) eg ("results_array", results); where results is an array
 
+// home page timer placement needs fixing if >1hr...
+
 enum {
 	//test
 	// Settings memory locations
@@ -145,6 +147,8 @@ class HRVApp extends App.AppBase {
 	var livePulse;
     var timeAutoStart;
     var timerTime;
+    
+    var mStorage;
 
 	hidden var mNoPulseCount;
     hidden var mPrevIntMs;
@@ -156,6 +160,9 @@ class HRVApp extends App.AppBase {
     hidden var testTimer;
     
     function initialize() {
+        //var mApp = Application.getApp();
+        //mAntID = mApp.getProperty("pAuxHRAntID");
+        mStorage = new HRVStorageHandler();
     	AppBase.initialize();
     }
 
@@ -700,7 +707,14 @@ class HRVApp extends App.AppBase {
         var chanAssign = new Ant.ChannelAssignment(
             Ant.CHANNEL_TYPE_RX_NOT_TX,
             Ant.NETWORK_PLUS);
-
+		//try {
+            //Create the sensor object and open it
+        //    mSensor = new AuxHRSensor(mAntID);
+        //    mSensor.open();
+        //} catch(e instanceof Ant.UnableToAcquireChannelException) {
+        //    System.println(e.getErrorMessage());
+        //    mSensor = null;
+        //}
         // Set the configuration
         var deviceCfg = new Ant.DeviceConfig( {
             :deviceNumber => 0,
@@ -884,6 +898,11 @@ class HRVApp extends App.AppBase {
 		else {
 			return new TestView();
 		}
+	}
+
+	// App running and Garmin Mobile has changed settings
+	onSettingsChanged() {
+		mStorage.onSettingsChanged();	
 	}
 
 }
