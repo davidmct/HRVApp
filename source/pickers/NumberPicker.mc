@@ -6,15 +6,14 @@ using Toybox.WatchUi;
 
 class NumberPicker extends WatchUi.Picker {
 
-    function initialize(initial) {
+    function initialize(initial_v, limit_v) {
 
         var title = new WatchUi.Text({:text=>Rez.Strings.numberPickerTitle, :locX=>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_BOTTOM, :color=>Graphics.COLOR_WHITE});
-        var factories;
-        var numberFactories;
+        var factories = new [1];
 
-        factories = new NumberFactory(0, initial, 1, {});
+        factories[0] = new NumberFactory(0, limit_v, 1, {});
  
-        Picker.initialize({:title=>title, :pattern=>factories});
+        Picker.initialize({:title=>title, :pattern=>factories, :defaults=>[initial_v]});
     }
 
     function onUpdate(dc) {

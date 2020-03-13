@@ -11,8 +11,9 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
     function onSelect(item) {
         var id = item.getId();
     
-     	if( id.equals("duration")) {    	
-     		Ui.pushView(new NumberPicker(app.timerTimeSet), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+     	if( id.equals("duration")) {    
+     		// set max as 120 - could be property!!	
+     		Ui.pushView(new NumberPicker(app.timerTimeSet, app.mMaxTimerTimeSet), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
     	}
     }
 }

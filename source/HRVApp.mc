@@ -92,6 +92,7 @@ class HRVApp extends App.AppBase {
 	var vibeSet;
 	var testTypeSet;
 	var timerTimeSet;
+	var mMaxTimerTimeSet;
 	var autoStartSet;
 	var autoTimeSet;
 	var bgColSet;
@@ -178,6 +179,7 @@ class HRVApp extends App.AppBase {
 		vibeSet = Ui.loadResource(Rez.Strings.Vibe).toNumber();
 		testTypeSet = Ui.loadResource(Rez.Strings.TestType).toNumber();
 		timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
+		mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
 		autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
 		autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
 		// ColSet are index into colour map

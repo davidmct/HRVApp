@@ -13,6 +13,7 @@
     <string id="Vibe">1</string>
     <string id="TestType">0</string>
     <string id="TimerTime">60</string>
+    <string id="MaxTimerTime">120</string>
     <string id="AutoStart">3600</string>
     <string id="AutoTime">3600</string>
     <string id="BgCol">3</string>
