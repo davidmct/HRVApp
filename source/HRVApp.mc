@@ -874,7 +874,7 @@ class HRVApp extends App.AppBase {
 
     function subView() {
 
-    	var subView = (viewNum + 7) % NUM_VIEWS;
+    	var subView = (viewNum + NUM_VIEWS - 1) % NUM_VIEWS;
     	return getView(subView);
     }
 
@@ -901,7 +901,7 @@ class HRVApp extends App.AppBase {
 	}
 
 	// App running and Garmin Mobile has changed settings
-	onSettingsChanged() {
+	function onSettingsChanged() {
 		mStorage.onSettingsChanged();	
 	}
 
