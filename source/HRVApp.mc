@@ -12,6 +12,8 @@ using Toybox.System as Sys;
 
 // home page timer placement needs fixing if >1hr...
 
+var mDebugging = true;
+
 enum {
 	//test
 	// Settings memory locations
@@ -95,6 +97,7 @@ class HRVApp extends App.AppBase {
 	var mMaxTimerTimeSet;
 	var autoStartSet;
 	var autoTimeSet;
+	var mMaxAutoTimeSet;
 	var bgColSet;
 	var lblColSet;
     var txtColSet;
@@ -163,7 +166,10 @@ class HRVApp extends App.AppBase {
     function initialize() {
         //var mApp = Application.getApp();
         //mAntID = mApp.getProperty("pAuxHRAntID");
+        Sys.println("HRVApp initialisation called");
         mStorage = new HRVStorageHandler();
+        // added this line as onStart() called when start pressed???
+        resetSettings();
     	AppBase.initialize();
     }
 
@@ -182,6 +188,12 @@ class HRVApp extends App.AppBase {
 		mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
 		autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
 		autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
+		mMaxAutoTimeSet = Ui.loadResource(Rez.Strings.MaxAutoTime).toNumber();
+		
+		Sys.println("autoTimeSet = " + autoTimeSet);
+        Sys.println("mMaxAutoTimeSet = " + mMaxAutoTimeSet);
+        Sys.println("autoStartSet = " + autoStartSet);
+        
 		// ColSet are index into colour map
 		bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
 		lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
@@ -217,7 +229,10 @@ class HRVApp extends App.AppBase {
 		// On very first use of app don't read in properties!
 		var value;
 		
+		// FORCE NOT OVER WRITE
 		value = getProperty(INITIAL_RUN);
+		if (mDebugging == true) {value = null;}
+			
 		if (value == null) {
 			setProperty(INITIAL_RUN, true);
 		} else {
@@ -884,6 +899,8 @@ class HRVApp extends App.AppBase {
 
     	lastViewNum = viewNum;
 		viewNum = newViewNum;
+		
+		Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
 		if(RESULT_VIEW == viewNum) {
 			return new ResultView();
@@ -905,6 +922,7 @@ class HRVApp extends App.AppBase {
 	// App running and Garmin Mobile has changed settings
 	function onSettingsChanged() {
 		mStorage.onSettingsChanged();	
+		Ui.requestUpdate();
 	}
 
 }

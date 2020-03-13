@@ -12,7 +12,7 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if( id.equals("duration")) {    
-     		// set max as 120 - could be property!!	
+     		// Picker set to initial value and max
      		Ui.pushView(new NumberPicker(app.timerTimeSet, app.mMaxTimerTimeSet), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
     	}
     }
@@ -30,8 +30,9 @@ class DurationPickerDelegate extends Ui.PickerDelegate {
 
     function onAccept(values) {
 		var app = App.getApp();
-		app.timerTimeSet = values.duration.value().toNumber();
-
+		// return just a number??
+		//app.timerTimeSet = new Time.Duration(values.toNumber());
+		app.timerTimeSet = values[0].toNumber();
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
 

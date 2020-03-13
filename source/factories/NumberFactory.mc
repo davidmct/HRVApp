@@ -26,7 +26,7 @@ class NumberFactory extends WatchUi.PickerFactory {
         }
 
         if(mFont == null) {
-            mFont = Graphics.FONT_NUMBER_HOT;
+            mFont = Graphics.FONT_NUMBER_MEDIUM;
         }
 
         if(mFormatString == null) {

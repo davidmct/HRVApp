@@ -1,23 +1,26 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Time;
+using Toybox.Lang;
+using Toybox.System as Sys;
 
 class AutoMenuDelegate extends Ui.Menu2InputDelegate {
 
    function onSelect(item) {
         var id = item.getId();
-    
+        var app = App.getApp();
+        
+        Sys.println("app.autoTimeSet = " + app.autoTimeSet);
+        Sys.println("app.mMaxAutoTimeSet = " + app.mMaxAutoTimeSet);
+        Sys.println("app.autoStartSet = " + app.autoStartSet);
+                    
      	if( id.equals("duration")) {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
-            	new Time.Duration(App.getApp().autoTimeSet)),
-            	new AutoTimeDelegate(), Ui.SLIDE_LEFT);
+     		// Picker set to initial value and max
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, app.mMaxAutoTimeSet), new AutoDurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME_OF_DAY,
-            	new Time.Duration(App.getApp().autoStartSet)),
-            	new AutoStartDelegate(), Ui.SLIDE_LEFT);
+			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
+			Ui.pushView(new NumberPicker(app.autoStartSet, app.mMaxAutoTimeSet), new AutoStartPickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
@@ -25,27 +28,45 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
     }
 }
 
-class AutoTimeDelegate extends Ui.NumberPickerDelegate {
+class AutoDurationPickerDelegate extends Ui.PickerDelegate {
 
-	function onNumberPicked(duration) {
-
-		var app = App.getApp();
-		app.autoTimeSet = duration.value().toNumber();
-	}
-	function initialize() {
-    	NumberPickerDelegate.initialize();
+    function initialize() {
+        PickerDelegate.initialize();
     }
+
+    function onCancel() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
+    function onAccept(values) {
+		var app = App.getApp();
+		Sys.println(" AutoDuration: "+values);
+		app.autoTimeSet = values[0].toNumber();
+
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
 }
 
-class AutoStartDelegate extends Ui.NumberPickerDelegate {
+class AutoStartPickerDelegate extends Ui.PickerDelegate {
 
-	function onNumberPicked(duration) {
+	//function onNumberPicked(duration) {
 
-		var app = App.getApp();
-		app.autoStartSet = duration.value().toNumber();
-	}
-	
-	function initialize() {
-    	NumberPickerDelegate.initialize();
+		//var app = App.getApp();
+		//app.autoStartSet = duration.value().toNumber();
+   function initialize() {
+        PickerDelegate.initialize();
     }
+
+    function onCancel() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
+    function onAccept(values) {
+		var app = App.getApp();
+		app.autoStartSet = values[0].toNumber();
+
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
 }

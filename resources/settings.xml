@@ -1,9 +1,4 @@
 <resources>
-    
-<!--     <string id="Timestamp">1428490789</string> v 1.0 -->
-<!--     <string id="Timestamp">1429685468</string> v 1.1.0  -->
-<!--	<string id="Timestamp">1430338749</string> v 1.1.1 -->  
-<!--	<string id="Timestamp">1430404698</string> v 1.1.3 -->
 	<string id="Timestamp">1447234278</string><!-- v 1.1.6 -->  
     <string id="AppName">HRV Update</string>
     <string id="Version">0.3.0</string>
@@ -16,6 +11,7 @@
     <string id="MaxTimerTime">120</string>
     <string id="AutoStart">3600</string>
     <string id="AutoTime">3600</string>
+    <string id="MaxAutoTime">6000</string>
     <string id="BgCol">3</string>
     <string id="LblCol">10</string>
     <string id="TxtCol">13</string>
