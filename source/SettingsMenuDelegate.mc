@@ -10,7 +10,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if ( id.equals("timer")) {
-     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
+     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer Test")});
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_LEFT );
         }
@@ -20,7 +20,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Schedule", null, "schedule", null));
 	        Ui.pushView(menu, new AutoMenuDelegate(), Ui.SLIDE_LEFT );
         }
-        else if ( id.equals("breathe"))  {
+        else if ( id.equals("breathe"))  { 
             Ui.pushView(new Rez.Menus.BreatheMenu(), new BreatheMenuDelegate(), Ui.SLIDE_LEFT);
         }
         else if ( id.equals("colour"))   {

@@ -6,7 +6,6 @@ class ChoiceMenuDelegate extends Ui.MenuInputDelegate {
     hidden var mFunc;
 
     function initialize(func) {
-
 		mFunc = func;
 		MenuInputDelegate.initialize();
     }

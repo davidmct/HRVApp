@@ -4,28 +4,34 @@ using Toybox.Time;
 
 class TimerMenuDelegate extends Ui.Menu2InputDelegate {
 
+	var app = App.getApp();
+		
+    function initialize() { Menu2InputDelegate.initialize(); }
+    
     function onSelect(item) {
         var id = item.getId();
     
-     	if( id.equals("duration")) {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
-            	new Time.Duration(App.getApp().timerTimeSet)),
-            	new TimerTimeDelegate(), Ui.SLIDE_LEFT);
-        }
+     	if( id.equals("duration")) {    	
+     		Ui.pushView(new NumberPicker(app.timerTimeSet), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+    	}
     }
-    
-    function initialize() { Menu2InputDelegate.initialize(); }
 }
 
-class TimerTimeDelegate extends Ui.NumberPickerDelegate {
+class DurationPickerDelegate extends Ui.PickerDelegate {
 
-    function onNumberPicked(duration) {
-
-		var app = App.getApp();
-		app.timerTimeSet = duration.value().toNumber();
-	}
-	function initialize() {
-    	NumberPickerDelegate.initialize();
+    function initialize() {
+        PickerDelegate.initialize();
     }
+
+    function onCancel() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
+    function onAccept(values) {
+		var app = App.getApp();
+		app.timerTimeSet = values.duration.value().toNumber();
+
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
 }
