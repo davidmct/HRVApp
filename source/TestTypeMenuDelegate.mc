@@ -26,8 +26,6 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             app.testTypeSet = TYPE_TIMER;
             Sys.println("Timer selected");
             item.setSelected(true);
-            // test var
-            //var xxx = mSrcMenu.findItemById(:Manual);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Auto)).setSelected(false);
             Sys.println(" end timer");
@@ -48,7 +46,6 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
         // this should turn item blue...
         Sys.println("calling request update in TestTYpeMenuDelegate");       
         requestUpdate();
-        //item.forceDraw();
         
         if(mId != :Auto && app.isWaiting) {
         	app.endTest();

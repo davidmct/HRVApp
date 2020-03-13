@@ -40,8 +40,16 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         }
         else if( id.equals("settings") ) {
         	// create long sub-menus
-
-            Ui.pushView(new Rez.Menus.SettingsMenu(), new SettingsMenuDelegate(), Ui.SLIDE_LEFT);
+	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
+	        menu.addItem(new Ui.MenuItem("Timer Test", null, "timer", null));
+	        menu.addItem(new Ui.MenuItem("Auto Test", null, "auto", null));
+	        menu.addItem(new Ui.MenuItem("Breathe Cycle", null, "breathe", null));
+	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
+	        menu.addItem(new Ui.MenuItem("Green Timer", null, "green", null));
+	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
+	        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));
+	        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));
+	        Ui.pushView(menu, new SettingsMenuDelegate(), Ui.SLIDE_LEFT );
         }
         else if( id.equals("about"))  {
         	// build simple menu with version from system file
