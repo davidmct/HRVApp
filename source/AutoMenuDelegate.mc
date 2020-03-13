@@ -2,17 +2,18 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Time;
 
-class AutoMenuDelegate extends Ui.MenuInputDelegate {
+class AutoMenuDelegate extends Ui.Menu2InputDelegate {
 
-    function onMenuItem(item) {
-
-        if(item == :MiDuration) {
+   function onSelect(item) {
+        var id = item.getId();
+    
+     	if( id.equals("duration")) {
 
             Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
             	new Time.Duration(App.getApp().autoTimeSet)),
             	new AutoTimeDelegate(), Ui.SLIDE_LEFT);
         }
-        else if(item == :MiSchedule) {
+        else if( id.equals("schedule"))  {
 
             Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME_OF_DAY,
             	new Time.Duration(App.getApp().autoStartSet)),
@@ -20,7 +21,7 @@ class AutoMenuDelegate extends Ui.MenuInputDelegate {
         }
     }
     function initialize() {
-    	MenuInputDelegate.initialize();
+    	Menu2InputDelegate.initialize();
     }
 }
 

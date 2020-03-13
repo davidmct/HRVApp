@@ -12,18 +12,6 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if( id.equals("test")) {
-     		//build test type menu
-     		//var app = App.getApp();
-     		//var mTestSelected = app.testTypeSet;
-     		//var toggleMenu = new Ui.Menu2({:title=>"Test"});
-            //toggleMenu.addItem(new Ui.ToggleMenuItem("TimerT", {:enabled=>"Timer Toggle: on", :disabled=>"Timer Toggle: off"}, "timer", (TYPE_TIMER == mTestSelected ), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
-            //toggleMenu.addItem(new Ui.ToggleMenuItem("ManualT", {:enabled=>"Manual Toggle: on", :disabled=>"Manual Toggle: off"}, "manual", (TYPE_MANUAL== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
-            //toggleMenu.addItem(new Ui.ToggleMenuItem("AutoT", {:enabled=>"Auto Toggle: on", :disabled=>"Auto Toggle: off"}, "Auto", (TYPE_AUTO== mTestSelected), {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
-            //WatchUi.pushView(toggleMenu, new TestTypeMenuDelegate(), Ui.SLIDE_LEFT );
-  
-
-  			//var obj;
-  			//obj = Rez.Drawables.MenuForeground_id;
   			var app = App.getApp();
   			var mTestSelected = app.testTypeSet;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,

@@ -2,20 +2,20 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Time;
 
-class TimerMenuDelegate extends Ui.MenuInputDelegate {
+class TimerMenuDelegate extends Ui.Menu2InputDelegate {
 
-    function onMenuItem(item) {
-
-        if(item == :MiDuration) {
+    function onSelect(item) {
+        var id = item.getId();
+    
+     	if( id.equals("duration")) {
 
             Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
             	new Time.Duration(App.getApp().timerTimeSet)),
             	new TimerTimeDelegate(), Ui.SLIDE_LEFT);
         }
     }
-    function initialize() {
-    	MenuInputDelegate.initialize();
-    }
+    
+    function initialize() { Menu2InputDelegate.initialize(); }
 }
 
 class TimerTimeDelegate extends Ui.NumberPickerDelegate {
