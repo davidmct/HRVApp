@@ -12,7 +12,7 @@ class BreatheMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
                     
      	if( id.equals("inhale")) {
-     		Ui.pushView(new NumberPicker(app.inhaleTimeSet, 9999, 1), new BreathePickerDelegate(:setIhaleTimer), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.inhaleTimeSet, 9999, 1), new BreathePickerDelegate(:setInhaleTimer), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("exhale"))  {
 			Ui.pushView(new NumberPicker(app.exhaleTimeSet, 9999, 1), new BreathePickerDelegate(:setExhaleTimer), Ui.SLIDE_IMMEDIATE);       	

@@ -10,18 +10,14 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
 	
    	function onSelect(item) {
         var id = item.getId();
-        
-        Sys.println("app.autoTimeSet = " + app.autoTimeSet);
-        Sys.println("app.mMaxAutoTimeSet = " + app.mMaxAutoTimeSet);
-        Sys.println("app.autoStartSet = " + app.autoStartSet);
                     
      	if( id.equals("duration")) {
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new AutoPickerDelegate(:setAutoTime), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new SecondsPickerDelegate(:setAutoTime), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
 			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
-			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new AutoPickerDelegate(:setStartTime), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new SecondsPickerDelegate(:setStartTime), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
@@ -32,7 +28,7 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
     function setStartTime(value) { app.autoStartSet = value;}   
 }
 
-class AutoPickerDelegate extends Ui.PickerDelegate {
+class SecondsPickerDelegate extends Ui.PickerDelegate {
 	hidden var mFunc;
 	
     function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
