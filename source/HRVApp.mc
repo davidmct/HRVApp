@@ -14,6 +14,15 @@ using Toybox.System as Sys;
 
 var mDebugging = true;
 
+using Toybox.Lang;
+
+class myException extends Lang.Exception {
+    function initialize(message) {
+    	Sys.println(message);
+        Exception.initialize();
+    }
+}
+
 enum {
 	//test
 	// Settings memory locations

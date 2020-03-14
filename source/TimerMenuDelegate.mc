@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Time;
+using Toybox.System as Sys;
 
 class TimerMenuDelegate extends Ui.Menu2InputDelegate {
 
@@ -32,7 +33,10 @@ class DurationPickerDelegate extends Ui.PickerDelegate {
 		var app = App.getApp();
 		// return just a number??
 		//app.timerTimeSet = new Time.Duration(values.toNumber());
-		app.timerTimeSet = values[0].toNumber();
+		var mNum;
+		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		Sys.println(" timerTimeSet Duration: " + values + " to "+mNum);
+		app.timerTimeSet = mNum;
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
 

@@ -40,8 +40,11 @@ class AutoDurationPickerDelegate extends Ui.PickerDelegate {
 
     function onAccept(values) {
 		var app = App.getApp();
-		Sys.println(" AutoDuration: "+values);
-		app.autoTimeSet = values[0].toNumber();
+		// need to combine two factories
+		var mNum;
+		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		Sys.println("Set AutoTimeSet Duration: " + values + " to "+mNum);
+		app.autoTimeSet = mNum;
 
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
@@ -64,7 +67,10 @@ class AutoStartPickerDelegate extends Ui.PickerDelegate {
 
     function onAccept(values) {
 		var app = App.getApp();
-		app.autoStartSet = values[0].toNumber();
+		var mNum;
+		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		Sys.println("Set  AutoStart Duration: " + values + " to "+mNum);
+		app.autoStartSet = mNum;
 
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
