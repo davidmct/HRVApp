@@ -29,7 +29,11 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        Ui.pushView(menu, new BreatheMenuDelegate(), Ui.SLIDE_LEFT );
         }
         else if ( id.equals("colour"))   {
-            Ui.pushView(new Rez.Menus.ColorMenu(), new ColorMenuDelegate(), Ui.SLIDE_LEFT);
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
+	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
+	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
+	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	        
+	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_LEFT );
         }
         else if ( id.equals("green"))  {
             Ui.pushView(new NumberPicker(App.getApp().greenTimeSet, 9999, 1), new GreenTimePickerDelegate(), Ui.SLIDE_IMMEDIATE);

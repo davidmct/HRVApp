@@ -6,9 +6,10 @@ using Toybox.System as Sys;
 
 class AutoMenuDelegate extends Ui.Menu2InputDelegate {
 
-   function onSelect(item) {
+	hidden var app = App.getApp();
+	
+   	function onSelect(item) {
         var id = item.getId();
-        var app = App.getApp();
         
         Sys.println("app.autoTimeSet = " + app.autoTimeSet);
         Sys.println("app.mMaxAutoTimeSet = " + app.mMaxAutoTimeSet);
@@ -16,62 +17,35 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
                     
      	if( id.equals("duration")) {
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new AutoDurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new AutoPickerDelegate(:setAutoTime), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
 			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
-			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new AutoStartPickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new AutoPickerDelegate(:setStartTime), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
     	Menu2InputDelegate.initialize();
     }
+    
+    function setAutoTime(value) { app.autoTimeSet = value;}
+    function setStartTime(value) { app.autoStartSet = value;}   
 }
 
-class AutoDurationPickerDelegate extends Ui.PickerDelegate {
-
-    function initialize() {
-        PickerDelegate.initialize();
-    }
+class AutoPickerDelegate extends Ui.PickerDelegate {
+	hidden var mFunc;
+	
+    function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
 
     function onCancel() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
 
     function onAccept(values) {
-		var app = App.getApp();
 		// need to combine two factories
 		var mNum;
 		mNum = values[1].toNumber() + values[0].toNumber() * 100;
-		Sys.println("Set AutoTimeSet Duration: " + values + " to "+mNum);
-		app.autoTimeSet = mNum;
-
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-
-}
-
-class AutoStartPickerDelegate extends Ui.PickerDelegate {
-
-	//function onNumberPicked(duration) {
-
-		//var app = App.getApp();
-		//app.autoStartSet = duration.value().toNumber();
-   function initialize() {
-        PickerDelegate.initialize();
-    }
-
-    function onCancel() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-
-    function onAccept(values) {
-		var app = App.getApp();
-		var mNum;
-		mNum = values[1].toNumber() + values[0].toNumber() * 100;
-		Sys.println("Set  AutoStart Duration: " + values + " to "+mNum);
-		app.autoStartSet = mNum;
-
+		mFunc.invoke( mNum);
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
 }
