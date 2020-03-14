@@ -14,7 +14,7 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
     
      	if( id.equals("duration")) {    
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.timerTimeSet, app.mMaxTimerTimeSet, 60), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.timerTimeSet, 9999, 1), new DurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
     	}
     }
 }
@@ -34,7 +34,7 @@ class DurationPickerDelegate extends Ui.PickerDelegate {
 		// return just a number??
 		//app.timerTimeSet = new Time.Duration(values.toNumber());
 		var mNum;
-		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		mNum = values[1].toNumber() + values[0].toNumber() * 100;
 		Sys.println(" timerTimeSet Duration: " + values + " to "+mNum);
 		app.timerTimeSet = mNum;
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);

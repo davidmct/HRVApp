@@ -16,11 +16,11 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
                     
      	if( id.equals("duration")) {
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.autoTimeSet, app.mMaxAutoTimeSet, 60), new AutoDurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new AutoDurationPickerDelegate(), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
 			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
-			Ui.pushView(new NumberPicker(app.autoStartSet, app.mMaxAutoTimeSet, 60), new AutoStartPickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new AutoStartPickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
@@ -42,7 +42,7 @@ class AutoDurationPickerDelegate extends Ui.PickerDelegate {
 		var app = App.getApp();
 		// need to combine two factories
 		var mNum;
-		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		mNum = values[1].toNumber() + values[0].toNumber() * 100;
 		Sys.println("Set AutoTimeSet Duration: " + values + " to "+mNum);
 		app.autoTimeSet = mNum;
 
@@ -68,11 +68,10 @@ class AutoStartPickerDelegate extends Ui.PickerDelegate {
     function onAccept(values) {
 		var app = App.getApp();
 		var mNum;
-		mNum = values[0].toNumber() + values[1].toNumber() * 100;
+		mNum = values[1].toNumber() + values[0].toNumber() * 100;
 		Sys.println("Set  AutoStart Duration: " + values + " to "+mNum);
 		app.autoStartSet = mNum;
 
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
-
 }

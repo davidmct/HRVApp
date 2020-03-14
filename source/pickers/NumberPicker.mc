@@ -3,6 +3,7 @@ using Toybox.Graphics;
 using Toybox.System;
 using Toybox.WatchUi;
 
+const DOUBLEDIGIT_FORMAT = "%02d";
 
 class NumberPicker extends WatchUi.Picker {
 
@@ -13,16 +14,18 @@ class NumberPicker extends WatchUi.Picker {
         var factories = new [2];
         // need to split initial number over four digits
         if (limit_v > 9999) { throw new myException( "Number picker input > 9999"); }
-        	
-        factories[0] = new NumberFactory(0, limit_v % 100, inc_v, {});
-        factories[1] = new NumberFactory(0, limit_v / 100, inc_v, {});
+        
+        // test as putting these in NumFac didn't work
+        var mTop = limit_v / 100;
+        var mBottom = limit_v % 100; 
+        
+        factories[0] = new NumberFactory(0, mTop, inc_v, {:format=>DOUBLEDIGIT_FORMAT});	
+        factories[1] = new NumberFactory(0, mBottom, inc_v, {:format=>DOUBLEDIGIT_FORMAT});
         
         // now fill in initial values of each factory
-        var mTemp = factories.size();
-        var defaults = [mTemp];
-
-        defaults[0] = initial_v % 100;
-        defaults[1] = initial_v / 100;
+        var defaults = new [factories.size()];
+        defaults[0] = initial_v / 100;
+        defaults[1] = initial_v % 100;
 
         Picker.initialize({:title=>title, :pattern=>factories, :defaults=>defaults});
     }

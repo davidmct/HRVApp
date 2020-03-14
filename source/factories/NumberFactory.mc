@@ -37,8 +37,9 @@ class NumberFactory extends WatchUi.PickerFactory {
 
     function getDrawable(index, selected) {
     	// need to change this width if it works. Doesn't need to set two parts to field as per time!!
-    	Sys.println("Number Factory. need to make width based on screen size");
-        return new WatchUi.Text( { :text=>getValue(index).format(mFormatString), :width=>200 ,:color=>Graphics.COLOR_WHITE, :font=> mFont, :locX =>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_CENTER } );
+    	//Sys.println("Number Factory. need to make width based on screen size");
+    	// take out :width=>200
+        return new WatchUi.Text( { :text=>getValue(index).format(mFormatString),:color=>Graphics.COLOR_WHITE, :font=> mFont, :locX =>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_CENTER } );
     }
 
     function getValue(index) {

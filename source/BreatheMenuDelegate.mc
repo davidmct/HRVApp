@@ -1,67 +1,66 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Time;
+using Toybox.Lang;
+using Toybox.System as Sys;
 
-class BreatheMenuDelegate extends Ui.MenuInputDelegate {
+class BreatheMenuDelegate extends Ui.Menu2InputDelegate {
 
-    function onMenuItem(item) {
-
-        if(item == :MiInhale) {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
-            	new Time.Duration(App.getApp().inhaleTimeSet)),
-            	new InhaleTimeDelegate(), Ui.SLIDE_LEFT);
+	function onSelect(item) {
+        var id = item.getId();
+        var app = App.getApp();
+                    
+     	if( id.equals("inhale")) {
+     		Ui.pushView(new NumberPicker(app.inhaleTimeSet, 9999, 1), new InhalePickerDelegate(), Ui.SLIDE_IMMEDIATE);
         }
-        else if(item == :MiExhale) {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
-            	new Time.Duration(App.getApp().exhaleTimeSet)),
-            	new ExhaleTimeDelegate(), Ui.SLIDE_LEFT);
+        else if( id.equals("exhale"))  {
+			Ui.pushView(new NumberPicker(app.exhaleTimeSet, 9999, 1), new ExhalePickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
         }
-        else if(item == :MiRelax) {
-
-            Ui.pushView(new Ui.NumberPicker(Ui.NUMBER_PICKER_TIME,
-            	new Time.Duration(App.getApp().relaxTimeSet)),
-            	new RelaxTimeDelegate(), Ui.SLIDE_LEFT);
+        else if( id.equals("exhale"))  {
+			Ui.pushView(new NumberPicker(app.relaxTimeSet, 9999, 1), new RelaxPickerDelegate(), Ui.SLIDE_IMMEDIATE);       	
         }
+        
     }
     function initialize() {
-    	MenuInputDelegate.initialize();
+    	Menu2InputDelegate.initialize();
     }
 }
 
-class InhaleTimeDelegate extends Ui.NumberPickerDelegate {
+class InhalePickerDelegate extends Ui.PickerDelegate {
 
-    function onNumberPicked(duration) {
+    function initialize() { PickerDelegate.initialize(); }
 
+    function onCancel() { Ui.popView(WatchUi.SLIDE_IMMEDIATE); }
+
+    function onAccept(values) {
 		var app = App.getApp();
-		app.inhaleTimeSet = duration.value().toNumber();
-	}
-	function initialize() {
-		NumberPickerDelegate.initialize();
-	}	
+		app.inhaleTimeSet = values[1].toNumber() + values[0].toNumber() * 100;
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
 }
 
-class ExhaleTimeDelegate extends Ui.NumberPickerDelegate {
+class ExhalePickerDelegate extends Ui.PickerDelegate {
 
-    function onNumberPicked(duration) {
+    function initialize() { PickerDelegate.initialize(); }
 
+    function onCancel() { Ui.popView(WatchUi.SLIDE_IMMEDIATE); }
+
+    function onAccept(values) {
 		var app = App.getApp();
-		app.exhaleTimeSet = duration.value().toNumber();
-	}
-	function initialize() {
-		NumberPickerDelegate.initialize();
-	}	
+		app.exhaleTimeSet = values[1].toNumber() + values[0].toNumber() * 100;
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
 }
 
-class RelaxTimeDelegate extends Ui.NumberPickerDelegate {
+class RelaxPickerDelegate extends Ui.PickerDelegate {
 
-    function onNumberPicked(duration) {
+    function initialize() { PickerDelegate.initialize(); }
 
+    function onCancel() { Ui.popView(WatchUi.SLIDE_IMMEDIATE); }
+
+    function onAccept(values) {
 		var app = App.getApp();
-		app.relaxTimeSet = duration.value().toNumber();
-	}
-	function initialize() {
-		NumberPickerDelegate.initialize();
-	}	
+		app.app.relaxTimeSet = values[1].toNumber() + values[0].toNumber() * 100;
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
 }
