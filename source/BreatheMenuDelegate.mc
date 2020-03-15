@@ -12,13 +12,13 @@ class BreatheMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
                     
      	if( id.equals("inhale")) {
-     		Ui.pushView(new NumberPicker(app.inhaleTimeSet, 9999, 1), new BreathePickerDelegate(:setInhaleTimer), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.inhaleTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setInhaleTimer)), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("exhale"))  {
-			Ui.pushView(new NumberPicker(app.exhaleTimeSet, 9999, 1), new BreathePickerDelegate(:setExhaleTimer), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.exhaleTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setExhaleTimer)), Ui.SLIDE_IMMEDIATE);       	
         }
         else if( id.equals("exhale"))  {
-			Ui.pushView(new NumberPicker(app.relaxTimeSet, 9999, 1), new BreathePickerDelegate(:setRelaxTimer), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.relaxTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setRelaxTimer)), Ui.SLIDE_IMMEDIATE);       	
         }
         
     }
@@ -30,17 +30,4 @@ class BreatheMenuDelegate extends Ui.Menu2InputDelegate {
     function setExhaleTimer(value) { app.exhaleTimeSet = value;}
     function setRelaxTimer(value) { app.relaxTimeSet = value;}
 
-}
-
-class BreathePickerDelegate extends Ui.PickerDelegate {
-	hidden var mFunc;
-    function initialize(func) { mFunc = func; PickerDelegate.initialize(); }
-
-    function onCancel() { Ui.popView(WatchUi.SLIDE_IMMEDIATE); }
-
-    function onAccept(values) {
-		var mValue = values[1].toNumber() + values[0].toNumber() * 100;
-		mFunc.invoke( mValue);
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
 }

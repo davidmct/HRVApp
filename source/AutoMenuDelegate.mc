@@ -13,11 +13,11 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
                     
      	if( id.equals("duration")) {
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new SecondsPickerDelegate(:setAutoTime), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setAutoTime)), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
 			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
-			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new SecondsPickerDelegate(:setStartTime), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new SecondsPickerDelegate(self.method(:setStartTime)), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
@@ -28,20 +28,4 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
     function setStartTime(value) { app.autoStartSet = value;}   
 }
 
-class SecondsPickerDelegate extends Ui.PickerDelegate {
-	hidden var mFunc;
-	
-    function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
 
-    function onCancel() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-
-    function onAccept(values) {
-		// need to combine two factories
-		var mNum;
-		mNum = values[1].toNumber() + values[0].toNumber() * 100;
-		mFunc.invoke( mNum);
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-}

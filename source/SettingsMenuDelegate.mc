@@ -5,6 +5,8 @@ using Toybox.System as Sys;
 
 class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 
+	hidden var app = App.getApp();
+	
 	function initialize() { Menu2InputDelegate.initialize();}
 
     function onSelect(item) {
@@ -39,10 +41,16 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
             Ui.pushView(new NumberPicker(App.getApp().greenTimeSet, 9999, 1), new GreenTimePickerDelegate(), Ui.SLIDE_IMMEDIATE);
         }
         else if ( id.equals("sound"))  {
-            Ui.pushView(new Rez.Menus.YesNoMenu(), new ChoiceMenuDelegate(method(:setSound)), Ui.SLIDE_LEFT);
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_LEFT );     
         }
         else if ( id.equals("vibration"))  {
-            Ui.pushView(new Rez.Menus.YesNoMenu(), new ChoiceMenuDelegate(method(:setVibe)), Ui.SLIDE_LEFT);
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Vibration")});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_LEFT );  
         }
         else if (id.equals("reset")) {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
@@ -53,16 +61,14 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function setSound(value) {
-    	var app = App.getApp();
-		app.soundSet = value;
+		if (value == "optOne") { app.soundSet = true;} else { app.soundSet = false;}
     }
 
     function setVibe(value) {
-    	var app = App.getApp();
-		app.vibeSet = value;
+		if (value == "optOne") { app.vibeSet = true; } else { app.vibeSet = false;}
     }
     
-        function onBack() {
+    function onBack() {
         Ui.popView(WatchUi.SLIDE_DOWN);
     }
  

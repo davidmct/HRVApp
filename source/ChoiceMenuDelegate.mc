@@ -1,24 +1,22 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 
-class ChoiceMenuDelegate extends Ui.MenuInputDelegate {
 
-    hidden var mFunc;
+class ChoiceMenu2Delegate extends Ui.Menu2InputDelegate {
 
-    function initialize(func) {
-		mFunc = func;
-		MenuInputDelegate.initialize();
-    }
-
-    function onMenuItem(item) {
-
-        if(item == :MiZero) {
-
-            mFunc.invoke(0);
+	hidden var app = App.getApp();
+	hidden var mFunc;
+	
+	function onSelect(item) {
+        var id = item.getId();
+                    
+     	if( id.equals("optOne")) {
+     		mFunc.invoke("optOne");
         }
-        else if(item == :MiOne) {
-
-            mFunc.invoke(1);
+        else if( id.equals("optTwo"))  {
+			mFunc.invoke("optTwo");       	
         }
     }
+    
+    function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }
 }
