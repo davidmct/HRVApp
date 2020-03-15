@@ -13,6 +13,8 @@ class HRVStorageHandler {
 // then save default set of properties
 
 	var mApp;
+	// test var
+	var x;
 
 	// setup storage functions	
     function initialize() {
@@ -43,36 +45,36 @@ class HRVStorageHandler {
 	function resetSettings() {
 
 		// Retrieve default settings from file
-		timestampSet = Ui.loadResource(Rez.Strings.Timestamp);
-		appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		versionSet = Ui.loadResource(Rez.Strings.Version);
+		mApp.timestampSet = Ui.loadResource(Rez.Strings.Timestamp);
+		mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+		mApp.versionSet = Ui.loadResource(Rez.Strings.Version);
 
-		greenTimeSet = Ui.loadResource(Rez.Strings.GreenTime).toNumber();
-		soundSet = Ui.loadResource(Rez.Strings.Sound).toNumber();
-		vibeSet = Ui.loadResource(Rez.Strings.Vibe).toNumber();
-		testTypeSet = Ui.loadResource(Rez.Strings.TestType).toNumber();
-		timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
-		mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
-		autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
-		autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
-		mMaxAutoTimeSet = Ui.loadResource(Rez.Strings.MaxAutoTime).toNumber();
+		mApp.greenTimeSet = Ui.loadResource(Rez.Strings.GreenTime).toNumber();
+		mApp.soundSet = Ui.loadResource(Rez.Strings.Sound).toNumber();
+		mApp.vibeSet = Ui.loadResource(Rez.Strings.Vibe).toNumber();
+		mApp.testTypeSet = Ui.loadResource(Rez.Strings.TestType).toNumber();
+		mApp.timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
+		mApp.mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
+		mApp.autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
+		mApp.autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
+		mApp.mMaxAutoTimeSet = Ui.loadResource(Rez.Strings.MaxAutoTime).toNumber();
 		
-		Sys.println("autoTimeSet = " + autoTimeSet);
-        Sys.println("mMaxAutoTimeSet = " + mMaxAutoTimeSet);
-        Sys.println("autoStartSet = " + autoStartSet);
+		Sys.println("autoTimeSet = " + mApp.autoTimeSet);
+        Sys.println("mMaxAutoTimeSet = " + mApp.mMaxAutoTimeSet);
+        Sys.println("autoStartSet = " + mApp.autoStartSet);
         
 		// ColSet are index into colour map
-		bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
-		lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
-		txtColSet = Ui.loadResource(Rez.Strings.TxtCol).toNumber();
-		hrvColSet = Ui.loadResource(Rez.Strings.HrvCol).toNumber();
-		avgHrvColSet = Ui.loadResource(Rez.Strings.AvgHrvCol).toNumber();
-		pulseColSet = Ui.loadResource(Rez.Strings.PulseCol).toNumber();
-		avgPulseColSet = Ui.loadResource(Rez.Strings.AvgPulseCol).toNumber();
+		mApp.bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
+		mApp.lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
+		mApp.txtColSet = Ui.loadResource(Rez.Strings.TxtCol).toNumber();
+		mApp.hrvColSet = Ui.loadResource(Rez.Strings.HrvCol).toNumber();
+		mApp.avgHrvColSet = Ui.loadResource(Rez.Strings.AvgHrvCol).toNumber();
+		mApp.pulseColSet = Ui.loadResource(Rez.Strings.PulseCol).toNumber();
+		mApp.avgPulseColSet = Ui.loadResource(Rez.Strings.AvgPulseCol).toNumber();
 
-		inhaleTimeSet = Ui.loadResource(Rez.Strings.inhaleTime).toNumber();
-		exhaleTimeSet = Ui.loadResource(Rez.Strings.exhaleTime).toNumber();
-		relaxTimeSet = Ui.loadResource(Rez.Strings.relaxTime).toNumber();
+		mApp.inhaleTimeSet = Ui.loadResource(Rez.Strings.inhaleTime).toNumber();
+		mApp.exhaleTimeSet = Ui.loadResource(Rez.Strings.exhaleTime).toNumber();
+		mApp.relaxTimeSet = Ui.loadResource(Rez.Strings.relaxTime).toNumber();
 	}
 
 	function readProperties() {
@@ -80,84 +82,68 @@ class HRVStorageHandler {
 		var value;
 		
 		// FORCE NOT OVER WRITE
-		value = getProperty(INITIAL_RUN);
+		value = mApp.getProperty(INITIAL_RUN);
 		if (mDebugging == true) {value = null;}
 			
 		if (value == null) {
-			setProperty(INITIAL_RUN, true);
+			mApp.setProperty(INITIAL_RUN, true);
 		} else {
-	    	value = getProperty(GREEN_TIME);
+	    	value = mApp.getProperty(GREEN_TIME);
 			if(null != value) {
 				// ensure a reasonable minimum
 				if(10 > value){
 					value = 10;
 				}
-	    		greenTimeSet = value;
+	    		mApp.greenTimeSet = value;
 	    	}
-	    	value = getProperty(SOUND);
+	    	value = mApp.getProperty(SOUND);
 			if(null != value) {
-	    		soundSet = value;
+	    		mApp.soundSet = value;
 	    	}
-	    	value = getProperty(VIBE);
+	    	value = mApp.getProperty(VIBE);
 			if(null != value) {
-	    		vibeSet = value;
+	    		mApp.vibeSet = value;
 	    	}
-	    	value = getProperty(TEST_TYPE);
+	    	value = mApp.getProperty(TEST_TYPE);
 			if(null != value) {
-	    		testTypeSet = value;
+	    		mApp.testTypeSet = value;
 	    	}
-	    	value = getProperty(TIMER_TIME);
+	    	value = mApp.getProperty(TIMER_TIME);
 			if(null != value) {
-	    		timerTimeSet = value;
+	    		mApp.timerTimeSet = value;
 	    	}
-	    	value = getProperty(AUTO_START);
+	    	value = mApp.getProperty(AUTO_START);
 			if(null != value) {
-	    		autoStartSet = value;
+	    		mApp.autoStartSet = value;
 	    	}
-	    	value = getProperty(AUTO_TIME);
+	    	value = mApp.getProperty(AUTO_TIME);
 			if(null != value) {
-	    		autoTimeSet = value;
+	    		mApp.autoTimeSet = value;
 	    	}
-	    	value = getProperty(BG_COL);
+	    	value = mApp.getProperty(BG_COL);
 			if(null != value) {
-	    		bgColSet = value;
+	    		mApp.bgColSet = value;
 	    	}
-	    	value = getProperty(LABEL_COL);
+	    	value = mApp.getProperty(LABEL_COL);
 			if(null != value) {
-	    		lblColSet = value;
+	    		mApp.lblColSet = value;
 	    	}
-	    	value = getProperty(TEXT_COL);
+	    	value = mApp.getProperty(TEXT_COL);
 			if(null != value) {
-	    		txtColSet = value;
+	    		mApp.txtColSet = value;
 	    	}
-	    	//value = getProperty(HRV_COL);
-			//if(null != value) {
-	    	//	hrvColSet = value;
-	    	//}
-	    	//value = getProperty(AVG_HRV_COL);
-			//if(null != value) {
-	    	//	avgHrvColSet = value;
-	    	//}
-	    	//value = getProperty(PULSE_COL);
-			//if(null != value) {
-	    	//	pulseColSet = value;
-	    	//}
-	    	//value = getProperty(AVG_PULSE_COL);
-			//if(null != value) {
-	    	//	avgPulseColSet = value;
-	    	//}
 	
-	    	value = getProperty(INHALE_TIME);
+	    	value = mApp.getProperty(INHALE_TIME);
 			if(null != value) {
-	    		inhaleTimeSet = value;
+	    		mApp.inhaleTimeSet = value;
 	    	}
-	    	value = getProperty(EXHALE_TIME);
+	    	value = mApp.getProperty(EXHALE_TIME);
 			if(null != value) {
-	    		exhaleTimeSet = value;
+	    		mApp.exhaleTimeSet = value;
 	    	}
-	    	value = getProperty(RELAX_TIME);
+	    	value = mApp.getProperty(RELAX_TIME);
 			if(null != value) {
-	    		relaxTimeSet = value;
+	    		mApp.relaxTimeSet = value;
 	    	}
 		}
 	}
@@ -165,10 +151,10 @@ class HRVStorageHandler {
 	function resetResults() {
 		// not sure this will work as scope TBD!!!
 		// results defined in HRVApp
-		results = new [150];
+		mApp.results = new [150];
 
 		for(var i = 0; i < 150; i++) {
-			results[i] = 0;
+			mApp.results[i] = 0;
 		}
 	}
 	
@@ -176,20 +162,20 @@ class HRVStorageHandler {
 		// currently references a results array in HRVApp
 		for(var i = 0; i < 30; i++) {
 			var ii = i * 5;
-			var result = getProperty(RESULTS + i);
+			var result = mApp.getProperty(RESULTS + i);
 			if(null != result) {
-				results[ii + 0] = result[0];
-				results[ii + 1] = result[1];
-				results[ii + 2] = result[2];
-				results[ii + 3] = result[3];
-				results[ii + 4] = result[4];
+				mApp.results[ii + 0] = result[0];
+				mApp.results[ii + 1] = result[1];
+				mApp.results[ii + 2] = result[2];
+				mApp.results[ii + 3] = result[3];
+				mApp.results[ii + 4] = result[4];
 			}
 		}
 	}
 
     function saveTest()
     {
-		var testDay = utcStart - (utcStart % 86400);
+		var testDay = mApp.utcStart - (utcStart % 86400);
 		var epoch = testDay - (86400 * 29);
 		var index = ((testDay / 86400) % 30) * 5;
 		var sumHrv = 0;
@@ -201,24 +187,24 @@ class HRVStorageHandler {
 		// REMOVE FOR PUBLISH
 		//index = ((timeNow() / 60) % 30) * 5;
 
-		results[index + 0] = utcStart;
-		results[index + 1] = hrv;
-		results[index + 2] = avgPulse;
+		mApp.results[index + 0] = mApp.utcStart;
+		mApp.results[index + 1] = mApp.hrv;
+		mApp.results[index + 2] = mApp.avgPulse;
 
 		// Calculate averages
 		for(var i = 0; i < 30; i++) {
 
 			var ii = i * 5;
 
-			if(epoch <= results[ii]) {
+			if(epoch <= mApp.results[ii]) {
 
-				sumHrv += results[ii + 1];
-				sumPulse += results[ii + 2];
+				sumHrv += mApp.results[ii + 1];
+				sumPulse += mApp.results[ii + 2];
 				count++;
 			}
 		}
-		results[index + 3] = sumHrv / count;
-		results[index + 4] = sumPulse / count;
+		mApp.results[index + 3] = sumHrv / count;
+		mApp.results[index + 4] = sumPulse / count;
 
 		// Print values to file in csv format with ISO 8601 date & time
 		var date = Calendar.info(startMoment, 0);
@@ -229,78 +215,78 @@ class HRVStorageHandler {
     		date.hour,
     		date.min.format("%02d"),
     		date.sec.format("%02d"),
-    		hrv,
-    		avgPulse,
+    		mApp.hrv,
+    		mApp.avgPulse,
     		sumHrv / count,
     		sumPulse / count]));
 
-		isNotSaved = false;
-    	isSaved = true;
+		mApp.isNotSaved = false;
+    	mApp.isSaved = true;
     }
 
 	function saveProperties() {
 		// Save settings to memory
-    	if(timestampSet != getProperty(TIMESTAMP)) {
-    		setProperty(TIMESTAMP, timestampSet);
+    	if(mApp.timestampSet != mApp.getProperty(TIMESTAMP)) {
+    		mApp.setProperty(TIMESTAMP, mApp.timestampSet);
     	}
-    	if(appNameSet != getProperty(APP_NAME)) {
-    		setProperty(APP_NAME, appNameSet);
+    	if(mApp.appNameSet != mApp.getProperty(APP_NAME)) {
+    		mApp.setProperty(APP_NAME, mApp.appNameSet);
     	}
-		if(versionSet != getProperty(VERSION)) {
-    		setProperty(VERSION, versionSet);
-    	}
-
-		if(greenTimeSet != getProperty(GREEN_TIME)) {
-    		setProperty(GREEN_TIME, greenTimeSet);
-    	}
-		if(soundSet != getProperty(SOUND)) {
-    		setProperty(SOUND, soundSet);
-    	}
-		if(vibeSet != getProperty(VIBE)) {
-    		setProperty(VIBE, vibeSet);
-    	}
-		if(testTypeSet != getProperty(TEST_TYPE)) {
-    		setProperty(TEST_TYPE, testTypeSet);
-    	}
-		if(timerTimeSet != getProperty(TIMER_TIME)) {
-    		setProperty(TIMER_TIME, timerTimeSet);
-    	}
-		if(autoStartSet != getProperty(AUTO_START)) {
-    		setProperty(AUTO_START, autoStartSet);
-    	}
-		if(autoTimeSet != getProperty(AUTO_TIME)) {
-    		setProperty(AUTO_TIME, autoTimeSet);
-    	}
-		if(bgColSet != getProperty(BG_COL)) {
-    		setProperty(BG_COL, bgColSet);
-    	}
-		if(lblColSet != getProperty(LABEL_COL)) {
-    		setProperty(LABEL_COL, lblColSet);
-    	}
-		if(txtColSet != getProperty(TEXT_COL)) {
-    		setProperty(TEXT_COL, txtColSet);
-    	}
-		if(hrvColSet != getProperty(HRV_COL)) {
-    		setProperty(HRV_COL, hrvColSet);
-    	}
-		if(avgHrvColSet != getProperty(AVG_HRV_COL)) {
-    		 setProperty(AVG_HRV_COL, avgHrvColSet);
-    	}
-		if(pulseColSet != getProperty(PULSE_COL)) {
-    		setProperty(PULSE_COL, pulseColSet);
-    	}
-		if(avgPulseColSet != getProperty(AVG_PULSE_COL)) {
-    		setProperty(AVG_PULSE_COL, avgPulseColSet);
+		if(mApp.versionSet != mApp.getProperty(VERSION)) {
+    		mApp.setProperty(VERSION, mApp.versionSet);
     	}
 
-    	if(inhaleTimeSet != getProperty(INHALE_TIME)) {
-    		setProperty(INHALE_TIME, inhaleTimeSet);
+		if(mApp.greenTimeSet != mApp.getProperty(GREEN_TIME)) {
+    		mApp.setProperty(GREEN_TIME, mApp.greenTimeSet);
     	}
-    	if(exhaleTimeSet != getProperty(EXHALE_TIME)) {
-    		setProperty(EXHALE_TIME, exhaleTimeSet);
+		if(mApp.soundSet != mApp.getProperty(SOUND)) {
+    		mApp.setProperty(SOUND, mApp.soundSet);
     	}
-    	if(relaxTimeSet != getProperty(RELAX_TIME)) {
-    		setProperty(RELAX_TIME, relaxTimeSet);
+		if(mApp.vibeSet != mApp.getProperty(VIBE)) {
+    		mApp.setProperty(VIBE, mApp.vibeSet);
+    	}
+		if(mApp.testTypeSet != mApp.getProperty(TEST_TYPE)) {
+    		mApp.setProperty(TEST_TYPE, mApp.testTypeSet);
+    	}
+		if(mApp.timerTimeSet != mApp.getProperty(TIMER_TIME)) {
+    		mApp.setProperty(TIMER_TIME, mApp.timerTimeSet);
+    	}
+		if(mApp.autoStartSet != mApp.getProperty(AUTO_START)) {
+    		mApp.setProperty(AUTO_START, mApp.autoStartSet);
+    	}
+		if(mApp.autoTimeSet != mApp.getProperty(AUTO_TIME)) {
+    		mApp.setProperty(AUTO_TIME, mApp.autoTimeSet);
+    	}
+		if(mApp.bgColSet != mApp.getProperty(BG_COL)) {
+    		mApp.setProperty(BG_COL, mApp.bgColSet);
+    	}
+		if(mApp.lblColSet != mApp.getProperty(LABEL_COL)) {
+    		mApp.setProperty(LABEL_COL, mApp.lblColSet);
+    	}
+		if(mApp.txtColSet != mApp.getProperty(TEXT_COL)) {
+    		mApp.setProperty(TEXT_COL, mApp.txtColSet);
+    	}
+		if(mApp.hrvColSet != mApp.getProperty(HRV_COL)) {
+    		mApp.setProperty(HRV_COL, mApp.hrvColSet);
+    	}
+		if(mApp.avgHrvColSet != mApp.getProperty(AVG_HRV_COL)) {
+    		 mApp.setProperty(AVG_HRV_COL, mApp.avgHrvColSet);
+    	}
+		if(mApp.pulseColSet != mApp.getProperty(PULSE_COL)) {
+    		mApp.setProperty(PULSE_COL, mApp.pulseColSet);
+    	}
+		if(mApp.avgPulseColSet != mApp.getProperty(AVG_PULSE_COL)) {
+    		mApp.setProperty(AVG_PULSE_COL, mApp.avgPulseColSet);
+    	}
+
+    	if(mApp.inhaleTimeSet != mApp.getProperty(INHALE_TIME)) {
+    		mApp.setProperty(INHALE_TIME, mApp.inhaleTimeSet);
+    	}
+    	if(mApp.exhaleTimeSet != mApp.getProperty(EXHALE_TIME)) {
+    		mApp.setProperty(EXHALE_TIME, mApp.exhaleTimeSet);
+    	}
+    	if(mApp.relaxTimeSet != mApp.getProperty(RELAX_TIME)) {
+    		mApp.setProperty(RELAX_TIME, mApp.relaxTimeSet);
     	}
 	}
 
@@ -308,14 +294,14 @@ class HRVStorageHandler {
 	    // Save results to memory
     	for(var i = 0; i < 30; i++) {
 			var ii = i * 5;
-			var result = getProperty(RESULTS + i);
-			if(null == result || results[ii] != result[0]) {
-				setProperty(RESULTS + i, [
-					results[ii + 0],
-					results[ii + 1],
-					results[ii + 2],
-					results[ii + 3],
-					results[ii + 4]]);
+			var result = mApp.getProperty(RESULTS + i);
+			if(null == result || mApp.results[ii] != result[0]) {
+				mApp.setProperty(RESULTS + i, [
+					mApp.results[ii + 0],
+					mApp.results[ii + 1],
+					mApp.results[ii + 2],
+					mApp.results[ii + 3],
+					mApp.results[ii + 4]]);
 			}
 		}
 	}

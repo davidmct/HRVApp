@@ -23,7 +23,7 @@ class TestView extends Ui.View {
 		}
 
 		if(!app.isChOpen && !app.isWaiting) {
-			app.openCh();
+			app.mSensor.openCh();
 		}
     }
 

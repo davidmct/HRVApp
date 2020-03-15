@@ -188,31 +188,30 @@ class HRVApp extends App.AppBase {
         Sys.println("HRVApp initialisation called");
         mStorage = new HRVStorageHandler();
         // added this line as onStart() called when start pressed???
-        resetSettings();
+        mStorage.resetSettings();
     	AppBase.initialize();
     }
 
 
     //! onStart() is called on application start up
     function onStart(state) {
-
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
 
 		// Retrieve saved settings from memory
-		resetSettings();		
-		readProperties();
+		mStorage.resetSettings();		
+		mStorage.readProperties();
 		
     	 if(VIVOACTIVE == device) {
     	 	soundSet = 0;
     	 }
 
 		// Retrieve saved results from memory
-		resetResults();		
-		loadResults();
+		mStorage.resetResults();		
+		mStorage.loadResults();
 
 		// Init ant variables
-		closeCh();
+		//AntHandler.closeCh();
 		mNoPulseCount = 0;
 	    mPrevIntMs = 0;
 	    mPrevBeatCount = 0;
@@ -239,15 +238,14 @@ class HRVApp extends App.AppBase {
 		testTimer = new Timer.Timer();
 		
 		// Start up ANT device
-	    //	try {
-	            //Create the sensor object and open it
-	    //        mSensor = new AuxHRSensor(mAntID);
-	    //        mSensor.open();
-	    //    } catch(e instanceof Ant.UnableToAcquireChannelException) {
-	    //        System.println(e.getErrorMessage());
-	    //        mSensor = null;
-	    //    }
-	    //}
+	    try {
+	    	//Create the sensor object and open it
+	   		mSensor = new AntHandler(mAntID);
+	    	mSensor.openCh();
+	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
+	    	System.println(e.getErrorMessage());
+	   		mSensor = null;
+	    }
     }
 
     function startTest() {
@@ -276,7 +274,7 @@ class HRVApp extends App.AppBase {
     	if(isWaiting) {
 			isWaiting = false;
 			if(!isChOpen) {
-				openCh();
+				mSensor.openCh();
 			}
 		}
 		else {
@@ -321,7 +319,7 @@ class HRVApp extends App.AppBase {
 					}
 					isWaiting = true;
 					if(isChOpen) {
-						closeCh();
+						mSensor.closeCh();
 					}
 					testTimer.start(method(:start),(timeAutoStart - timeNow())*1000,false); // false
 					return;
@@ -329,7 +327,7 @@ class HRVApp extends App.AppBase {
 				else {
 					isWaiting = false;
 					if(!isChOpen) {
-						openCh();
+						mSensor.openCh();
 					}
 					testTimer.start(method(:autoFinish),timerTime*1000,true); // true
 				}
@@ -363,10 +361,10 @@ class HRVApp extends App.AppBase {
 		if (state == null) {
 		}
     	// Close ant channel
-		closeCh();
+		mSensor.closeCh();
 		
-		saveProperties();
-		saveResults();
+		mStorage.saveProperties();
+		mStorage.saveResults();
 
 		greenTimer.stop();
 		viewTimer.stop();
@@ -381,20 +379,17 @@ class HRVApp extends App.AppBase {
 
 
     function resetGreenTimer() {
-
 		greenTimer.stop();
 		greenTimer.start(method(:startGreenMode),greenTimeSet*1000,true);
     }
 
     function stopGreenTimer() {
-
     	greenTimer.stop();
     }
 
     function startGreenMode() {
-
     	if(!isTesting && isChOpen) {
-    		closeCh();
+    		mSensor.closeCh();
     	}
     	if(WATCH_VIEW != viewNum) {
     		Ui.switchToView(getView(WATCH_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_LEFT);
@@ -413,8 +408,7 @@ class HRVApp extends App.AppBase {
 		}
     }
 
-	function clockFormat(time)
-	{
+	function clockFormat(time) 	{
 		var hour = (time / 3600) % 24;
 		var min = (time / 60) % 60;
 		var sec = time % 60;
@@ -511,24 +505,20 @@ class HRVApp extends App.AppBase {
     }
 
     function plusView() {
-
     	var plusView = (viewNum + 1) % NUM_VIEWS;
     	return getView(plusView);
     }
 
     function lastView() {
-
     	return getView(lastViewNum);
     }
 
     function subView() {
-
     	var subView = (viewNum + NUM_VIEWS - 1) % NUM_VIEWS;
     	return getView(subView);
     }
 
     function getView(newViewNum) {
-
     	lastViewNum = viewNum;
 		viewNum = newViewNum;
 		

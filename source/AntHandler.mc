@@ -2,23 +2,28 @@ using Toybox.Ant as Ant;
 using Toybox.Time as Time;
 using Toybox.System as Sys;
 
-class antHandler extends Ant.GenericChannel {
+class AntHandler extends Ant.GenericChannel {
     const DEVICE_TYPE = 120;
     const PERIOD = 8070;
+    
+    var mApp;
 	
 	function openCh() {
+	    // Open the channel
+        GenericChannel.open();
+       	mApp.isChOpen = GenericChannel.open();
+        // may need some other changes
+    }
+        
+    function initialize( mAntID) { 
+    	mApp = Application.getApp();
+    	   
         // Get the channel
         var chanAssign = new Ant.ChannelAssignment(
             Ant.CHANNEL_TYPE_RX_NOT_TX,
             Ant.NETWORK_PLUS);
-		//try {
-            //Create the sensor object and open it
-        //    mSensor = new AuxHRSensor(mAntID);
-        //    mSensor.open();
-        //} catch(e instanceof Ant.UnableToAcquireChannelException) {
-        //    System.println(e.getErrorMessage());
-        //    mSensor = null;
-        //}
+        GenericChannel.initialize(self.method(:onAntMsg), chanAssign);
+
         // Set the configuration
         var deviceCfg = new Ant.DeviceConfig( {
             :deviceNumber => mAntID,             //Set to 0 to use wildcard search
@@ -29,10 +34,9 @@ class antHandler extends Ant.GenericChannel {
             :searchTimeoutLowPriority => 2,
             :searchTimeoutHighPriority => 2,
             :searchThreshold => 0} );
-
-        antCh = new Ant.GenericChannel(self.method(:onAntMsg), chanAssign);
-        antCh.setDeviceConfig(deviceCfg);
-		isChOpen = antCh.open();
+        setDeviceConfig(deviceCfg);
+		// will now be searching for strap
+		
     }
 
     function onAntMsg(msg)
@@ -41,9 +45,9 @@ class antHandler extends Ant.GenericChannel {
 
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId ) {
 
-            isAntRx = true;
-            isStrapRx = true;
-            livePulse = payload[7].toNumber();
+            mApp.isAntRx = true;
+            mApp.isStrapRx = true;
+            mApp.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 
@@ -52,11 +56,11 @@ class antHandler extends Ant.GenericChannel {
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
             var event = payload[1].toNumber();
             if( Ant.MSG_CODE_EVENT_RX_FAIL == event ) {
-				isStrapRx = false;
-				isPulseRx = false;
+				mApp.isStrapRx = false;
+				mApp.isPulseRx = false;
             }
             else if( Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH == event ) {
-				isAntRx = false;
+				mApp.isAntRx = false;
             }
             else if( Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT == event ) {
 				closeCh();
@@ -67,13 +71,13 @@ class antHandler extends Ant.GenericChannel {
 
 	// Close Ant channel.
     function closeCh() {
-    	if(isChOpen) {
-    		antCh.release();
+    	if(mApp.isChOpen) {
+    		GenericChannel.release();
     	}
-    	isChOpen = false;
-    	isAntRx = false;
-		isStrapRx = false;
-		isPulseRx = false;
+    	mApp.isChOpen = false;
+    	mApp.isAntRx = false;
+		mApp.isStrapRx = false;
+		mApp.isPulseRx = false;
     }
     
 
