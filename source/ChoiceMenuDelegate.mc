@@ -12,9 +12,11 @@ class ChoiceMenu2Delegate extends Ui.Menu2InputDelegate {
                     
      	if( id.equals("optOne")) {
      		mFunc.invoke("optOne");
+     		Ui.popView(WatchUi.SLIDE_DOWN);
         }
         else if( id.equals("optTwo"))  {
-			mFunc.invoke("optTwo");       	
+			mFunc.invoke("optTwo"); 
+			Ui.popView(WatchUi.SLIDE_DOWN);      	
         }
     }
     

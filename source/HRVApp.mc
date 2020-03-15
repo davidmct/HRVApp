@@ -12,6 +12,14 @@ using Toybox.System as Sys;
 
 // home page timer placement needs fixing if >1hr...
 
+// Things still to fix
+//1. Confirmation dialogue still old style
+//2. Need to make sure any Delegate Pop's view when done
+//3. Set up properties and storage
+//4. Update ANT logic and interface
+//5. Redo HRV measurements and fix graph
+//6. Add poincare view
+
 var mDebugging = true;
 
 using Toybox.Lang;
