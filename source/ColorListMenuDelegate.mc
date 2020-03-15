@@ -1,73 +1,26 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
+using Toybox.System as Sys;
 
-class ColorListMenuDelegate extends Ui.MenuInputDelegate {
+class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
 
-    hidden var mFunc;
-
-    function initialize(func) {
-
-		mFunc = func;
-		MenuInputDelegate.initialize();
-    }
-
-    function onMenuItem(item) {
-
-        if(item == :MiBlack) {
-
-            mFunc.invoke(BLACK);
-        }
-        else if(item == :MiWhite) {
-
-			mFunc.invoke(WHITE);
-        }
-        else if(item == :MiBlue) {
-
-            mFunc.invoke(BLUE);
-        }
-        else if(item == :MiDkBlue) {
-
-            mFunc.invoke(DK_BLUE);
-        }
-        else if(item == :MiRed) {
-
-            mFunc.invoke(RED);
-        }
-        else if(item == :MiDkRed) {
-
-            mFunc.invoke(DK_RED);
-        }
-        else if(item == :MiLtGray) {
-
-            mFunc.invoke(LT_GRAY);
-        }
-        else if(item == :MiDkGray) {
-
-            mFunc.invoke(DK_GRAY);
-        }
-        else if(item == :MiGreen) {
-
-            mFunc.invoke(GREEN);
-        }
-        else if(item == :MiDkGreen) {
-
-            mFunc.invoke(DK_GREEN);
-        }
-        else if(item == :MiOrange) {
-
-            mFunc.invoke(ORANGE);
-        }
-        else if(item == :MiYellow) {
-
-            mFunc.invoke(YELLOW);
-        }
-        else if(item == :MiPink) {
-
-            mFunc.invoke(PINK);
-        }
-        else if(item == :MiPurple) {
-
-            mFunc.invoke(PURPLE);
+	hidden var app = App.getApp();
+	hidden var mFunc;
+	
+	function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }
+	        
+   	function onSelect(item) {
+        var id = item.getId();
+        // id is dictionary entry
+        var value = $.mColourNumbersString.get(id);
+        
+        if (value < 0 || value >= $.mColourNumbersString.size()) {
+        	// opps
+        	var mErr = new myException( "ColourListMenuDelegate: colour out of range");
+        } else {
+        	Sys.println("ColourListMenuDelegate: colour picked = " + value);
+        	mFunc.invoke( value);   
+        	Ui.popView(WatchUi.SLIDE_DOWN);     
         }
     }
 }

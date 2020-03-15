@@ -33,6 +33,11 @@ enum {
 	TRANSPARENT = 14
 }
 
+	// for menu construction .. and could get rid of enum and change map at some point
+	var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
+		"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
+		"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
+
 	function mapColour(index) {
 		var col;
 		if (index < 0 || index > (colours.size()-1) ) {

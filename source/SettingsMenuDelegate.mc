@@ -38,7 +38,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_LEFT );
         }
         else if ( id.equals("green"))  {
-            Ui.pushView(new NumberPicker(App.getApp().greenTimeSet, 9999, 1), new GreenTimePickerDelegate(), Ui.SLIDE_IMMEDIATE);
+            Ui.pushView(new NumberPicker(App.getApp().greenTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setGreenTimer)), Ui.SLIDE_IMMEDIATE);
         }
         else if ( id.equals("sound"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
@@ -67,6 +67,8 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     function setVibe(value) {
 		if (value == "optOne") { app.vibeSet = true; } else { app.vibeSet = false;}
     }
+    
+    function setGreenTimer( value) { app.greenTimeSet = value;}
     
     function onBack() {
         Ui.popView(WatchUi.SLIDE_DOWN);
