@@ -9,22 +9,19 @@ class ResultView extends Ui.View {
 	function initialize() { app=App.getApp(); View.initialize();}
 	
 	function onLayout(dc) {
-		View.setLayout(Rez.Layouts.ResultsViewLayout(dc));
+		setLayout(Rez.Layouts.ResultsViewLayout(dc));
 	}
 		
     //! Restore the state of the app and prepare the view to be shown
+    //! Called when this View is brought to the foreground. Restore
+    //! the state of this View and prepare it to be shown. This include
+    //! loading resources into memory.
     function onShow() {
     	app.updateSeconds();
     	app.resetGreenTimer();
-    }
-
-    //! Update the view
-    function onUpdate(dc) {
-		var time = 0;
+    			var time = 0;
 		var pulse = 0;
 		var expected = 0;
-		
-		View.onUpdate(dc);
 
 		if(app.isTesting) {
 			time = app.timeNow() - app.utcStart;
@@ -39,46 +36,38 @@ class ResultView extends Ui.View {
 		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT || Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueColour = app.txtColSet;
 		
-		var labelView = View.findDrawableById("timeY");
-		labelView.color = mLabelColour;
-		labelView.justification = mLabelJust;
-		labelView = View.findDrawableById("pulseY");
-		labelView.color = mLabelColour;
-		labelView.justification = mLabelJust;
-		labelView = View.findDrawableById("hrvY");
-		labelView.color = mLabelColour;
-		labelView.justification = mLabelJust;
-		labelView = View.findDrawableById("samplesY");
-		labelView.color = mLabelColour;
-		labelView.justification = mLabelJust;
-		labelView = View.findDrawableById("expectedY");
-		labelView.color = mLabelColour;
-		labelView.justification = mLabelJust;
-		
-		// update variables in view
-		var valueView;
-		valueView = View.findDrawableById("timeValue");
-        valueView.text = app.timerFormat(time).toString();
-        valueView.color = mValueColour;
-        valueView.justification = mValueJust;
-        valueView = View.findDrawableById("pulseValue");    
-		valueView.text = app.avgPulse.toString();
-        valueView.color = mValueColour;
-        valueView.justification = mValueJust;
-        valueView = View.findDrawableById("hrvValue");    
-		valueView.text = app.hrv.toString();   
-        valueView.color = mValueColour;
-        valueView.justification = mValueJust;	     
-        valueView = View.findDrawableById("samplesValue");    
-		valueView.text = app.dataCount.toString();  
-        valueView.justification = mValueJust;
-        valueView.color = mValueColour;      
-        valueView = View.findDrawableById("expectedValue");    
-		valueView.text = expected.toString();   
-        valueView.justification = mValueJust;
-        valueView.color = mValueColour;     
+		updateLayoutField("timeY", null, mLabelColour, mLabelJust);
+		updateLayoutField("pulseY", null, mLabelColour, mLabelJust);		
+		updateLayoutField("hrvY", null, mLabelColour, mLabelJust);		
+		updateLayoutField("samplesY", null, mLabelColour, mLabelJust);	
+		updateLayoutField("expectedY", null, mLabelColour, mLabelJust);	
+
+		updateLayoutField( "timeValue", app.timerFormat(time).toString(), mValueColour, mValueJust);
+		updateLayoutField( "pulseValue", app.avgPulse.toString(), mValueColour, mValueJust);
+		updateLayoutField( "hrvValue", app.hrv.toString(), mValueColour, mValueJust);
+		updateLayoutField( "samplesValue", app.dataCount.toString(), mValueColour, mValueJust);
+		updateLayoutField( "expectedValue", expected.toString(), mValueColour, mValueJust);
+    }
+    
+    hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
+        var drawable = findDrawableById(fieldId);
+        if (drawable != null) {
+            drawable.setColor(fieldColour);
+            drawable.setJustification(fieldJust);
+            if (fieldValue != null) {
+            	drawable.setText(fieldValue);
+            }
+        }
+    }
+    
+    //! Update the view
+    function onUpdate(dc) { 
+   		View.onUpdate(dc);
     }
 
+    //! Called when this View is removed from the screen. Save the
+    //! state of this View here. This includes freeing resources from
+    //! memory.
     function onHide() {
     }
 }
