@@ -1,16 +1,16 @@
 <layouts>
     <!-- Results view layout for round-280x280 -->
     <layout id="ResultsViewLayout">
-        <label id="timeY" text="Time" x="111" y="48" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="pulseY" text="Pulse" x="111" y="78" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="hrvY" text="HRV" x="111" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="samplesY" text="Samples" x="111" y="138" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="expectedY" text="Expected" x="111" y="168" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="timeValue" x="center" y="48" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="pulseValue" x="center" y="78" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="hrvValue" x="center" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="samplesValue" x="center" y="138" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="expectedValue" x="center" y="168" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="timeY" text="Time" x="130" y="58" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="pulseY" text="Pulse" x="130" y="88" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="hrvY" text="HRV" x="130" y="118" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="samplesY" text="Samples" x="130" y="148" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="expectedY" text="Expected" x="130" y="178" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="timeValue" x="center" y="58" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="pulseValue" x="center" y="88" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="hrvValue" x="center" y="118" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="samplesValue" x="center" y="148" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="expectedValue" x="center" y="178" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
 		<drawable id="ResultsLayoutLines_id" />
     </layout>
 </layouts>

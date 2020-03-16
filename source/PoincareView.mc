@@ -7,8 +7,9 @@ class PoincareView extends Ui.View {
 
 	hidden var floorVar;
 	hidden var scaleVar;
+	var app;
 
-	function initialize() { View.initialize();}
+	function initialize() { app = App.getApp(); View.initialize();}
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
@@ -25,8 +26,6 @@ class PoincareView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-
-		var app = App.getApp();
 
 		var today = (app.timeToday() / 86400) % 30;	// Todays index
 		var epoch = app.timeToday() - (86400 * 29);	// Index 29 days ago
@@ -114,8 +113,10 @@ class PoincareView extends Ui.View {
 
 		// add code here
 		// Draw the view
-		MapSetColour(dc, TRANSPARENT, app.bgColSet);
+		//MapSetColour(dc, app.txtColSet, app.bgColSet);
+		dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_BLACK);
 		dc.clear();
+		dc.drawText(100, 100, Gfx.FONT_MEDIUM, "POINCARE", Gfx.TEXT_JUSTIFY_CENTER); 
 		
 		Sys.println("In POINCARE VIEW");
 		
@@ -123,6 +124,9 @@ class PoincareView extends Ui.View {
 		//var str = System.getSystemStats().usedMemory.toString();
 		//dc.setColor(WHITE, BLACK);
 		//dc.drawText(dc.getWidth() / 2, 0, font, str, Gfx.TEXT_JUSTIFY_CENTER);
-
+		
+		//If using layout then calling onUpdate() works. If drawing explicitly then overwrites screen
+		// Possibly needs to be at start! 
+   		//View.onUpdate(dc);
     }
 }

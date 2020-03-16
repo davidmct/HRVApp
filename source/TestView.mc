@@ -32,8 +32,6 @@ class TestView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-    	var app = Application.getApp();
-
     	// Default layout settings
 	    var titleFont = 4;		// Gfx.FONT_LARGE
 	    var numFont = 6;		// Gfx.FONT_NUMBER_MILD

@@ -70,6 +70,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     }
 
     function onEnter() {
+    	Sys.println("HRVBehaviour onEnter()");
 		if(0 < app.viewNum) {
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;

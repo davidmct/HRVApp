@@ -61,8 +61,8 @@ class ResultView extends Ui.View {
 		expected = (((1 + time) / 60.0) * app.avgPulse).toNumber();
 
 		var mLabelColour = mapColour( app.lblColSet);
-		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT || Graphics.TEXT_JUSTIFY_VCENTER;
-		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT || Graphics.TEXT_JUSTIFY_VCENTER;
+		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER;
+		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueColour = mapColour( app.txtColSet);
 		
 		//Sys.println("ResultView: update fields of layout: labelCol: "+ mLabelColour + " Value colour " + mValueColour);
