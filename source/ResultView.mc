@@ -4,52 +4,27 @@ using Toybox.Graphics as Gfx;
 
 class ResultView extends Ui.View {
 
-	function initialize() { View.initialize();}
+	hidden var app;
+
+	function initialize() { app=App.getApp(); View.initialize();}
 	
+	function onLayout(dc) {
+		View.setLayout(Rez.Layouts.ResultsViewLayout(dc));
+	}
+		
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
-    	var app = App.getApp();
     	app.updateSeconds();
     	app.resetGreenTimer();
     }
 
     //! Update the view
     function onUpdate(dc) {
-
-    	var app = App.getApp();
-
-    	// Default layout settings
-	    var font = 3;		// Gfx.FONT_MEDIUM
-	    var timeY = 14;
-	    var pulseY = 44;
-	    var hrvY = 74;
-	    var samplesY = 104;
-	    var expectedY = 134;
-	    var line1Y = 60;
-	    var line2Y = 90;
-	    var col1 = 105;
-	    var col2 = 111;
-
-		if(FENIX == app.device) {
-        	font = 1;		// Gfx.FONT_TINY
-		    timeY = 48;
-		    pulseY = 78;
-		    hrvY = 108;
-		    samplesY = 138;
-		    expectedY = 168;
-		    line1Y = 94;
-		    line2Y = 124;
-		    col1 = 111;
-		    col2 = 115;
-        }
-
-		var justL = 6;		// Gfx.TEXT_JUSTIFY_LEFT | Gfx.TEXT_JUSTIFY_VCENTER
-		var justR = 4;		// Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER
-
 		var time = 0;
 		var pulse = 0;
 		var expected = 0;
+		
+		View.onUpdate(dc);
 
 		if(app.isTesting) {
 			time = app.timeNow() - app.utcStart;
@@ -59,31 +34,49 @@ class ResultView extends Ui.View {
 		}
 		expected = (((1 + time) / 60.0) * app.avgPulse).toNumber();
 
-    	// Draw the view
-        MapSetColour( dc, TRANSPARENT, app.bgColSet);
-        dc.clear();
-
-        MapSetColour( dc, app.lblColSet, TRANSPARENT);
-        dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
-		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
-		dc.drawText(col1, timeY, font, "Time :", justR);
-		dc.drawText(col1, pulseY, font, "Avg pulse :", justR);
-		dc.drawText(col1, hrvY, font, "HRV :", justR);
-		dc.drawText(col1, samplesY, font, "Samples :", justR);
-		dc.drawText(col1, expectedY, font, "Expected :", justR);
-
-		MapSetColour( dc, app.txtColSet, TRANSPARENT);
-		dc.drawText(col2, timeY, font, app.timerFormat(time), justL);
-		dc.drawText(col2, pulseY, font, app.avgPulse.toString(), justL);
-		dc.drawText(col2, hrvY, font, app.hrv.toString(), justL);
-		dc.drawText(col2, samplesY, font, app.dataCount.toString(), justL);
-		dc.drawText(col2, expectedY, font, expected.toString(), justL);
-
-		// Testing only. Draw used memory
-		//var str = System.getSystemStats().usedMemory.toString();
-		//dc.setColor(WHITE, BLACK);
-		//dc.drawText(0, 100, font, str, Gfx.TEXT_JUSTIFY_LEFT);
-
+		var mLabelColour = app.lblColSet;
+		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT || Graphics.TEXT_JUSTIFY_VCENTER;
+		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT || Graphics.TEXT_JUSTIFY_VCENTER;
+		var mValueColour = app.txtColSet;
+		
+		var labelView = View.findDrawableById("timeY");
+		labelView.color = mLabelColour;
+		labelView.justification = mLabelJust;
+		labelView = View.findDrawableById("pulseY");
+		labelView.color = mLabelColour;
+		labelView.justification = mLabelJust;
+		labelView = View.findDrawableById("hrvY");
+		labelView.color = mLabelColour;
+		labelView.justification = mLabelJust;
+		labelView = View.findDrawableById("samplesY");
+		labelView.color = mLabelColour;
+		labelView.justification = mLabelJust;
+		labelView = View.findDrawableById("expectedY");
+		labelView.color = mLabelColour;
+		labelView.justification = mLabelJust;
+		
+		// update variables in view
+		var valueView;
+		valueView = View.findDrawableById("timeValue");
+        valueView.text = app.timerFormat(time).toString();
+        valueView.color = mValueColour;
+        valueView.justification = mValueJust;
+        valueView = View.findDrawableById("pulseValue");    
+		valueView.text = app.avgPulse.toString();
+        valueView.color = mValueColour;
+        valueView.justification = mValueJust;
+        valueView = View.findDrawableById("hrvValue");    
+		valueView.text = app.hrv.toString();   
+        valueView.color = mValueColour;
+        valueView.justification = mValueJust;	     
+        valueView = View.findDrawableById("samplesValue");    
+		valueView.text = app.dataCount.toString();  
+        valueView.justification = mValueJust;
+        valueView.color = mValueColour;      
+        valueView = View.findDrawableById("expectedValue");    
+		valueView.text = expected.toString();   
+        valueView.justification = mValueJust;
+        valueView.color = mValueColour;     
     }
 
     function onHide() {

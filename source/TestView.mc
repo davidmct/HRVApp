@@ -4,14 +4,16 @@ using Toybox.Graphics as Gfx;
 
 class TestView extends Ui.View {
 
+	hidden var app;
+	
     function initialize() {
     	View.initialize();
+    	app = App.getApp();
     }
+    
     
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
-    	var app = Application.getApp();
 
     	app.updateSeconds();
     	app.resetGreenTimer();
