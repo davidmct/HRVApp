@@ -6,13 +6,18 @@ using Toybox.System as Sys;
 class ResultView extends Ui.View {
 
 	hidden var app;
-	//var mResultsLayout;
+	var mResultsLayout;
 
 	function initialize() { app=App.getApp(); View.initialize();}
 	
 	function onLayout(dc) {
-		setLayout(Rez.Layouts.ResultsViewLayout(dc));
-		Sys.println("ResultView: onLayout() called ");
+		mResultsLayout = Rez.Layouts.ResultsViewLayout(dc);
+		//Sys.println("ResultView: onLayout() called ");
+		if ( mResultsLayout != null ) {
+			setLayout (mResultsLayout);
+		} else {
+			Sys.println("layout null");
+		}
 	}
 		
     //! Restore the state of the app and prepare the view to be shown
@@ -20,8 +25,7 @@ class ResultView extends Ui.View {
     //! the state of this View and prepare it to be shown. This include
     //! loading resources into memory.
     function onShow() {
-    	Sys.println("ResultView: onShow() called ");
-    	
+    	//Sys.println("ResultView: onShow() called ");   	
     	app.updateSeconds();
     	app.resetGreenTimer();		
 		//return true;
@@ -29,9 +33,9 @@ class ResultView extends Ui.View {
     
     hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
         var drawable = findDrawableById(fieldId);
-        Sys.println("ResultView: updateLayoutField() called " + drawable );
+        //Sys.println("ResultView: updateLayoutField() called " + drawable );
         if (drawable != null) {
-        	Sys.println("ResultView: updateLayoutField() setting colour/Just ");
+        	//Sys.println("ResultView: updateLayoutField() setting colour/Just ");
             drawable.setColor(fieldColour);
             drawable.setJustification(fieldJust);
             if (fieldValue != null) {
@@ -42,7 +46,7 @@ class ResultView extends Ui.View {
     
     //! Update the view
     function onUpdate(dc) { 
-    	Sys.println("ResultView: onUpdate() called");
+    	//Sys.println("ResultView: onUpdate() called");
     	
     	var time = 0;
 		var pulse = 0;
@@ -56,12 +60,12 @@ class ResultView extends Ui.View {
 		}
 		expected = (((1 + time) / 60.0) * app.avgPulse).toNumber();
 
-		var mLabelColour = app.lblColSet;
+		var mLabelColour = mapColour( app.lblColSet);
 		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT || Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT || Graphics.TEXT_JUSTIFY_VCENTER;
-		var mValueColour = app.txtColSet;
+		var mValueColour = mapColour( app.txtColSet);
 		
-		Sys.println("ResultView: update fields of layout");
+		//Sys.println("ResultView: update fields of layout: labelCol: "+ mLabelColour + " Value colour " + mValueColour);
 		updateLayoutField("timeY", null, mLabelColour, mLabelJust);
 		updateLayoutField("pulseY", null, mLabelColour, mLabelJust);		
 		updateLayoutField("hrvY", null, mLabelColour, mLabelJust);		
@@ -74,8 +78,9 @@ class ResultView extends Ui.View {
 		updateLayoutField( "samplesValue", app.dataCount.toString(), mValueColour, mValueJust);
 		updateLayoutField( "expectedValue", expected.toString(), mValueColour, mValueJust);
 		
+		//dc.drawText(100, 100, Graphics.FONT_MEDIUM, "WHAT IS HAPPENING", Graphics.TEXT_JUSTIFY_CENTER);
    		View.onUpdate(dc);
-   		return true;
+   		//return true;
     }
 
     //! Called when this View is removed from the screen. Save the

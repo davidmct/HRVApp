@@ -1,11 +1,11 @@
 <layouts>
     <!-- Results view layout for round-280x280 -->
     <layout id="ResultsViewLayout">
-        <label id="timeY" x="111" y="48" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="pulseY" x="111" y="78" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="hrvY" x="111" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="samplesY" x="111" y="138" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="expectedY" x="111" y="168" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="timeY" text="Time" x="111" y="48" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="pulseY" text="Pulse" x="111" y="78" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="hrvY" text="HRV" x="111" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="samplesY" text="Samples" x="111" y="138" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="expectedY" text="Expected" x="111" y="168" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="timeValue" x="center" y="48" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="pulseValue" x="center" y="78" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="hrvValue" x="center" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
