@@ -7,17 +7,14 @@ class AntHandler extends Ant.GenericChannel {
     const PERIOD = 8070;
     
     var mApp;
+    hidden var mSearching;
+    hidden var mLocalAntID;
 	
-	function openCh() {
-	    // Open the channel
-       	mApp.isChOpen = GenericChannel.open();
-        // may need some other changes
-    }
-        
-    function initialize( mAntID) { 
+	function initialize(mAntID) {
     	mApp = Application.getApp();
-    	   
-        // Get the channel
+    	mSearching = false;
+    	mLocalAntID = mAntID;
+    	// Get the channel
         var chanAssign = new Ant.ChannelAssignment(
             Ant.CHANNEL_TYPE_RX_NOT_TX,
             Ant.NETWORK_PLUS);
@@ -25,17 +22,23 @@ class AntHandler extends Ant.GenericChannel {
 
         // Set the configuration
         var deviceCfg = new Ant.DeviceConfig( {
-            :deviceNumber => mAntID,             //Set to 0 to use wildcard search
+            :deviceNumber => mLocalAntID,             //Set to 0 to use wildcard search
             :deviceType => DEVICE_TYPE,            
             :transmissionType => 0,
             :messagePeriod => PERIOD,
             :radioFrequency => 57,
-            :searchTimeoutLowPriority => 2,
+            :searchTimeoutLowPriority => 10,
             :searchTimeoutHighPriority => 2,
             :searchThreshold => 0} );
         setDeviceConfig(deviceCfg);
-		// will now be searching for strap
-		
+		// will now be searching for strap after openCh()
+    }
+        
+    function openCh() { 
+    	closeCh();
+    	mSearching = true;   	
+		mApp.isChOpen = GenericChannel.open();
+        // may need some other changes
     }
 
     function onAntMsg(msg)
@@ -43,7 +46,13 @@ class AntHandler extends Ant.GenericChannel {
 		var payload = msg.getPayload();
 
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId ) {
-
+        	if (mSearching) {
+                mSearching = false;
+                // Update our device configuration primarily to see the device number of the sensor we paired to
+                deviceCfg = GenericChannel.getDeviceConfig();
+            }
+			// not sure this handles all page types and 65th special page correctly
+			
             mApp.isAntRx = true;
             mApp.isStrapRx = true;
             mApp.livePulse = payload[7].toNumber();
@@ -53,30 +62,42 @@ class AntHandler extends Ant.GenericChannel {
 			sampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
-            var event = payload[1].toNumber();
-            if( Ant.MSG_CODE_EVENT_RX_FAIL == event ) {
-				mApp.isStrapRx = false;
-				mApp.isPulseRx = false;
-            }
-            else if( Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH == event ) {
-				mApp.isAntRx = false;
-            }
-            else if( Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT == event ) {
-				closeCh();
-				openCh();
-            }
+       		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
+	            var event = (payload[1] & 0xFF);
+	            if (Ant.MSG_CODE_EVENT_CHANNEL_CLOSED == event) {
+	            	openCh();
+	            } 
+	            else if ( Ant.MSG_CODE_EVENT_RX_FAIL == event ) {
+					mApp.isStrapRx = false;
+					mApp.isPulseRx = false;
+					mSearching = false;
+	            }
+	            else if( Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH == event ) {
+					mApp.isAntRx = false;
+	            }
+	            else if( Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT == event ) {
+					closeCh();
+					openCh();
+	            }
+	            else {
+	            	// channel response
+	            }
+	    	}
         }
     }
-
+    
 	// Close Ant channel.
     function closeCh() {
+    	// release dumps whole config
     	if(mApp.isChOpen) {
-    		GenericChannel.release();
+    		//GenericChannel.release();
+    		GenericChannel.close();
     	}
     	mApp.isChOpen = false;
     	mApp.isAntRx = false;
 		mApp.isStrapRx = false;
 		mApp.isPulseRx = false;
+		mSearching = false;
     }
     
 
