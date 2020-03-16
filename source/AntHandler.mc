@@ -10,7 +10,6 @@ class AntHandler extends Ant.GenericChannel {
 	
 	function openCh() {
 	    // Open the channel
-        GenericChannel.open();
        	mApp.isChOpen = GenericChannel.open();
         // may need some other changes
     }

@@ -139,10 +139,10 @@ class HRVApp extends App.AppBase {
 	// Ant channel & states
 	var antCh;
 
-	var isChOpen;
-    var isAntRx;
-    var isStrapRx;
-    var isPulseRx;
+	var isChOpen = false;
+    var isAntRx = false;
+    var isStrapRx = false;
+    var isPulseRx = false;
 
 	// App states
 	var isWaiting;
@@ -189,10 +189,17 @@ class HRVApp extends App.AppBase {
         mStorage = new HRVStorageHandler();
         // added this line as onStart() called when start pressed???
         mStorage.resetSettings();
+        resetTest();
     	AppBase.initialize();
     }
 
-
+    //! Return the initial view of your application here
+    function getInitialView() {
+    	viewNum = 0;
+		lastViewNum = 0;
+		return [ new TestView(), new HRVBehaviourDelegate() ];
+    }
+    
     //! onStart() is called on application start up
     function onStart(state) {
 		// Retrieve device type
@@ -246,7 +253,35 @@ class HRVApp extends App.AppBase {
 	    	System.println(e.getErrorMessage());
 	   		mSensor = null;
 	    }
+	    if (mDebugging) {
+	    	Sys.println("AUX sensor created: " + mSensor);
+	    }
     }
+    
+    //! onStop() is called when your application is exiting
+    function onStop(state) {
+
+		if (state == null) {
+		//???
+		
+		}
+    	// Close ant channel
+		mSensor.closeCh();
+		
+		mStorage.saveProperties();
+		mStorage.saveResults();
+
+		greenTimer.stop();
+		viewTimer.stop();
+		testTimer.stop();
+    }
+    
+   	// App running and Garmin Mobile has changed settings
+	function onSettingsChanged() {
+		// update any things depending on storage functions
+		mStorage.onSettingsChangedStore();	
+		Ui.requestUpdate();
+	}
 
     function startTest() {
     	alert(TONE_START);
@@ -354,29 +389,6 @@ class HRVApp extends App.AppBase {
     	//	date.min.format("%02d"),
     	//	date.sec.format("%02d")]));
     }
-
-    //! onStop() is called when your application is exiting
-    function onStop(state) {
-
-		if (state == null) {
-		}
-    	// Close ant channel
-		mSensor.closeCh();
-		
-		mStorage.saveProperties();
-		mStorage.saveResults();
-
-		greenTimer.stop();
-		viewTimer.stop();
-		testTimer.stop();
-    }
-
-    //! Return the initial view of your application here
-    function getInitialView() {
-
-		return [ new TestView(), new HRVBehaviourDelegate() ];
-    }
-
 
     function resetGreenTimer() {
 		greenTimer.stop();
@@ -540,14 +552,6 @@ class HRVApp extends App.AppBase {
 			return new TestView();
 		}
 	}
-
-	// App running and Garmin Mobile has changed settings
-	function onSettingsChanged() {
-		// update any things depending on storage functions
-		mStorage.onSettingsChangedStore();	
-		Ui.requestUpdate();
-	}
-
 }
 
 

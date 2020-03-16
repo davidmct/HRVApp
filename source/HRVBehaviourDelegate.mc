@@ -70,34 +70,51 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     }
 
     function onEnter() {
-    	Sys.println("HRVBehaviour onEnter()");
+    	if (mDebugging) {
+	    	Sys.println("HRVBehaviour onEnter()");
+	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ app.viewNum);
+	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.isNotSaved);
+	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.dataCount);
+	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.isFinished);
+	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.isTesting);
+	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.isWaiting);
+	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.isAntRx);
+	    }
+    	// 
 		if(0 < app.viewNum) {
+			Sys.println("HRVBehaviour onEnter() - switch to test view");
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
 		else if(app.isNotSaved && MIN_SAMPLES < app.dataCount) {
-
+			Sys.println("HRVBehaviour onEnter() - confirm save");
 			Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+			// skips Green timer reset may need checking
 			return true;
     	}
     	else if(app.isFinished) {
+    		Sys.println("HRVBehaviour onEnter() - Finished");
     		app.resetTest();
     		Ui.requestUpdate();
     	}
     	else if(app.isTesting || app.isWaiting) {
+    		Sys.println("HRVBehaviour onEnter() - Stop test");
     		app.stopTest();
     		Ui.requestUpdate();
     	}
     	else if(!app.isAntRx){
+    		Sys.println("HRVBehaviour onEnter() - no ANT");
     		app.alert(TONE_ERROR);
     	}
     	else {
+    		Sys.println("HRVBehaviour onEnter() - start branch");
     		app.startTest();
     		app.stopViewTimer();
     		app.updateSeconds();
     	}
-
+		
     	app.resetGreenTimer();
+ 		Sys.println("HRVBehaviour onEnter() - leaving");   	
     	return true;
 	}
 
@@ -112,12 +129,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
         menu.addItem(new Ui.MenuItem("About", null, "about", null));
         Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_LEFT );
-		//Ui.pushView(new Rez.Menus.MainMenu(), new MainMenuDelegate(), Ui.SLIDE_LEFT);
 		return true;
     }
 
 	function onEscape() {
-
 		if(TEST_VIEW == app.viewNum) {
 			if(app.isTesting) {
 				app.stopTest();
@@ -132,7 +147,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			}
 		}
 		else {
-
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 		}
 		return true;

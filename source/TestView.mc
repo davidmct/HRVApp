@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System as Sys;
 
 class TestView extends Ui.View {
 
@@ -11,16 +12,13 @@ class TestView extends Ui.View {
     	app = App.getApp();
     }
     
-    
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
     	app.updateSeconds();
     	app.resetGreenTimer();
 
     	if(app.isClosing) {
 			app.onStop( null );
-			//popView(SLIDE_IMMEDIATE);
 			popView(SLIDE_RIGHT);
 		}
 
@@ -31,7 +29,7 @@ class TestView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-
+		//Sys.println("TestView:onUpdate() called");
     	// Default layout settings
 	    var titleFont = 4;		// Gfx.FONT_LARGE
 	    var numFont = 6;		// Gfx.FONT_NUMBER_MILD
@@ -61,11 +59,9 @@ class TestView extends Ui.View {
 		var testType = app.testTypeSet;
 
 		if(TYPE_TIMER == testType) {
-
 			timerTime = app.timerTimeSet;
 		}
 		else if(TYPE_AUTO == testType) {
-
 			timerTime = app.autoTimeSet;
 		}
 
@@ -77,67 +73,50 @@ class TestView extends Ui.View {
     	var testTime = app.timeNow() - app.utcStart;
 
 		if(app.isFinished) {
-
 			pulse = app.avgPulse;
-
 			testTime = app.utcStop - app.utcStart;
 
 			if(MIN_SAMPLES > app.dataCount) {
-
 				msgTxt = "Not enough data";
 			}
 			else if(app.isSaved) {
-
 				msgTxt = "Result saved";
 			}
 			else {
-
 				msgTxt = "Finished";
 			}
     	}
     	else if(app.isTesting) {
-
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
 			var cycle = 1 + testTime % (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
 			if(cycle <= app.inhaleTimeSet) {
-
 				msgTxt = "Inhale through nose " + cycle;
 			}
 			else if(cycle <= app.inhaleTimeSet + app.exhaleTimeSet) {
-
 				msgTxt = "Exhale out mouth " + (cycle - app.inhaleTimeSet);
 			}
 			else {
-
 				msgTxt = "Relax " + (cycle - (app.inhaleTimeSet + app.exhaleTimeSet));
 			}
 
 			if(TYPE_MANUAL != testType) {
-
 				timerTime -= testTime;
 			}
 			else {
-
 				timerTime = testTime;
 			}
     	}
     	else if(app.isWaiting) {
-
     		msgTxt = "Autostart in " + app.timerFormat(app.timeAutoStart - app.timeNow());
     	}
     	else if(app.isStrapRx) {
-
 			if(TYPE_TIMER == testType) {
-
 				msgTxt = "Timer test ready";
 			}
 			else if(TYPE_MANUAL == testType) {
-
 				msgTxt = "Manual test ready";
-
 			}
 			else {
-
 				msgTxt = "Schedule " + app.clockFormat(app.autoStartSet);
 			}
     	}
@@ -152,25 +131,20 @@ class TestView extends Ui.View {
     	var pulseTxt = "PULSE";
 
     	if(!app.isChOpen) {
-
 			pulse = 0;
 			strapTxt = "SAVING";
 			pulseTxt = "BATTERY";
 		}
 		else if(!app.isStrapRx) {
-
 	    		strapCol = RED;
 	    		pulseCol = RED;
     	}
     	else {
-
     		strapCol = GREEN;
     		if(!app.isPulseRx) {
-
 	    		pulseCol = RED;
 	    	}
 	    	else {
-
 	    		pulseCol = GREEN;
 	    	}
     	}
@@ -238,7 +212,6 @@ class TestView extends Ui.View {
 			col3 = col1 + dc.getWidth() / 2 ;
         }
     	
-
 		// Draw the view
         MapSetColour(dc, TRANSPARENT, app.bgColSet);
         dc.clear();
