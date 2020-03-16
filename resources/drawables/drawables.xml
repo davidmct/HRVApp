@@ -1,3 +1,4 @@
 <drawables>
     <drawable-list id="MenuForeground_id" background="Gfx.COLOR_TRANSPARENT" />
+    <drawable-list id="ResultsLayoutLines_id" background="Gfx.COLOR_TRANSPARENT"/>
 </drawables>

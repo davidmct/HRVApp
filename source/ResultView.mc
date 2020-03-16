@@ -1,15 +1,18 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System as Sys;
 
 class ResultView extends Ui.View {
 
 	hidden var app;
+	//var mResultsLayout;
 
 	function initialize() { app=App.getApp(); View.initialize();}
 	
 	function onLayout(dc) {
 		setLayout(Rez.Layouts.ResultsViewLayout(dc));
+		Sys.println("ResultView: onLayout() called ");
 	}
 		
     //! Restore the state of the app and prepare the view to be shown
@@ -17,9 +20,31 @@ class ResultView extends Ui.View {
     //! the state of this View and prepare it to be shown. This include
     //! loading resources into memory.
     function onShow() {
+    	Sys.println("ResultView: onShow() called ");
+    	
     	app.updateSeconds();
-    	app.resetGreenTimer();
-    			var time = 0;
+    	app.resetGreenTimer();		
+		//return true;
+    }
+    
+    hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
+        var drawable = findDrawableById(fieldId);
+        Sys.println("ResultView: updateLayoutField() called " + drawable );
+        if (drawable != null) {
+        	Sys.println("ResultView: updateLayoutField() setting colour/Just ");
+            drawable.setColor(fieldColour);
+            drawable.setJustification(fieldJust);
+            if (fieldValue != null) {
+            	drawable.setText(fieldValue);
+            }
+        }
+    }
+    
+    //! Update the view
+    function onUpdate(dc) { 
+    	Sys.println("ResultView: onUpdate() called");
+    	
+    	var time = 0;
 		var pulse = 0;
 		var expected = 0;
 
@@ -36,6 +61,7 @@ class ResultView extends Ui.View {
 		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT || Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueColour = app.txtColSet;
 		
+		Sys.println("ResultView: update fields of layout");
 		updateLayoutField("timeY", null, mLabelColour, mLabelJust);
 		updateLayoutField("pulseY", null, mLabelColour, mLabelJust);		
 		updateLayoutField("hrvY", null, mLabelColour, mLabelJust);		
@@ -47,22 +73,9 @@ class ResultView extends Ui.View {
 		updateLayoutField( "hrvValue", app.hrv.toString(), mValueColour, mValueJust);
 		updateLayoutField( "samplesValue", app.dataCount.toString(), mValueColour, mValueJust);
 		updateLayoutField( "expectedValue", expected.toString(), mValueColour, mValueJust);
-    }
-    
-    hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
-        var drawable = findDrawableById(fieldId);
-        if (drawable != null) {
-            drawable.setColor(fieldColour);
-            drawable.setJustification(fieldJust);
-            if (fieldValue != null) {
-            	drawable.setText(fieldValue);
-            }
-        }
-    }
-    
-    //! Update the view
-    function onUpdate(dc) { 
+		
    		View.onUpdate(dc);
+   		return true;
     }
 
     //! Called when this View is removed from the screen. Save the

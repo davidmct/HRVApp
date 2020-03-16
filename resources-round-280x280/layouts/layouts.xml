@@ -11,6 +11,6 @@
         <label id="hrvValue" x="center" y="108" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="samplesValue" x="center" y="138" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="expectedValue" x="center" y="168" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-		<drawable id="ResultsLayoutLines_id" ></drawable>
+		<drawable id="ResultsLayoutLines_id" />
     </layout>
 </layouts>
