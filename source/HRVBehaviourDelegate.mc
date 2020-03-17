@@ -74,11 +74,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	    	Sys.println("HRVBehaviour onEnter()");
 	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ app.viewNum);
 	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.isNotSaved);
-	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.dataCount);
+	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSensor.mHRData.dataCount);
 	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.isFinished);
 	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.isTesting);
 	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.isWaiting);
-	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.isAntRx);
+	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
 	    }
     	// 
 		if(0 < app.viewNum) {
@@ -102,7 +102,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     		app.stopTest();
     		Ui.requestUpdate();
     	}
-    	else if(!app.isAntRx){
+    	else if(!app.mSensor.mHRData.isAntRx){
     		Sys.println("HRVBehaviour onEnter() - no ANT");
     		app.alert(TONE_ERROR);
     	}
@@ -137,7 +137,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			if(app.isTesting) {
 				app.stopTest();
 			}
-			if(app.isFinished && app.isNotSaved && MIN_SAMPLES < app.dataCount) {
+			if(app.isFinished && app.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
 				app.isClosing = true;
 				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 			}

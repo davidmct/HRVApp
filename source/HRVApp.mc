@@ -136,14 +136,6 @@ class HRVApp extends App.AppBase {
 	var viewNum;
 	var lastViewNum;
 
-	// Ant channel & states
-	var antCh;
-
-	var isChOpen = false;
-    var isAntRx = false;
-    var isStrapRx = false;
-    var isPulseRx = false;
-
 	// App states
 	var isWaiting;
 	var isTesting;
@@ -154,42 +146,28 @@ class HRVApp extends App.AppBase {
 	var isSeconds;
 	var isMinutes;
 
-	// Test variables
-	var hrv;
-	var avgPulse;
-	var devSqSum;
-	var pulseSum;
-	var dataCount;
-
 	var utcStart;
 	var utcStop;
 
 	var startMoment;
 	//var stopMoment;
 
-	var livePulse;
     var timeAutoStart;
     var timerTime;
     
     var mStorage;
-
-	hidden var mNoPulseCount;
-    hidden var mPrevIntMs;
-    hidden var mPrevBeatCount;
-    hidden var mPrevBeatEvent;
 
     hidden var greenTimer;
     hidden var viewTimer;
     hidden var testTimer;
     
     function initialize() {
+    	Sys.println("HRVApp initialisation called");
         mApp = Application.getApp();
         mAntID = mApp.getProperty("pAuxHRAntID");
-        Sys.println("HRVApp initialisation called");
         mStorage = new HRVStorageHandler();
-        // added this line as onStart() called when start pressed???
+        // could possibly call in initialize func in class
         mStorage.resetSettings();
-        resetTest();
     	AppBase.initialize();
     }
 
@@ -209,6 +187,19 @@ class HRVApp extends App.AppBase {
 		mStorage.resetSettings();		
 		mStorage.readProperties();
 		
+		// Start up ANT device
+	    try {
+	    	//Create the sensor object and open it
+	   		mSensor= new AntHandler(mAntID);
+	    	mSensor.openCh();
+	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
+	    	System.println(e.getErrorMessage());
+	   		mSensor = null;
+	    }
+	    if (mDebugging) {
+	    	Sys.println("AUX sensor created: " + mSensor);
+	    }
+		
     	 if(VIVOACTIVE == device) {
     	 	soundSet = 0;
     	 }
@@ -217,17 +208,9 @@ class HRVApp extends App.AppBase {
 		mStorage.resetResults();		
 		mStorage.loadResults();
 
-		// Init ant variables
-		//AntHandler.closeCh();
-		mNoPulseCount = 0;
-	    mPrevIntMs = 0;
-	    mPrevBeatCount = 0;
-	    mPrevBeatEvent = 0;
-
 		// Init test variables
 		resetTest();
 		startMoment = 0;
-		livePulse = 0;
     	timeAutoStart = 0;
     	timerTime = 0;
 
@@ -244,18 +227,6 @@ class HRVApp extends App.AppBase {
 		viewTimer = new Timer.Timer();
 		testTimer = new Timer.Timer();
 		
-		// Start up ANT device
-	    try {
-	    	//Create the sensor object and open it
-	   		mSensor = new AntHandler(mAntID);
-	    	mSensor.openCh();
-	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
-	    	System.println(e.getErrorMessage());
-	   		mSensor = null;
-	    }
-	    if (mDebugging) {
-	    	Sys.println("AUX sensor created: " + mSensor);
-	    }
     }
     
     //! onStop() is called when your application is exiting
@@ -266,8 +237,7 @@ class HRVApp extends App.AppBase {
 		
 		}
     	// Close ant channel
-		mSensor.closeCh();
-		
+		mSensor.closeCh();		
 		mStorage.saveProperties();
 		mStorage.saveResults();
 
@@ -308,7 +278,7 @@ class HRVApp extends App.AppBase {
     	testTimer.stop();
     	if(isWaiting) {
 			isWaiting = false;
-			if(!isChOpen) {
+			if(!mSensor.mHRData.isChOpen) {
 				mSensor.openCh();
 			}
 		}
@@ -325,11 +295,7 @@ class HRVApp extends App.AppBase {
     }
 
     function resetTest() {
-		hrv = 0;
-		avgPulse = 0;
-		devSqSum = 0;
-		pulseSum = 0;
-		dataCount = 0;
+    	mSensor.mHRData.resetTestVariables();
 		utcStart = 0;
 		utcStop = 0;
 		isWaiting = false;
@@ -353,7 +319,7 @@ class HRVApp extends App.AppBase {
 						timeAutoStart += 86400;
 					}
 					isWaiting = true;
-					if(isChOpen) {
+					if(mSensor.mHRData.isChOpen) {
 						mSensor.closeCh();
 					}
 					testTimer.start(method(:start),(timeAutoStart - timeNow())*1000,false); // false
@@ -361,7 +327,7 @@ class HRVApp extends App.AppBase {
 				}
 				else {
 					isWaiting = false;
-					if(!isChOpen) {
+					if(!mSensor.mHRData.isChOpen) {
 						mSensor.openCh();
 					}
 					testTimer.start(method(:autoFinish),timerTime*1000,true); // true

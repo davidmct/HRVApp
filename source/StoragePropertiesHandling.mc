@@ -13,15 +13,11 @@ class HRVStorageHandler {
 // then save default set of properties
 
 	var mApp;
-	// test var
-	var x;
 
 	// setup storage functions	
     function initialize() {
     	mApp = App.getApp();
-		x = mApp.isWaiting;
-		Sys.println(" x is set to  "+x);
-		Sys.println("app is " + mApp);
+
     }
 
 	// message from Garmin that settings have been changed on mobile - called from main app

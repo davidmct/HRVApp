@@ -7,37 +7,91 @@ class AntHandler extends Ant.GenericChannel {
     const PERIOD = 8070; // 4x per second
     
     var mApp;
+    var mHRData;
+    
     hidden var mSearching;
-    hidden var mLocalAntID;
+    hidden var mChanAssign;
+    hidden var mLocalmAntID;
+    
+    class HRStatus {
+     	var isChOpen;
+		var isAntRx;
+		var isStrapRx;
+		var isPulseRx;
+		var livePulse;
+		var mNoPulseCount;
+		var mPrevBeatCount;
+		var mPrevBeatEvent;
+		var mPrevIntMs;
+		var hrv;
+		var avgPulse;
+		var	devSqSum;
+		var	pulseSum;
+		var	dataCount;
+		var devMs;
+		
+    	function initialize() {
+        	isChOpen = false;
+    		isAntRx = false;
+			isStrapRx = false;
+			isPulseRx = false;
+			initForTest();
+			resetTestVariables();
+		}
+		
+		function initForTest() {
+			livePulse = 0;
+			mNoPulseCount = 0;
+			mPrevBeatCount = 0;
+			mPrevBeatEvent = 0;
+			mPrevIntMs = 0;	
+			resetTestVariables();	
+		}
+		
+		function resetTestVariables() {
+			hrv = 0;
+			avgPulse = 0;
+			devSqSum = 0;
+			pulseSum = 0;
+			dataCount = 0;
+			devMs = 0;
+		} 
+    }
 	
 	function initialize(mAntID) {
     	mApp = Application.getApp();
     	mSearching = false;
-    	mLocalAntID = mAntID;
+    	mLocalmAntID = mAntID;
+    	
+    	mHRData = new HRStatus();
+    	
     	// Get the channel
-        var chanAssign = new Ant.ChannelAssignment(
+        mChanAssign = new Ant.ChannelAssignment(
             Ant.CHANNEL_TYPE_RX_NOT_TX,
             Ant.NETWORK_PLUS);
-        GenericChannel.initialize(self.method(:onAntMsg), chanAssign);
+        GenericChannel.initialize(self.method(:onAntMsg), mChanAssign);
 
         // Set the configuration
         var deviceCfg = new Ant.DeviceConfig( {
-            :deviceNumber => mLocalAntID,             //Set to 0 to use wildcard search
-            :deviceType => DEVICE_TYPE,            
+            :deviceNumber => mAntID,             //Set to 0 to use wildcard search
+            :deviceType => DEVICE_TYPE,
             :transmissionType => 0,
             :messagePeriod => PERIOD,
-            :radioFrequency => 57,
-            :searchTimeoutLowPriority => 10,
+            :radioFrequency => 57,              //Ant+ Frequency
+            :searchTimeoutLowPriority => 10,    //Timeout in 25s
             :searchTimeoutHighPriority => 2,
-            :searchThreshold => 0} );
-        setDeviceConfig(deviceCfg);
+            :searchThreshold => 0} );           //Pair to all transmitting sensors
+       	GenericChannel.setDeviceConfig(deviceCfg);
 		// will now be searching for strap after openCh()
     }
         
     function openCh() { 
     	closeCh();
     	mSearching = true;   	
-		mApp.isChOpen = GenericChannel.open();
+		mHRData.isChOpen = GenericChannel.open();
+		if (mDebugging) {
+			Sys.println("openCh: isOpen? "+ mHRData.isChOpen);
+		}
         // may need some other changes
     }
 
@@ -53,34 +107,41 @@ class AntHandler extends Ant.GenericChannel {
             }
 			// not sure this handles all page types and 65th special page correctly
 			
-            mApp.isAntRx = true;
-            mApp.isStrapRx = true;
-            mApp.livePulse = payload[7].toNumber();
+            mHRData.isAntRx = true;
+            mHRData.isStrapRx = true;
+            mHRData.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 
-			sampleProcessing(beatCount, beatEvent);
+			HRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
-	            var event = (payload[1] & 0xFF);
-	            if (Ant.MSG_CODE_EVENT_CHANNEL_CLOSED == event) {
-	            	openCh();
-	            } 
-	            else if ( Ant.MSG_CODE_EVENT_RX_FAIL == event ) {
-					mApp.isStrapRx = false;
-					mApp.isPulseRx = false;
-					mSearching = false;
-	            }
-	            else if( Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH == event ) {
-					mApp.isAntRx = false;
-	            }
-	            else if( Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT == event ) {
-					closeCh();
-					openCh();
-	            }
-	            else {
-	            	// channel response
+	            var event = (payload[1] & 0xFF);	            
+	            switch( event) {
+	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
+	            		openCh();
+	            		break;
+	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
+						mHRData.isStrapRx = false;
+						mHRData.isPulseRx = false;
+						mSearching = false;
+						// wait for another message?
+						Sys.println("RX_FAIL in AntHandler");
+						break;
+					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
+						mHRData.isAntRx = false;
+						// try another channel assignment and search
+						GenericChannel.release();
+						initialize(mLocalmAntID);	
+						break;
+					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
+						closeCh();
+						openCh();
+						break;
+	            	default:
+	            		// channel response
+	            		break;
 	            }
 	    	}
         }
@@ -89,14 +150,72 @@ class AntHandler extends Ant.GenericChannel {
 	// Close Ant channel.
     function closeCh() {
     	// release dumps whole config
-    	if(mApp.isChOpen) {
+    	if(mHRData.isChOpen) {
     		//GenericChannel.release();
     		GenericChannel.close();
     	}
-    	mApp.isChOpen = false;
-    	mApp.isAntRx = false;
-		mApp.isStrapRx = false;
-		mApp.isPulseRx = false;
+    	mHRData.isChOpen = false;
+    	mHRData.isAntRx = false;
+		mHRData.isStrapRx = false;
+		mHRData.isPulseRx = false;
 		mSearching = false;
-    }  
+    } 
+    
+    function HRSampleProcessing(beatCount, beatEvent) {
+
+		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
+		
+			mHRData.isPulseRx = true;
+			mHRData.mNoPulseCount = 0;
+			
+			// Calculate estimated ranges for reliable data
+			var maxMs = 60000 / (livePulse * 0.7);
+			var minMs = 60000 / (livePulse * 1.4);
+			
+			// Get interval
+			var intMs = 0;
+			if(mHRData.mPrevBeatEvent > beatEvent) {
+				intMs = 64000 - mHRData.mPrevBeatEvent + beatEvent;
+			} else {
+				intMs = beatEvent - mHRData.mPrevBeatEvent;
+			}
+			
+			// Only update hrv data if testing started, & values look to be error free
+			if(mApp.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+				var devMs = 0;
+				if(intMs > mHRData.mPrevIntMs) {
+					mHRData.devMs = intMs - mHRData.mPrevIntMs;
+				} else {
+					mHRData.devMs = mHRData.mPrevIntMs - intMs;
+				}
+				
+				mHRData.devSqSum += mHRData.devMs * mHRData.devMs;
+				mHRData.pulseSum += mHRData.livePulse;
+				mHRData.dataCount++;
+			
+				if(1 < mHRData.dataCount) {
+					var rmssd = Math.sqrt(mHRData.devSqSum.toFloat() / (mHRData.dataCount - 1));
+					mHRData.hrv = ((Math.log(rmssd, 1.0512712)) + 0.5).toNumber();
+					mHRData.avgPulse = ((mHRData.pulseSum.toFloat() / mHRData.dataCount) + 0.5).toNumber();
+				}
+			
+				// Print live data
+				//if(isTesting){
+				//	var liveMs = (intMs.toFloat() / 1000);
+				//	System.println(liveMs.format("%.03f"));
+				//}
+			}
+			mHRData.mPrevIntMs = intMs;
+		} else {
+			mHRData.mNoPulseCount += 1;
+			if(0 < mHRData.livePulse) {
+				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
+				if(limit < mHRData.mNoPulseCount) {
+					mHRData.isPulseRx = false;
+				}
+			}
+		}
+		mHRData.mPrevBeatCount = beatCount;
+		mHRData.mPrevBeatEvent = beatEvent;
+	} 
 }

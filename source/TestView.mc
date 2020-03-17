@@ -22,7 +22,7 @@ class TestView extends Ui.View {
 			popView(SLIDE_RIGHT);
 		}
 
-		if(!app.isChOpen && !app.isWaiting) {
+		if(!app.mSensor.mHRData.isChOpen && !app.isWaiting) {
 			app.mSensor.openCh();
 		}
     }
@@ -52,7 +52,7 @@ class TestView extends Ui.View {
 		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER;		// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER 5
 
     	// HRV
-		var hrv = app.hrv;
+		var hrv = app.mSensor.mHRData.hrv;
 
 		// Timer
 		var timerTime = app.utcStop - app.utcStart;
@@ -66,17 +66,17 @@ class TestView extends Ui.View {
 		}
 
 		// Pulse
-		var pulse = app.livePulse;
+		var pulse = app.mSensor.mHRData.livePulse;
 
 		// Message
     	var msgTxt;
     	var testTime = app.timeNow() - app.utcStart;
 
 		if(app.isFinished) {
-			pulse = app.avgPulse;
+			pulse = app.mSensor.mHRData.avgPulse;
 			testTime = app.utcStop - app.utcStart;
 
-			if(MIN_SAMPLES > app.dataCount) {
+			if(MIN_SAMPLES > app.mSensor.mHRData.dataCount) {
 				msgTxt = "Not enough data";
 			}
 			else if(app.isSaved) {
@@ -109,7 +109,7 @@ class TestView extends Ui.View {
     	else if(app.isWaiting) {
     		msgTxt = "Autostart in " + app.timerFormat(app.timeAutoStart - app.timeNow());
     	}
-    	else if(app.isStrapRx) {
+    	else if(app.mSensor.mHRData.isStrapRx) {
 			if(TYPE_TIMER == testType) {
 				msgTxt = "Timer test ready";
 			}
@@ -130,18 +130,18 @@ class TestView extends Ui.View {
     	var strapTxt = "STRAP";
     	var pulseTxt = "PULSE";
 
-    	if(!app.isChOpen) {
+    	if(!app.mSensor.mHRData.isChOpen) {
 			pulse = 0;
 			strapTxt = "SAVING";
 			pulseTxt = "BATTERY";
 		}
-		else if(!app.isStrapRx) {
+		else if(!app.mSensor.mHRData.isStrapRx) {
 	    		strapCol = RED;
 	    		pulseCol = RED;
     	}
     	else {
     		strapCol = GREEN;
-    		if(!app.isPulseRx) {
+    		if(!app.mSensor.mHRData.isPulseRx) {
 	    		pulseCol = RED;
 	    	}
 	    	else {
