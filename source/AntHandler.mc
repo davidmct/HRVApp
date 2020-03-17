@@ -8,6 +8,7 @@ class AntHandler extends Ant.GenericChannel {
     
     var mApp;
     var mHRData;
+    hidden var deviceCfg;
     
     hidden var mSearching;
     hidden var mChanAssign;
@@ -29,12 +30,14 @@ class AntHandler extends Ant.GenericChannel {
 		var	pulseSum;
 		var	dataCount;
 		var devMs;
+		var mAntEvent;
 		
     	function initialize() {
         	isChOpen = false;
     		isAntRx = false;
 			isStrapRx = false;
 			isPulseRx = false;
+			mAntEvent = "not set";
 			initForTest();
 			resetTestVariables();
 		}
@@ -72,7 +75,7 @@ class AntHandler extends Ant.GenericChannel {
         GenericChannel.initialize(self.method(:onAntMsg), mChanAssign);
 
         // Set the configuration
-        var deviceCfg = new Ant.DeviceConfig( {
+        deviceCfg = new Ant.DeviceConfig( {
             :deviceNumber => mAntID,             //Set to 0 to use wildcard search
             :deviceType => DEVICE_TYPE,
             :transmissionType => 0,
@@ -83,10 +86,15 @@ class AntHandler extends Ant.GenericChannel {
             :searchThreshold => 0} );           //Pair to all transmitting sensors
        	GenericChannel.setDeviceConfig(deviceCfg);
 		// will now be searching for strap after openCh()
+		Sys.println("ANT initialised");
     }
         
     function openCh() { 
-    	closeCh();
+    	if (mHRData.isChOpen == true)
+    	{
+    		Sys.println("OpenCh: closing open channels and reseting status");
+    		closeCh();
+    	}
     	mSearching = true;   	
 		mHRData.isChOpen = GenericChannel.open();
 		if (mDebugging) {
@@ -97,16 +105,20 @@ class AntHandler extends Ant.GenericChannel {
 
     function onAntMsg(msg)
     {
-		var payload = msg.getPayload();
+		var payload = msg.getPayload();		
+		//Sys.println("Ant msg");		
 
-        if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId ) {
+        if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if (mSearching) {
                 mSearching = false;
                 // Update our device configuration primarily to see the device number of the sensor we paired to
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
+			mHRData.mAntEvent ="ANT data";
 			
+			// added another getPayload() as in sensor code
+			payload = msg.getPayload();
             mHRData.isAntRx = true;
             mHRData.isStrapRx = true;
             mHRData.livePulse = payload[7].toNumber();
@@ -116,10 +128,14 @@ class AntHandler extends Ant.GenericChannel {
 			HRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
+        	//if (mDebugging) {
+        	//	Sys.println("ANT EVENT msg");
+        	//}
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
 	            var event = (payload[1] & 0xFF);	            
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
+	            		mHRData.mAntEvent ="ANT:EVENT: closed";
 	            		openCh();
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
@@ -127,24 +143,29 @@ class AntHandler extends Ant.GenericChannel {
 						mHRData.isPulseRx = false;
 						mSearching = false;
 						// wait for another message?
-						Sys.println("RX_FAIL in AntHandler");
+						mHRData.mAntEvent ="RX_FAIL in AntHandler";
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
-						mHRData.isAntRx = false;
-						// try another channel assignment and search
-						GenericChannel.release();
-						initialize(mLocalmAntID);	
+						mHRData.mAntEvent = "ANT:RX_FAIL, search/wait";
+						mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
-						closeCh();
-						openCh();
+						mHRData.mAntEvent = "ANT: EVENT timeout";
+						//closeCh();
+						//openCh();
 						break;
 	            	default:
 	            		// channel response
+	            		mAntEvent ="ANT:EVENT: default";
 	            		break;
-	            }
-	    	}
-        }
+	    		} 
+        	} else {
+        		mHRData.mAntEvent = "Not an RF EVENT";
+        	} 
+        } else {
+    		//other message!
+    		mHRData.mAntEvent = "ANT other message " + msg.messageId;
+    	}
     }
     
 	// Close Ant channel.
@@ -152,6 +173,7 @@ class AntHandler extends Ant.GenericChannel {
     	// release dumps whole config
     	if(mHRData.isChOpen) {
     		//GenericChannel.release();
+    		Sys.println("CloseCh(): closing open channel");
     		GenericChannel.close();
     	}
     	mHRData.isChOpen = false;

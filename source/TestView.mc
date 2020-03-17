@@ -22,9 +22,9 @@ class TestView extends Ui.View {
 			popView(SLIDE_RIGHT);
 		}
 
-		if(!app.mSensor.mHRData.isChOpen && !app.isWaiting) {
-			app.mSensor.openCh();
-		}
+		//if(!app.mSensor.mHRData.isChOpen && !app.isWaiting) {
+		//	app.mSensor.openCh();
+		//}
     }
 
     //! Update the view

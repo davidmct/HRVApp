@@ -162,7 +162,7 @@ class HRVApp extends App.AppBase {
     hidden var testTimer;
     
     function initialize() {
-    	Sys.println("HRVApp initialisation called");
+    	Sys.println("HRVApp initialisation called RUN 4");
         mApp = Application.getApp();
         mAntID = mApp.getProperty("pAuxHRAntID");
         mStorage = new HRVStorageHandler();
@@ -173,6 +173,9 @@ class HRVApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
+    	if (mDebugging) {
+    		Sys.println("getInitialView() called");
+    	}
     	viewNum = 0;
 		lastViewNum = 0;
 		return [ new TestView(), new HRVBehaviourDelegate() ];
@@ -183,8 +186,7 @@ class HRVApp extends App.AppBase {
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
 
-		// Retrieve saved settings from memory
-		mStorage.resetSettings();		
+		// Retrieve saved settings from memory	
 		mStorage.readProperties();
 		
 		// Start up ANT device
@@ -198,6 +200,7 @@ class HRVApp extends App.AppBase {
 	    }
 	    if (mDebugging) {
 	    	Sys.println("AUX sensor created: " + mSensor);
+	    	Sys.println("Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
 		
     	 if(VIVOACTIVE == device) {
@@ -306,7 +309,10 @@ class HRVApp extends App.AppBase {
     }
 
     function start() {
-
+		Sys.println("Start: entered");
+		Sys.println("stopped code");
+		//return;
+		
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	var testType = testTypeSet;
     	if(TYPE_MANUAL != testType){
@@ -354,6 +360,7 @@ class HRVApp extends App.AppBase {
     	//	date.hour,
     	//	date.min.format("%02d"),
     	//	date.sec.format("%02d")]));
+    	Sys.println("Start: leaving func");
     }
 
     function resetGreenTimer() {
@@ -366,7 +373,7 @@ class HRVApp extends App.AppBase {
     }
 
     function startGreenMode() {
-    	if(!isTesting && isChOpen) {
+    	if(!isTesting && mSensor.mHRData.isChOpen) {
     		mSensor.closeCh();
     	}
     	if(WATCH_VIEW != viewNum) {

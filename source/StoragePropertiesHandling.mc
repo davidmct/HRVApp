@@ -54,10 +54,6 @@ class HRVStorageHandler {
 		mApp.autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
 		mApp.autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
 		mApp.mMaxAutoTimeSet = Ui.loadResource(Rez.Strings.MaxAutoTime).toNumber();
-		
-		Sys.println("autoTimeSet = " + mApp.autoTimeSet);
-        Sys.println("mMaxAutoTimeSet = " + mApp.mMaxAutoTimeSet);
-        Sys.println("autoStartSet = " + mApp.autoStartSet);
         
 		// ColSet are index into colour map
 		mApp.bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();

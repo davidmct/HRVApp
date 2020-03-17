@@ -79,6 +79,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.isTesting);
 	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.isWaiting);
 	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
+	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + app.mSensor.mHRData.isChOpen);
+	    	Sys.println("HRVBehaviour onEnter(): mAntEvent " + app.mSensor.mHRData.mAntEvent);
 	    }
     	// 
 		if(0 < app.viewNum) {
