@@ -3,8 +3,8 @@ using Toybox.Time as Time;
 using Toybox.System as Sys;
 
 class AntHandler extends Ant.GenericChannel {
-    const DEVICE_TYPE = 120;
-    const PERIOD = 8070;
+    const DEVICE_TYPE = 120;  //strap
+    const PERIOD = 8070; // 4x per second
     
     var mApp;
     hidden var mSearching;
@@ -98,8 +98,5 @@ class AntHandler extends Ant.GenericChannel {
 		mApp.isStrapRx = false;
 		mApp.isPulseRx = false;
 		mSearching = false;
-    }
-    
-
-    
+    }  
 }
