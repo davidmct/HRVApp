@@ -30,8 +30,8 @@ class TestView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 		if(mDebugging) {
-			Sys.println("TestView:onUpdate() called");
-			Sys.println("ANT stat: " + app.mSensor.mHRData.livePulse.toString());
+			//Sys.println("TestView:onUpdate() called");
+			//Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
 		}
 		
     	// Default layout settings

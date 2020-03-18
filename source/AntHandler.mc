@@ -98,8 +98,8 @@ class AntHandler extends Ant.GenericChannel {
     function openCh() { 
     	if (mHRData.isChOpen == true)
     	{
-    		Sys.println("OpenCh: closing open channels and reseting status");
-    		GenericChannel.close();
+    		//Sys.println("OpenCh: closing open channels and reseting status");
+    		//GenericChannel.close();
     	}
     	mSearching = true;   	
 		mHRData.isChOpen = GenericChannel.open();
@@ -125,11 +125,11 @@ class AntHandler extends Ant.GenericChannel {
     function onAntMsg(msg)
     {
 		var payload = msg.getPayload();		
-        //Sys.println("device ID = " + msg.deviceNumber);
-		//Sys.println("deviceType = " + msg.deviceType);
-		//Sys.println("transmissionType= " + msg.transmissionType);
-		//Sys.println("getPayload = " + msg.getPayload());
-		//Sys.println("messageId = " + msg.messageId);
+        Sys.println("device ID = " + msg.deviceNumber);
+		Sys.println("deviceType = " + msg.deviceType);
+		Sys.println("transmissionType= " + msg.transmissionType);
+		Sys.println("getPayload = " + msg.getPayload());
+		Sys.println("messageId = " + msg.messageId);
 
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if (mSearching) {
@@ -149,15 +149,15 @@ class AntHandler extends Ant.GenericChannel {
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 
-			//Sys.println("Pulse is :" + mHRData.livePulse);
+			Sys.println("Pulse is :" + mHRData.livePulse);
 			//Sys.println("beatEvent is :" + beatEvent);
 			//Sys.println("beatCount is :" + beatCount);
 			HRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
-        	//if (mDebugging) {
-        	//	Sys.println("ANT EVENT msg");
-        	//}
+        	if (mDebugging) {
+        		Sys.println("ANT EVENT msg");
+        	}
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
 	            var event = (payload[1] & 0xFF);	            
 	            switch( event) {

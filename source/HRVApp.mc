@@ -257,6 +257,8 @@ class HRVApp extends App.AppBase {
 		greenTimer.stop();
 		viewTimer.stop();
 		testTimer.stop();
+		
+		Sys.println("App stopped");
     }
     
    	// App running and Garmin Mobile has changed settings
@@ -291,9 +293,9 @@ class HRVApp extends App.AppBase {
     	testTimer.stop();
     	if(isWaiting) {
 			isWaiting = false;
-			if(!mSensor.mHRData.isChOpen) {
-				mSensor.openCh();
-			}
+			//if(!mSensor.mHRData.isChOpen) {
+			//	mSensor.openCh();
+			//}
 		}
 		else {
 			isTesting = false;
@@ -335,17 +337,17 @@ class HRVApp extends App.AppBase {
 						timeAutoStart += 86400;
 					}
 					isWaiting = true;
-					if(mSensor.mHRData.isChOpen) {
-						mSensor.closeCh();
-					}
+					//if(mSensor.mHRData.isChOpen) {
+					//	mSensor.closeCh();
+					//}
 					testTimer.start(method(:start),(timeAutoStart - timeNow())*1000,false); // false
 					return;
 				}
 				else {
 					isWaiting = false;
-					if(!mSensor.mHRData.isChOpen) {
-						mSensor.openCh();
-					}
+					//if(!mSensor.mHRData.isChOpen) {
+					//	mSensor.openCh();
+					//}
 					testTimer.start(method(:autoFinish),timerTime*1000,true); // true
 				}
 			}
@@ -384,7 +386,7 @@ class HRVApp extends App.AppBase {
 
     function startGreenMode() {
     	if(!isTesting && mSensor.mHRData.isChOpen) {
-    		mSensor.closeCh();
+    		//mSensor.closeCh();
     	}
     	if(WATCH_VIEW != viewNum) {
     		Ui.switchToView(getView(WATCH_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_LEFT);

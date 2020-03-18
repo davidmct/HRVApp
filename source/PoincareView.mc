@@ -115,7 +115,7 @@ class PoincareView extends Ui.View {
 		// add code here
 		// Draw the view
 		//MapSetColour(dc, app.txtColSet, app.bgColSet);
-		dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_BLACK);
+		dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_BLACK);
 		dc.clear();
 		dc.drawText(100, 80, Gfx.FONT_MEDIUM, "POINCARE", Gfx.TEXT_JUSTIFY_CENTER); 
 		dc.drawText(100, 150, Gfx.FONT_MEDIUM, app.mSensor.mHRData.livePulse.toString(), Gfx.TEXT_JUSTIFY_CENTER); 
