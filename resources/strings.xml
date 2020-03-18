@@ -7,7 +7,7 @@
     <string id="morning">AM</string>
     <string id="afternoon">PM</string>
     <!-- Number Picker -->
-    <string id="numberPickerTitle">Seconds</string>
+    <string id="numberPickerTitle">mm:ss</string>
     <!-- String Picker -->
     <string id="stringPickerTitle">Pick a string</string>
     <!-- Date Picker -->

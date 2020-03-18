@@ -4,6 +4,7 @@ using Toybox.Time;
 using Toybox.Lang;
 using Toybox.System as Sys;
 
+// modify to use mm:ss as display looks nicer
 class SecondsPickerDelegate extends Ui.PickerDelegate {
 	hidden var mFunc;
 	
@@ -15,7 +16,8 @@ class SecondsPickerDelegate extends Ui.PickerDelegate {
 
     function onAccept(values) {
 		// need to combine two factories
-		var mNum = values[1].toNumber() + values[0].toNumber() * 100;
+		// seconds in [2] then minutes in [0]
+		var mNum = values[2].toNumber() + values[0].toNumber() * 100 * 60;
 		mFunc.invoke( mNum);
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }

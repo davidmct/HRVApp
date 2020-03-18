@@ -116,7 +116,8 @@ class PoincareView extends Ui.View {
 		//MapSetColour(dc, app.txtColSet, app.bgColSet);
 		dc.setColor(Gfx.COLOR_DK_BLUE, Gfx.COLOR_BLACK);
 		dc.clear();
-		dc.drawText(100, 100, Gfx.FONT_MEDIUM, "POINCARE", Gfx.TEXT_JUSTIFY_CENTER); 
+		dc.drawText(100, 80, Gfx.FONT_MEDIUM, "POINCARE", Gfx.TEXT_JUSTIFY_CENTER); 
+		dc.drawText(100, 150, Gfx.FONT_MEDIUM, app.mSensor.mHRData.mAntEvent.toString(), Gfx.TEXT_JUSTIFY_CENTER); 
 		
 		Sys.println("In POINCARE VIEW");
 		

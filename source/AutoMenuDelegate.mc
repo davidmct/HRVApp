@@ -13,11 +13,11 @@ class AutoMenuDelegate extends Ui.Menu2InputDelegate {
                     
      	if( id.equals("duration")) {
      		// Picker set to initial value and max
-     		Ui.pushView(new NumberPicker(app.autoTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setAutoTime)), Ui.SLIDE_IMMEDIATE);
+     		Ui.pushView(new NumberPicker(app.autoTimeSet, 5959, 1), new SecondsPickerDelegate(self.method(:setAutoTime)), Ui.SLIDE_IMMEDIATE);
         }
         else if( id.equals("schedule"))  {
 			// was Ui.NUMBER_PICKER_TIME_OF_DAY which is seconds since midnight
-			Ui.pushView(new NumberPicker(app.autoStartSet, 9999, 1), new SecondsPickerDelegate(self.method(:setStartTime)), Ui.SLIDE_IMMEDIATE);       	
+			Ui.pushView(new NumberPicker(app.autoStartSet, 5959, 1), new SecondsPickerDelegate(self.method(:setStartTime)), Ui.SLIDE_IMMEDIATE);       	
         }
     }
     function initialize() {
