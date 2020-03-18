@@ -31,8 +31,7 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			Sys.println("ANT stat: " + app.mSensor.mHRData.mAntEvent.toString());
-			app.mSensor.mHRData.mAntEvent = "no update";
+			Sys.println("ANT stat: " + app.mSensor.mHRData.livePulse.toString());
 		}
 		
     	// Default layout settings

@@ -166,7 +166,7 @@ class HRVApp extends App.AppBase {
     
     function initialize() {
     	Sys.println("HRVApp initialisation called RUN 7");
-        mApp = Application.getApp();
+        mApp = App.getApp();
         mAntID = mApp.getProperty("pAuxHRAntID");
         mStorage = new HRVStorageHandler();
         // could possibly call in initialize func in class
@@ -190,11 +190,11 @@ class HRVApp extends App.AppBase {
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
 		// Retrieve saved settings from memory	
 		mStorage.readProperties();
-		
-		// Start up ANT device
+
+   		// Start up ANT device
 	    try {
 	    	//Create the sensor object and open it
-	   		mSensor= new AntHandler(mAntID);
+	   		mSensor = new AntHandler(mAntID);
 	    	//mSensor.openCh();
 	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
 	    	System.println(e.getErrorMessage());

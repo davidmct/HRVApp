@@ -1,6 +1,7 @@
 using Toybox.Ant as Ant;
 using Toybox.Time as Time;
 using Toybox.System as Sys;
+using Toybox.Math;
 
 class AntHandler extends Ant.GenericChannel {
     const DEVICE_TYPE = 120;  //strap
@@ -12,8 +13,8 @@ class AntHandler extends Ant.GenericChannel {
     
     var mSearching;
     hidden var mChanAssign;
-    hidden var mLocalmAntID;
-    hidden var mAntCh;
+    //hidden var mLocalmAntID;
+    //hidden var mAntCh;
     
     class HRStatus {
      	var isChOpen;
@@ -65,7 +66,7 @@ class AntHandler extends Ant.GenericChannel {
 	function initialize(mAntID) {
     	mApp = Application.getApp();
     	mSearching = true;
-    	mLocalmAntID = mAntID;
+    	//mLocalmAntID = mAntID;
     	
     	mHRData = new HRStatus();
     	
@@ -98,13 +99,11 @@ class AntHandler extends Ant.GenericChannel {
     	if (mHRData.isChOpen == true)
     	{
     		Sys.println("OpenCh: closing open channels and reseting status");
-    		GenericChannel.closeCh();
+    		GenericChannel.close();
     	}
     	mSearching = true;   	
 		mHRData.isChOpen = GenericChannel.open();
-		if (mDebugging) {
-			Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);
-		}
+		Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);
         // may need some other changes
     }
     
@@ -122,48 +121,15 @@ class AntHandler extends Ant.GenericChannel {
 		mHRData.isPulseRx = false;
 		mSearching = true;
     } 
-    
-    function onMessage(msg) {
-        // Parse the payload
-        var payload = msg.getPayload();
-        Sys.println("device ID = " + msg.deviceNumber);
-		Sys.println("deviceType = " + msg.deviceType);
-		Sys.println("transmissionType= " + msg.transmissionType);
-		Sys.println("getPayload = " + msg.getPayload());
-		Sys.println("messageId = " + msg.messageId);
-		
-        if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId ) {
-            // Were we searching?
-            if (mSearching) {
-                mSearching = false;
-                // Update our device configuration primarily to see the device number of the sensor we paired to
-                deviceCfg = GenericChannel.getDeviceConfig();
-            }
-            mHRData.isAntRx = true;
-			mHRData.mAntEvent ="ANT data";
-        } else if(Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId) {
-        	mHRData.mAntEvent ="ANT Response";
-            if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
-                if (Ant.MSG_CODE_EVENT_CHANNEL_CLOSED == (payload[1] & 0xFF)) {
-                    // Channel closed, re-open
-                    open();
-                } else if( Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH  == (payload[1] & 0xFF) ) {
-                    mSearching = true;
-                }
-            } else {
-                //It is a channel response.
-            }
-        }
-    }
 
     function onAntMsg(msg)
     {
 		var payload = msg.getPayload();		
-        Sys.println("device ID = " + msg.deviceNumber);
-		Sys.println("deviceType = " + msg.deviceType);
-		Sys.println("transmissionType= " + msg.transmissionType);
-		Sys.println("getPayload = " + msg.getPayload());
-		Sys.println("messageId = " + msg.messageId);
+        //Sys.println("device ID = " + msg.deviceNumber);
+		//Sys.println("deviceType = " + msg.deviceType);
+		//Sys.println("transmissionType= " + msg.transmissionType);
+		//Sys.println("getPayload = " + msg.getPayload());
+		//Sys.println("messageId = " + msg.messageId);
 
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if (mSearching) {
@@ -172,16 +138,20 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
-			mHRData.mAntEvent ="ANT data";
+			Sys.println("ANT DATA");
+			//mHRData.mAntEvent ="ANT data";
 			
 			// added another getPayload() as in sensor code
-			payload = msg.getPayload();
+			//payload = msg.getPayload();
             mHRData.isAntRx = true;
             mHRData.isStrapRx = true;
             mHRData.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 
+			//Sys.println("Pulse is :" + mHRData.livePulse);
+			//Sys.println("beatEvent is :" + beatEvent);
+			//Sys.println("beatCount is :" + beatCount);
 			HRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
@@ -192,7 +162,7 @@ class AntHandler extends Ant.GenericChannel {
 	            var event = (payload[1] & 0xFF);	            
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
-	            		mHRData.mAntEvent ="ANT:EVENT: closed";
+	            		Sys.println("ANT:EVENT: closed");
 	            		openCh();
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
@@ -200,41 +170,41 @@ class AntHandler extends Ant.GenericChannel {
 						mHRData.isPulseRx = false;
 						mSearching = true;
 						// wait for another message?
-						mHRData.mAntEvent ="RX_FAIL in AntHandler";
+						Sys.println( "RX_FAIL in AntHandler");
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
-						mHRData.mAntEvent = "ANT:RX_FAIL, search/wait";
+						Sys.println( "ANT:RX_FAIL, search/wait");
 						mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
-						mHRData.mAntEvent = "ANT: EVENT timeout";
+						Sys.println( "ANT: EVENT timeout");
 						//closeCh();
 						//openCh();
 						break;
 	            	default:
 	            		// channel response
-	            		mAntEvent ="ANT:EVENT: default";
+	            		Sys.println( "ANT:EVENT: default");
 	            		break;
 	    		} 
         	} else {
-        		mHRData.mAntEvent = "Not an RF EVENT";
+        		//Sys.println("Not an RF EVENT");
         	} 
         } else {
     		//other message!
-    		mHRData.mAntEvent = "ANT other message " + msg.messageId;
+    		Sys.println( "ANT other message " + msg.messageId);
     	}
     }
     
     function HRSampleProcessing(beatCount, beatEvent) {
-
+		//Sys.println("HRSampleProcessing");
 		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
 		
 			mHRData.isPulseRx = true;
 			mHRData.mNoPulseCount = 0;
 			
 			// Calculate estimated ranges for reliable data
-			var maxMs = 60000 / (livePulse * 0.7);
-			var minMs = 60000 / (livePulse * 1.4);
+			var maxMs = 60000 / (mHRData.livePulse * 0.7);
+			var minMs = 60000 / (mHRData.livePulse * 1.4);
 			
 			// Get interval
 			var intMs = 0;
@@ -243,16 +213,18 @@ class AntHandler extends Ant.GenericChannel {
 			} else {
 				intMs = beatEvent - mHRData.mPrevBeatEvent;
 			}
-			
-			// Only update hrv data if testing started, & values look to be error free
+			//Sys.println("HRSampleProcessing - step 2");
+			// Only update hrv data if testing started, & values look to be error free			
 			if(mApp.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+			// test line without app testing
+			//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
 				var devMs = 0;
 				if(intMs > mHRData.mPrevIntMs) {
 					mHRData.devMs = intMs - mHRData.mPrevIntMs;
 				} else {
 					mHRData.devMs = mHRData.mPrevIntMs - intMs;
 				}
-				
+				//Sys.println("HRSampleProcessing - step 3");
 				mHRData.devSqSum += mHRData.devMs * mHRData.devMs;
 				mHRData.pulseSum += mHRData.livePulse;
 				mHRData.dataCount++;
@@ -265,12 +237,14 @@ class AntHandler extends Ant.GenericChannel {
 			
 				// Print live data
 				//if(isTesting){
-				//	var liveMs = (intMs.toFloat() / 1000);
-				//	System.println(liveMs.format("%.03f"));
+				//var liveMs = (intMs.toFloat() / 1000);
+				//Sys.println(liveMs.format("%.03f"));
 				//}
 			}
 			mHRData.mPrevIntMs = intMs;
+			//Sys.println("HRSampleProcessing - step 4");
 		} else {
+			//Sys.println("HRSampleProcessing - step 5");
 			mHRData.mNoPulseCount += 1;
 			if(0 < mHRData.livePulse) {
 				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
@@ -281,5 +255,6 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		mHRData.mPrevBeatCount = beatCount;
 		mHRData.mPrevBeatEvent = beatEvent;
+		//Sys.println("HRSampleProcessing - end");
 	} 
 }
