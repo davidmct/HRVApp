@@ -3,6 +3,8 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
+// look at sensor example for line graph
+
 class PoincareView extends Ui.View {
 
 	hidden var floorVar;

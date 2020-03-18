@@ -29,7 +29,12 @@ class TestView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-		//Sys.println("TestView:onUpdate() called");
+		if(mDebugging) {
+			Sys.println("TestView:onUpdate() called");
+			Sys.println("ANT stat: " + app.mSensor.mHRData.mAntEvent.toString());
+			app.mSensor.mHRData.mAntEvent = "no update";
+		}
+		
     	// Default layout settings
 	    var titleFont = 4;		// Gfx.FONT_LARGE
 	    var numFont = 6;		// Gfx.FONT_NUMBER_MILD

@@ -160,9 +160,12 @@ class HRVApp extends App.AppBase {
     hidden var greenTimer;
     hidden var viewTimer;
     hidden var testTimer;
+    const UI_UPDATE_PERIOD_MS = 1000;
+    // ensure second update
+    hidden var _uiTimer;
     
     function initialize() {
-    	Sys.println("HRVApp initialisation called RUN 4");
+    	Sys.println("HRVApp initialisation called RUN 7");
         mApp = Application.getApp();
         mAntID = mApp.getProperty("pAuxHRAntID");
         mStorage = new HRVStorageHandler();
@@ -185,7 +188,6 @@ class HRVApp extends App.AppBase {
     function onStart(state) {
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
-
 		// Retrieve saved settings from memory	
 		mStorage.readProperties();
 		
@@ -193,19 +195,20 @@ class HRVApp extends App.AppBase {
 	    try {
 	    	//Create the sensor object and open it
 	   		mSensor= new AntHandler(mAntID);
-	    	mSensor.openCh();
+	    	//mSensor.openCh();
 	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
 	    	System.println(e.getErrorMessage());
 	   		mSensor = null;
 	    }
+	    
 	    if (mDebugging) {
 	    	Sys.println("AUX sensor created: " + mSensor);
 	    	Sys.println("Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
-		
-    	 if(VIVOACTIVE == device) {
+
+    	if(VIVOACTIVE == device) {
     	 	soundSet = 0;
-    	 }
+    	}
 
 		// Retrieve saved results from memory
 		mStorage.resetResults();		
@@ -229,7 +232,14 @@ class HRVApp extends App.AppBase {
     	greenTimer = new Timer.Timer();
 		viewTimer = new Timer.Timer();
 		testTimer = new Timer.Timer();
+		_uiTimer = new Timer.Timer();
+		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);
 		
+    }
+    
+    //! A wrapper function to allow the timer to request a screen update
+    function updateScreen() {
+        Ui.requestUpdate();
     }
     
     //! onStop() is called when your application is exiting
