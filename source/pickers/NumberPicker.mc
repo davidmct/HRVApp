@@ -29,7 +29,7 @@ class NumberPicker extends WatchUi.Picker {
         // now fill in initial values of each factory
         var defaults = new [factories.size()];
         defaults[0] = initial_v / 60;
-        defaults[0] = defaults[0].format("%d");
+        defaults[0] = defaults[0];
         defaults[1] = null;
         defaults[2] = initial_v % 60;
 
