@@ -25,16 +25,16 @@ class HRVStorageHandler {
 		// should probably stop any test and reload settings
 
 	}
-// use Property and store for CIA 2.4 on
-// Property.getValue(name as string);
-//Property.setValue("mystetting", mySetting);
-
-// if (Toybox.Application has :Storage) {
-// use Storage and Property methods
-//} else {
-// use Application.AppBase methods
-// app.getProperty() and app.setProperty()
-//}
+	// use Property and store for CIA 2.4 on
+	// Property.getValue(name as string);
+	//Property.setValue("mystetting", mySetting);
+	
+	// if (Toybox.Application has :Storage) {
+	// use Storage and Property methods
+	//} else {
+	// use Application.AppBase methods
+	// app.getProperty() and app.setProperty()
+	//}
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
 
@@ -45,16 +45,14 @@ class HRVStorageHandler {
 		mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		mApp.versionSet = Ui.loadResource(Rez.Strings.Version);
 
-		mApp.greenTimeSet = Ui.loadResource(Rez.Strings.GreenTime).toNumber();
+		mApp.mFitWriteEnabled = Ui.loadResource(Rez.Strings.FitFileWrite).toNumber();
 		mApp.soundSet = Ui.loadResource(Rez.Strings.Sound).toNumber();
 		mApp.vibeSet = Ui.loadResource(Rez.Strings.Vibe).toNumber();
 		mApp.testTypeSet = Ui.loadResource(Rez.Strings.TestType).toNumber();
 		mApp.timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
 		mApp.mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
-		mApp.autoStartSet = Ui.loadResource(Rez.Strings.AutoStart).toNumber();
-		mApp.autoTimeSet = Ui.loadResource(Rez.Strings.AutoTime).toNumber();
-		mApp.mMaxAutoTimeSet = Ui.loadResource(Rez.Strings.MaxAutoTime).toNumber();
-        
+		mApp.mManualTimeSet = Ui.loadResource(Rez.Strings.ManualTime).toNumber();
+      
 		// ColSet are index into colour map
 		mApp.bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
 		mApp.lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
@@ -80,13 +78,9 @@ class HRVStorageHandler {
 		if (value == null) {
 			mApp.setProperty(INITIAL_RUN, true);
 		} else {
-	    	value = mApp.getProperty(GREEN_TIME);
+	    	value = mApp.getProperty(FIT_STATE);
 			if(null != value) {
-				// ensure a reasonable minimum
-				if(10 > value){
-					value = 10;
-				}
-	    		mApp.greenTimeSet = value;
+	    		mApp.mFitWriteEnabled = value;
 	    	}
 	    	value = mApp.getProperty(SOUND);
 			if(null != value) {
@@ -102,16 +96,16 @@ class HRVStorageHandler {
 	    	}
 	    	value = mApp.getProperty(TIMER_TIME);
 			if(null != value) {
-	    		mApp.timerTimeSet = value;
+	    		mApp.timerTimeSet = value.toNumber();
 	    	}
-	    	value = mApp.getProperty(AUTO_START);
+	    	value = mApp.getProperty(MANUAL_TIME);
 			if(null != value) {
-	    		mApp.autoStartSet = value;
+	    		mApp.mManualTimeSet = value.toNumber();
 	    	}
-	    	value = mApp.getProperty(AUTO_TIME);
+	    	value = mApp.getProperty(MAX_MANUAL_TIME);
 			if(null != value) {
-	    		mApp.autoTimeSet = value;
-	    	}
+	    		mApp.mMaxTimerTimeSet = value.toNumber();
+	    	}	    	
 	    	value = mApp.getProperty(BG_COL);
 			if(null != value) {
 	    		mApp.bgColSet = value;
@@ -127,15 +121,15 @@ class HRVStorageHandler {
 	
 	    	value = mApp.getProperty(INHALE_TIME);
 			if(null != value) {
-	    		mApp.inhaleTimeSet = value;
+	    		mApp.inhaleTimeSet = value.toNumber();
 	    	}
 	    	value = mApp.getProperty(EXHALE_TIME);
 			if(null != value) {
-	    		mApp.exhaleTimeSet = value;
+	    		mApp.exhaleTimeSet = value.toNumber();
 	    	}
 	    	value = mApp.getProperty(RELAX_TIME);
 			if(null != value) {
-	    		mApp.relaxTimeSet = value;
+	    		mApp.relaxTimeSet = value.toNumber();
 	    	}
 		}
 	}
@@ -227,9 +221,8 @@ class HRVStorageHandler {
 		if(mApp.versionSet != mApp.getProperty(VERSION)) {
     		mApp.setProperty(VERSION, mApp.versionSet);
     	}
-
-		if(mApp.greenTimeSet != mApp.getProperty(GREEN_TIME)) {
-    		mApp.setProperty(GREEN_TIME, mApp.greenTimeSet);
+		if(mApp.mFitWriteEnabled != mApp.getProperty(FIT_STATE)) {
+    		mApp.setProperty(FIT_STATE, mApp.mFitWriteEnabled);
     	}
 		if(mApp.soundSet != mApp.getProperty(SOUND)) {
     		mApp.setProperty(SOUND, mApp.soundSet);
@@ -241,14 +234,14 @@ class HRVStorageHandler {
     		mApp.setProperty(TEST_TYPE, mApp.testTypeSet);
     	}
 		if(mApp.timerTimeSet != mApp.getProperty(TIMER_TIME)) {
-    		mApp.setProperty(TIMER_TIME, mApp.timerTimeSet);
+    		mApp.setProperty(TIMER_TIME, mApp.timerTimeSet.toString());
     	}
-		if(mApp.autoStartSet != mApp.getProperty(AUTO_START)) {
-    		mApp.setProperty(AUTO_START, mApp.autoStartSet);
+		if(mApp.mManualTimeSet != mApp.getProperty(MANUAL_TIME)) {
+    		mApp.setProperty(TIMER_TIME, mApp.mManualTimeSet.toString());
     	}
-		if(mApp.autoTimeSet != mApp.getProperty(AUTO_TIME)) {
-    		mApp.setProperty(AUTO_TIME, mApp.autoTimeSet);
-    	}
+ 		if(mApp.mMaxTimerTimeSet != mApp.getProperty(MAX_MANUAL_TIME)) {
+    		mApp.setProperty(TIMER_TIME, mApp.mMaxTimerTimeSet.toString());
+    	}   	
 		if(mApp.bgColSet != mApp.getProperty(BG_COL)) {
     		mApp.setProperty(BG_COL, mApp.bgColSet);
     	}
@@ -272,13 +265,13 @@ class HRVStorageHandler {
     	}
 
     	if(mApp.inhaleTimeSet != mApp.getProperty(INHALE_TIME)) {
-    		mApp.setProperty(INHALE_TIME, mApp.inhaleTimeSet);
+    		mApp.setProperty(INHALE_TIME, mApp.inhaleTimeSet.toString());
     	}
     	if(mApp.exhaleTimeSet != mApp.getProperty(EXHALE_TIME)) {
-    		mApp.setProperty(EXHALE_TIME, mApp.exhaleTimeSet);
+    		mApp.setProperty(EXHALE_TIME, mApp.exhaleTimeSet.toString());
     	}
     	if(mApp.relaxTimeSet != mApp.getProperty(RELAX_TIME)) {
-    		mApp.setProperty(RELAX_TIME, mApp.relaxTimeSet);
+    		mApp.setProperty(RELAX_TIME, mApp.relaxTimeSet.toString());
     	}
 	}
 

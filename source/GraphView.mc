@@ -13,8 +13,6 @@ class GraphView extends Ui.View {
     function onShow() {
 
     	var app = App.getApp();
-    	app.resetGreenTimer();
-		app.updateMinutes();
     }
 
     function scale(num) {

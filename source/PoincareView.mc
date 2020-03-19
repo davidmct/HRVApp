@@ -16,8 +16,7 @@ class PoincareView extends Ui.View {
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
     	var app = App.getApp();
-    	app.resetGreenTimer();
-		app.updateMinutes();
+
     }
 
     function scale(num) {
@@ -121,6 +120,23 @@ class PoincareView extends Ui.View {
 		dc.drawText(100, 150, Gfx.FONT_MEDIUM, app.mSensor.mHRData.livePulse.toString(), Gfx.TEXT_JUSTIFY_CENTER); 
 		
 		Sys.println("In POINCARE VIEW");
+		
+		// use exclude in jungle for different screen formats 
+		// Largest square on a circular screen is 
+		// mRadius = dc.getwidth/2;
+		// height = width = mRadius / sqrt(2);
+		// top_left = (mRadius - width, mRadius - height);
+		// top_right = (mRadius + width, mRadius - height);
+		// bottom_left = (mRadius - width, mRadius + height);
+		// bottom_right = (mRadius + width, mRadius + height);	
+		
+		// will need to work out range on X which is same as Y
+		// draw overall box
+		// draw grid lines on both dimensions at say N_GRID_LINES (odd number), goes beyond axis lines left and bottom
+		// Make centre grid marker bolder or longer
+		// put median variation at this point and label
+		// need left and right range labels eg
+		// Lowest value - a bit, median, Highest plus a bit : might be very small!
 		
 		// Testing only. Draw used memory
 		//var str = System.getSystemStats().usedMemory.toString();

@@ -22,35 +22,20 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
 		var app = App.getApp();
 		var mId = item.getId();
 		
-		if( mId == :Timer ) {
-            app.testTypeSet = TYPE_TIMER;
-            Sys.println("Timer selected");
-            item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Auto)).setSelected(false);
-            Sys.println(" end timer");
-        }
-        else if( mId == :Manual) {
+		if( mId == :Manual) {
             app.testTypeSet = TYPE_MANUAL;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Auto)).setSelected(false);           
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);           
         }
-        else if( mId == :Auto)  {
-            app.testTypeSet = TYPE_AUTO;
+        else if( mId == :Timer)  {
+            app.testTypeSet = TYPE_TIMER;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }
         
         // this should turn item blue...
-        Sys.println("calling request update in TestTYpeMenuDelegate");       
+        Sys.println("calling request update in TestTypeMenuDelegate");       
         requestUpdate();
-        
-        if(mId != :Auto && app.isWaiting) {
-        	app.endTest();
-        }
-
     }
     
 }

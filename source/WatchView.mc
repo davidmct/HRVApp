@@ -9,7 +9,6 @@ class WatchView extends Ui.View {
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
 
-    	App.getApp().updateMinutes();
     }
 
     //! Update the view

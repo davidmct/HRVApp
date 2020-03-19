@@ -6,16 +6,16 @@ using Toybox.System as Sys;
 class TestView extends Ui.View {
 
 	hidden var app;
+	hidden var mFirst;
 	
     function initialize() {
     	View.initialize();
     	app = App.getApp();
+    	mFirst = true;
     }
     
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-    	app.updateSeconds();
-    	app.resetGreenTimer();
 
     	if(app.isClosing) {
 			app.onStop( null );
@@ -35,8 +35,8 @@ class TestView extends Ui.View {
 		}
 		
     	// Default layout settings
-	    var titleFont = 4;		// Gfx.FONT_LARGE
-	    var numFont = 6;		// Gfx.FONT_NUMBER_MILD
+	    var titleFont = Gfx.FONT_LARGE;		// Gfx.FONT_LARGE
+	    var numFont = Gfx.FONT_NUMBER_MILD;		// Gfx.FONT_NUMBER_MILD
 	    var titleY = 14;
 	    var strapY = 33;
 	    var pulseY = 49;
@@ -65,15 +65,15 @@ class TestView extends Ui.View {
 		if(TYPE_TIMER == testType) {
 			timerTime = app.timerTimeSet;
 		}
-		else if(TYPE_AUTO == testType) {
-			timerTime = app.autoTimeSet;
+		else if(TYPE_MANUAL == testType) {
+			timerTime = app.mManualTimeSet;
 		}
 
 		// Pulse
 		var pulse = app.mSensor.mHRData.livePulse;
 
 		// Message
-    	var msgTxt;
+    	var msgTxt ="";
     	var testTime = app.timeNow() - app.utcStart;
 
 		if(app.isFinished) {
@@ -110,18 +110,12 @@ class TestView extends Ui.View {
 				timerTime = testTime;
 			}
     	}
-    	else if(app.isWaiting) {
-    		msgTxt = "Autostart in " + app.timerFormat(app.timeAutoStart - app.timeNow());
-    	}
     	else if(app.mSensor.mHRData.isStrapRx) {
 			if(TYPE_TIMER == testType) {
 				msgTxt = "Timer test ready";
 			}
 			else if(TYPE_MANUAL == testType) {
 				msgTxt = "Manual test ready";
-			}
-			else {
-				msgTxt = "Schedule " + app.clockFormat(app.autoStartSet);
 			}
     	}
     	else {
@@ -192,9 +186,9 @@ class TestView extends Ui.View {
 			txt_size = dc.getTextDimensions("HRV TEST", titleFont);
 			strapY = titleY + txt_size[1] + 5;
 			// actual heart rate and label
-			pulseLblY = titleY + txt_size[1]/2 + 5;			
+			pulseLblY = titleY + txt_size[1]/2 + 7;			
 			txt_size = dc.getTextDimensions( strapTxt, font);
-			pulseY = strapY + txt_size[1] -5;
+			pulseY = strapY + txt_size[1] - 5;
 			pulseTxtY = strapY+(pulseY-strapY)/2;			
 			
 			// status message
@@ -244,6 +238,29 @@ class TestView extends Ui.View {
 		//var str = System.getSystemStats().usedMemory.toString();
 		//dc.setColor(WHITE, BLACK);
 		//dc.drawText(dc.getWidth() / 2, 0, font, str, Gfx.TEXT_JUSTIFY_CENTER);
+		
+		//dump out parameters for a layout
+		if (mDebugging && mFirst) {
+			mFirst = false;
+			Sys.println( "titleFont: " + titleFont);
+		    Sys.println(" numFont: " + numFont);
+		    Sys.println(" titleY: " + titleY);
+		    Sys.println(" strapY: " + strapY);
+		    Sys.println(" pulseY: " + pulseY);
+		    Sys.println(" pulseLblY: " + pulseLblY);
+		    Sys.println(" pulseTxtY: " + pulseTxtY);
+		    Sys.println(" msgTxtY: " + msgTxtY);
+		    Sys.println(" resLblY: " + resLblY);
+		    Sys.println(" resTxtY: " + resTxtY);
+		    Sys.println(" line1Y: " + line1Y);
+		    Sys.println(" line2Y: " + line2Y);
+		    Sys.println(" col1: " + col1);
+		    Sys.println(" col2: " + col2);
+		    Sys.println(" col3: " + col3);
+	        Sys.println(" font: " + font);
+			Sys.println(" msgFont: " + msgFont);
+			Sys.println(" just: " + just);
+		}
     }
 
     //! Called when this View is removed from the screen. Save the

@@ -91,7 +91,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		else if(app.isNotSaved && MIN_SAMPLES < app.dataCount) {
 			Sys.println("HRVBehaviour onEnter() - confirm save");
 			Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
-			// skips Green timer reset may need checking
 			return true;
     	}
     	else if(app.isFinished) {
@@ -111,18 +110,13 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     	else {
     		Sys.println("HRVBehaviour onEnter() - start branch");
     		app.startTest();
-    		app.stopViewTimer();
-    		app.updateSeconds();
     	}
 		
-    	app.resetGreenTimer();
  		Sys.println("HRVBehaviour onEnter() - leaving");   	
     	return true;
 	}
 
 	function onMenu() {
-		app.stopGreenTimer();
-		app.stopViewTimer();
 		
 		// Generate a new Menu for mainmenu
         var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main")});
@@ -155,11 +149,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onPower() {
-		app.resetGreenTimer();
 		return true;
 	}
-
-
 }
 
 // This is the custom drawable we will use for our main menu title

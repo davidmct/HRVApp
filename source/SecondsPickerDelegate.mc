@@ -17,7 +17,7 @@ class SecondsPickerDelegate extends Ui.PickerDelegate {
     function onAccept(values) {
 		// need to combine two factories
 		// seconds in [2] then minutes in [0]
-		var mNum = values[2].toNumber() + values[0].toNumber() * 100 * 60;
+		var mNum = values[2].toNumber() + values[0].toNumber() * 60;
 		mFunc.invoke( mNum);
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }

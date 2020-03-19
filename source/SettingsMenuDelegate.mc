@@ -17,11 +17,17 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_LEFT );
         }
-        else if ( id.equals("auto"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Auto")});
-	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
-	        menu.addItem(new Ui.MenuItem("Schedule", null, "schedule", null));
-	        Ui.pushView(menu, new AutoMenuDelegate(), Ui.SLIDE_LEFT );
+ //       else if ( id.equals("auto"))  {
+ //           var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Auto")});
+//	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
+//	        menu.addItem(new Ui.MenuItem("Schedule", null, "schedule", null));
+//	        Ui.pushView(menu, new AutoMenuDelegate(), Ui.SLIDE_LEFT );
+//        }
+        else if ( id.equals("fitOutput"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write?")});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_LEFT );  
         }
         else if ( id.equals("breathe"))  { 
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Breathe")});
@@ -36,9 +42,6 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
 	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	        
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_LEFT );
-        }
-        else if ( id.equals("green"))  {
-            Ui.pushView(new NumberPicker(App.getApp().greenTimeSet, 9999, 1), new SecondsPickerDelegate(self.method(:setGreenTimer)), Ui.SLIDE_IMMEDIATE);
         }
         else if ( id.equals("sound"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
@@ -67,8 +70,10 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     function setVibe(value) {
 		if (value == "optOne") { app.vibeSet = true; } else { app.vibeSet = false;}
     }
-    
-    function setGreenTimer( value) { app.greenTimeSet = value;}
+ 
+    function setFitWrite(value) {
+		if (value == "optOne") { app.mFitWriteEnabled = true; } else { app.mFitWriteEnabled = false;}
+    }   
     
     function onBack() {
         Ui.popView(WatchUi.SLIDE_DOWN);
@@ -81,26 +86,5 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     function onWrap(key) {
         //Disallow Wrapping
         return false;
-    }
-}
-
-class GreenTimePickerDelegate extends Ui.PickerDelegate {
-
-   function initialize() {
-        PickerDelegate.initialize();
-    }
-
-    function onCancel() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-
-    function onAccept(values) {
-		var app = App.getApp();
-		var mNum;
-		mNum = values[1].toNumber() + values[0].toNumber() * 100;
-		Sys.println("Set  Greentime Duration: " + values + " to "+mNum);
-		app.greenTimeSet = mNum;
-
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
 }

@@ -26,8 +26,7 @@ class ResultView extends Ui.View {
     //! loading resources into memory.
     function onShow() {
     	//Sys.println("ResultView: onShow() called ");   	
-    	app.updateSeconds();
-    	app.resetGreenTimer();		
+	
 		//return true;
     }
     

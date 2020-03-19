@@ -15,7 +15,6 @@ using Toybox.System as Sys;
 //1. Confirmation dialogue still old style
 //2. Need to make sure any Delegate Pop's view when done
 //3. Set up properties and storage
-//4. Update ANT logic and interface
 //5. Redo HRV measurements and fix graph
 //6. Add poincare view
 
@@ -36,13 +35,13 @@ enum {
 	TIMESTAMP = 0,
 	APP_NAME = 1,
 	VERSION = 2,
-	GREEN_TIME = 5,
+	FIT_STATE = 5,
 	SOUND = 6,
 	VIBE = 7,
 	TEST_TYPE = 8,
 	TIMER_TIME = 9,
-	AUTO_START = 10,
-	AUTO_TIME = 11,
+	MANUAL_TIME = 10,
+	MAX_MANUAL_TIME = 11,
 	BG_COL = 12,
 	LABEL_COL = 13,
 	TEXT_COL = 14,
@@ -71,9 +70,8 @@ enum {
 	TONE_ERROR = 18,
 
 	// Test types
-	TYPE_TIMER = 0,
-	TYPE_MANUAL = 1,
-	TYPE_AUTO = 2,
+	TYPE_MANUAL = 0, // runs as long as useer wants up to max time
+	TYPE_TIMER = 1,  // defaults to 5 mins and can be changed down or to max-time
 
 	// Device types
 	EPIX = 0,
@@ -108,15 +106,12 @@ class HRVApp extends App.AppBase {
 	var appNameSet;
 	var versionSet;
 
-	var greenTimeSet;
 	var soundSet;
 	var vibeSet;
 	var testTypeSet;
 	var timerTimeSet;
+	var mManualTimeSet;
 	var mMaxTimerTimeSet;
-	var autoStartSet;
-	var autoTimeSet;
-	var mMaxAutoTimeSet;
 	var bgColSet;
 	var lblColSet;
     var txtColSet;
@@ -143,8 +138,7 @@ class HRVApp extends App.AppBase {
 	var isNotSaved;
 	var isSaved;
 	var isClosing;
-	var isSeconds;
-	var isMinutes;
+	var mFitWriteEnabled;
 
 	var utcStart;
 	var utcStop;
@@ -152,15 +146,13 @@ class HRVApp extends App.AppBase {
 	var startMoment;
 	//var stopMoment;
 
-    var timeAutoStart;
     var timerTime;
     
     var mStorage;
 
-    hidden var greenTimer;
-    hidden var viewTimer;
     hidden var testTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
+    
     // ensure second update
     hidden var _uiTimer;
     
@@ -217,7 +209,6 @@ class HRVApp extends App.AppBase {
 		// Init test variables
 		resetTest();
 		startMoment = 0;
-    	timeAutoStart = 0;
     	timerTime = 0;
 
     	// Init view variables
@@ -225,12 +216,8 @@ class HRVApp extends App.AppBase {
 		lastViewNum = 0;
 
 		isClosing = false;
-		isSeconds = false;
-		isMinutes = false;
 
 		// Init timers
-    	greenTimer = new Timer.Timer();
-		viewTimer = new Timer.Timer();
 		testTimer = new Timer.Timer();
 		_uiTimer = new Timer.Timer();
 		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);
@@ -249,13 +236,10 @@ class HRVApp extends App.AppBase {
 		//???
 		
 		}
-    	// Close ant channel
-		mSensor.closeCh();		
+	
 		mStorage.saveProperties();
 		mStorage.saveResults();
 
-		greenTimer.stop();
-		viewTimer.stop();
 		testTimer.stop();
 		
 		Sys.println("App stopped");
@@ -286,7 +270,6 @@ class HRVApp extends App.AppBase {
     function autoFinish() {
     	endTest();
     	saveTest();
-    	resetGreenTimer();
     }
 
     function endTest() {
@@ -322,41 +305,27 @@ class HRVApp extends App.AppBase {
 
     function start() {
 		Sys.println("Start: entered");
-		Sys.println("stopped code");
-		//return;
 		
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	var testType = testTypeSet;
-    	if(TYPE_MANUAL != testType){
-			if(TYPE_AUTO == testType) {
-				// Auto wait
-				if(!isWaiting) {
-					timeAutoStart = timeToday() + autoStartSet;
-					timerTime = autoTimeSet;
-					if(timeAutoStart < timeNow()) {
-						timeAutoStart += 86400;
-					}
-					isWaiting = true;
-					//if(mSensor.mHRData.isChOpen) {
-					//	mSensor.closeCh();
-					//}
-					testTimer.start(method(:start),(timeAutoStart - timeNow())*1000,false); // false
-					return;
-				}
-				else {
-					isWaiting = false;
-					//if(!mSensor.mHRData.isChOpen) {
-					//	mSensor.openCh();
-					//}
-					testTimer.start(method(:autoFinish),timerTime*1000,true); // true
-				}
-			}
-			// Timer start
-			else {
-				timerTime = timerTimeSet;
-				testTimer.start(method(:finishTest),timerTime*1000,false); // false
-			}
+    	// isWaiting is unused now I think
+    	isWaiting = false;
+    	
+    	if(TYPE_MANUAL == testType){
+ 			// kick off a timer for period of test
+ 			
+ 			var x = mManualTimeSet;
+ 			
+    		timerTime = timerTimeSet;
+			testTimer.start(method(:finishTest),mMaxTimerTimeSet,false); // false
+			isTesting = true;   		
+    	
+    	} else {
+    		// kick off a timer for period of test
+    		timerTime = timerTimeSet;
+			testTimer.start(method(:finishTest),timerTime*1000,false); // false
 		}
+
 		// Common start
 		startMoment = Time.now();
 		//utcStart = timeNow();
@@ -373,24 +342,6 @@ class HRVApp extends App.AppBase {
     	//	date.min.format("%02d"),
     	//	date.sec.format("%02d")]));
     	Sys.println("Start: leaving func");
-    }
-
-    function resetGreenTimer() {
-		greenTimer.stop();
-		greenTimer.start(method(:startGreenMode),greenTimeSet*1000,true);
-    }
-
-    function stopGreenTimer() {
-    	greenTimer.stop();
-    }
-
-    function startGreenMode() {
-    	if(!isTesting && mSensor.mHRData.isChOpen) {
-    		//mSensor.closeCh();
-    	}
-    	if(WATCH_VIEW != viewNum) {
-    		Ui.switchToView(getView(WATCH_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_LEFT);
-    	}
     }
 
     function timerFormat(time) {
@@ -442,62 +393,11 @@ class HRVApp extends App.AppBase {
     	}
     }
 
-    function stopViewTimer() {
-
-    	viewTimer.stop();
-    	isMinutes = false;
-	    isSeconds = false;
-    }
-
-    function updateMinutes() {
-
-    	if(!isMinutes) {
-	    	viewTimer.stop();
-	    	var sec = System.getClockTime().sec;
-			var ms;
-			if(0 == sec) {
-	    		ms = 60000;
-	    	}
-	    	else {
-	    		ms = 60000 - sec * 1000;
-	    	}
-	    	viewTimer.start(method(:updateSynced),ms,false);
-	    	isMinutes = true;
-	    	isSeconds = false;
-    	}
-    	Ui.requestUpdate();
-    }
-
-    function updateSeconds() {
-
-    	if(!isSeconds) {
-    		viewTimer.stop();
-    		viewTimer.start(method(:onViewTimer),1000,true);
-    		isSeconds = true;
-    		isMinutes = false;
-    	}
-    	Ui.requestUpdate();
-    }
-
-    function updateSynced() {
-
-    	viewTimer.stop();
-    	viewTimer.start(method(:onViewTimer),60000,true);
-    	Ui.requestUpdate();
-    }
-
-    function onViewTimer() {
-
-    	Ui.requestUpdate();
-    }
-
     function timeNow() {
-
     	return (Time.now().value() + System.getClockTime().timeZoneOffset);
     }
 
     function timeToday() {
-
     	return (timeNow() - (timeNow() % 86400));
     }
 
@@ -506,9 +406,7 @@ class HRVApp extends App.AppBase {
     	return getView(plusView);
     }
 
-    function lastView() {
-    	return getView(lastViewNum);
-    }
+    function lastView() { return getView(lastViewNum); }
 
     function subView() {
     	var subView = (viewNum + NUM_VIEWS - 1) % NUM_VIEWS;
