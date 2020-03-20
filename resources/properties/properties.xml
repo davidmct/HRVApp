@@ -2,8 +2,6 @@
 	<property id="pAuxHRAntID" type="number">0</property>
 	<property id="firstLoadEver" type ="boolean">false</property>
 	<property id="timestampSet" type="number">1447234278</property>
-	<property id="appNameSet" type="string">HRV Analysis</property>
-	<property id="versionSet" type="string">0.1.0</property>
 	<property id="FitWriteEnabled" type ="boolean">false</property>
 	<property id="soundSet" type="boolean">true</property>
 	<property id="vibeSet" type="boolean">false</property>

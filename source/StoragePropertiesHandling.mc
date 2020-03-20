@@ -7,32 +7,6 @@ using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
 enum {
-	// Settings memory locations
-	TIMESTAMP = 0,
-	APP_NAME = 1,
-	VERSION = 2,
-	FIT_STATE = 5,
-	SOUND = 6,
-	VIBE = 7,
-	TEST_TYPE = 8,
-	TIMER_TIME = 9,
-	MANUAL_TIME = 10,
-	MAX_MANUAL_TIME = 11,
-	BG_COL = 12,
-	LABEL_COL = 13,
-	TEXT_COL = 14,
-
-	HRV_COL = 15,		// Not applied yet
-	AVG_HRV_COL = 16,	// Not applied yet
-	PULSE_COL = 17,		// Not applied yet
-	AVG_PULSE_COL = 18,	// Not applied yet
-
-	INHALE_TIME = 20,
-	EXHALE_TIME = 21,
-	RELAX_TIME = 22,
-	
-	INITIAL_RUN = 23,
-
 	// Results memory locations. (X) <> (X + 29)
 	RESULTS = 100,
 	
@@ -48,60 +22,12 @@ class HRVStorageHandler {
 // then save default set of properties
 
 	var mApp;
-	
-	hidden var timestampSetTxt;
-	hidden var appNameSetTxt;
-	hidden var versionSetTxt;
-	hidden var mFitWriteEnabled;
-	hidden var soundSetTxt;
-	hidden var vibeSetTxt;
-	hidden var testTypeSetTxt;
-	hidden var timerTimeSetTxt;
-	hidden var mMaxTimerTimeSetTxt;
-	hidden var mManualTimeSetTxt;
-      
-		// ColSet are index into colour map
-	hidden var bgColSetTxt;
-	hidden var lblColSetTxt;
-	hidden var txtColSetTxt;
-	hidden var hrvColSetTxt;
-	hidden var avgHrvColSetTxt;
-	hidden var pulseColSetTxt;
-	hidden var avgPulseColSetTxt;
-
-	hidden var inhaleTimeSetTxt;
-	hidden var exhaleTimeSetTxt;
-	hidden var relaxTimeSetTxt;
 
 	// setup storage functions	
     function initialize() {
     	mApp = App.getApp();
     	// create buffers here? use function so external can call parts
     	
-    	// load up resource strings
-    	timestampSetTxt = Rez.Strings.Timestamp;
-		appNameSetTxt = Rez.Strings.AppName;
-		versionSetTxt = Rez.Strings.Version;
-		mFitWriteEnabled = Rez.Strings.FitFileWrite;
-		soundSetTxt = Rez.Strings.Sound;
-		vibeSetTxt = Rez.Strings.Vibe;
-		testTypeSetTxt = Rez.Strings.TestType;
-		timerTimeSetTxt = Rez.Strings.TimerTime;
-		mMaxTimerTimeSetTxt = Rez.Strings.MaxTimerTime;
-		mManualTimeSetTxt = Rez.Strings.ManualTime;
-      
-		// ColSet are index into colour map
-		bgColSetTxt = Rez.Strings.BgCol;
-		lblColSetTxt = Rez.Strings.LblCol;
-		txtColSetTxt = Rez.Strings.TxtCol;
-		hrvColSetTxt = Rez.Strings.HrvCol;
-		avgHrvColSetTxt = Rez.Strings.AvgHrvCol;
-		pulseColSetTxt = Rez.Strings.PulseCol;
-		avgPulseColSetTxt = Rez.Strings.AvgPulseCol;
-
-		inhaleTimeSetTxt = Rez.Strings.inhaleTime;
-		exhaleTimeSetTxt = Rez.Strings.exhaleTime;
-		relaxTimeSetTxt = Rez.Strings.relaxTime;
     }
 
 	// message from Garmin that settings have been changed on mobile - called from main app
@@ -125,32 +51,52 @@ class HRVStorageHandler {
 	
 	// This should be factory default settings and should write values back to store
 	function resetSettings() {
-		// Retrieve default settings from file
-		mApp.timestampSet = Ui.loadResource(TimestampSetTxt);
-		mApp.appNameSet = Ui.loadResource(AppNameSetTxt);
-		mApp.versionSet = Ui.loadResource(VersionSetTxt);
-		mApp.mFitWriteEnabled = Ui.loadResource(FitFileWriteSetTxt).toNumber();
-		mApp.soundSet = Ui.loadResource(SoundSetTxt).toNumber();
-		mApp.vibeSet = Ui.loadResource(VibeSetTxt).toNumber();
-		mApp.testTypeSet = Ui.loadResource(TestTypeSetTxt).toNumber();
-		mApp.timerTimeSet = Ui.loadResource(TimerTimeSetTxt).toNumber();
-		mApp.mMaxTimerTimeSet = Ui.loadResource(MaxTimerTimeSetTxt).toNumber();
-		mApp.mManualTimeSet = Ui.loadResource(ManualTimeSetTxt).toNumber();
-      
-		// ColSet are index into colour map
-		mApp.bgColSet = Ui.loadResource(BgColSetTxt).toNumber();
-		mApp.lblColSet = Ui.loadResource(LblColSetTxt).toNumber();
-		mApp.txtColSet = Ui.loadResource(TxtColSetTxt).toNumber();
-		mApp.hrvColSet = Ui.loadResource(HrvColSetTxt).toNumber();
-		mApp.avgHrvColSet = Ui.loadResource(AvgHrvColSetTxt).toNumber();
-		mApp.pulseColSet = Ui.loadResource(PulseColSetTxt).toNumber();
-		mApp.avgPulseColSet = Ui.loadResource(AvgPulseColTxt).toNumber();
-
-		mApp.inhaleTimeSet = Ui.loadResource(inhaleTimeTxt).toNumber();
-		mApp.exhaleTimeSet = Ui.loadResource(exhaleTimeTxt).toNumber();
-		mApp.relaxTimeSet = Ui.loadResource(relaxTimeTxt).toNumber();
-		
-		// need to write back
+	
+		if (Toybox.Application has :Storage) {
+			// use Storage.get/setValue("", value) for storage or properties not used in settings			
+			mApp.Properties.setValue("pAuxHRAntID", 0);
+			Storage.setValue("firstLoadEver", true);
+			Storage.setValue("FitWriteEnabled", false);
+			mApp.Properties.setValue("soundSet", true);
+			mApp.Properties.setValue("vibeSet", false);
+			mApp.Properties.setValue("testTypeSet", 0);
+			mApp.Properties.setValue("timerTimeSet", 300);
+			mApp.Properties.setValue("MaxTimerTimeSet", 300);
+			mApp.Properties.setValue("ManualTimeSet", 300);
+			mApp.Properties.setValue("bgColSet", 3);
+			mApp.Properties.setValue("lblColSet", 10);
+			mApp.Properties.setValue("txtColSet", 13);
+			mApp.Properties.setValue("hrvColSet", 10);
+			mApp.Properties.setValue("avgHrvColSet", 12);
+			mApp.Properties.setValue("pulseColSet", 13);
+			mApp.Properties.setValue("avgPulseColSet", 6);
+			mApp.Properties.setValue("inhaleTimeSet", 4);
+			mApp.Properties.setValue("exhaleTimeSet", 4);
+			mApp.Properties.setValue("relaxTimeSet", 2);				
+		} else {
+			mApp.setProperty("pAuxHRAntID", 0);
+			mApp.setProperty("firstLoadEver", true);
+			mApp.setProperty("FitWriteEnabled", false);
+			mApp.setProperty("soundSet", true);
+			mApp.setProperty("vibeSet", false);
+			mApp.setProperty("testTypeSet", 0);
+			mApp.setProperty("timerTimeSet", 300);
+			mApp.setProperty("MaxTimerTimeSet", 300);
+			mApp.setProperty("ManualTimeSet", 300);
+			mApp.setProperty("bgColSet", 3);
+			mApp.setProperty("lblColSet", 10);
+			mApp.setProperty("txtColSet", 13);
+			mApp.setProperty("hrvColSet", 10);
+			mApp.setProperty("avgHrvColSet", 12);
+			mApp.setProperty("pulseColSet", 13);
+			mApp.setProperty("avgPulseColSet", 6);
+			mApp.setProperty("inhaleTimeSet", 4);
+			mApp.setProperty("exhaleTimeSet", 4);
+			mApp.setProperty("relaxTimeSet", 2);			
+		}
+	
+		// now load up variables
+		readProperties();
 	}
 
 	function readProperties() {	
@@ -161,102 +107,135 @@ class HRVStorageHandler {
 		}
 	}	
 	
-		
-
+	function saveProperties() {	
+		if (Toybox.Application has :Storage) {
+			_CallSavePropStorage();
+		} else {
+			_CallSavePropProperty();
+		}
+	}
+	
 	function _CallReadPropProperty() {	
 		// On very first use of app don't read in properties!
 		var value;
 		
 		// FORCE NOT OVER WRITE
-		value = mApp.getProperty(INITIAL_RUN);
+		value = mApp.getProperty("firstLoadEver");
 		if (mDebugging == true) {value = null;}
 			
 		if (value == null) {
-			mApp.setProperty(INITIAL_RUN, true);
+			mApp.setProperty("firstLoadEver", true);
 		} else {
-	    	value = mApp.getProperty(FIT_STATE);
-			if(null != value) {
-	    		mApp.mFitWriteEnabled = value;
-	    	}
-	    	value = mApp.getProperty(SOUND);
-			if(null != value) {
-	    		mApp.soundSet = value;
-	    	}
-	    	value = mApp.getProperty(VIBE);
-			if(null != value) {
-	    		mApp.vibeSet = value;
-	    	}
-	    	value = mApp.getProperty(TEST_TYPE);
-			if(null != value) {
-	    		mApp.testTypeSet = value;
-	    	}
-	    	value = mApp.getProperty(TIMER_TIME);
-			if(null != value) {
-	    		mApp.timerTimeSet = value.toNumber();
-	    	}
-	    	value = mApp.getProperty(MANUAL_TIME);
-			if(null != value) {
-	    		mApp.mManualTimeSet = value.toNumber();
-	    	}
-	    	value = mApp.getProperty(MAX_MANUAL_TIME);
-			if(null != value) {
-	    		mApp.mMaxTimerTimeSet = value.toNumber();
-	    	}	    	
-	    	value = mApp.getProperty(BG_COL);
-			if(null != value) {
-	    		mApp.bgColSet = value;
-	    	}
-	    	value = mApp.getProperty(LABEL_COL);
-			if(null != value) {
-	    		mApp.lblColSet = value;
-	    	}
-	    	value = mApp.getProperty(TEXT_COL);
-			if(null != value) {
-	    		mApp.txtColSet = value;
-	    	}
+			// assumes all these values exist
+			mApp.timestampSet = mApp.getProperty("TimestampSet");
+			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+			mApp.mFitWriteEnabled = mApp.getProperty("FitWriteEnabled");
+			mApp.soundSet = mApp.getProperty("SoundSet");
+			mApp.vibeSet = mApp.getProperty("VibeSet");
+			mApp.testTypeSet = mApp.getProperty("TestTypeSet").toNumber();
+			mApp.timerTimeSet = mApp.getProperty("TimerTimeSet").toNumber();
+			mApp.mMaxTimerTimeSet = mApp.getProperty("MaxTimerTimeSet").toNumber();
+			mApp.mManualTimeSet = mApp.getProperty("ManualTimeSet").toNumber();	      
+			// ColSet are index into colour map
+			mApp.bgColSet = mApp.getProperty("bgColSet").toNumber();
+			mApp.lblColSet = mApp.getProperty("lblColSet").toNumber();
+			mApp.txtColSet = mApp.getProperty("txtColSet").toNumber();
+			mApp.hrvColSet = mApp.getProperty("hrvColSet").toNumber();
+			mApp.avgHrvColSet = mApp.getProperty("AvgHrvColSet").toNumber();
+			mApp.pulseColSet = mApp.getProperty("PulseColSet").toNumber();
+			mApp.avgPulseColSet = mApp.getProperty("AvgPulseColSet").toNumber();
 	
-	    	value = mApp.getProperty(INHALE_TIME);
-			if(null != value) {
-	    		mApp.inhaleTimeSet = value.toNumber();
-	    	}
-	    	value = mApp.getProperty(EXHALE_TIME);
-			if(null != value) {
-	    		mApp.exhaleTimeSet = value.toNumber();
-	    	}
-	    	value = mApp.getProperty(RELAX_TIME);
-			if(null != value) {
-	    		mApp.relaxTimeSet = value.toNumber();
-	    	}
+			mApp.inhaleTimeSet = mApp.getProperty("inhaleTimeSet").toNumber();
+			mApp.exhaleTimeSet = mApp.getProperty("exhaleTimeSet").toNumber();
+			mApp.relaxTimeSet = mApp.getProperty("relaxTimeSet").toNumber();	
 		}
 	}
 	
 	function _CallReadPropStorage() {
 		//Property.getValue(name as string);
+		// On very first use of app don't read in properties!
+		var value;
 		
-		mApp.timestampSet = Property.getValue(TimestampTxt);
-		mApp.appNameSet = Property.getValue(AppNameTxt);
-		mApp.versionSet = Property.getValue(VersionTxt);
-		mApp.mFitWriteEnabled = Property.getValue(FitFileWriteTxt).toNumber();
-		mApp.soundSet = Property.getValue(SoundTxt).toNumber();
-		mApp.vibeSet = Property.getValue(VibeTxt).toNumber();
-		mApp.testTypeSet = Property.getValue(TestTypeTxt).toNumber();
-		mApp.timerTimeSet = Property.getValue(TimerTimeTxt).toNumber();
-		mApp.mMaxTimerTimeSet = Property.getValue(MaxTimerTimeTxt).toNumber();
-		mApp.mManualTimeSet = Property.getValue(ManualTimeTxt).toNumber();
+		// FORCE NOT OVER WRITE
+		value = Storage.getValue("firstLoadEver");
+		if (mDebugging == true) {value = null;}
+			
+		if (value == null) {
+			Storage.setValue("firstLoadEver", true);
+		} else {	
+			mApp.timestampSet = Storage.getValue("TimestampSet");
+			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+			mApp.mFitWriteEnabled = Storage.getValue("FitWriteEnabled");
+			mApp.soundSet = mApp.Properties.getValue("SoundSet");
+			mApp.vibeSet = mApp.Properties.getValue("VibeSet");
+			mApp.testTypeSet = mApp.Properties.getValue("TestTypeSet").toNumber();
+			mApp.timerTimeSet = mApp.Properties.getValue("TimerTimeSet").toNumber();
+			mApp.mMaxTimerTimeSet = mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
+			mApp.mManualTimeSet = mApp.Properties.getValue("ManualTimeSet").toNumber();
+	      
+			// ColSet are index into colour map
+			mApp.bgColSet = mApp.Properties.getValue("bgColSet").toNumber();
+			mApp.lblColSet = mApp.Properties.getValue("lblColSet").toNumber();
+			mApp.txtColSet = mApp.Properties.getValue("txtColSet").toNumber();
+			mApp.hrvColSet = mApp.Properties.getValue("hrvColSet").toNumber();
+			mApp.avgHrvColSet = mApp.Properties.getValue("AvgHrvColSet").toNumber();
+			mApp.pulseColSet = mApp.Properties.getValue("PulseColSet").toNumber();
+			mApp.avgPulseColSet = mApp.Properties.getValue("AvgPulseColSet").toNumber();	
+			mApp.inhaleTimeSet = mApp.Properties.getValue("inhaleTimeSet").toNumber();
+			mApp.exhaleTimeSet = mApp.Properties.getValue("exhaleTimeSet").toNumber();
+			mApp.relaxTimeSet = mApp.Properties.getValue("relaxTimeSet").toNumber();	
+		}	
+	}
+	
+	function _CallSavePropStorage() {
+		Storage.setValue("TimestampSet", mApp.timestampSet);
+		Storage.setValue("FitWriteEnabled", mApp.mFitWriteEnabled);
+		
+		// user changable
+		mApp.Properties.setValue("SoundSet", mApp.soundSet);
+		mApp.Properties.setValue("VibeSet", mApp.vibeSet);
+		mApp.Properties.setValue("TestTypeSet", mApp.testTypeSet);
+		mApp.Properties.setValue("TimerTimeSet", mApp.timerTimeSet);
+		mApp.Properties.setValue("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
+		mApp.Properties.setValue("ManualTimeSet", mApp.mManualTimeSet);
       
 		// ColSet are index into colour map
-		mApp.bgColSet = Property.getValue(BgColTxt).toNumber();
-		mApp.lblColSet = Property.getValue(LblColTxt).toNumber();
-		mApp.txtColSet = Property.getValue(TxtColTxt).toNumber();
-		mApp.hrvColSet = Property.getValue(HrvColTxt).toNumber();
-		mApp.avgHrvColSet = Property.getValue(AvgHrvColTxt).toNumber();
-		mApp.pulseColSet = Property.getValue(PulseColTxt).toNumber();
-		mApp.avgPulseColSet = Property.getValue(AvgPulseColTxt).toNumber();
-
-		mApp.inhaleTimeSet = Property.getValue(inhaleTimeTxt).toNumber();
-		mApp.exhaleTimeSet = Property.getValue(exhaleTimeTxt).toNumber();
-		mApp.relaxTimeSet = Property.getValue(relaxTimeTxt).toNumber();	
+		mApp.Properties.setValue("bgColSet", mApp.bgColSet);
+		mApp.Properties.setValue("lblColSet", mApp.lblColSet);
+		mApp.Properties.setValue("txtColSet", mApp.txtColSet);
+		mApp.Properties.setValue("hrvColSet", mApp.hrvColSet);
+		mApp.Properties.setValue("AvgHrvColSet", mApp.avgHrvColSet);
+		mApp.Properties.setValue("PulseColSet", mApp.pulseColSet);
+		mApp.Properties.setValue("AvgPulseColSet", mApp.avgPulseColSet);	
+		mApp.Properties.setValue("inhaleTimeSet", mApp.inhaleTimeSet);
+		mApp.Properties.setValue("exhaleTimeSet", mApp.exhaleTimeSet);
+		mApp.Properties.setValue("relaxTimeSet", mApp.relaxTimeSet);			
+	}
 	
+	function _CallSavePropProperty() {
+		mApp.setProperty("TimestampSet", mApp.timestampSet);
+		mApp.setProperty("FitWriteEnabled", mApp.mFitWriteEnabled);
+		
+		mApp.setProperty("SoundSet", mApp.soundSet);
+		mApp.setProperty("VibeSet", mApp.vibeSet);
+		mApp.setProperty("TestTypeSet", mApp.testTypeSet);
+		mApp.setProperty("TimerTimeSet", mApp.timerTimeSet);
+		mApp.setProperty("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
+		mApp.setProperty("ManualTimeSet", mApp.mManualTimeSet);
+      
+		// ColSet are index into colour map
+		mApp.setProperty("bgColSet", mApp.bgColSet);
+		mApp.setProperty("lblColSet", mApp.lblColSet);
+		mApp.setProperty("txtColSet", mApp.txtColSet);
+		mApp.setProperty("hrvColSet", mApp.hrvColSet);
+		mApp.setProperty("AvgHrvColSet", mApp.avgHrvColSet);
+		mApp.setProperty("PulseColSet", mApp.pulseColSet);
+		mApp.setProperty("AvgPulseColSet", mApp.avgPulseColSet);	
+		mApp.setProperty("inhaleTimeSet", mApp.inhaleTimeSet);
+		mApp.setProperty("exhaleTimeSet", mApp.exhaleTimeSet);
+		mApp.setProperty("relaxTimeSet", mApp.relaxTimeSet);	
 	}
 
 	function resetResults() {
@@ -334,71 +313,6 @@ class HRVStorageHandler {
 		mApp.isNotSaved = false;
     	mApp.isSaved = true;
     }
-
-	function saveProperties() {
-		// Save settings to memory
-    	if(mApp.timestampSet != mApp.getProperty(TIMESTAMP)) {
-    		mApp.setProperty(TIMESTAMP, mApp.timestampSet);
-    	}
-    	if(mApp.appNameSet != mApp.getProperty(APP_NAME)) {
-    		mApp.setProperty(APP_NAME, mApp.appNameSet);
-    	}
-		if(mApp.versionSet != mApp.getProperty(VERSION)) {
-    		mApp.setProperty(VERSION, mApp.versionSet);
-    	}
-		if(mApp.mFitWriteEnabled != mApp.getProperty(FIT_STATE)) {
-    		mApp.setProperty(FIT_STATE, mApp.mFitWriteEnabled);
-    	}
-		if(mApp.soundSet != mApp.getProperty(SOUND)) {
-    		mApp.setProperty(SOUND, mApp.soundSet);
-    	}
-		if(mApp.vibeSet != mApp.getProperty(VIBE)) {
-    		mApp.setProperty(VIBE, mApp.vibeSet);
-    	}
-		if(mApp.testTypeSet != mApp.getProperty(TEST_TYPE)) {
-    		mApp.setProperty(TEST_TYPE, mApp.testTypeSet);
-    	}
-		if(mApp.timerTimeSet != mApp.getProperty(TIMER_TIME)) {
-    		mApp.setProperty(TIMER_TIME, mApp.timerTimeSet.toString());
-    	}
-		if(mApp.mManualTimeSet != mApp.getProperty(MANUAL_TIME)) {
-    		mApp.setProperty(TIMER_TIME, mApp.mManualTimeSet.toString());
-    	}
- 		if(mApp.mMaxTimerTimeSet != mApp.getProperty(MAX_MANUAL_TIME)) {
-    		mApp.setProperty(TIMER_TIME, mApp.mMaxTimerTimeSet.toString());
-    	}   	
-		if(mApp.bgColSet != mApp.getProperty(BG_COL)) {
-    		mApp.setProperty(BG_COL, mApp.bgColSet);
-    	}
-		if(mApp.lblColSet != mApp.getProperty(LABEL_COL)) {
-    		mApp.setProperty(LABEL_COL, mApp.lblColSet);
-    	}
-		if(mApp.txtColSet != mApp.getProperty(TEXT_COL)) {
-    		mApp.setProperty(TEXT_COL, mApp.txtColSet);
-    	}
-		if(mApp.hrvColSet != mApp.getProperty(HRV_COL)) {
-    		mApp.setProperty(HRV_COL, mApp.hrvColSet);
-    	}
-		if(mApp.avgHrvColSet != mApp.getProperty(AVG_HRV_COL)) {
-    		 mApp.setProperty(AVG_HRV_COL, mApp.avgHrvColSet);
-    	}
-		if(mApp.pulseColSet != mApp.getProperty(PULSE_COL)) {
-    		mApp.setProperty(PULSE_COL, mApp.pulseColSet);
-    	}
-		if(mApp.avgPulseColSet != mApp.getProperty(AVG_PULSE_COL)) {
-    		mApp.setProperty(AVG_PULSE_COL, mApp.avgPulseColSet);
-    	}
-
-    	if(mApp.inhaleTimeSet != mApp.getProperty(INHALE_TIME)) {
-    		mApp.setProperty(INHALE_TIME, mApp.inhaleTimeSet.toString());
-    	}
-    	if(mApp.exhaleTimeSet != mApp.getProperty(EXHALE_TIME)) {
-    		mApp.setProperty(EXHALE_TIME, mApp.exhaleTimeSet.toString());
-    	}
-    	if(mApp.relaxTimeSet != mApp.getProperty(RELAX_TIME)) {
-    		mApp.setProperty(RELAX_TIME, mApp.relaxTimeSet.toString());
-    	}
-	}
 
 	function saveResults() {
 	    // Save results to memory

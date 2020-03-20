@@ -1,5 +1,6 @@
 using Toybox.Application as App;
 using Toybox.Application.Storage as Store;
+using Toybox.Application.Properties as Property;
 using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
@@ -123,9 +124,18 @@ class HRVApp extends App.AppBase {
     hidden var _uiTimer;
     
     function initialize() {
-    	Sys.println("HRVApp initialisation called RUN 7");
+    	Sys.println("HRVApp initialisation called RUN 8");
         mApp = App.getApp();
-        mAntID = mApp.getProperty("pAuxHRAntID");
+        
+		if (Toybox.Application has :Storage) {
+			mAntID = mApp.Properties.getValue("pAuxHRAntID");
+			versionSet = Ui.loadResource(Rez.Strings.AppVersion);			
+		} else {
+			mAntID = mApp.getProperty("pAuxHRAntID");
+			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+		}
+		Sys.println("ANT ID set to : " + mAntID);
+		
         mStorage = new HRVStorageHandler();
         // could possibly call in initialize func in class
         // may only want to call this on settings-> reset settings option as overwrites user

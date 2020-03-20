@@ -4,7 +4,10 @@ using Toybox.Application as App;
 using Toybox.Graphics;
 
 class MainMenuDelegate extends Ui.Menu2InputDelegate {
+	var app; 
+	
     function initialize() {
+      	app = App.getApp();
         Menu2InputDelegate.initialize();
     }
 
@@ -12,7 +15,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if( id.equals("test")) {
-  			var app = App.getApp();
+
   			var mTestSelected = app.testTypeSet;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
@@ -42,7 +45,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
 	        // get app version
-	        var mAppVer = Ui.loadResource(Rez.Strings.Version);
+	        var mAppVer = app.versionSet;
 	        menu.addItem(new Ui.MenuItem(mAppVer, null, "test", null));
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_LEFT );
         }
