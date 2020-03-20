@@ -137,10 +137,7 @@ class HRVApp extends App.AppBase {
 		Sys.println("ANT ID set to : " + mAntID);
 		
         mStorage = new HRVStorageHandler();
-        // could possibly call in initialize func in class
-        // may only want to call this on settings-> reset settings option as overwrites user
-        // This call should be to load
-        mStorage.resetSettings();
+        mStorage.readProperties();
     	AppBase.initialize();
     }
 

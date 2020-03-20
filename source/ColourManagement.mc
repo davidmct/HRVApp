@@ -40,6 +40,7 @@ enum {
 
 	function mapColour(index) {
 		var col;
+		//if (index == null) { Sys.println("mapColour: Null index");}		
 		if (index < 0 || index > (colours.size()-1) ) {
 			Sys.println("mapColour: index out of range");
 			col = 0;
@@ -47,8 +48,7 @@ enum {
 			col = index;
 		}
 		//Sys.println("mapColour from " + index + " to " + col);
-		return colours[col];
-		
+		return colours[col];		
 	}
 	
 	function MapSetColour( dc, fore, back) {

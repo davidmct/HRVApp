@@ -117,24 +117,24 @@ class HRVStorageHandler {
 	
 	function _CallReadPropProperty() {	
 		// On very first use of app don't read in properties!
-		var value;
+		//var value;
 		
 		// FORCE NOT OVER WRITE
-		value = mApp.getProperty("firstLoadEver");
-		if (mDebugging == true) {value = null;}
+		//value = mApp.getProperty("firstLoadEver");
+		//if (mDebugging == true) {value = null;}
 			
-		if (value == null) {
-			mApp.setProperty("firstLoadEver", true);
-		} else {
+		//if (value == null) {
+		//	mApp.setProperty("firstLoadEver", true);
+		//} else {
 			// assumes all these values exist
-			mApp.timestampSet = mApp.getProperty("TimestampSet");
+			mApp.timestampSet = mApp.getProperty("timestampSet");
 			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			mApp.mFitWriteEnabled = mApp.getProperty("FitWriteEnabled");
-			mApp.soundSet = mApp.getProperty("SoundSet");
-			mApp.vibeSet = mApp.getProperty("VibeSet");
-			mApp.testTypeSet = mApp.getProperty("TestTypeSet").toNumber();
-			mApp.timerTimeSet = mApp.getProperty("TimerTimeSet").toNumber();
+			mApp.soundSet = mApp.getProperty("soundSet");
+			mApp.vibeSet = mApp.getProperty("vibeSet");
+			mApp.testTypeSet = mApp.getProperty("testTypeSet").toNumber();
+			mApp.timerTimeSet = mApp.getProperty("timerTimeSet").toNumber();
 			mApp.mMaxTimerTimeSet = mApp.getProperty("MaxTimerTimeSet").toNumber();
 			mApp.mManualTimeSet = mApp.getProperty("ManualTimeSet").toNumber();	      
 			// ColSet are index into colour map
@@ -142,36 +142,36 @@ class HRVStorageHandler {
 			mApp.lblColSet = mApp.getProperty("lblColSet").toNumber();
 			mApp.txtColSet = mApp.getProperty("txtColSet").toNumber();
 			mApp.hrvColSet = mApp.getProperty("hrvColSet").toNumber();
-			mApp.avgHrvColSet = mApp.getProperty("AvgHrvColSet").toNumber();
-			mApp.pulseColSet = mApp.getProperty("PulseColSet").toNumber();
-			mApp.avgPulseColSet = mApp.getProperty("AvgPulseColSet").toNumber();
+			mApp.avgHrvColSet = mApp.getProperty("avgHrvColSet").toNumber();
+			mApp.pulseColSet = mApp.getProperty("pulseColSet").toNumber();
+			mApp.avgPulseColSet = mApp.getProperty("avgPulseColSet").toNumber();
 	
 			mApp.inhaleTimeSet = mApp.getProperty("inhaleTimeSet").toNumber();
 			mApp.exhaleTimeSet = mApp.getProperty("exhaleTimeSet").toNumber();
 			mApp.relaxTimeSet = mApp.getProperty("relaxTimeSet").toNumber();	
-		}
+		//}
 	}
 	
 	function _CallReadPropStorage() {
 		//Property.getValue(name as string);
 		// On very first use of app don't read in properties!
-		var value;
+		//var value;
 		
 		// FORCE NOT OVER WRITE
-		value = Storage.getValue("firstLoadEver");
-		if (mDebugging == true) {value = null;}
+		//value = Storage.getValue("firstLoadEver");
+		//if (mDebugging == true) {value = null;}
 			
-		if (value == null) {
-			Storage.setValue("firstLoadEver", true);
-		} else {	
-			mApp.timestampSet = Storage.getValue("TimestampSet");
+		//if (value == null) {
+			//Storage.setValue("firstLoadEver", true);
+		//} else {	
+			mApp.timestampSet = Storage.getValue("timestampSet");
 			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			mApp.mFitWriteEnabled = Storage.getValue("FitWriteEnabled");
-			mApp.soundSet = mApp.Properties.getValue("SoundSet");
-			mApp.vibeSet = mApp.Properties.getValue("VibeSet");
-			mApp.testTypeSet = mApp.Properties.getValue("TestTypeSet").toNumber();
-			mApp.timerTimeSet = mApp.Properties.getValue("TimerTimeSet").toNumber();
+			mApp.soundSet = mApp.Properties.getValue("soundSet");
+			mApp.vibeSet = mApp.Properties.getValue("vibeSet");
+			mApp.testTypeSet = mApp.Properties.getValue("testTypeSet").toNumber();
+			mApp.timerTimeSet = mApp.Properties.getValue("timerTimeSet").toNumber();
 			mApp.mMaxTimerTimeSet = mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
 			mApp.mManualTimeSet = mApp.Properties.getValue("ManualTimeSet").toNumber();
 	      
@@ -180,24 +180,24 @@ class HRVStorageHandler {
 			mApp.lblColSet = mApp.Properties.getValue("lblColSet").toNumber();
 			mApp.txtColSet = mApp.Properties.getValue("txtColSet").toNumber();
 			mApp.hrvColSet = mApp.Properties.getValue("hrvColSet").toNumber();
-			mApp.avgHrvColSet = mApp.Properties.getValue("AvgHrvColSet").toNumber();
-			mApp.pulseColSet = mApp.Properties.getValue("PulseColSet").toNumber();
-			mApp.avgPulseColSet = mApp.Properties.getValue("AvgPulseColSet").toNumber();	
+			mApp.avgHrvColSet = mApp.Properties.getValue("avgHrvColSet").toNumber();
+			mApp.pulseColSet = mApp.Properties.getValue("pulseColSet").toNumber();
+			mApp.avgPulseColSet = mApp.Properties.getValue("avgPulseColSet").toNumber();	
 			mApp.inhaleTimeSet = mApp.Properties.getValue("inhaleTimeSet").toNumber();
 			mApp.exhaleTimeSet = mApp.Properties.getValue("exhaleTimeSet").toNumber();
 			mApp.relaxTimeSet = mApp.Properties.getValue("relaxTimeSet").toNumber();	
-		}	
+		//}	
 	}
 	
 	function _CallSavePropStorage() {
-		Storage.setValue("TimestampSet", mApp.timestampSet);
+		Storage.setValue("timestampSet", mApp.timestampSet);
 		Storage.setValue("FitWriteEnabled", mApp.mFitWriteEnabled);
 		
 		// user changable
-		mApp.Properties.setValue("SoundSet", mApp.soundSet);
-		mApp.Properties.setValue("VibeSet", mApp.vibeSet);
-		mApp.Properties.setValue("TestTypeSet", mApp.testTypeSet);
-		mApp.Properties.setValue("TimerTimeSet", mApp.timerTimeSet);
+		mApp.Properties.setValue("soundSet", mApp.soundSet);
+		mApp.Properties.setValue("vibeSet", mApp.vibeSet);
+		mApp.Properties.setValue("testTypeSet", mApp.testTypeSet);
+		mApp.Properties.setValue("timerTimeSet", mApp.timerTimeSet);
 		mApp.Properties.setValue("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
 		mApp.Properties.setValue("ManualTimeSet", mApp.mManualTimeSet);
       
@@ -206,22 +206,22 @@ class HRVStorageHandler {
 		mApp.Properties.setValue("lblColSet", mApp.lblColSet);
 		mApp.Properties.setValue("txtColSet", mApp.txtColSet);
 		mApp.Properties.setValue("hrvColSet", mApp.hrvColSet);
-		mApp.Properties.setValue("AvgHrvColSet", mApp.avgHrvColSet);
-		mApp.Properties.setValue("PulseColSet", mApp.pulseColSet);
-		mApp.Properties.setValue("AvgPulseColSet", mApp.avgPulseColSet);	
+		mApp.Properties.setValue("avgHrvColSet", mApp.avgHrvColSet);
+		mApp.Properties.setValue("pulseColSet", mApp.pulseColSet);
+		mApp.Properties.setValue("avgPulseColSet", mApp.avgPulseColSet);	
 		mApp.Properties.setValue("inhaleTimeSet", mApp.inhaleTimeSet);
 		mApp.Properties.setValue("exhaleTimeSet", mApp.exhaleTimeSet);
 		mApp.Properties.setValue("relaxTimeSet", mApp.relaxTimeSet);			
 	}
 	
 	function _CallSavePropProperty() {
-		mApp.setProperty("TimestampSet", mApp.timestampSet);
+		mApp.setProperty("timestampSet", mApp.timestampSet);
 		mApp.setProperty("FitWriteEnabled", mApp.mFitWriteEnabled);
 		
-		mApp.setProperty("SoundSet", mApp.soundSet);
-		mApp.setProperty("VibeSet", mApp.vibeSet);
-		mApp.setProperty("TestTypeSet", mApp.testTypeSet);
-		mApp.setProperty("TimerTimeSet", mApp.timerTimeSet);
+		mApp.setProperty("soundSet", mApp.soundSet);
+		mApp.setProperty("vibeSet", mApp.vibeSet);
+		mApp.setProperty("testTypeSet", mApp.testTypeSet);
+		mApp.setProperty("timerTimeSet", mApp.timerTimeSet);
 		mApp.setProperty("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
 		mApp.setProperty("ManualTimeSet", mApp.mManualTimeSet);
       
@@ -230,9 +230,9 @@ class HRVStorageHandler {
 		mApp.setProperty("lblColSet", mApp.lblColSet);
 		mApp.setProperty("txtColSet", mApp.txtColSet);
 		mApp.setProperty("hrvColSet", mApp.hrvColSet);
-		mApp.setProperty("AvgHrvColSet", mApp.avgHrvColSet);
-		mApp.setProperty("PulseColSet", mApp.pulseColSet);
-		mApp.setProperty("AvgPulseColSet", mApp.avgPulseColSet);	
+		mApp.setProperty("avgHrvColSet", mApp.avgHrvColSet);
+		mApp.setProperty("pulseColSet", mApp.pulseColSet);
+		mApp.setProperty("avgPulseColSet", mApp.avgPulseColSet);	
 		mApp.setProperty("inhaleTimeSet", mApp.inhaleTimeSet);
 		mApp.setProperty("exhaleTimeSet", mApp.exhaleTimeSet);
 		mApp.setProperty("relaxTimeSet", mApp.relaxTimeSet);	

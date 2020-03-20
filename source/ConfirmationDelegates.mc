@@ -18,7 +18,8 @@ class SettingsDelegate extends Ui.ConfirmationDelegate {
 
     function onResponse(value) {
         if(value == Ui.CONFIRM_YES) {
-            App.getApp().resetSettings();
+        	// push original settings in to Properties
+            App.getApp().mStorage.resetSettings();
         }
     }
     function initialize() { ConfirmationDelegate.initialize();}	
