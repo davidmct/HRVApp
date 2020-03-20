@@ -124,7 +124,8 @@ class HRVApp extends App.AppBase {
     hidden var _uiTimer;
     
     function initialize() {
-    	Sys.println("HRVApp initialisation called RUN 8");
+    	if (mDebugging) { 	Sys.println("HRVApp initialisation called");}
+        
         mApp = App.getApp();
         
 		if (Toybox.Application has :Storage) {
@@ -143,9 +144,8 @@ class HRVApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-    	if (mDebugging) {
-    		Sys.println("getInitialView() called");
-    	}
+    	if (mDebugging) { Sys.println("getInitialView() called"); }
+    	
     	viewNum = 0;
 		lastViewNum = 0;
 		return [ new TestView(), new HRVBehaviourDelegate() ];
@@ -155,8 +155,6 @@ class HRVApp extends App.AppBase {
     function onStart(state) {
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
-		// Retrieve saved settings from memory	
-		mStorage.readProperties();
 
    		// Start up ANT device
 	    try {
@@ -174,12 +172,14 @@ class HRVApp extends App.AppBase {
 	    }
 
     	if(VIVOACTIVE == device) {
-    	 	soundSet = 0;
+    	 	soundSet = false;
     	}
 
 		// Retrieve saved results from memory
-		mStorage.resetResults();		
-		mStorage.loadResults();
+		// clear buffer
+		mStorage.resetResults();
+		//restore previous results from properties/store		
+		mStorage.retrieveResults();
 
 		// Init test variables
 		resetTest();
@@ -207,13 +207,10 @@ class HRVApp extends App.AppBase {
     //! onStop() is called when your application is exiting
     function onStop(state) {
 
-		if (state == null) {
-		//???
-		
-		}
+		if (state == null) { 		}
 	
 		mStorage.saveProperties();
-		mStorage.saveResults();
+		mStorage.storeResults();
 
 		testTimer.stop();
 		
@@ -283,9 +280,11 @@ class HRVApp extends App.AppBase {
 		
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	var testType = testTypeSet;
+    	
     	// isWaiting is unused now I think
     	isWaiting = false;
-    	
+    	isTesting = true;  
+    				
     	if(TYPE_MANUAL == testType){
  			// kick off a timer for period of test
  			
@@ -293,7 +292,7 @@ class HRVApp extends App.AppBase {
  			
     		timerTime = timerTimeSet;
 			testTimer.start(method(:finishTest),mMaxTimerTimeSet,false); // false
-			isTesting = true;   		
+ 		
     	
     	} else {
     		// kick off a timer for period of test

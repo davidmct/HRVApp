@@ -6,14 +6,13 @@ using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
-enum {
-	// Results memory locations. (X) <> (X + 29)
-	RESULTS = 100,
-	
+// Results memory locations. (X) <> (X + 29)
+const NUM_RESULT_ENTRIES = 150;
 	// Samples needed for stats min
-	MIN_SAMPLES = 20
+const MIN_SAMPLES = 20;
 
-}
+// for properties method of storage
+const RESULTS = "RESULTS";
 
 class HRVStorageHandler {
 
@@ -35,20 +34,9 @@ class HRVStorageHandler {
 		// should probably stop any test and reload settings
 
 	}
-	// use Property and store for CIA 2.4 on
-	// Property.getValue(name as string);
-	//Property.setValue("mystetting", mySetting);
-	
-	// if (Toybox.Application has :Storage) {
-	// use Storage and Property methods
-	//} else {
-	// use Application.AppBase methods
-	// app.getProperty() and app.setProperty()
-	//}
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
 
-	
 	// This should be factory default settings and should write values back to store
 	function resetSettings() {
 	
@@ -239,26 +227,54 @@ class HRVStorageHandler {
 	}
 
 	function resetResults() {
-		// not sure this will work as scope TBD!!!
-		// results defined in HRVApp
-		mApp.results = new [150];
+		// should only be called from settings
+		mApp.results = new [NUM_RESULT_ENTRIES];
 
-		for(var i = 0; i < 150; i++) {
+		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 			mApp.results[i] = 0;
 		}
 	}
 	
-	function loadResults() {
+	function retrieveResults() {
 		// currently references a results array in HRVApp
-		for(var i = 0; i < 30; i++) {
-			var ii = i * 5;
-			var result = mApp.getProperty(RESULTS + i);
-			if(null != result) {
-				mApp.results[ii + 0] = result[0];
-				mApp.results[ii + 1] = result[1];
-				mApp.results[ii + 2] = result[2];
-				mApp.results[ii + 3] = result[3];
-				mApp.results[ii + 4] = result[4];
+		if (Toybox.Application has :Storage) {
+			var mCheck = Storage.getValue("resultsArray");
+			if (mCheck == null) {new mApp.myException("retrieveResults: no results array");}
+			else {
+				mApp.results = mCheck;
+			} 
+		} else {		
+			for(var i = 0; i < 30; i++) {
+				var ii = i * 5;
+				var result = mApp.getProperty(RESULTS + i);
+				if(null != result) {
+					mApp.results[ii + 0] = result[0];
+					mApp.results[ii + 1] = result[1];
+					mApp.results[ii + 2] = result[2];
+					mApp.results[ii + 3] = result[3];
+					mApp.results[ii + 4] = result[4];
+				}
+			}
+		}
+	}
+	
+	function storeResults() {
+	    // Save results to memory
+	    if (Toybox.Application has :Storage) {
+			Storage.setValue("resultsArray", mApp.results);
+		} else {	
+		    // NUM_RESULT_ENTRIES ie 150
+	    	for(var i = 0; i < 30; i++) {
+				var ii = i * 5;
+				var result = mApp.getProperty(RESULTS + i);
+				if(null == result || mApp.results[ii] != result[0]) {
+					mApp.setProperty(RESULTS + i, [
+						mApp.results[ii + 0],
+						mApp.results[ii + 1],
+						mApp.results[ii + 2],
+						mApp.results[ii + 3],
+						mApp.results[ii + 4]]);
+				}
 			}
 		}
 	}
@@ -314,23 +330,6 @@ class HRVStorageHandler {
     	mApp.isSaved = true;
     }
 
-	function saveResults() {
-	    // Save results to memory
-    	for(var i = 0; i < 30; i++) {
-			var ii = i * 5;
-			var result = mApp.getProperty(RESULTS + i);
-			if(null == result || mApp.results[ii] != result[0]) {
-				mApp.setProperty(RESULTS + i, [
-					mApp.results[ii + 0],
-					mApp.results[ii + 1],
-					mApp.results[ii + 2],
-					mApp.results[ii + 3],
-					mApp.results[ii + 4]]);
-			}
-		}
-	}
-	
-	
 	
 }
 

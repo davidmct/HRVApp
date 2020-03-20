@@ -125,11 +125,11 @@ class AntHandler extends Ant.GenericChannel {
     function onAntMsg(msg)
     {
 		var payload = msg.getPayload();		
-        Sys.println("device ID = " + msg.deviceNumber);
-		Sys.println("deviceType = " + msg.deviceType);
-		Sys.println("transmissionType= " + msg.transmissionType);
-		Sys.println("getPayload = " + msg.getPayload());
-		Sys.println("messageId = " + msg.messageId);
+        //Sys.println("device ID = " + msg.deviceNumber);
+		//Sys.println("deviceType = " + msg.deviceType);
+		//Sys.println("transmissionType= " + msg.transmissionType);
+		//Sys.println("getPayload = " + msg.getPayload());
+		//Sys.println("messageId = " + msg.messageId);
 
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if (mSearching) {
@@ -138,9 +138,7 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
-			Sys.println("ANT DATA");
-			//mHRData.mAntEvent ="ANT data";
-			
+			//Sys.println("ANT DATA");			
 			// added another getPayload() as in sensor code
 			//payload = msg.getPayload();
             mHRData.isAntRx = true;
@@ -162,7 +160,7 @@ class AntHandler extends Ant.GenericChannel {
 	            var event = (payload[1] & 0xFF);	            
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
-	            		Sys.println("ANT:EVENT: closed");
+	            		//Sys.println("ANT:EVENT: closed");
 	            		openCh();
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
@@ -170,20 +168,20 @@ class AntHandler extends Ant.GenericChannel {
 						mHRData.isPulseRx = false;
 						mSearching = true;
 						// wait for another message?
-						Sys.println( "RX_FAIL in AntHandler");
+						//Sys.println( "RX_FAIL in AntHandler");
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						Sys.println( "ANT:RX_FAIL, search/wait");
 						mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
-						Sys.println( "ANT: EVENT timeout");
-						//closeCh();
-						//openCh();
+						//Sys.println( "ANT: EVENT timeout");
+						////closeCh();
+						////openCh();
 						break;
 	            	default:
 	            		// channel response
-	            		Sys.println( "ANT:EVENT: default");
+	            		//Sys.println( "ANT:EVENT: default");
 	            		break;
 	    		} 
         	} else {
@@ -191,7 +189,7 @@ class AntHandler extends Ant.GenericChannel {
         	} 
         } else {
     		//other message!
-    		Sys.println( "ANT other message " + msg.messageId);
+    		//Sys.println( "ANT other message " + msg.messageId);
     	}
     }
     
