@@ -1,25 +1,157 @@
-<resources>
-	<string id="Timestamp">1447234278</string><!-- v 1.1.6 -->  
-    <string id="AppName">HRV Analysis</string>
-    <string id="Version">0.1.1</string>
-    
-    <string id="FitFileWrite">0</string>
-    <string id="Sound">1</string>
-    <string id="Vibe">1</string>
-    <string id="TestType">0</string>
-    <string id="TimerTime">300</string>
-    <string id="ManualTime">300</string>
-    <string id="MaxTimerTime">300</string>
-    <string id="BgCol">3</string>
-    <string id="LblCol">10</string>
-    <string id="TxtCol">13</string>
-    <string id="HrvCol">10</string>
-    <string id="AvgHrvCol">12</string>
-    <string id="PulseCol">13</string>
-    <string id="AvgPulseCol">6</string>
-    
-    <string id="inhaleTime">4</string>
-    <string id="exhaleTime">4</string>
-    <string id="relaxTime">2</string>
-
-</resources>
+<settings>
+	<setting propertyKey="@Properties.pAuxHRAntID" title="@Strings.pAuxHRAntIDTitle" prompt="@Strings.pAuxHRAntIDPrompt">
+		<settingConfig type="numeric"  />
+	</setting>	
+	<setting propertyKey="@Properties.FitWriteEnabled" title="@Strings.mFitWriteEnabledTitle" prompt="@Strings.mFitWriteEnabledPrompt">
+		<settingConfig type="boolean" />
+	</setting>		
+	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetTitle" prompt="@Strings.soundSetPrompt">
+		<settingConfig type="boolean" />
+	</setting>	
+	<setting propertyKey="@Properties.vibeSet" title="@Strings.vibeSetTitle" prompt="@Strings.vibeSetPrompt">
+		<settingConfig type="boolean" />
+	</setting>		
+	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
+		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
+	</setting>	
+	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.ManualTimeSetPrompt">
+		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
+	</setting>	
+	
+	<setting propertyKey="@Properties.inhaleTimeSet" title="@Strings.inhaleTimeSetTitle" prompt="@Strings.inhaleTimeSetPrompt">
+		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
+	</setting>		
+	<setting propertyKey="@Properties.exhaleTimeSet" title="@Strings.exhaleTimeSetTitle" prompt="@Strings.exhaleTimeSetPrompt">
+		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
+	</setting>		
+	<setting propertyKey="@Properties.relaxTimeSet" title="@Strings.relaxTimeSetTitle" prompt="@Strings.relaxTimeSetPrompt">
+		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
+	</setting>		
+		
+	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>		
+		</settingConfig>	
+	</setting>		
+	<setting propertyKey="@Properties.lblColSet" title="@Strings.lblColSetTitle" prompt="@Strings.lblColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>			
+	</setting>
+	<setting propertyKey="@Properties.txtColSet" title="@Strings.txtColSetTitle" prompt="@Strings.txtColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>					
+	</setting>
+	<setting propertyKey="@Properties.hrvColSet" title="@Strings.hrvColSetTitle" prompt="@Strings.hrvColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>		
+	</setting>
+	<setting propertyKey="@Properties.avgHrvColSet" title="@Strings.avgHrvColSetTitle" prompt="@Strings.avgHrvColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>					
+	</setting>
+	<setting propertyKey="@Properties.pulseColSet" title="@Strings.pulseColSetTitle" prompt="@Strings.pulseColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>		
+	</setting>
+	<setting propertyKey="@Properties.avgPulseColSet" title="@Strings.avgPulseColSetTitle" prompt="@Strings.avgPulseColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>				
+	</setting>
+</settings>

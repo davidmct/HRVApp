@@ -30,36 +30,6 @@ class myException extends Lang.Exception {
 }
 
 enum {
-	//test
-	// Settings memory locations
-	TIMESTAMP = 0,
-	APP_NAME = 1,
-	VERSION = 2,
-	FIT_STATE = 5,
-	SOUND = 6,
-	VIBE = 7,
-	TEST_TYPE = 8,
-	TIMER_TIME = 9,
-	MANUAL_TIME = 10,
-	MAX_MANUAL_TIME = 11,
-	BG_COL = 12,
-	LABEL_COL = 13,
-	TEXT_COL = 14,
-
-	HRV_COL = 15,		// Not applied yet
-	AVG_HRV_COL = 16,	// Not applied yet
-	PULSE_COL = 17,		// Not applied yet
-	AVG_PULSE_COL = 18,	// Not applied yet
-
-	INHALE_TIME = 20,
-	EXHALE_TIME = 21,
-	RELAX_TIME = 22,
-	
-	INITIAL_RUN = 23,
-
-	// Results memory locations. (X) <> (X + 29)
-	RESULTS = 100,
-
 	// Tones
 	TONE_KEY = 0,
 	TONE_START = 1,
@@ -87,10 +57,6 @@ enum {
 	WATCH_VIEW = 3,
 	POINCARE_VIEW = 4,
 	NUM_VIEWS = 5,
-
-	// Test minimum
-	MIN_SAMPLES = 20
-
 }
 
 class HRVApp extends App.AppBase {
@@ -162,6 +128,8 @@ class HRVApp extends App.AppBase {
         mAntID = mApp.getProperty("pAuxHRAntID");
         mStorage = new HRVStorageHandler();
         // could possibly call in initialize func in class
+        // may only want to call this on settings-> reset settings option as overwrites user
+        // This call should be to load
         mStorage.resetSettings();
     	AppBase.initialize();
     }

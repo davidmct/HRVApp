@@ -1,3 +1,24 @@
 <properties>
-  <property id="pAuxHRAntID" type="number">0</property>
+	<property id="pAuxHRAntID" type="number">0</property>
+	<property id="firstLoadEver" type ="boolean">false</property>
+	<property id="timestampSet" type="number">1447234278</property>
+	<property id="appNameSet" type="string">HRV Analysis</property>
+	<property id="versionSet" type="string">0.1.0</property>
+	<property id="FitWriteEnabled" type ="boolean">false</property>
+	<property id="soundSet" type="boolean">true</property>
+	<property id="vibeSet" type="boolean">false</property>
+	<property id="testTypeSet" type="number">0</property>
+	<property id="timerTimeSet" type="number">300</property>
+	<property id="MaxTimerTimeSet" type="number">300</property>
+	<property id="ManualTimeSet" type="number">300</property>
+	<property id="bgColSet" type="number">3</property>
+	<property id="lblColSet" type="number">10</property>
+	<property id="txtColSet" type="number">13</property>
+	<property id="hrvColSet" type="number">10</property>
+	<property id="avgHrvColSet" type="number">12</property>
+	<property id="pulseColSet" type="number">13</property>
+	<property id="avgPulseColSet" type="number">6</property>
+	<property id="inhaleTimeSet" type="number">4</property>
+	<property id="exhaleTimeSet" type="number">4</property>
+	<property id="relaxTimeSet" type="number">2</property>
 </properties>

@@ -6,6 +6,41 @@ using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
+enum {
+	// Settings memory locations
+	TIMESTAMP = 0,
+	APP_NAME = 1,
+	VERSION = 2,
+	FIT_STATE = 5,
+	SOUND = 6,
+	VIBE = 7,
+	TEST_TYPE = 8,
+	TIMER_TIME = 9,
+	MANUAL_TIME = 10,
+	MAX_MANUAL_TIME = 11,
+	BG_COL = 12,
+	LABEL_COL = 13,
+	TEXT_COL = 14,
+
+	HRV_COL = 15,		// Not applied yet
+	AVG_HRV_COL = 16,	// Not applied yet
+	PULSE_COL = 17,		// Not applied yet
+	AVG_PULSE_COL = 18,	// Not applied yet
+
+	INHALE_TIME = 20,
+	EXHALE_TIME = 21,
+	RELAX_TIME = 22,
+	
+	INITIAL_RUN = 23,
+
+	// Results memory locations. (X) <> (X + 29)
+	RESULTS = 100,
+	
+	// Samples needed for stats min
+	MIN_SAMPLES = 20
+
+}
+
 class HRVStorageHandler {
 
 // if initial run then we should clear store
@@ -13,11 +48,60 @@ class HRVStorageHandler {
 // then save default set of properties
 
 	var mApp;
+	
+	hidden var timestampSetTxt;
+	hidden var appNameSetTxt;
+	hidden var versionSetTxt;
+	hidden var mFitWriteEnabled;
+	hidden var soundSetTxt;
+	hidden var vibeSetTxt;
+	hidden var testTypeSetTxt;
+	hidden var timerTimeSetTxt;
+	hidden var mMaxTimerTimeSetTxt;
+	hidden var mManualTimeSetTxt;
+      
+		// ColSet are index into colour map
+	hidden var bgColSetTxt;
+	hidden var lblColSetTxt;
+	hidden var txtColSetTxt;
+	hidden var hrvColSetTxt;
+	hidden var avgHrvColSetTxt;
+	hidden var pulseColSetTxt;
+	hidden var avgPulseColSetTxt;
+
+	hidden var inhaleTimeSetTxt;
+	hidden var exhaleTimeSetTxt;
+	hidden var relaxTimeSetTxt;
 
 	// setup storage functions	
     function initialize() {
     	mApp = App.getApp();
+    	// create buffers here? use function so external can call parts
+    	
+    	// load up resource strings
+    	timestampSetTxt = Rez.Strings.Timestamp;
+		appNameSetTxt = Rez.Strings.AppName;
+		versionSetTxt = Rez.Strings.Version;
+		mFitWriteEnabled = Rez.Strings.FitFileWrite;
+		soundSetTxt = Rez.Strings.Sound;
+		vibeSetTxt = Rez.Strings.Vibe;
+		testTypeSetTxt = Rez.Strings.TestType;
+		timerTimeSetTxt = Rez.Strings.TimerTime;
+		mMaxTimerTimeSetTxt = Rez.Strings.MaxTimerTime;
+		mManualTimeSetTxt = Rez.Strings.ManualTime;
+      
+		// ColSet are index into colour map
+		bgColSetTxt = Rez.Strings.BgCol;
+		lblColSetTxt = Rez.Strings.LblCol;
+		txtColSetTxt = Rez.Strings.TxtCol;
+		hrvColSetTxt = Rez.Strings.HrvCol;
+		avgHrvColSetTxt = Rez.Strings.AvgHrvCol;
+		pulseColSetTxt = Rez.Strings.PulseCol;
+		avgPulseColSetTxt = Rez.Strings.AvgPulseCol;
 
+		inhaleTimeSetTxt = Rez.Strings.inhaleTime;
+		exhaleTimeSetTxt = Rez.Strings.exhaleTime;
+		relaxTimeSetTxt = Rez.Strings.relaxTime;
     }
 
 	// message from Garmin that settings have been changed on mobile - called from main app
@@ -38,36 +122,48 @@ class HRVStorageHandler {
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
 
+	
+	// This should be factory default settings and should write values back to store
 	function resetSettings() {
-
 		// Retrieve default settings from file
-		mApp.timestampSet = Ui.loadResource(Rez.Strings.Timestamp);
-		mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		mApp.versionSet = Ui.loadResource(Rez.Strings.Version);
-
-		mApp.mFitWriteEnabled = Ui.loadResource(Rez.Strings.FitFileWrite).toNumber();
-		mApp.soundSet = Ui.loadResource(Rez.Strings.Sound).toNumber();
-		mApp.vibeSet = Ui.loadResource(Rez.Strings.Vibe).toNumber();
-		mApp.testTypeSet = Ui.loadResource(Rez.Strings.TestType).toNumber();
-		mApp.timerTimeSet = Ui.loadResource(Rez.Strings.TimerTime).toNumber();
-		mApp.mMaxTimerTimeSet = Ui.loadResource(Rez.Strings.MaxTimerTime).toNumber();
-		mApp.mManualTimeSet = Ui.loadResource(Rez.Strings.ManualTime).toNumber();
+		mApp.timestampSet = Ui.loadResource(TimestampSetTxt);
+		mApp.appNameSet = Ui.loadResource(AppNameSetTxt);
+		mApp.versionSet = Ui.loadResource(VersionSetTxt);
+		mApp.mFitWriteEnabled = Ui.loadResource(FitFileWriteSetTxt).toNumber();
+		mApp.soundSet = Ui.loadResource(SoundSetTxt).toNumber();
+		mApp.vibeSet = Ui.loadResource(VibeSetTxt).toNumber();
+		mApp.testTypeSet = Ui.loadResource(TestTypeSetTxt).toNumber();
+		mApp.timerTimeSet = Ui.loadResource(TimerTimeSetTxt).toNumber();
+		mApp.mMaxTimerTimeSet = Ui.loadResource(MaxTimerTimeSetTxt).toNumber();
+		mApp.mManualTimeSet = Ui.loadResource(ManualTimeSetTxt).toNumber();
       
 		// ColSet are index into colour map
-		mApp.bgColSet = Ui.loadResource(Rez.Strings.BgCol).toNumber();
-		mApp.lblColSet = Ui.loadResource(Rez.Strings.LblCol).toNumber();
-		mApp.txtColSet = Ui.loadResource(Rez.Strings.TxtCol).toNumber();
-		mApp.hrvColSet = Ui.loadResource(Rez.Strings.HrvCol).toNumber();
-		mApp.avgHrvColSet = Ui.loadResource(Rez.Strings.AvgHrvCol).toNumber();
-		mApp.pulseColSet = Ui.loadResource(Rez.Strings.PulseCol).toNumber();
-		mApp.avgPulseColSet = Ui.loadResource(Rez.Strings.AvgPulseCol).toNumber();
+		mApp.bgColSet = Ui.loadResource(BgColSetTxt).toNumber();
+		mApp.lblColSet = Ui.loadResource(LblColSetTxt).toNumber();
+		mApp.txtColSet = Ui.loadResource(TxtColSetTxt).toNumber();
+		mApp.hrvColSet = Ui.loadResource(HrvColSetTxt).toNumber();
+		mApp.avgHrvColSet = Ui.loadResource(AvgHrvColSetTxt).toNumber();
+		mApp.pulseColSet = Ui.loadResource(PulseColSetTxt).toNumber();
+		mApp.avgPulseColSet = Ui.loadResource(AvgPulseColTxt).toNumber();
 
-		mApp.inhaleTimeSet = Ui.loadResource(Rez.Strings.inhaleTime).toNumber();
-		mApp.exhaleTimeSet = Ui.loadResource(Rez.Strings.exhaleTime).toNumber();
-		mApp.relaxTimeSet = Ui.loadResource(Rez.Strings.relaxTime).toNumber();
+		mApp.inhaleTimeSet = Ui.loadResource(inhaleTimeTxt).toNumber();
+		mApp.exhaleTimeSet = Ui.loadResource(exhaleTimeTxt).toNumber();
+		mApp.relaxTimeSet = Ui.loadResource(relaxTimeTxt).toNumber();
+		
+		// need to write back
 	}
 
-	function readProperties() {
+	function readProperties() {	
+		if (Toybox.Application has :Storage) {
+			_CallReadPropStorage();
+		} else {
+			_CallReadPropProperty();
+		}
+	}	
+	
+		
+
+	function _CallReadPropProperty() {	
 		// On very first use of app don't read in properties!
 		var value;
 		
@@ -132,6 +228,35 @@ class HRVStorageHandler {
 	    		mApp.relaxTimeSet = value.toNumber();
 	    	}
 		}
+	}
+	
+	function _CallReadPropStorage() {
+		//Property.getValue(name as string);
+		
+		mApp.timestampSet = Property.getValue(TimestampTxt);
+		mApp.appNameSet = Property.getValue(AppNameTxt);
+		mApp.versionSet = Property.getValue(VersionTxt);
+		mApp.mFitWriteEnabled = Property.getValue(FitFileWriteTxt).toNumber();
+		mApp.soundSet = Property.getValue(SoundTxt).toNumber();
+		mApp.vibeSet = Property.getValue(VibeTxt).toNumber();
+		mApp.testTypeSet = Property.getValue(TestTypeTxt).toNumber();
+		mApp.timerTimeSet = Property.getValue(TimerTimeTxt).toNumber();
+		mApp.mMaxTimerTimeSet = Property.getValue(MaxTimerTimeTxt).toNumber();
+		mApp.mManualTimeSet = Property.getValue(ManualTimeTxt).toNumber();
+      
+		// ColSet are index into colour map
+		mApp.bgColSet = Property.getValue(BgColTxt).toNumber();
+		mApp.lblColSet = Property.getValue(LblColTxt).toNumber();
+		mApp.txtColSet = Property.getValue(TxtColTxt).toNumber();
+		mApp.hrvColSet = Property.getValue(HrvColTxt).toNumber();
+		mApp.avgHrvColSet = Property.getValue(AvgHrvColTxt).toNumber();
+		mApp.pulseColSet = Property.getValue(PulseColTxt).toNumber();
+		mApp.avgPulseColSet = Property.getValue(AvgPulseColTxt).toNumber();
+
+		mApp.inhaleTimeSet = Property.getValue(inhaleTimeTxt).toNumber();
+		mApp.exhaleTimeSet = Property.getValue(exhaleTimeTxt).toNumber();
+		mApp.relaxTimeSet = Property.getValue(relaxTimeTxt).toNumber();	
+	
 	}
 
 	function resetResults() {

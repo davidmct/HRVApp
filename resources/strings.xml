@@ -1,4 +1,53 @@
 <resources>
+	<string id="pAuxHRAntIDTitle">ANT Strap ID</string> 
+	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
+	<string id="mFitWriteEnabledTitle">FIT File Write</string> 
+	<string id="mFitWriteEnabledPrompt">Set  true to write FIR file</string>
+	<string id="soundSetTitle">Sound?</string>
+	<string id="soundSetPrompt">On or Off</string>
+	<string id="vibeSetTitle">Vibrate?</string>
+	<string id="vibeSetPrompt">On or Off</string>
+	<string id="timerTimeSetTitle">Default Length</string>
+	<string id="timerTimeSetPrompt">Set length of test in seconds</string>
+	<string id="TimeTooLargeError">Maximum value is 300 seconds</string>
+	<string id="ManualTimeSetTitle">Manual test time</string> 
+	<string id="ManualTimeSetPrompt">Maximum allowed manual time seconds</string>
+	<string id="inhaleTimeSetTitle">Inhale time</string> 
+	<string id="inhaleTimeSetPrompt">Length of inhale - seconds</string>
+	<string id="BreatheTimeError">Length > 10 seconds</string>
+	<string id="exhaleTimeSetTitle">Exhale time</string>
+	<string id="exhaleTimeSetPrompt">Length of exhale - seconds</string>
+	<string id="relaxTimeSetTitle">Relax time </string>
+	<string id="relaxTimeSetPrompt">Length of relax - seconds</string>
+	<string id="bgColSetTitle">Background colour</string>
+	<string id="bgColSetPrompt">Pick Colour</string>
+	<string id="WHITE">WHITE</string>
+	<string id="LT_GRAY">LT_GRAY</string>
+	<string id="DK_GRAY">DK_GRAY</string>
+	<string id="BLACK">BLACK</string>
+	<string id="RED">RED</string>
+	<string id="DK_RED">DK_RED</string>
+	<string id="ORANGE">ORANGE</string>
+	<string id="YELLOW">YELLOW</string>
+	<string id="GREEN">GREEN</string>
+	<string id="DK_GREEN">DK_GREEN</string>
+	<string id="BLUE">BLUE</string>
+	<string id="DK_BLUE">DK_BLUE</string>
+	<string id="PURPLE">PURPLE</string>
+	<string id="PINK">PINK"</string>		
+	<string id="lblColSetTitle">Label colour</string> 
+	<string id="lblColSetPrompt">Select colour</string>
+	<string id="txtColSetTitle" >Text colour</string>
+	<string id="txtColSetPrompt">Select colour</string>
+	<string id="hrvColSetTitle" >HRV colour</string>
+	<string id="hrvColSetPrompt">Select colour</string>
+	<string id="avgHrvColSetTitle">Average HR colour</string> 
+	<string id="avgHrvColSetPrompt">Select colour</string>
+	<string id="pulseColSetTitle">Pulse colour</string>
+	<string id="pulseColSetPrompt">Select colour</string>
+	<string id="avgPulseColSetTitle">Average pulse colour</string> 
+	<string id="avgPulseColSetPrompt">Select colour</string>
+
     <!-- Color Picker -->
     <string id="colorPickerTitle">Pick a color</string>
     <!-- Time Picker -->
