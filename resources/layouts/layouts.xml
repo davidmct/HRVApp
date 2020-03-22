@@ -2,4 +2,6 @@
     <!-- Results view undefined -->
     <layout id="ResultsViewLayout">
     </layout>
+    <layout id="TestViewLayout">
+    </layout>
 </layouts>

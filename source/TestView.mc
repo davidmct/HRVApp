@@ -6,14 +6,23 @@ using Toybox.System as Sys;
 class TestView extends Ui.View {
 
 	hidden var app;
-	hidden var mFirst;
+	hidden var mTestViewLayout;
 	
     function initialize() {
     	View.initialize();
     	app = App.getApp();
-    	mFirst = true;
     }
     
+    function onLayout(dc) {
+		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
+		//Sys.println("TestView: onLayout() called ");
+		if ( mTestViewLayout != null ) {
+			setLayout (mTestViewLayout);
+		} else {
+			Sys.println("layout null");
+		}
+	}
+        
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
 
@@ -21,10 +30,20 @@ class TestView extends Ui.View {
 			app.onStop( null );
 			popView(SLIDE_RIGHT);
 		}
-
-		//if(!app.mSensor.mHRData.isChOpen && !app.isWaiting) {
-		//	app.mSensor.openCh();
-		//}
+    }
+   
+   // could be common function as in ResultsView 
+   hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
+        var drawable = findDrawableById(fieldId);
+        //Sys.println("TestView: updateLayoutField() called " + drawable );
+        if (drawable != null) {
+        	//Sys.println("TestView: updateLayoutField() setting colour/Just ");
+            drawable.setColor(fieldColour);
+            drawable.setJustification(fieldJust);
+            if (fieldValue != null) {
+            	drawable.setText(fieldValue);
+            }
+        }
     }
 
     //! Update the view
@@ -34,26 +53,6 @@ class TestView extends Ui.View {
 			//Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
 		}
 		
-    	// Default layout settings
-	    var titleFont = Gfx.FONT_LARGE;		// Gfx.FONT_LARGE
-	    var numFont = Gfx.FONT_NUMBER_MILD;		// Gfx.FONT_NUMBER_MILD
-	    var titleY = 14;
-	    var strapY = 33;
-	    var pulseY = 49;
-	    var pulseLblY = 13;
-	    var pulseTxtY = 41;
-	    var msgTxtY = 74;
-	    var resLblY = 99;
-	    var resTxtY = 127;
-	    var line1Y = 60;
-	    var line2Y = 90;
-	    var col1 = 65;
-	    var col2 = 102;
-	    var col3 = 164;
-
-        var font = Gfx.FONT_TINY;		// Gfx.FONT_TINY 1
-		var msgFont = Gfx.FONT_MEDIUM;	// Gfx.FONT_MEDIUM 3
-		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER;		// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER 5
 
     	// HRV
 		var hrv = app.mSensor.mHRData.hrv;
@@ -147,120 +146,30 @@ class TestView extends Ui.View {
 	    	}
     	}
     	
-    	// adjust defaults for actual device now we have text strings
-    	if(FORERUNNER == app.device) {
-        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-			resLblY = 100;
-			pulseLblY = 12;
-	    	pulseTxtY = 40;
-        }
-        else if(VIVOACTIVE == app.device) {
-        	//numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-        }
-        else if(EPIX == app.device) {
-        	numFont = 6;		// Gfx.FONT_NUMBER_MEDIUM
-        }
-        else if(FENIX == app.device) {
-        	numFont = Gfx.FONT_NUMBER_MEDIUM;	
-        	titleFont = Gfx.FONT_MEDIUM;
-			titleY = 47;
-			strapY = 67;
-			pulseY = 83;
-			pulseLblY = 50;
-			pulseTxtY = 73;
-			msgTxtY = 108;
-			resLblY = 134;
-			resTxtY = 157;
-			line1Y = 94;
-			line2Y = 124;
-			col1 = 80;
-			col2 = 109;
-			col3 = 154;
-        } else if(FENIX6 == app.device) {
-        	numFont =  Gfx.FONT_NUMBER_MILD; // was medium
-        	titleFont = Gfx.FONT_MEDIUM;
-        	
-			titleY = 45;
-			// text about strap and pulse
-			var txt_size = [null, null];
-			txt_size = dc.getTextDimensions("HRV TEST", titleFont);
-			strapY = titleY + txt_size[1] + 5;
-			// actual heart rate and label
-			pulseLblY = titleY + txt_size[1]/2 + 7;			
-			txt_size = dc.getTextDimensions( strapTxt, font);
-			pulseY = strapY + txt_size[1] - 5;
-			pulseTxtY = strapY+(pulseY-strapY)/2;			
-			
-			// status message
-			txt_size = dc.getTextDimensions( pulseTxt, font);
-			var heightPulse = txt_size[1];
-			msgTxtY = pulseY + heightPulse;
-			
-			// results strip under titles TIMER and HRV
-			txt_size = dc.getTextDimensions( msgTxt, msgFont);
-			resLblY = msgTxtY + txt_size[1] - 2;
-			txt_size = dc.getTextDimensions( "TIMER", font);
-			resTxtY = resLblY + txt_size[1];
-			// lines splitting fields
-			line1Y = msgTxtY - 15;
-			line2Y = resLblY - 20;
-			// Columns to display fields in
-			col1 = dc.getWidth() /4 ;
-			col2 = dc.getWidth() / 2;
-			col3 = col1 + dc.getWidth() / 2 ;
-        }
-    	
-		// Draw the view
-        MapSetColour(dc, TRANSPARENT, app.bgColSet);
-        dc.clear();
-
-        MapSetColour( dc, app.lblColSet, TRANSPARENT);
-        dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
-		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
-		dc.drawText(col2, titleY, titleFont, "HRV TEST", just);
-		dc.drawText(col3, pulseLblY, font, "BPM", just);
-		dc.drawText(col1, resLblY, font, "TIMER", just);
-		dc.drawText(col3, resLblY, font, "HRV", just);
-
-		MapSetColour( dc, app.txtColSet, TRANSPARENT);
-		dc.drawText(col3, pulseTxtY, numFont, pulse.toString(), just);
-		dc.drawText(col2, msgTxtY, msgFont, msgTxt, just);
-		dc.drawText(col1, resTxtY, numFont, app.timerFormat(timerTime), just);
-		dc.drawText(col3, resTxtY, numFont, hrv.toString(), just);
-
-		MapSetColour( dc, strapCol, TRANSPARENT);
-		dc.drawText(col1, strapY, font, strapTxt, just);
-
-		MapSetColour( dc, pulseCol, TRANSPARENT);
-		dc.drawText(col1, pulseY, font, pulseTxt, just);
-
-		// Testing only. Draw used memory
-		//var str = System.getSystemStats().usedMemory.toString();
-		//dc.setColor(WHITE, BLACK);
-		//dc.drawText(dc.getWidth() / 2, 0, font, str, Gfx.TEXT_JUSTIFY_CENTER);
+    	var mLabelColour = mapColour( app.lblColSet);
+		var mJust = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
+		var mValueColour = mapColour( app.txtColSet);
 		
-		//dump out parameters for a layout
-		if (mDebugging && mFirst) {
-			mFirst = false;
-			Sys.println( "titleFont: " + titleFont);
-		    Sys.println(" numFont: " + numFont);
-		    Sys.println(" titleY: " + titleY);
-		    Sys.println(" strapY: " + strapY);
-		    Sys.println(" pulseY: " + pulseY);
-		    Sys.println(" pulseLblY: " + pulseLblY);
-		    Sys.println(" pulseTxtY: " + pulseTxtY);
-		    Sys.println(" msgTxtY: " + msgTxtY);
-		    Sys.println(" resLblY: " + resLblY);
-		    Sys.println(" resTxtY: " + resTxtY);
-		    Sys.println(" line1Y: " + line1Y);
-		    Sys.println(" line2Y: " + line2Y);
-		    Sys.println(" col1: " + col1);
-		    Sys.println(" col2: " + col2);
-		    Sys.println(" col3: " + col3);
-	        Sys.println(" font: " + font);
-			Sys.println(" msgFont: " + msgFont);
-			Sys.println(" just: " + just);
-		}
+		updateLayoutField("ViewTitle", null, mLabelColour, mJust);
+		updateLayoutField("ViewResultLbl", null, mLabelColour, mJust);
+		updateLayoutField("ViewPulseLbl", null, mLabelColour, mJust);
+		updateLayoutField("ViewTimerLbl", null, mLabelColour, mJust);
+		updateLayoutField("ViewStrapTxt", strapTxt, mapColour(strapCol), mJust);	
+		updateLayoutField("ViewPulseTxt", pulseTxt, mapColour(pulseCol), mJust);	
+					
+		updateLayoutField( "ViewMsgTxt", msgTxt, mValueColour, mJust);
+		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
+		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
+		updateLayoutField( "ViewTimerVal", app.timerFormat(timerTime), mValueColour, mJust);
+
+		// check colour of lines - can we set in drawable?
+		
+		// Draw the view
+        //MapSetColour(dc, TRANSPARENT, app.bgColSet);
+        //dc.clear();      		
+   		View.onUpdate(dc);
+   		//return true;
+		
     }
 
     //! Called when this View is removed from the screen. Save the
