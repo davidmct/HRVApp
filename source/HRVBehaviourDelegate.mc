@@ -57,11 +57,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     function slide(direction) {
 
     	//if((Ui.SLIDE_LEFT == direction || Ui.SLIDE_UP == direction) && GRAPH_VIEW == app.viewNum) {
-    	if(Ui.SLIDE_LEFT == direction && GRAPH_VIEW == app.viewNum) {
+    	if(Ui.SLIDE_LEFT == direction && HISTORY_VIEW == app.viewNum) {
     		return Ui.SLIDE_IMMEDIATE;
 		}
     	//else if((Ui.SLIDE_RIGHT == direction || Ui.SLIDE_DOWN == direction) && GRAPH_VIEW == app.viewNum) {
-    	else if(Ui.SLIDE_RIGHT == direction && GRAPH_VIEW == app.viewNum) {
+    	else if(Ui.SLIDE_RIGHT == direction && HISTORY_VIEW == app.viewNum) {
     		return Ui.SLIDE_IMMEDIATE;
     	}
     	else {

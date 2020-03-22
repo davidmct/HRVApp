@@ -3,6 +3,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
+// display a summary of the current test data eg rMSSD
 class ResultView extends Ui.View {
 
 	hidden var app;

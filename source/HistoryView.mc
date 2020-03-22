@@ -2,7 +2,8 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
-class GraphView extends Ui.View {
+// Show the previous test results over time
+class HistoryView extends Ui.View {
 
 	hidden var floorVar;
 	hidden var scaleVar;

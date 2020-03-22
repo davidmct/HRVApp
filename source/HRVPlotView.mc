@@ -2,7 +2,11 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 
-class WatchView extends Ui.View {
+
+// Plot the HRV over time for current test
+// have a sliding window that just has last N results
+
+class HrvPlotView extends Ui.View {
 
 	function initialize() { View.initialize();}
 	

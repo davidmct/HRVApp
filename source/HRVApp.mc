@@ -54,8 +54,8 @@ enum {
 	// Views
 	TEST_VIEW = 0,
 	RESULT_VIEW = 1,
-	GRAPH_VIEW = 2,
-	WATCH_VIEW = 3,
+	HISTORY_VIEW = 2,
+	HRVPLOT_VIEW = 3,
 	POINCARE_VIEW = 4,
 	NUM_VIEWS = 5,
 }
@@ -396,15 +396,15 @@ class HRVApp extends App.AppBase {
 		if(RESULT_VIEW == viewNum) {
 			return new ResultView();
 		}
-		else if(GRAPH_VIEW == viewNum) {
-			return new GraphView();
+		else if(HISTORY_VIEW == viewNum) {
+			return new HistoryView();
 		}
-		else if(WATCH_VIEW == viewNum) {
-			return new WatchView();
+		else if(HRVPLOT_VIEW == viewNum) {
+			return new HrvPlotView();
 		}
 		else if(POINCARE_VIEW == viewNum) {
 			return new PoincareView();
-		}
+		}	
 		else {
 			return new TestView();
 		}

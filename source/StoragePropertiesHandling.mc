@@ -7,12 +7,13 @@ using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
 // Results memory locations. (X) <> (X + 29)
-const NUM_RESULT_ENTRIES = 150;
-	// Samples needed for stats min
-const MIN_SAMPLES = 20;
-
-// for properties method of storage
+const NUM_RESULT_ENTRIES = 30; // last 30 days
+const DATA_SET_SIZE = 5; // each containing this number of entries
+// for properties method of storage, arranged as arrays of results per time period
 const RESULTS = "RESULTS";
+
+// Samples needed for stats min
+const MIN_SAMPLES = 20;
 
 class HRVStorageHandler {
 
@@ -228,9 +229,9 @@ class HRVStorageHandler {
 
 	function resetResults() {
 		// should only be called from settings
-		mApp.results = new [NUM_RESULT_ENTRIES];
+		mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 
-		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
 			mApp.results[i] = 0;
 		}
 	}
@@ -244,9 +245,9 @@ class HRVStorageHandler {
 				mApp.results = mCheck;
 			} 
 		} else {		
-			for(var i = 0; i < 30; i++) {
-				var ii = i * 5;
+			for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 				var result = mApp.getProperty(RESULTS + i);
+				var ii = i * DATA_SET_SIZE;
 				if(null != result) {
 					mApp.results[ii + 0] = result[0];
 					mApp.results[ii + 1] = result[1];
@@ -263,9 +264,8 @@ class HRVStorageHandler {
 	    if (Toybox.Application has :Storage) {
 			Storage.setValue("resultsArray", mApp.results);
 		} else {	
-		    // NUM_RESULT_ENTRIES ie 150
-	    	for(var i = 0; i < 30; i++) {
-				var ii = i * 5;
+	    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+				var ii = i * DATA_SET_SIZE;
 				var result = mApp.getProperty(RESULTS + i);
 				if(null == result || mApp.results[ii] != result[0]) {
 					mApp.setProperty(RESULTS + i, [
@@ -298,9 +298,9 @@ class HRVStorageHandler {
 		mApp.results[index + 2] = mApp.avgPulse;
 
 		// Calculate averages
-		for(var i = 0; i < 30; i++) {
+		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 
-			var ii = i * 5;
+			var ii = i * DATA_SET_SIZE;
 
 			if(epoch <= mApp.results[ii]) {
 
