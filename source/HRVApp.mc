@@ -15,9 +15,11 @@ using Toybox.System as Sys;
 // Things still to fix
 //1. Confirmation dialogue still old style
 //2. Need to make sure any Delegate Pop's view when done
-//3. Set up properties and storage
+//3. check initialisation of storage and properties on first run to avoid null on read
 //5. Redo HRV measurements and fix graph
 //6. Add poincare view
+//7. History and HRV plot over time views
+//8. change summary page to include rMSSD SSRR(10, 20...), skipped or double beats
 
 var mDebugging = true;
 

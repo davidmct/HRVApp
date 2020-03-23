@@ -16,14 +16,14 @@
     <layout id = "TestViewLayout">
         <label id="ViewTitle" text="HRV TEST" x="140" y="45" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
         <label id="ViewMsgTxt" text="msg" x="140" y="147" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="ViewResultLbl" text="HRV" x="210" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_LARGE" />
-        <label id="ViewResultTxt" text="value" x="103" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewResultLbl" text="HRV" x="210" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="ViewResultTxt" text="value" x="210" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
         <label id="ViewStrapTxt" text="strap" x="70" y="90" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseLbl" text="BPM" x="70" y="72" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseTxt" text="pulse" x="130" y="116" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseVal" text="xx" x="103" y="116" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewPulseLbl" text="BPM" x="210" y="72" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="ViewPulseTxt" text="pulse" x="70" y="116" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="ViewPulseVal" text="xx" x="210" y="110" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
         <label id="ViewTimerLbl" text="TIMER" x="70" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewTimerVal" text="value" x="130" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewTimerVal" text="value" x="70" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
  		<drawable id="TestViewLayoutLines_id" />     
     </layout>
 </layouts>

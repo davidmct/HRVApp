@@ -161,12 +161,7 @@ class TestView extends Ui.View {
 		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
 		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
 		updateLayoutField( "ViewTimerVal", app.timerFormat(timerTime), mValueColour, mJust);
-
-		// check colour of lines - can we set in drawable?
-		
-		// Draw the view
-        //MapSetColour(dc, TRANSPARENT, app.bgColSet);
-        //dc.clear();      		
+   		
    		View.onUpdate(dc);
    		//return true;
 		
