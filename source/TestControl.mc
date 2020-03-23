@@ -71,13 +71,13 @@ class TestController {
 		mState.isClosing = false;
 		
 		// Init test variables
-		resetTest();
 		startMoment = 0;
     	timerTime = 0;
     	utcStart = 0;
 		utcStop = 0;		
 		startMoment = 0;	
 		
+		// resetTest() is called after sensor opened by onStart in main	
 	}
 	
 	// application is stopping
@@ -150,6 +150,8 @@ class TestController {
 
     function start() {
 		Sys.println("Start: entered");
+		
+		// why don't we resetTest() here??
 		
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	var testType = mApp.testTypeSet;

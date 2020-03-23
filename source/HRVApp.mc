@@ -112,8 +112,7 @@ class HRVApp extends App.AppBase {
 			mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
 		}
 		Sys.println("ANT ID set to : " + mAntID);
-		
-		
+			
         mStorage = new HRVStorageHandler();
         mTestControl = new TestController();
         mStorage.readProperties();
@@ -157,6 +156,8 @@ class HRVApp extends App.AppBase {
 		mStorage.resetResults();
 		//restore previous results from properties/store		
 		mStorage.retrieveResults();
+		// initialise for testing
+		mTestControl.resetTest();
 
     	// Init view variables
 		viewNum = 0;
