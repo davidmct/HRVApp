@@ -25,8 +25,8 @@ class TestView extends Ui.View {
         
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
-    	if(app.isClosing) {
+    	// might need to go in test controller
+    	if(app.mTestControl.mState.isClosing) {
 			app.onStop( null );
 			popView(SLIDE_RIGHT);
 		}
@@ -145,6 +145,20 @@ class TestView extends Ui.View {
 	    		pulseCol = GREEN;
 	    	}
     	}
+    	
+    	// optimisation....
+    	// We should cache drawable ID in on layout
+    	// The lablels are fixed and can be done in layout
+    	// Would need to change colours if these variables got changed
+    	// dynamic fields updated using cached ID. Ideally only on change but these should be frequent as HR
+    	// could use a call back to update based on model changes (Model-View-Controller pattern)
+    	// All of the test logic above should be else where and call an update function here
+    	// function onShow() { getModel().setObserver(self.method(:onNotify));}
+    	// function onHide() {getModel().setObserver(null);}
+    	// function onNotify(symbol, object, params) {
+    	// test :symbol_x
+    	// }
+    	// can call onNotify with onNotify(:State_x, self, array);
     	
     	var mLabelColour = mapColour( app.lblColSet);
 		var mJust = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;

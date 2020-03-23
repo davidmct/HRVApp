@@ -17,9 +17,11 @@ using Toybox.System as Sys;
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //5. Redo HRV measurements and fix graph
-//6. Add poincare view
+//6. Add poincare view - look at onPartialUpdate...
 //7. History and HRV plot over time views
 //8. change summary page to include rMSSD SSRR(10, 20...), skipped or double beats
+//9. how to make trial version and possible payment
+// "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = true;
 
@@ -100,30 +102,14 @@ class HRVApp extends App.AppBase {
 	var viewNum;
 	var lastViewNum;
 
-	// App states
-	var isWaiting;
-	var isTesting;
-	var isFinished;
-	var isNotSaved;
-	var isSaved;
-	var isClosing;
 	var mFitWriteEnabled;
-
-	var utcStart;
-	var utcStop;
-
-	var startMoment;
-	//var stopMoment;
-
-    var timerTime;
     
     var mStorage;
-
-    hidden var testTimer;
-    const UI_UPDATE_PERIOD_MS = 1000;
+    var mTestControl;
     
     // ensure second update
     hidden var _uiTimer;
+    const UI_UPDATE_PERIOD_MS = 1000;
     
     function initialize() {
     	if (mDebugging) { 	Sys.println("HRVApp initialisation called");}
@@ -140,14 +126,14 @@ class HRVApp extends App.AppBase {
 		Sys.println("ANT ID set to : " + mAntID);
 		
         mStorage = new HRVStorageHandler();
+        mTestControl = new TestController();
         mStorage.readProperties();
     	AppBase.initialize();
     }
 
     //! Return the initial view of your application here
     function getInitialView() {
-    	if (mDebugging) { Sys.println("getInitialView() called"); }
-    	
+    	if (mDebugging) { Sys.println("getInitialView() called"); }   	
     	viewNum = 0;
 		lastViewNum = 0;
 		return [ new TestView(), new HRVBehaviourDelegate() ];
@@ -183,22 +169,13 @@ class HRVApp extends App.AppBase {
 		//restore previous results from properties/store		
 		mStorage.retrieveResults();
 
-		// Init test variables
-		resetTest();
-		startMoment = 0;
-    	timerTime = 0;
-
     	// Init view variables
 		viewNum = 0;
 		lastViewNum = 0;
 
-		isClosing = false;
-
 		// Init timers
-		testTimer = new Timer.Timer();
 		_uiTimer = new Timer.Timer();
-		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);
-		
+		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);		
     }
     
     //! A wrapper function to allow the timer to request a screen update
@@ -208,13 +185,12 @@ class HRVApp extends App.AppBase {
     
     //! onStop() is called when your application is exiting
     function onStop(state) {
-
 		if (state == null) { 		}
 	
 		mStorage.saveProperties();
 		mStorage.storeResults();
-
-		testTimer.stop();
+		mTestControl.stopControl();
+		_uiTimer.stop();
 		
 		Sys.println("App stopped");
     }
@@ -225,157 +201,6 @@ class HRVApp extends App.AppBase {
 		mStorage.onSettingsChangedStore();	
 		Ui.requestUpdate();
 	}
-
-    function startTest() {
-    	alert(TONE_START);
-    	start();
-    }
-
-    function stopTest() {
-    	endTest();
-		alert(TONE_STOP);
-    }
-
-    function finishTest() {
-    	endTest();
-    	alert(TONE_SUCCESS);
-    }
-
-    function autoFinish() {
-    	endTest();
-    	saveTest();
-    }
-
-    function endTest() {
-    	testTimer.stop();
-    	if(isWaiting) {
-			isWaiting = false;
-			//if(!mSensor.mHRData.isChOpen) {
-			//	mSensor.openCh();
-			//}
-		}
-		else {
-			isTesting = false;
-			isFinished = true;
-			isNotSaved = true;
-			utcStop = timeNow();
-		}
-    }
-
-    function discardTest() {
-    	isNotSaved = false;
-    }
-
-    function resetTest() {
-    	mSensor.mHRData.resetTestVariables();
-		utcStart = 0;
-		utcStop = 0;
-		isWaiting = false;
-		isTesting = false;
-		isFinished = false;
-		isNotSaved = false;
-		isSaved = false;
-    }
-
-    function start() {
-		Sys.println("Start: entered");
-		
-		testTimer.stop();	// This is in case user has changed test type while waiting
-    	var testType = testTypeSet;
-    	
-    	// isWaiting is unused now I think
-    	isWaiting = false;
-    	isTesting = true;  
-    				
-    	if(TYPE_MANUAL == testType){
- 			// kick off a timer for period of test
- 			
- 			var x = mManualTimeSet;
- 			
-    		timerTime = timerTimeSet;
-			testTimer.start(method(:finishTest),mMaxTimerTimeSet,false); // false
- 		
-    	
-    	} else {
-    		// kick off a timer for period of test
-    		timerTime = timerTimeSet;
-			testTimer.start(method(:finishTest),timerTime*1000,false); // false
-		}
-
-		// Common start
-		startMoment = Time.now();
-		//utcStart = timeNow();
-		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
-		isTesting = true;
-
-		// Print live data
-		//var date = Calendar.info(startMoment, 0);
-    	//System.println(format("$1$-$2$-$3$ $4$:$5$:$6$",[
-    	//	date.year,
-    	//	date.month,
-    	//	date.day,
-    	//	date.hour,
-    	//	date.min.format("%02d"),
-    	//	date.sec.format("%02d")]));
-    	Sys.println("Start: leaving func");
-    }
-
-    function timerFormat(time) {
-    	var hour = time / 3600;
-		var min = (time / 60) % 60;
-		var sec = time % 60;
-		if(0 < hour) {
-			return format("$1$:$2$:$3$",[hour.format("%01d"),min.format("%02d"),sec.format("%02d")]);
-		}
-		else {
-			return format("$1$:$2$",[min.format("%01d"),sec.format("%02d")]);
-		}
-    }
-
-	function clockFormat(time) 	{
-		var hour = (time / 3600) % 24;
-		var min = (time / 60) % 60;
-		var sec = time % 60;
-		var meridiem = "";
-		if(System.getDeviceSettings().is24Hour) {
-			if(0 == time) {
-				hour = 24;
-			}
-			else {
-				hour = hour % 24;
-			}
-			return format("$1$$2$",[hour.format("%02d"),min.format("%02d")]);
-		}
-		else {
-			if(12 > hour) {
-				meridiem = "AM";
-			}
-			else {
-				meridiem = "PM";
-			}
-			hour = 1 + (hour + 11) % 12;
-			return format("$1$:$2$:$3$ $4$",[hour.format("%01d"),
-				min.format("%02d"),sec.format("%02d"),meridiem]);
-		}
-	}
-
-	function alert(type)
-	{
-    	if(soundSet) {
-    		Attention.playTone(type);
-    	}
-    	if(vibeSet) {
-    		Attention.vibrate([new Attention.VibeProfile(100,400)]);
-    	}
-    }
-
-    function timeNow() {
-    	return (Time.now().value() + System.getClockTime().timeZoneOffset);
-    }
-
-    function timeToday() {
-    	return (timeNow() - (timeNow() % 86400));
-    }
 
     function plusView() {
     	var plusView = (viewNum + 1) % NUM_VIEWS;
