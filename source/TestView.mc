@@ -7,11 +7,60 @@ class TestView extends Ui.View {
 
 	hidden var app;
 	hidden var mTestViewLayout;
+	var mLabelColour;
+	var oldLblCol;
+	var mJust = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
+	var mValueColour;
+	var oldValCol;
+	
+	var strapTxt;
+	var strapCol;
+	var pulseTxt;
+	var pulseCol;
+	var msgTxt;
+	var hrv = 0;
+	var avgPulse = 0;
+	var timer = "0:00";	
+	
+	// layout ID cache
+	var mViewTitleID;
+	var mViewResultLblID;
+	var mViewPulseLblID;
+	var mViewTimerLblID;
+	
+	var mViewStrapTxtID;	
+	var mViewPulseTxtID;	
+				
+	var mViewMsgTxtID;
+	var mViewResultTxtID;
+	var mViewPulseValID;
+	var mViewTimerValID;		
 	
     function initialize() {
     	View.initialize();
     	app = App.getApp();
+    	oldLblCol = 20;
+    	oldValCol = 20;
     }
+    
+	// function onShow() { getModel().setObserver(self.method(:onNotify));}
+	// function onHide() {getModel().setObserver(null);}
+	// function onNotify(symbol, object, params) {
+	// test :symbol_x
+	// }
+	// can call onNotify with onNotify(:State_x, self, array);  
+	  
+	function onNotify(symbol, object, params) {
+		// [strapTxt, strapCol, pulseTxt, pulseCol, msgTxt, hrv, avgPulse, timer]
+		strapTxt = params[0];
+		pulseTxt = params[1];
+		strapCol = params[2];
+		pulseCol = params[3];
+		msgTxt = params[4];
+		hrv = params[5];
+		avgPulse = params[6];
+		timer = params[7];	
+	}	
     
     function onLayout(dc) {
 		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
@@ -21,10 +70,53 @@ class TestView extends Ui.View {
 		} else {
 			Sys.println("layout null");
 		}
+	
+		mLabelColour = mapColour( app.lblColSet);
+		mValueColour = mapColour( app.txtColSet);
+		oldLblCol = app.lblColSet;
+		oldValCol = app.txtColSet;
+		
+		strapCol = app.txtColSet;
+    	pulseCol = app.txtColSet;
+    	strapTxt = "STRAP";
+    	pulseTxt = "PULSE";
+
+		Sys.println("onLayout: starting field update");		
+		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
+		mViewResultLblID = getLayoutFieldIDandInit("ViewResultLbl", null, mLabelColour, mJust);
+		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
+		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour, mJust);
+		
+		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapTxt", strapTxt, mLabelColour, mJust);	
+		mViewPulseTxtID = getLayoutFieldIDandInit("ViewPulseTxt", pulseTxt, mLabelColour, mJust);	
+					
+		mViewMsgTxtID = getLayoutFieldIDandInit("ViewMsgTxt", msgTxt, mValueColour, mJust);
+		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", hrv.toString(), mValueColour, mJust);
+		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal", avgPulse.toString(), mValueColour, mJust);
+		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);			
 	}
         
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
+    	// have colours changed?
+    	if ((app.lblColSet != oldLblCol) || (app.txtColSet != oldValCol)) {
+    		Sys.println("Updating colours in onShow() TestView()");
+    		oldLblCol = app.lblColSet;
+    		oldValCol = app.txtColSet;    	
+	    	// update colours if they have changed
+	        mLabelColour = mapColour( app.lblColSet);
+			mValueColour = mapColour( app.txtColSet);
+			mViewTitleID.setColor( mLabelColour);
+			mViewResultLblID.setColor( mLabelColour);
+			mViewPulseLblID.setColor( mLabelColour);
+			mViewTimerLblID.setColor( mLabelColour);					
+			mViewMsgTxtID.setColor( mValueColour);
+			mViewResultTxtID.setColor( mValueColour);
+			mViewPulseValID.setColor( mValueColour);
+			mViewTimerValID.setColor( mValueColour);	
+		}
+		app.mTestControl.setObserver(self.method(:onNotify));
+				
     	// might need to go in test controller
     	if(app.mTestControl.mState.isClosing) {
 			app.onStop( null );
@@ -33,13 +125,21 @@ class TestView extends Ui.View {
     }
    
    // could be common function as in ResultsView 
-   hidden function updateLayoutField(fieldId, fieldValue, fieldColour, fieldJust) {
+
+   hidden function getLayoutFieldIDandInit(fieldId, fieldValue, fieldColour, fieldJust) {
         var drawable = findDrawableById(fieldId);
-        //Sys.println("TestView: updateLayoutField() called " + drawable );
         if (drawable != null) {
-        	//Sys.println("TestView: updateLayoutField() setting colour/Just ");
             drawable.setColor(fieldColour);
             drawable.setJustification(fieldJust);
+            if (fieldValue != null) {
+            	drawable.setText(fieldValue);
+            }
+        }
+        return drawable;
+   }
+   hidden function updateLayoutField(drawable, fieldValue, fieldColour) {
+        if (drawable != null) {
+            drawable.setColor(fieldColour);
             if (fieldValue != null) {
             	drawable.setText(fieldValue);
             }
@@ -52,100 +152,7 @@ class TestView extends Ui.View {
 			//Sys.println("TestView:onUpdate() called");
 			//Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
 		}
-		
-
-    	// HRV
-		var hrv = app.mSensor.mHRData.hrv;
-
-		// Timer
-		var timerTime = app.utcStop - app.utcStart;
-		var testType = app.testTypeSet;
-
-		if(TYPE_TIMER == testType) {
-			timerTime = app.timerTimeSet;
-		}
-		else if(TYPE_MANUAL == testType) {
-			timerTime = app.mManualTimeSet;
-		}
-
-		// Pulse
-		var pulse = app.mSensor.mHRData.livePulse;
-
-		// Message
-    	var msgTxt ="";
-    	var testTime = app.timeNow() - app.utcStart;
-
-		if(app.isFinished) {
-			pulse = app.mSensor.mHRData.avgPulse;
-			testTime = app.utcStop - app.utcStart;
-
-			if(MIN_SAMPLES > app.mSensor.mHRData.dataCount) {
-				msgTxt = "Not enough data";
-			}
-			else if(app.isSaved) {
-				msgTxt = "Result saved";
-			}
-			else {
-				msgTxt = "Finished";
-			}
-    	}
-    	else if(app.isTesting) {
-    		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			var cycle = 1 + testTime % (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			if(cycle <= app.inhaleTimeSet) {
-				msgTxt = "Inhale through nose " + cycle;
-			}
-			else if(cycle <= app.inhaleTimeSet + app.exhaleTimeSet) {
-				msgTxt = "Exhale out mouth " + (cycle - app.inhaleTimeSet);
-			}
-			else {
-				msgTxt = "Relax " + (cycle - (app.inhaleTimeSet + app.exhaleTimeSet));
-			}
-
-			if(TYPE_MANUAL != testType) {
-				timerTime -= testTime;
-			}
-			else {
-				timerTime = testTime;
-			}
-    	}
-    	else if(app.mSensor.mHRData.isStrapRx) {
-			if(TYPE_TIMER == testType) {
-				msgTxt = "Timer test ready";
-			}
-			else if(TYPE_MANUAL == testType) {
-				msgTxt = "Manual test ready";
-			}
-    	}
-    	else {
-    		msgTxt = "Searching for HRM";
-    	}
-
-    	// Strap & pulse indicators
-    	var strapCol = app.txtColSet;
-    	var pulseCol = app.txtColSet;
-    	var strapTxt = "STRAP";
-    	var pulseTxt = "PULSE";
-
-    	if(!app.mSensor.mHRData.isChOpen) {
-			pulse = 0;
-			strapTxt = "SAVING";
-			pulseTxt = "BATTERY";
-		}
-		else if(!app.mSensor.mHRData.isStrapRx) {
-	    		strapCol = RED;
-	    		pulseCol = RED;
-    	}
-    	else {
-    		strapCol = GREEN;
-    		if(!app.mSensor.mHRData.isPulseRx) {
-	    		pulseCol = RED;
-	    	}
-	    	else {
-	    		pulseCol = GREEN;
-	    	}
-    	}
-    	
+		    	
     	// optimisation....
     	// We should cache drawable ID in on layout
     	// The lablels are fixed and can be done in layout
@@ -159,22 +166,17 @@ class TestView extends Ui.View {
     	// test :symbol_x
     	// }
     	// can call onNotify with onNotify(:State_x, self, array);
+    	//Sys.println("onUpdate: update fields " +strapCol+" "+pulseCol);
     	
-    	var mLabelColour = mapColour( app.lblColSet);
-		var mJust = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
-		var mValueColour = mapColour( app.txtColSet);
-		
-		updateLayoutField("ViewTitle", null, mLabelColour, mJust);
-		updateLayoutField("ViewResultLbl", null, mLabelColour, mJust);
-		updateLayoutField("ViewPulseLbl", null, mLabelColour, mJust);
-		updateLayoutField("ViewTimerLbl", null, mLabelColour, mJust);
-		updateLayoutField("ViewStrapTxt", strapTxt, mapColour(strapCol), mJust);	
-		updateLayoutField("ViewPulseTxt", pulseTxt, mapColour(pulseCol), mJust);	
-					
-		updateLayoutField( "ViewMsgTxt", msgTxt, mValueColour, mJust);
-		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
-		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
-		updateLayoutField( "ViewTimerVal", app.timerFormat(timerTime), mValueColour, mJust);
+		updateLayoutField(mViewStrapTxtID, strapTxt, mapColour(strapCol));	
+		updateLayoutField(mViewPulseTxtID, pulseTxt, mapColour(pulseCol));					
+		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
+		updateLayoutField(mViewResultTxtID, hrv.toString(), mValueColour);
+		updateLayoutField(mViewPulseValID, avgPulse.toString(), mValueColour);
+		updateLayoutField(mViewTimerValID, timer, mValueColour);
+//		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
+//		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
+//		updateLayoutField( "ViewTimerVal", app.timerFormat(timerTime), mValueColour, mJust);
    		
    		View.onUpdate(dc);
    		//return true;
@@ -184,6 +186,7 @@ class TestView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
+    	app.mTestControl.setObserver(null);
     }
 
 }

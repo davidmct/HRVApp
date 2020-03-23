@@ -44,6 +44,7 @@ class TestController {
 	var startMoment;
 	//var stopMoment;
 	hidden var mApp;
+	hidden var mFunc;
 	    
 	class cTestState {
 		// App states
@@ -80,12 +81,18 @@ class TestController {
 		// resetTest() is called after sensor opened by onStart in main	
 	}
 	
+	// function to call to update Results view
+	function setObserver(func) {
+		mFunc = func;	
+	}
+	
+	// function onHide() {getModel().setObserver(null);}
 	// application is stopping
 	function stopControl() { 
 		testTimer.stop();
 		mApp.mStorage.storeResults(); 	
 		
-		}
+	}
 	
 	function startTest() {
     	alert(TONE_START);
@@ -182,6 +189,106 @@ class TestController {
 		mState.isTesting = true;
 
     	Sys.println("Start: leaving func");
+    }
+    
+    function performTest() {
+    	// needs to be driven off a timer (UI one?)
+    	// HRV
+		var hrv = app.mSensor.mHRData.hrv;
+
+		// Timer
+		var timerTime = app.utcStop - app.utcStart;
+		var testType = app.testTypeSet;
+
+		if(TYPE_TIMER == testType) {
+			timerTime = app.timerTimeSet;
+		}
+		else if(TYPE_MANUAL == testType) {
+			timerTime = app.mManualTimeSet;
+		}
+
+		// Pulse
+		var pulse = app.mSensor.mHRData.livePulse;
+
+		// Message
+    	var msgTxt ="";
+    	var testTime = app.timeNow() - app.utcStart;
+
+		if(app.isFinished) {
+			pulse = app.mSensor.mHRData.avgPulse;
+			testTime = app.utcStop - app.utcStart;
+
+			if(MIN_SAMPLES > app.mSensor.mHRData.dataCount) {
+				msgTxt = "Not enough data";
+			}
+			else if(app.isSaved) {
+				msgTxt = "Result saved";
+			}
+			else {
+				msgTxt = "Finished";
+			}
+    	}
+    	else if(app.isTesting) {
+    		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
+			var cycle = 1 + testTime % (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
+			if(cycle <= app.inhaleTimeSet) {
+				msgTxt = "Inhale through nose " + cycle;
+			}
+			else if(cycle <= app.inhaleTimeSet + app.exhaleTimeSet) {
+				msgTxt = "Exhale out mouth " + (cycle - app.inhaleTimeSet);
+			}
+			else {
+				msgTxt = "Relax " + (cycle - (app.inhaleTimeSet + app.exhaleTimeSet));
+			}
+
+			if(TYPE_MANUAL != testType) {
+				timerTime -= testTime;
+			}
+			else {
+				timerTime = testTime;
+			}
+    	}
+    	else if(app.mSensor.mHRData.isStrapRx) {
+			if(TYPE_TIMER == testType) {
+				msgTxt = "Timer test ready";
+			}
+			else if(TYPE_MANUAL == testType) {
+				msgTxt = "Manual test ready";
+			}
+    	}
+    	else {
+    		msgTxt = "Searching for HRM";
+    	}
+
+    	// Strap & pulse indicators
+    	var strapCol = app.txtColSet;
+    	var pulseCol = app.txtColSet;
+    	var strapTxt = "STRAP";
+    	var pulseTxt = "PULSE";
+
+    	if(!app.mSensor.mHRData.isChOpen) {
+			pulse = 0;
+			strapTxt = "SAVING";
+			pulseTxt = "BATTERY";
+		}
+		else if(!app.mSensor.mHRData.isStrapRx) {
+	    		strapCol = RED;
+	    		pulseCol = RED;
+    	}
+    	else {
+    		strapCol = GREEN;
+    		if(!app.mSensor.mHRData.isPulseRx) {
+	    		pulseCol = RED;
+	    	}
+	    	else {
+	    		pulseCol = GREEN;
+	    	}
+    	}
+    
+    	if (mFunc != null) {
+    		mFunc.invoke(:Update, mFunc, [strapTxt, strapCol, pulseTxt, pulseCol, msgTxt, hrv, 
+    			app.mSensor.mHRData.avgPulse, app.timerFormat(timerTime)]);
+    	}
     }
     
     function UpdateTestStatus() {
