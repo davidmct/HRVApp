@@ -35,19 +35,6 @@ class myException extends Lang.Exception {
 }
 
 enum {
-	// Tones
-	TONE_KEY = 0,
-	TONE_START = 1,
-	TONE_STOP = 2,
-	TONE_RESET = 9,
-	TONE_FAILURE = 14,
-	TONE_SUCCESS = 15,
-	TONE_ERROR = 18,
-
-	// Test types
-	TYPE_MANUAL = 0, // runs as long as useer wants up to max time
-	TYPE_TIMER = 1,  // defaults to 5 mins and can be changed down or to max-time
-
 	// Device types
 	EPIX = 0,
 	FENIX = 1,
@@ -102,8 +89,7 @@ class HRVApp extends App.AppBase {
 	var viewNum;
 	var lastViewNum;
 
-	var mFitWriteEnabled;
-    
+	var mFitWriteEnabled;   
     var mStorage;
     var mTestControl;
     
@@ -118,12 +104,15 @@ class HRVApp extends App.AppBase {
         
 		if (Toybox.Application has :Storage) {
 			mAntID = mApp.Properties.getValue("pAuxHRAntID");
-			versionSet = Ui.loadResource(Rez.Strings.AppVersion);			
+			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
+			mFitWriteEnabled = mApp.Properties.getValue("pFitWriteEnabled"); 		
 		} else {
 			mAntID = mApp.getProperty("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+			mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
 		}
 		Sys.println("ANT ID set to : " + mAntID);
+		
 		
         mStorage = new HRVStorageHandler();
         mTestControl = new TestController();
@@ -188,7 +177,6 @@ class HRVApp extends App.AppBase {
 		if (state == null) { 		}
 	
 		mStorage.saveProperties();
-		mStorage.storeResults();
 		mTestControl.stopControl();
 		_uiTimer.stop();
 		

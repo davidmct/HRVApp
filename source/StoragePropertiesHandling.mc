@@ -45,7 +45,7 @@ class HRVStorageHandler {
 			// use Storage.get/setValue("", value) for storage or properties not used in settings			
 			mApp.Properties.setValue("pAuxHRAntID", 0);
 			Storage.setValue("firstLoadEver", true);
-			Storage.setValue("FitWriteEnabled", false);
+			Storage.setValue("pFitWriteEnabled", false);
 			mApp.Properties.setValue("soundSet", true);
 			mApp.Properties.setValue("vibeSet", false);
 			mApp.Properties.setValue("testTypeSet", 0);
@@ -65,7 +65,7 @@ class HRVStorageHandler {
 		} else {
 			mApp.setProperty("pAuxHRAntID", 0);
 			mApp.setProperty("firstLoadEver", true);
-			mApp.setProperty("FitWriteEnabled", false);
+			mApp.setProperty("pFitWriteEnabled", false);
 			mApp.setProperty("soundSet", true);
 			mApp.setProperty("vibeSet", false);
 			mApp.setProperty("testTypeSet", 0);
@@ -119,7 +119,7 @@ class HRVStorageHandler {
 			mApp.timestampSet = mApp.getProperty("timestampSet");
 			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mApp.mFitWriteEnabled = mApp.getProperty("FitWriteEnabled");
+			mApp.mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
 			mApp.soundSet = mApp.getProperty("soundSet");
 			mApp.vibeSet = mApp.getProperty("vibeSet");
 			mApp.testTypeSet = mApp.getProperty("testTypeSet").toNumber();
@@ -156,7 +156,7 @@ class HRVStorageHandler {
 			mApp.timestampSet = Storage.getValue("timestampSet");
 			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mApp.mFitWriteEnabled = Storage.getValue("FitWriteEnabled");
+			mApp.mFitWriteEnabled = Storage.getValue("pFitWriteEnabled");
 			mApp.soundSet = mApp.Properties.getValue("soundSet");
 			mApp.vibeSet = mApp.Properties.getValue("vibeSet");
 			mApp.testTypeSet = mApp.Properties.getValue("testTypeSet").toNumber();
@@ -180,7 +180,7 @@ class HRVStorageHandler {
 	
 	function _CallSavePropStorage() {
 		Storage.setValue("timestampSet", mApp.timestampSet);
-		Storage.setValue("FitWriteEnabled", mApp.mFitWriteEnabled);
+		Storage.setValue("pFitWriteEnabled", mApp.mFitWriteEnabled);
 		
 		// user changable
 		mApp.Properties.setValue("soundSet", mApp.soundSet);
@@ -205,7 +205,7 @@ class HRVStorageHandler {
 	
 	function _CallSavePropProperty() {
 		mApp.setProperty("timestampSet", mApp.timestampSet);
-		mApp.setProperty("FitWriteEnabled", mApp.mFitWriteEnabled);
+		mApp.setProperty("pFitWriteEnabled", mApp.mFitWriteEnabled);
 		
 		mApp.setProperty("soundSet", mApp.soundSet);
 		mApp.setProperty("vibeSet", mApp.vibeSet);
@@ -326,8 +326,6 @@ class HRVStorageHandler {
     		sumHrv / count,
     		sumPulse / count]));
 
-		mApp.isNotSaved = false;
-    	mApp.isSaved = true;
     }
 
 	

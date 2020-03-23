@@ -2,7 +2,7 @@
 	<setting propertyKey="@Properties.pAuxHRAntID" title="@Strings.pAuxHRAntIDTitle" prompt="@Strings.pAuxHRAntIDPrompt">
 		<settingConfig type="numeric"  />
 	</setting>	
-	<setting propertyKey="@Properties.FitWriteEnabled" title="@Strings.mFitWriteEnabledTitle" prompt="@Strings.mFitWriteEnabledPrompt">
+	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWriteEnabledTitle" prompt="@Strings.mFitWriteEnabledPrompt">
 		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetTitle" prompt="@Strings.soundSetPrompt">

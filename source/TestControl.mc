@@ -18,22 +18,21 @@ using Toybox.Timer;
 using Toybox.Attention;
 using Toybox.System as Sys;
 
-// TBD is here or in main
-//enum {
+
+enum {
 	// Tones
-//	TONE_KEY = 0,
-//	TONE_START = 1,
-//	TONE_STOP = 2,
-//	TONE_RESET = 9,
-//	TONE_FAILURE = 14,
-//	TONE_SUCCESS = 15,
-//	TONE_ERROR = 18,
+	TONE_KEY = 0,
+	TONE_START = 1,
+	TONE_STOP = 2,
+	TONE_RESET = 9,
+	TONE_FAILURE = 14,
+	TONE_SUCCESS = 15,
+	TONE_ERROR = 18,
 
-	// Test types
-//	TYPE_MANUAL = 0, // runs as long as useer wants up to max time
-//	TYPE_TIMER = 1,  // defaults to 5 mins and can be changed down or to max-time
-//}	
-
+	//Test types
+	TYPE_MANUAL = 0,  //runs as long as useer wants up to max time
+	TYPE_TIMER = 1,   // to 5 mins and can be changed down or to max-time
+}	
 
 class TestController {
 
@@ -41,7 +40,7 @@ class TestController {
 	hidden var testTimer;
 	var mState;
 	var utcStart;
-	var utcStop;	
+	var utcStop;	 
 	var startMoment;
 	//var stopMoment;
 	hidden var mApp;
@@ -82,7 +81,11 @@ class TestController {
 	}
 	
 	// application is stopping
-	function stopControl() { testTimer.stop(); 	}
+	function stopControl() { 
+		testTimer.stop();
+		mApp.mStorage.storeResults(); 	
+		
+		}
 	
 	function startTest() {
     	alert(TONE_START);
@@ -102,6 +105,8 @@ class TestController {
     function autoFinish() {
     	endTest();
     	saveTest();
+    	mState.isNotSaved = false;
+    	mState.isSaved = true;
     }
 
     function endTest() {
@@ -133,7 +138,7 @@ class TestController {
     function discardTest() { mState.isNotSaved = false;    }
 
     function resetTest() {
-    	mSensor.mHRData.resetTestVariables();
+    	mApp.mSensor.mHRData.resetTestVariables();
 		utcStart = 0;
 		utcStop = 0;
 		mState.isWaiting = false;
