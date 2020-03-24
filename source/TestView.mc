@@ -13,13 +13,7 @@ class TestView extends Ui.View {
 	var mValueColour;
 	var oldValCol;
 	
-	var strapTxt;
-	var strapCol;
-	var pulseTxt;
-	var pulseCol;
 	var msgTxt;
-	var hrv = 0;
-	var avgPulse = 0;
 	var timer = "0:00";	
 	
 	// layout ID cache
@@ -51,15 +45,9 @@ class TestView extends Ui.View {
 	// can call onNotify with onNotify(:State_x, self, array);  
 	  
 	function onNotify(symbol, object, params) {
-		// [strapTxt, strapCol, pulseTxt, pulseCol, msgTxt, hrv, avgPulse, timer]
-		strapTxt = params[0];
-		pulseTxt = params[1];
-		strapCol = params[2];
-		pulseCol = params[3];
-		msgTxt = params[4];
-		hrv = params[5];
-		avgPulse = params[6];
-		timer = params[7];	
+		// [ msgTxt, timer]
+		msgTxt = params[0];
+		timer = params[1];	
 	}	
     
     function onLayout(dc) {
@@ -75,24 +63,20 @@ class TestView extends Ui.View {
 		mValueColour = mapColour( app.txtColSet);
 		oldLblCol = app.lblColSet;
 		oldValCol = app.txtColSet;
-		
-		strapCol = app.txtColSet;
-    	pulseCol = app.txtColSet;
-    	strapTxt = "STRAP";
-    	pulseTxt = "PULSE";
 
 		Sys.println("onLayout: starting field update");		
 		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
 		mViewResultLblID = getLayoutFieldIDandInit("ViewResultLbl", null, mLabelColour, mJust);
 		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
 		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour, mJust);
+
 		
-		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapTxt", strapTxt, mLabelColour, mJust);	
-		mViewPulseTxtID = getLayoutFieldIDandInit("ViewPulseTxt", pulseTxt, mLabelColour, mJust);	
+		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapTxt", "STRAP", mapColour(RED), mJust);	
+		mViewPulseTxtID = getLayoutFieldIDandInit("ViewPulseTxt", "PULSE", mapColour(RED), mJust);	
 					
 		mViewMsgTxtID = getLayoutFieldIDandInit("ViewMsgTxt", msgTxt, mValueColour, mJust);
-		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", hrv.toString(), mValueColour, mJust);
-		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal", avgPulse.toString(), mValueColour, mJust);
+		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
+		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
 		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);			
 	}
         
@@ -115,7 +99,8 @@ class TestView extends Ui.View {
 			mViewPulseValID.setColor( mValueColour);
 			mViewTimerValID.setColor( mValueColour);	
 		}
-		app.mTestControl.setObserver(self.method(:onNotify));
+		
+		app.mTestControl.setObserver(:testview, self.method(:onNotify));
 				
     	// might need to go in test controller
     	if(app.mTestControl.mState.isClosing) {
@@ -168,11 +153,11 @@ class TestView extends Ui.View {
     	// can call onNotify with onNotify(:State_x, self, array);
     	//Sys.println("onUpdate: update fields " +strapCol+" "+pulseCol);
     	
-		updateLayoutField(mViewStrapTxtID, strapTxt, mapColour(strapCol));	
-		updateLayoutField(mViewPulseTxtID, pulseTxt, mapColour(pulseCol));					
+		updateLayoutField(mViewStrapTxtID, app.mSensor.mHRData.strapTxt, mapColour(app.mSensor.mHRData.strapCol));	
+		updateLayoutField(mViewPulseTxtID, app.mSensor.mHRData.pulseTxt, mapColour(app.mSensor.mHRData.pulseCol));					
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
-		updateLayoutField(mViewResultTxtID, hrv.toString(), mValueColour);
-		updateLayoutField(mViewPulseValID, avgPulse.toString(), mValueColour);
+		updateLayoutField(mViewResultTxtID, app.mSensor.mHRData.hrv.toString(), mValueColour);
+		updateLayoutField(mViewPulseValID, app.mSensor.mHRData.avgPulse.toString(), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
 //		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
 //		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);

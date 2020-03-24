@@ -11,7 +11,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		BehaviorDelegate.initialize();
 		app = App.getApp();
 	}
-       
+      
     function onSelect() {
     	// same as enter, tap or click
     	return onEnter();  
@@ -73,11 +73,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     	if (mDebugging) {
 	    	Sys.println("HRVBehaviour onEnter()");
 	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ app.viewNum);
-	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.isNotSaved);
+	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.mTestControl.mState.isNotSaved);
 	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSensor.mHRData.dataCount);
-	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.isFinished);
-	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.isTesting);
-	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.isWaiting);
+	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.mTestControl.mState.isFinished);
+	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.mTestControl.mState.isTesting);
+	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.mTestControl.mState.isWaiting);
 	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
 	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + app.mSensor.mHRData.isChOpen);
 	    	Sys.println("HRVBehaviour onEnter(): mAntEvent " + app.mSensor.mHRData.mAntEvent);
@@ -88,30 +88,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
-		else if(app.isNotSaved && MIN_SAMPLES < app.dataCount) {
-			Sys.println("HRVBehaviour onEnter() - confirm save");
-			Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
-			return true;
-    	}
-    	else if(app.isFinished) {
-    		Sys.println("HRVBehaviour onEnter() - Finished");
-    		app.resetTest();
-    		Ui.requestUpdate();
-    	}
-    	else if(app.isTesting || app.isWaiting) {
-    		Sys.println("HRVBehaviour onEnter() - Stop test");
-    		app.stopTest();
-    		Ui.requestUpdate();
-    	}
-    	else if(!app.mSensor.mHRData.isAntRx){
-    		Sys.println("HRVBehaviour onEnter() - no ANT");
-    		app.alert(TONE_ERROR);
-    	}
-    	else {
-    		Sys.println("HRVBehaviour onEnter() - start branch");
-    		app.startTest();
-    	}
-		
+		else {
+			var res = app.HRVStateChange(:enterPressed);
+			if (res == true) {
+				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+				return true;
+			}
+		}
+				
  		Sys.println("HRVBehaviour onEnter() - leaving");   	
     	return true;
 	}
@@ -130,17 +114,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
 	function onEscape() {
 		if(TEST_VIEW == app.viewNum) {
-			if(app.isTesting) {
-				app.stopTest();
-			}
-			if(app.isFinished && app.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
-				app.isClosing = true;
+			var res = app.HRVStateChange(:escapePressed);
+			if (res == true) {		
 				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
-			}
-			else {
-				app.onStop( null);
+			} else {
 				Ui.popView(Ui.SLIDE_RIGHT);
-			}
+			}			
+			
+
 		}
 		else {
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);

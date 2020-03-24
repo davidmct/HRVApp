@@ -101,7 +101,11 @@ class HRVApp extends App.AppBase {
     	if (mDebugging) { 	Sys.println("HRVApp initialisation called");}
         
         mApp = App.getApp();
-        
+         
+        mStorage = new HRVStorageHandler();
+        mTestControl = new TestController();
+        mStorage.readProperties();  
+             
 		if (Toybox.Application has :Storage) {
 			mAntID = mApp.Properties.getValue("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
@@ -113,9 +117,6 @@ class HRVApp extends App.AppBase {
 		}
 		Sys.println("ANT ID set to : " + mAntID);
 			
-        mStorage = new HRVStorageHandler();
-        mTestControl = new TestController();
-        mStorage.readProperties();
     	AppBase.initialize();
     }
 
@@ -224,6 +225,20 @@ class HRVApp extends App.AppBase {
 		else {
 			return new TestView();
 		}
+	}
+	
+	function HRVStateChange(type) {
+		if (type == null) {
+			// ignore
+		} 
+		else if (type == :enterPressed) {
+			return mTestControl.onEnterPressed();// call test controller		
+		} 
+		else if (type == :escapePressed) {
+			return mTestControl.onEscapePressed();		
+		}
+		
+		return true;	
 	}
 }
 

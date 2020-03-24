@@ -83,7 +83,7 @@ class TestController {
 	
 	// function to call to update Results view
 	function setObserver(func) {
-		mFunc = func;	
+		mFunc = func;
 	}
 	
 	// function onHide() {getModel().setObserver(null);}
@@ -157,9 +157,18 @@ class TestController {
 
     function start() {
 		Sys.println("Start: entered");
+		// This should check if HR is active with pulse
+		// if not then alert
 		
-		// why don't we resetTest() here??
+		// if test is running do we get another start() call on stop
+		// if(app.isTesting || app.isWaiting) then stopTest() is called
 		
+		//Set up test type and timer up or down.
+		
+		//set test state
+		//mState.XXXX = true;
+		
+		// why don't we resetTest() here??		
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	var testType = mApp.testTypeSet;
     	
@@ -186,15 +195,12 @@ class TestController {
 		startMoment = Time.now();
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
-		mState.isTesting = true;
 
     	Sys.println("Start: leaving func");
     }
     
     function performTest() {
     	// needs to be driven off a timer (UI one?)
-    	// HRV
-		var hrv = app.mSensor.mHRData.hrv;
 
 		// Timer
 		var timerTime = app.utcStop - app.utcStart;
@@ -207,15 +213,11 @@ class TestController {
 			timerTime = app.mManualTimeSet;
 		}
 
-		// Pulse
-		var pulse = app.mSensor.mHRData.livePulse;
-
 		// Message
     	var msgTxt ="";
     	var testTime = app.timeNow() - app.utcStart;
 
 		if(app.isFinished) {
-			pulse = app.mSensor.mHRData.avgPulse;
 			testTime = app.utcStop - app.utcStart;
 
 			if(MIN_SAMPLES > app.mSensor.mHRData.dataCount) {
@@ -260,35 +262,52 @@ class TestController {
     		msgTxt = "Searching for HRM";
     	}
 
-    	// Strap & pulse indicators
-    	var strapCol = app.txtColSet;
-    	var pulseCol = app.txtColSet;
-    	var strapTxt = "STRAP";
-    	var pulseTxt = "PULSE";
-
-    	if(!app.mSensor.mHRData.isChOpen) {
-			pulse = 0;
-			strapTxt = "SAVING";
-			pulseTxt = "BATTERY";
-		}
-		else if(!app.mSensor.mHRData.isStrapRx) {
-	    		strapCol = RED;
-	    		pulseCol = RED;
+		// update Test View data  
+    	if (mFunc != null) {
+    		mFunc.invoke(:Update, mFunc, [ msgTxt, app.timerFormat(timerTime)]);
+    	}
+    }
+    
+    function onEnterPressed() {
+    	if(mState.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
+			Sys.println("HRVBehaviour onEnter() - confirm save");
+			return true;
+    	}
+    	else if(mState.isFinished) {
+    		Sys.println("HRVBehaviour onEnter() - Finished");
+    		resetTest();
+    		Ui.requestUpdate();
+    	}
+    	else if(app.mTestControl.mState.isTesting || app.mTestControl.mState.isWaiting) {
+    		Sys.println("HRVBehaviour onEnter() - Stop test");
+    		stopTest();
+    		Ui.requestUpdate();
+    	}
+    	else if(!app.mSensor.mHRData.isAntRx){
+    		Sys.println("HRVBehaviour onEnter() - no ANT");
+    		alert(TONE_ERROR);
     	}
     	else {
-    		strapCol = GREEN;
-    		if(!app.mSensor.mHRData.isPulseRx) {
-	    		pulseCol = RED;
-	    	}
-	    	else {
-	    		pulseCol = GREEN;
-	    	}
-    	}
+    		Sys.println("HRVBehaviour onEnter() - start branch");
+    		startTest();
+    	}  
+   		// no save needed
+   		return false;    
+    }
     
-    	if (mFunc != null) {
-    		mFunc.invoke(:Update, mFunc, [strapTxt, strapCol, pulseTxt, pulseCol, msgTxt, hrv, 
-    			app.mSensor.mHRData.avgPulse, app.timerFormat(timerTime)]);
-    	}
+    function onEscapePressed() {
+  		if(mState.isTesting) {
+			stopTest();
+		}
+			
+		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
+			mState.isClosing = true;
+			return true;
+		}
+		else {
+			app.mTestControl.onStop( null);
+			return false;
+		}     
     }
     
     function UpdateTestStatus() {

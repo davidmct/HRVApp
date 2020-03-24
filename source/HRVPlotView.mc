@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.Lang;
 
 
 // Plot the HRV over time for current test
@@ -90,7 +91,7 @@ class HrvPlotView extends Ui.View {
 		}
 
 		// Format time
-    	var timeStr = format("$1$:$2$", [hour.format("%01d"), min.format("%02d")]);
+    	var timeStr = Lang.format("$1$:$2$", [hour.format("%01d"), min.format("%02d")]);
 
 		// Get meridiem offset
 		var textW = dc.getTextWidthInPixels(timeStr, numFont);

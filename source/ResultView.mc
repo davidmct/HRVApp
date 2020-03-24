@@ -52,10 +52,10 @@ class ResultView extends Ui.View {
 		var pulse = 0;
 		var expected = 0;
 
-		if(app.isTesting) {
+		if(app.mTestControl.mState.isTesting) {
 			time = app.timeNow() - app.utcStart;
 		}
-		else if(app.isFinished) {
+		else if(app.mTestControl.mState.isFinished) {
 			time = app.utcStop - app.utcStart;
 		}
 		expected = (((1 + time) / 60.0) * app.mSensor.mHRData.avgPulse).toNumber();
