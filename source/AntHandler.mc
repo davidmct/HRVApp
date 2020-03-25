@@ -168,8 +168,9 @@ class AntHandler extends Ant.GenericChannel {
 			var beatCount = payload[6].toNumber();
 
 			Sys.println("ANT: Pulse is :" + mHRData.livePulse);
-			//Sys.println("beatEvent is :" + beatEvent);
-			//Sys.println("beatCount is :" + beatCount);
+			Sys.println("beatEvent is :" + beatEvent);
+			Sys.println("beatCount is :" + beatCount);
+						
 			HRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
@@ -238,9 +239,27 @@ class AntHandler extends Ant.GenericChannel {
 			} else {
 				intMs = beatEvent - mHRData.mPrevBeatEvent;
 			}
-			//Sys.println("HRSampleProcessing - step 2");
+			
+			if (mDebugging) {
+				// maybe too much data for speed");
+				Sys.println("HRSampleProcessing - step 2");
+				Sys.println("HRSampleProcessing isTesting - "+ mApp.mTestControl.mState.isTesting);	
+				Sys.println("HRSampleProcessing livePulse - "+mHRData.livePulse);			
+				Sys.println("HRSampleProcessing maxMs - "+maxMs);
+				Sys.println("HRSampleProcessing intMs - "+intMs);
+				Sys.println("HRSampleProcessing minMs - "+minMs);	
+				Sys.println("HRSampleProcessing PrevIntMs - "+mHRData.mPrevIntMs);	
+				Sys.println("HRSampleProcessing	mNoPulseCount - "+mNoPulseCount);
+				Sys.println("HRSampleProcessing mPrevBeatCount - "+mPrevBeatCount);
+				Sys.println("HRSampleProcessing mPrevBeatEvent - "+mPrevBeatEvent);			
+			} 
+			
 			// Only update hrv data if testing started, & values look to be error free			
-			if(mApp.mTestControl.mState.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+			if(mApp.mTestControl.mState.isTesting && 
+				maxMs > intMs && 
+				minMs < intMs && 
+				maxMs > mHRData.mPrevIntMs && 
+				minMs < mHRData.mPrevIntMs) {		
 				// test line without app testing
 				//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
 				var devMs = 0;

@@ -13,7 +13,6 @@ using Toybox.System as Sys;
 // home page timer placement needs fixing if >1hr...
 
 // Things still to fix
-//1. Confirmation dialogue still old style
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //5. Redo HRV measurements and fix graph
