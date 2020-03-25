@@ -46,17 +46,17 @@ class ResultView extends Ui.View {
     
     //! Update the view
     function onUpdate(dc) { 
-    	//Sys.println("ResultView: onUpdate() called");
+    	Sys.println("ResultView: onUpdate() called");
     	
     	var time = 0;
 		var pulse = 0;
 		var expected = 0;
 
 		if(app.mTestControl.mState.isTesting) {
-			time = app.timeNow() - app.utcStart;
+			time = app.timeNow() - app.mTestControl.utcStart;
 		}
 		else if(app.mTestControl.mState.isFinished) {
-			time = app.utcStop - app.utcStart;
+			time = app.mTestControl.utcStop - app.mTestControl.utcStart;
 		}
 		expected = (((1 + time) / 60.0) * app.mSensor.mHRData.avgPulse).toNumber();
 
@@ -72,7 +72,7 @@ class ResultView extends Ui.View {
 		updateLayoutField("samplesY", null, mLabelColour, mLabelJust);	
 		updateLayoutField("expectedY", null, mLabelColour, mLabelJust);	
 
-		updateLayoutField( "timeValue", app.timerFormat(time).toString(), mValueColour, mValueJust);
+		updateLayoutField( "timeValue", timerFormat(time).toString(), mValueColour, mValueJust);
 		updateLayoutField( "pulseValue", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mValueJust);
 		updateLayoutField( "hrvValue", app.mSensor.mHRData.hrv.toString(), mValueColour, mValueJust);
 		updateLayoutField( "samplesValue", app.mSensor.mHRData.dataCount.toString(), mValueColour, mValueJust);

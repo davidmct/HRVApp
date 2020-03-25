@@ -167,7 +167,7 @@ class AntHandler extends Ant.GenericChannel {
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 
-			Sys.println("Pulse is :" + mHRData.livePulse);
+			Sys.println("ANT: Pulse is :" + mHRData.livePulse);
 			//Sys.println("beatEvent is :" + beatEvent);
 			//Sys.println("beatCount is :" + beatCount);
 			HRSampleProcessing(beatCount, beatEvent);
@@ -217,7 +217,7 @@ class AntHandler extends Ant.GenericChannel {
     }
     
     function HRSampleProcessing(beatCount, beatEvent) {
-		//Sys.println("HRSampleProcessing");
+		Sys.println("HRSampleProcessing");
 		
 		// want a test that we are testing and need samples around whole lot?
 		
@@ -249,7 +249,7 @@ class AntHandler extends Ant.GenericChannel {
 				} else {
 					mHRData.devMs = mHRData.mPrevIntMs - intMs;
 				}
-				//Sys.println("HRSampleProcessing - step 3");
+				Sys.println("HRSampleProcessing - step 3");
 				mHRData.devSqSum += mHRData.devMs * mHRData.devMs;
 				mHRData.pulseSum += mHRData.livePulse;
 				mHRData.dataCount++;
@@ -267,9 +267,9 @@ class AntHandler extends Ant.GenericChannel {
 				//}
 			}
 			mHRData.mPrevIntMs = intMs;
-			//Sys.println("HRSampleProcessing - step 4");
+			Sys.println("HRSampleProcessing - step 4");
 		} else {
-			//Sys.println("HRSampleProcessing - step 5");
+			Sys.println("HRSampleProcessing - step 5");
 			mHRData.mNoPulseCount += 1;
 			if(0 < mHRData.livePulse) {
 				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
@@ -281,6 +281,6 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		mHRData.mPrevBeatCount = beatCount;
 		mHRData.mPrevBeatEvent = beatEvent;
-		//Sys.println("HRSampleProcessing - end");
+		Sys.println("HRSampleProcessing - end");
 	} 
 }

@@ -282,7 +282,8 @@ class TestController {
     function UpdateTestStatus() {
     	// this should drive the state transistions and state view information
     	// AntHandler drives data model information in sampleProcessing
-
+		Sys.println("TestControl: UpdateTestStatus()");
+		
 		// Timer information for view
 		var timerTime = utcStop - utcStart;
 		var testType = mApp.testTypeSet;

@@ -125,7 +125,7 @@ class HRVApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-    	if (mDebugging) { Sys.println("getInitialView() called"); }   	
+    	if (mDebugging) { Sys.println("HRVApp: getInitialView() called"); }   	
     	viewNum = 0;
 		lastViewNum = 0;
 		return [ new TestView(), new HRVBehaviourDelegate() ];

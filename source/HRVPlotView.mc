@@ -64,7 +64,7 @@ class HrvPlotView extends Ui.View {
 		var just = 5;		// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER
 
 		// Get time units
-		var time = app.timeNow();
+		var time = timeNow();
     	var hour = (time / 3600) % 24;
 		var min = (time / 60) % 60;
 		var sec = time % 60;

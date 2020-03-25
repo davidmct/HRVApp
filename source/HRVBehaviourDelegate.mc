@@ -141,10 +141,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	
 	function setSave(value) {
 		if (value == "optOne") { 
-            App.getApp().mTestControl.saveTest();
+            app.mTestControl.saveTest();
         }
         else {
-        	App.getApp().mTestControl.discardTest();
+        	app.mTestControl.discardTest();
         }		
     }
 	

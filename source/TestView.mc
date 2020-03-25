@@ -14,7 +14,7 @@ class TestView extends Ui.View {
 	var oldValCol;
 	
 	var msgTxt;
-	var timer = "0:00";	
+	var timer = timerFormat(0);	
 	
 	// layout ID cache
 	var mViewTitleID;
@@ -52,7 +52,7 @@ class TestView extends Ui.View {
     
     function onLayout(dc) {
 		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
-		//Sys.println("TestView: onLayout() called ");
+		Sys.println("TestView: onLayout() called ");
 		if ( mTestViewLayout != null ) {
 			setLayout (mTestViewLayout);
 		} else {
@@ -64,7 +64,7 @@ class TestView extends Ui.View {
 		oldLblCol = app.lblColSet;
 		oldValCol = app.txtColSet;
 
-		Sys.println("onLayout: starting field update");		
+		Sys.println("TextView: onLayout(): starting field update");		
 		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
 		mViewResultLblID = getLayoutFieldIDandInit("ViewResultLbl", null, mLabelColour, mJust);
 		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
@@ -136,8 +136,8 @@ class TestView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 		if(mDebugging) {
-			//Sys.println("TestView:onUpdate() called");
-			//Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
+			Sys.println("TestView:onUpdate() called");
+			Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
 		}
 		    	
     	// optimisation....

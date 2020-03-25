@@ -27,8 +27,8 @@ class PoincareView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-		var today = (app.timeToday() / 86400) % 30;	// Todays index
-		var epoch = app.timeToday() - (86400 * 29);	// Index 29 days ago
+		var today = (timeToday() / 86400) % 30;	// Todays index
+		var epoch = timeToday() - (86400 * 29);	// Index 29 days ago
 
 		// REMOVE FOR PUBLISH
 		//today = (app.timeNow() / 3600) % 30;	// Todays index
