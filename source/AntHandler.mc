@@ -217,12 +217,12 @@ class AntHandler extends Ant.GenericChannel {
     }
     
     function HRSampleProcessing(beatCount, beatEvent) {
-		Sys.println("HRSampleProcessing");
+		//Sys.println("HRSampleProcessing");
 		
 		// want a test that we are testing and need samples around whole lot?
 		
 		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
-		
+			//Sys.println("HRSampleProcessing - step 1");
 			mHRData.isPulseRx = true;
 	    	mHRData.pulseCol = GREEN;
 			mHRData.mNoPulseCount = 0;
@@ -240,9 +240,9 @@ class AntHandler extends Ant.GenericChannel {
 			}
 			//Sys.println("HRSampleProcessing - step 2");
 			// Only update hrv data if testing started, & values look to be error free			
-			if(mApp.mTestControl.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
-			// test line without app testing
-			//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+			if(mApp.mTestControl.mState.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+				// test line without app testing
+				//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
 				var devMs = 0;
 				if(intMs > mHRData.mPrevIntMs) {
 					mHRData.devMs = intMs - mHRData.mPrevIntMs;
@@ -267,9 +267,9 @@ class AntHandler extends Ant.GenericChannel {
 				//}
 			}
 			mHRData.mPrevIntMs = intMs;
-			Sys.println("HRSampleProcessing - step 4");
+			//Sys.println("HRSampleProcessing - step 4");
 		} else {
-			Sys.println("HRSampleProcessing - step 5");
+			//Sys.println("HRSampleProcessing - step 5");
 			mHRData.mNoPulseCount += 1;
 			if(0 < mHRData.livePulse) {
 				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
@@ -281,6 +281,6 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		mHRData.mPrevBeatCount = beatCount;
 		mHRData.mPrevBeatEvent = beatEvent;
-		Sys.println("HRSampleProcessing - end");
+		//Sys.println("HRSampleProcessing - end");
 	} 
 }

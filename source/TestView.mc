@@ -137,7 +137,7 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			Sys.println("ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
+			Sys.println("Test View ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
 		}
 		    	
     	// optimisation....
@@ -163,8 +163,11 @@ class TestView extends Ui.View {
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
    		
    		View.onUpdate(dc);
-   		//return true;
-		
+   		
+   		if(mDebugging) {
+			Sys.println("TestView:onUpdate() exit");
+		}
+   		//return true;		
     }
 
     //! Called when this View is removed from the screen. Save the

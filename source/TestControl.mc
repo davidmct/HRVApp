@@ -221,7 +221,7 @@ class TestController {
 			testTimer.start(method(:finishTest),mApp.mMaxTimerTimeSet,false); // false   	
     	} else {
     		// kick off a timer for period of test
-    		timerTime = timerTimeSet;
+    		timerTime = mApp.timerTimeSet;
 			testTimer.start(method(:finishTest),timerTime*1000,false); // false
 		}
 
@@ -302,6 +302,7 @@ class TestController {
     	var testTime = timeNow() - utcStart;
 
 		if(mState.isFinished) {
+			Sys.println("TestControl: isFinished branch");
 			testTime = utcStop - utcStart;
 
 			if(MIN_SAMPLES > mApp.mSensor.mHRData.dataCount) {
@@ -315,6 +316,7 @@ class TestController {
 			}
     	}
     	else if(mState.isTesting) {
+    		Sys.println("TestControl: isTesting branch");
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
 			var cycle = 1 + testTime % (mApp.inhaleTimeSet + mApp.exhaleTimeSet + mApp.relaxTimeSet);
 			if(cycle <= mApp.inhaleTimeSet) {
@@ -352,10 +354,12 @@ class TestController {
     		msgTxt = "Searching for HRM";
     	}
 
+		Sys.println("TestControl: invoking test view");
 		// update Test View data  
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
     	}
+    	Sys.println("TestControl: exiting UpdateStatus");
     }   
 	
 }
