@@ -90,7 +90,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			// in test view so means stop or start test
 			var res = app.HRVStateChange(:enterPressed);
 			if (res == true) {
-				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
+		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
 				return true;
 			}
 		}
@@ -115,7 +119,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		if(TEST_VIEW == app.viewNum) {
 			var res = app.HRVStateChange(:escapePressed);
 			if (res == true) {		
-				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
+				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
+		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
 			} else {
 				Ui.popView(Ui.SLIDE_RIGHT);
 				app.onStop(null);
@@ -130,6 +138,16 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onPower() {
 		return true;
 	}
+	
+	function setSave(value) {
+		if (value == "optOne") { 
+            App.getApp().mTestControl.saveTest();
+        }
+        else {
+        	App.getApp().mTestControl.discardTest();
+        }		
+    }
+	
 }
 
 // This is the custom drawable we will use for our main menu title
