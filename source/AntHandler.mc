@@ -218,6 +218,9 @@ class AntHandler extends Ant.GenericChannel {
     
     function HRSampleProcessing(beatCount, beatEvent) {
 		//Sys.println("HRSampleProcessing");
+		
+		// want a test that we are testing and need samples around whole lot?
+		
 		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
 		
 			mHRData.isPulseRx = true;
@@ -237,7 +240,7 @@ class AntHandler extends Ant.GenericChannel {
 			}
 			//Sys.println("HRSampleProcessing - step 2");
 			// Only update hrv data if testing started, & values look to be error free			
-			if(mApp.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
+			if(mApp.mTestControl.isTesting && maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
 			// test line without app testing
 			//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
 				var devMs = 0;

@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.1.1</string>
+	<string id="AppVersion">0.2.0</string>
 	<string id="pAuxHRAntIDTitle">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledTitle">FIT File Write</string> 
@@ -9,8 +9,8 @@
 	<string id="soundSetPrompt">On or Off</string>
 	<string id="vibeSetTitle">Vibrate?</string>
 	<string id="vibeSetPrompt">On or Off</string>
-	<string id="timerTimeSetTitle">Default Length</string>
-	<string id="timerTimeSetPrompt">Set length of test in seconds</string>
+	<string id="timerTimeSetTitle">Timer based test</string>
+	<string id="timerTimeSetPrompt">Set length of test in seconds - should be 300 (5mins)</string>
 	<string id="TimeTooLargeError">Maximum value is 300 seconds</string>
 	<string id="ManualTimeSetTitle">Manual test time</string> 
 	<string id="ManualTimeSetPrompt">Maximum allowed manual time seconds</string>

@@ -1,3 +1,4 @@
 <resources>    
     <string id="Device">0</string>
+    <string id="MenuTitleSize">2</string>
 </resources>

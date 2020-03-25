@@ -161,9 +161,6 @@ class TestView extends Ui.View {
 		updateLayoutField(mViewResultTxtID, app.mSensor.mHRData.hrv.toString(), mValueColour);
 		updateLayoutField(mViewPulseValID, app.mSensor.mHRData.avgPulse.toString(), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
-//		updateLayoutField( "ViewResultTxt", app.mSensor.mHRData.hrv.toString(), mValueColour, mJust);
-//		updateLayoutField( "ViewPulseVal", app.mSensor.mHRData.avgPulse.toString(), mValueColour, mJust);
-//		updateLayoutField( "ViewTimerVal", app.timerFormat(timerTime), mValueColour, mJust);
    		
    		View.onUpdate(dc);
    		//return true;

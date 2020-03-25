@@ -81,6 +81,8 @@ class HRVApp extends App.AppBase {
 	var inhaleTimeSet;
 	var exhaleTimeSet;
 	var relaxTimeSet;
+	
+	var mMenuTitleSize;
 
 	// Results array variable
 	var results;
@@ -116,7 +118,8 @@ class HRVApp extends App.AppBase {
 			mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
 		}
 		Sys.println("ANT ID set to : " + mAntID);
-			
+		//Menu title size
+		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();			
     	AppBase.initialize();
     }
 
@@ -171,6 +174,9 @@ class HRVApp extends App.AppBase {
     
     //! A wrapper function to allow the timer to request a screen update
     function updateScreen() {
+    	// drive teststate transitions outside UI
+    	mTestControl.UpdateTestStatus();
+    	// update views
         Ui.requestUpdate();
     }
     

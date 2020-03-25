@@ -77,17 +77,17 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSensor.mHRData.dataCount);
 	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.mTestControl.mState.isFinished);
 	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.mTestControl.mState.isTesting);
-	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.mTestControl.mState.isWaiting);
 	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
 	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + app.mSensor.mHRData.isChOpen);
 	    }
     	// 
-		if(0 < app.viewNum) {
+		if(app.viewNum != TEST_VIEW) {
 			Sys.println("HRVBehaviour onEnter() - switch to test view");
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
 		else {
+			// in test view so means stop or start test
 			var res = app.HRVStateChange(:enterPressed);
 			if (res == true) {
 				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
@@ -136,9 +136,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 class DrawableMenuTitle extends Ui.Drawable {
     var mIsTitleSelected = false;
     hidden var mTitle = "unset";
+    hidden var app;
 
     function initialize(label) {
         Drawable.initialize({});
+        app = App.getApp();
         mTitle = label;
     }
 
@@ -151,7 +153,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         var spacing = 2;
         var appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
         var bitmapWidth = appIcon.getWidth();
-        var labelWidth = dc.getTextWidthInPixels(mTitle, Graphics.FONT_MEDIUM);
+        var labelWidth = dc.getTextWidthInPixels(mTitle, app.mMenuTitleSize);
 
         var bitmapX = (dc.getWidth() - (bitmapWidth + spacing + labelWidth)) / 2;
         var bitmapY = (dc.getHeight() - appIcon.getHeight()) / 2;
@@ -164,6 +166,6 @@ class DrawableMenuTitle extends Ui.Drawable {
 
         dc.drawBitmap(bitmapX, bitmapY, appIcon);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(labelX, labelY, Graphics.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(labelX, labelY, app.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }

@@ -13,7 +13,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if ( id.equals("timer")) {
-     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer Test")});
+     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_LEFT );
         }
