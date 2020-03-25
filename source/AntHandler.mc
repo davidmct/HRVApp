@@ -242,16 +242,16 @@ class AntHandler extends Ant.GenericChannel {
 			
 			if (mDebugging) {
 				// maybe too much data for speed");
-				Sys.println("HRSampleProcessing - step 2");
+				//Sys.println("HRSampleProcessing - step 2");
 				Sys.println("HRSampleProcessing isTesting - "+ mApp.mTestControl.mState.isTesting);	
 				Sys.println("HRSampleProcessing livePulse - "+mHRData.livePulse);			
 				Sys.println("HRSampleProcessing maxMs - "+maxMs);
 				Sys.println("HRSampleProcessing intMs - "+intMs);
 				Sys.println("HRSampleProcessing minMs - "+minMs);	
 				Sys.println("HRSampleProcessing PrevIntMs - "+mHRData.mPrevIntMs);	
-				Sys.println("HRSampleProcessing	mNoPulseCount - "+mNoPulseCount);
-				Sys.println("HRSampleProcessing mPrevBeatCount - "+mPrevBeatCount);
-				Sys.println("HRSampleProcessing mPrevBeatEvent - "+mPrevBeatEvent);			
+				Sys.println("HRSampleProcessing	mNoPulseCount - "+  mHRData.mNoPulseCount);
+				Sys.println("HRSampleProcessing mPrevBeatCount - "+ mHRData.mPrevBeatCount);
+				Sys.println("HRSampleProcessing mPrevBeatEvent - "+ mHRData.mPrevBeatEvent);			
 			} 
 			
 			// Only update hrv data if testing started, & values look to be error free			
@@ -262,7 +262,7 @@ class AntHandler extends Ant.GenericChannel {
 				minMs < mHRData.mPrevIntMs) {		
 				// test line without app testing
 				//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
-				var devMs = 0;
+				//var devMs = 0;
 				if(intMs > mHRData.mPrevIntMs) {
 					mHRData.devMs = intMs - mHRData.mPrevIntMs;
 				} else {
