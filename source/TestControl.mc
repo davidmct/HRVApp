@@ -154,6 +154,54 @@ class TestController {
 		mState.isNotSaved = false;
 		mState.isSaved = false;
     }
+    
+    function saveTest() {
+		var testDay = utcStart - (utcStart % 86400);
+		var epoch = testDay - (86400 * 29);
+		var index = ((testDay / 86400) % 30) * 5;
+		var sumHrv = 0;
+		var sumPulse = 0;
+		var count = 0;
+
+		// REMOVE FOR PUBLISH
+		//index = ((timeNow() / 3600) % 30) * 5;
+		// REMOVE FOR PUBLISH
+		//index = ((timeNow() / 60) % 30) * 5;
+
+		mApp.results[index + 0] = utcStart;
+		mApp.results[index + 1] = mApp.mSensor.mHRData.hrv;
+		mApp.results[index + 2] = mApp.mSensor.mHRData.avgPulse;
+
+		// Calculate averages
+		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+
+			var ii = i * DATA_SET_SIZE;
+
+			if(epoch <= mApp.results[ii]) {
+
+				sumHrv += mApp.results[ii + 1];
+				sumPulse += mApp.results[ii + 2];
+				count++;
+			}
+		}
+		mApp.results[index + 3] = sumHrv / count;
+		mApp.results[index + 4] = sumPulse / count;
+
+		// Print values to file in csv format with ISO 8601 date & time
+		var date = Calendar.info(startMoment, 0);
+    	Sys.println(format("$1$-$2$-$3$T$4$:$5$:$6$,$7$,$8$,$9$,$10$",[
+    		date.year,
+    		date.month,
+    		date.day,
+    		date.hour,
+    		date.min.format("%02d"),
+    		date.sec.format("%02d"),
+    		mApp.mSensor.mHRData.hrv,
+    		mApp.mSensor.mHRData.avgPulse,
+    		sumHrv / count,
+    		sumPulse / count]));
+    }
+    
 
     function start() {
 		Sys.println("Start: entered");
@@ -182,7 +230,7 @@ class TestController {
  			var x = mManualTimeSet;
  			
     		timerTime = timerTimeSet;
-			testTimer.start(method(:finishTest),mMaxTimerTimeSet,false); // false
+			testTimer.start(method(:finishTest),mApp.mMaxTimerTimeSet,false); // false
  		
     	
     	} else {
@@ -203,44 +251,44 @@ class TestController {
     	// needs to be driven off a timer (UI one?)
 
 		// Timer
-		var timerTime = app.utcStop - app.utcStart;
-		var testType = app.testTypeSet;
+		var timerTime = utcStop - utcStart;
+		var testType = mApp.testTypeSet;
 
 		if(TYPE_TIMER == testType) {
-			timerTime = app.timerTimeSet;
+			timerTime = mApp.timerTimeSet;
 		}
 		else if(TYPE_MANUAL == testType) {
-			timerTime = app.mManualTimeSet;
+			timerTime = mApp.mManualTimeSet;
 		}
 
 		// Message
     	var msgTxt ="";
-    	var testTime = app.timeNow() - app.utcStart;
+    	var testTime = timeNow() - utcStart;
 
-		if(app.isFinished) {
-			testTime = app.utcStop - app.utcStart;
+		if(mState.isFinished) {
+			testTime = utcStop - utcStart;
 
 			if(MIN_SAMPLES > app.mSensor.mHRData.dataCount) {
 				msgTxt = "Not enough data";
 			}
-			else if(app.isSaved) {
+			else if(mState.isSaved) {
 				msgTxt = "Result saved";
 			}
 			else {
 				msgTxt = "Finished";
 			}
     	}
-    	else if(app.isTesting) {
+    	else if(mState.isTesting) {
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			var cycle = 1 + testTime % (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			if(cycle <= app.inhaleTimeSet) {
+			var cycle = 1 + testTime % (mApp.inhaleTimeSet + mApp.exhaleTimeSet + mApp.relaxTimeSet);
+			if(cycle <= mApp.inhaleTimeSet) {
 				msgTxt = "Inhale through nose " + cycle;
 			}
-			else if(cycle <= app.inhaleTimeSet + app.exhaleTimeSet) {
-				msgTxt = "Exhale out mouth " + (cycle - app.inhaleTimeSet);
+			else if(cycle <= mApp.inhaleTimeSet + mApp.exhaleTimeSet) {
+				msgTxt = "Exhale out mouth " + (cycle - mApp.inhaleTimeSet);
 			}
 			else {
-				msgTxt = "Relax " + (cycle - (app.inhaleTimeSet + app.exhaleTimeSet));
+				msgTxt = "Relax " + (cycle - (mApp.inhaleTimeSet + mApp.exhaleTimeSet));
 			}
 
 			if(TYPE_MANUAL != testType) {
@@ -264,12 +312,12 @@ class TestController {
 
 		// update Test View data  
     	if (mFunc != null) {
-    		mFunc.invoke(:Update, mFunc, [ msgTxt, app.timerFormat(timerTime)]);
+    		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
     	}
     }
     
     function onEnterPressed() {
-    	if(mState.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
+    	if(mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
 			Sys.println("HRVBehaviour onEnter() - confirm save");
 			return true;
     	}
@@ -278,12 +326,12 @@ class TestController {
     		resetTest();
     		Ui.requestUpdate();
     	}
-    	else if(app.mTestControl.mState.isTesting || app.mTestControl.mState.isWaiting) {
+    	else if(mState.isTesting || mState.isWaiting) {
     		Sys.println("HRVBehaviour onEnter() - Stop test");
     		stopTest();
     		Ui.requestUpdate();
     	}
-    	else if(!app.mSensor.mHRData.isAntRx){
+    	else if(!mApp.mSensor.mHRData.isAntRx){
     		Sys.println("HRVBehaviour onEnter() - no ANT");
     		alert(TONE_ERROR);
     	}
@@ -300,12 +348,12 @@ class TestController {
 			stopTest();
 		}
 			
-		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < app.mSensor.mHRData.dataCount) {
+		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
 			mState.isClosing = true;
 			return true;
 		}
 		else {
-			app.mTestControl.onStop( null);
+			// hand back to UI to close app
 			return false;
 		}     
     }

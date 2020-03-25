@@ -24,7 +24,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 //	        Ui.pushView(menu, new AutoMenuDelegate(), Ui.SLIDE_LEFT );
 //        }
         else if ( id.equals("fitOutput"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write?")});
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_LEFT );  

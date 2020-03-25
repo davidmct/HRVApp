@@ -80,7 +80,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	    	Sys.println("HRVBehaviour onEnter(): isWaiting " + app.mTestControl.mState.isWaiting);
 	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
 	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + app.mSensor.mHRData.isChOpen);
-	    	Sys.println("HRVBehaviour onEnter(): mAntEvent " + app.mSensor.mHRData.mAntEvent);
 	    }
     	// 
 		if(0 < app.viewNum) {
@@ -119,9 +118,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 				Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 			} else {
 				Ui.popView(Ui.SLIDE_RIGHT);
+				app.onStop(null);
 			}			
-			
-
 		}
 		else {
 			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);

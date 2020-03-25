@@ -278,56 +278,6 @@ class HRVStorageHandler {
 			}
 		}
 	}
-
-    function saveTest()
-    {
-		var testDay = mApp.utcStart - (utcStart % 86400);
-		var epoch = testDay - (86400 * 29);
-		var index = ((testDay / 86400) % 30) * 5;
-		var sumHrv = 0;
-		var sumPulse = 0;
-		var count = 0;
-
-		// REMOVE FOR PUBLISH
-		//index = ((timeNow() / 3600) % 30) * 5;
-		// REMOVE FOR PUBLISH
-		//index = ((timeNow() / 60) % 30) * 5;
-
-		mApp.results[index + 0] = mApp.utcStart;
-		mApp.results[index + 1] = mApp.hrv;
-		mApp.results[index + 2] = mApp.avgPulse;
-
-		// Calculate averages
-		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-
-			var ii = i * DATA_SET_SIZE;
-
-			if(epoch <= mApp.results[ii]) {
-
-				sumHrv += mApp.results[ii + 1];
-				sumPulse += mApp.results[ii + 2];
-				count++;
-			}
-		}
-		mApp.results[index + 3] = sumHrv / count;
-		mApp.results[index + 4] = sumPulse / count;
-
-		// Print values to file in csv format with ISO 8601 date & time
-		var date = Calendar.info(startMoment, 0);
-    	System.println(format("$1$-$2$-$3$T$4$:$5$:$6$,$7$,$8$,$9$,$10$",[
-    		date.year,
-    		date.month,
-    		date.day,
-    		date.hour,
-    		date.min.format("%02d"),
-    		date.sec.format("%02d"),
-    		mApp.hrv,
-    		mApp.avgPulse,
-    		sumHrv / count,
-    		sumPulse / count]));
-
-    }
-
 	
 }
 

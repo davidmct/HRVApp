@@ -44,7 +44,7 @@ class TestView extends Ui.View {
 	// }
 	// can call onNotify with onNotify(:State_x, self, array);  
 	  
-	function onNotify(symbol, object, params) {
+	function onNotify(symbol, params) {
 		// [ msgTxt, timer]
 		msgTxt = params[0];
 		timer = params[1];	
@@ -100,10 +100,12 @@ class TestView extends Ui.View {
 			mViewTimerValID.setColor( mValueColour);	
 		}
 		
-		app.mTestControl.setObserver(:testview, self.method(:onNotify));
+		app.mTestControl.setObserver(self.method(:onNotify));
 				
     	// might need to go in test controller
     	if(app.mTestControl.mState.isClosing) {
+    		// stop app?????
+    		//CHECK
 			app.onStop( null );
 			popView(SLIDE_RIGHT);
 		}

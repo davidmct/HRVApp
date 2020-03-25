@@ -5,12 +5,13 @@ class SaveDelegate extends Ui.ConfirmationDelegate {
 
     function onResponse(value) {
         if(value == Ui.CONFIRM_YES) {
-            App.getApp().saveTest();
+            App.getApp().mTestControl.saveTest();
         }
         else {
-        	App.getApp().discardTest();
+        	App.getApp().mTestControl.discardTest();
         }
     }
+    
     function initialize() { ConfirmationDelegate.initialize();  }	
 }
 
@@ -29,7 +30,7 @@ class ResultsDelegate extends Ui.ConfirmationDelegate {
 
     function onResponse(value) {
         if(value == Ui.CONFIRM_YES ) {
-            App.getApp().resetResults();
+            App.getApp().mStorage.resetResults();
         }
     }
     function initialize() { ConfirmationDelegate.initialize(); }	    
