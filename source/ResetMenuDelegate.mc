@@ -12,25 +12,25 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
  			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSaveSettings)), Ui.SLIDE_LEFT ); 
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_LEFT ); 
 			//Ui.pushView(new Ui.Confirmation("Reset settings?"), new SettingsDelegate(), Ui.SLIDE_LEFT);
         }
         else if (id.equals("results")) {
          	var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSaveResults)), Ui.SLIDE_LEFT );
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_LEFT );
 			//Ui.pushView(new Ui.Confirmation("Clear results?"), new ResultsDelegate(), Ui.SLIDE_LEFT);
         }
     }
     
-    function setSaveSettings(value) {
+    function setResetSettings(value) {
 		if (value == "optOne") { 
             App.getApp().mStorage.resetSettings();
         }	
     }
     
-    function setSaveResults(value) {
+    function setResetResults(value) {
 		if (value == "optOne") { 
             App.getApp().mStorage.resetResults();
         }	
