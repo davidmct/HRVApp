@@ -156,9 +156,6 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
-			//Sys.println("ANT DATA");			
-			// added another getPayload() as in sensor code
-			//payload = msg.getPayload();
             mHRData.isAntRx = true;
             mHRData.isStrapRx = true;
             mHRData.strapCol = GREEN;
@@ -166,10 +163,12 @@ class AntHandler extends Ant.GenericChannel {
             mHRData.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
-
-			Sys.println("ANT: Pulse is :" + mHRData.livePulse);
-			Sys.println("beatEvent is :" + beatEvent);
-			Sys.println("beatCount is :" + beatCount);
+	
+			if (mDebugging) {
+				Sys.println("ANT: Pulse is :" + mHRData.livePulse);
+				Sys.println("beatEvent is :" + beatEvent);
+				Sys.println("beatCount is :" + beatCount);
+			}
 						
 			HRSampleProcessing(beatCount, beatEvent);
         }
@@ -223,7 +222,7 @@ class AntHandler extends Ant.GenericChannel {
 		// want a test that we are testing and need samples around whole lot?
 		
 		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
-			//Sys.println("HRSampleProcessing - step 1");
+			Sys.println("HRSampleProcessing - step 1");
 			mHRData.isPulseRx = true;
 	    	mHRData.pulseCol = GREEN;
 			mHRData.mNoPulseCount = 0;
@@ -240,7 +239,7 @@ class AntHandler extends Ant.GenericChannel {
 				intMs = beatEvent - mHRData.mPrevBeatEvent;
 			}
 			
-			if (mDebugging) {
+			if (mDebuggingANT == true) {
 				// maybe too much data for speed");
 				//Sys.println("HRSampleProcessing - step 2");
 				Sys.println("HRSampleProcessing isTesting - "+ mApp.mTestControl.mState.isTesting);	
@@ -260,15 +259,16 @@ class AntHandler extends Ant.GenericChannel {
 				minMs < intMs && 
 				maxMs > mHRData.mPrevIntMs && 
 				minMs < mHRData.mPrevIntMs) {		
-				// test line without app testing
-				//if(maxMs > intMs && minMs < intMs && maxMs > mHRData.mPrevIntMs && minMs < mHRData.mPrevIntMs) {		
-				//var devMs = 0;
+
+				Sys.println("ANT - step 3");
+				
 				if(intMs > mHRData.mPrevIntMs) {
 					mHRData.devMs = intMs - mHRData.mPrevIntMs;
 				} else {
 					mHRData.devMs = mHRData.mPrevIntMs - intMs;
 				}
-				Sys.println("HRSampleProcessing - step 3");
+				
+				Sys.println("ANT - step 3");
 				mHRData.devSqSum += mHRData.devMs * mHRData.devMs;
 				mHRData.pulseSum += mHRData.livePulse;
 				mHRData.dataCount++;
@@ -279,11 +279,6 @@ class AntHandler extends Ant.GenericChannel {
 					mHRData.avgPulse = ((mHRData.pulseSum.toFloat() / mHRData.dataCount) + 0.5).toNumber();
 				}
 			
-				// Print live data
-				//if(isTesting){
-				//var liveMs = (intMs.toFloat() / 1000);
-				//Sys.println(liveMs.format("%.03f"));
-				//}
 			}
 			mHRData.mPrevIntMs = intMs;
 			//Sys.println("HRSampleProcessing - step 4");

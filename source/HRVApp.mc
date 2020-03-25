@@ -23,6 +23,7 @@ using Toybox.System as Sys;
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = true;
+var mDebuggingANT = false;
 
 using Toybox.Lang;
 

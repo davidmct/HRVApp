@@ -138,6 +138,7 @@ class TestView extends Ui.View {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
 			Sys.println("Test View ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
+			Sys.println("Test state = "+ app.mTestControl.mState.isTesting);
 		}
 		    	
     	// optimisation....
