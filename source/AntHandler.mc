@@ -3,6 +3,21 @@ using Toybox.Time as Time;
 using Toybox.System as Sys;
 using Toybox.Math;
 
+// Sample processing changes
+// 1. Each batch update
+//		When a batch of samples has arrived we can calculate group stats (these combined at end of test)
+//		These are displayed on SummaryView
+//2. On each sample arriving...
+//		don't do anything if not testing
+//		If beatCount same as previous then ignore ie no pulse
+//		If beatCount != previous+1 then we have missed data potentially
+//			Options: ignore as invalid and move variables on
+//					assume this is data unchanged and write previous values to store for count, event and IntMs
+//		We shouldn't guess interval besides if well out of range ie a dropped beat or double beat then OK
+//			(detect this in processing not in handler)
+// 		Add intMs to list in sampleProcess class .. addSample()
+//3. In sample processing we could work out delta and save this but more storage...
+
 class AntHandler extends Ant.GenericChannel {
     const DEVICE_TYPE = 120;  //strap
     const PERIOD = 8070; // 4x per second
@@ -94,7 +109,7 @@ class AntHandler extends Ant.GenericChannel {
             :searchThreshold => 0} );           //Pair to all transmitting sensors, 0 disabled, 1 = nearest
        	//mChanAssign.setBackgroundScan(true);
        	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
-       	setDeviceConfig(deviceCfg);
+       	GenericChannel.setDeviceConfig(deviceCfg);
        	mHRData.isChOpen = GenericChannel.open();
        	
 		// will now be searching for strap after openCh()
@@ -102,6 +117,7 @@ class AntHandler extends Ant.GenericChannel {
     }
         
     function openCh() { 
+    	// Garmin advice is release, initialize, setConfig, open!!!!
     	if (mHRData.isChOpen == true)
     	{
     		//Sys.println("OpenCh: closing open channels and reseting status");
@@ -172,7 +188,7 @@ class AntHandler extends Ant.GenericChannel {
 				Sys.println("beatCount is :" + beatCount);
 			}
 						
-			HRSampleProcessing(beatCount, beatEvent);
+			newHRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
         	if (mDebuggingANT) {
@@ -217,6 +233,43 @@ class AntHandler extends Ant.GenericChannel {
     		//Sys.println( "ANT other message " + msg.messageId);
     	}
     }
+    
+	function newHRSampleProcessing(beatCount, beatEvent) {
+		if (mDebuggingANT) {Sys.println("HR-SP");}
+	
+		// check we have a pulse and another beat recorded 
+		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
+			mHRData.isPulseRx = true;
+	    	mHRData.pulseCol = GREEN;
+			mHRData.mNoPulseCount = 0;
+					
+			// Get interval
+			// need to check 64000 in ANT spec for roll-over number
+			var intMs = 0;
+			if(mHRData.mPrevBeatEvent > beatEvent) {
+				intMs = 64000 - mHRData.mPrevBeatEvent + beatEvent;
+			} else {
+				intMs = beatEvent - mHRData.mPrevBeatEvent;
+			}
+			
+			var beatsInGap = beatCount - mHRData.mPrevBeatCount;			
+			mApp.mSampleProc.rawSampleProcessing(mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, beatsInGap );
+
+		} else {
+			// either no longer have a pulse or Count not changing
+			mHRData.mNoPulseCount += 1;
+			if(0 < mHRData.livePulse) {
+				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
+				if(limit < mHRData.mNoPulseCount) {
+					mHRData.isPulseRx = false;
+					mHRData.pulseCol = RED;
+				}
+			}
+		}
+		mHRData.mPrevBeatCount = beatCount;
+		mHRData.mPrevBeatEvent = beatEvent;
+		//Sys.println("HRSampleProcessing - end");
+	}
     
     function HRSampleProcessing(beatCount, beatEvent) {
 		if (mDebuggingANT) {Sys.println("HR-SP");}

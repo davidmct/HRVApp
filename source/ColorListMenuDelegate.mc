@@ -4,7 +4,6 @@ using Toybox.System as Sys;
 
 class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
 
-	hidden var app = App.getApp();
 	hidden var mFunc;
 	
 	function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }

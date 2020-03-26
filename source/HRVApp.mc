@@ -94,6 +94,8 @@ class HRVApp extends App.AppBase {
 	var mFitWriteEnabled;   
     var mStorage;
     var mTestControl;
+    var mIntervalSampleBuffer; // buffer in app space for intervals
+    var mSampleProc; // instance of sample processor
     
     // ensure second update
     hidden var _uiTimer;
@@ -106,6 +108,7 @@ class HRVApp extends App.AppBase {
          
         mStorage = new HRVStorageHandler();
         mTestControl = new TestController();
+        mSampleProc = new SampleProcessing();
         mStorage.readProperties();  
              
 		if (Toybox.Application has :Storage) {

@@ -140,6 +140,9 @@ class TestController {
 
     function resetTest() {
     	mApp.mSensor.mHRData.initForTest();
+    	// need to be careful we have shown all results first!!!
+    	Sys.println("TestControl: resetTest() - clearing sample buffer - is this right place?");
+    	mApp.mSampleProc.resetSampleBuffer();
 		utcStart = 0;
 		utcStop = 0;
 		mState.isTesting = false;
@@ -288,7 +291,7 @@ class TestController {
 		if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
 		
 		// Timer information for view
-		var timerTime = 0; // = utcStop - utcStart;
+		timerTime = 0; // = utcStop - utcStart;
 		var testType = mApp.testTypeSet;
 		
 		// set default time display and adjust in tests below

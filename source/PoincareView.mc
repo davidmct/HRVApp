@@ -5,6 +5,25 @@ using Toybox.System as Sys;
 
 // look at sensor example for line graph
 
+// This file draws a Poincare plot of the HRV values
+// Simple method:
+// 	scan through every sample, work out range and plot in x-y scatter
+//	number of points could be ~300-1000 as have 5 minutes of roughly 50-150 samples (BPM). Worse case 200 BPM
+// Grouping
+//	We could scan data and find unique values and only plot these
+//	Consumes lots of memory as need a flag per entry and order(N) reads of data ie N+(N-1)+(N-2) as we scan and mark used
+//	Could do this scan every time value is added ie per second or so in which case plot reads once
+//	Major issue is that it is a difference plot from previous which is important => would have to compare ajacent triplets
+// Sampling
+//	Only do every Nth/Nth-1 sample .. could potentially miss outliers which will be infrequent
+//Drawing
+//	Simplistically we would plot a point at each entry. This shows clustering if some variation but at scale of chart TBD
+// 	dc.drawPoint(x, y)
+//	Could draw circle/rectangle but execution time much higher
+//	Every single value would need scaling in both x and y though x becomes y of next sample
+//Scaling
+//	Will need to run through all data finding min and max .. or capture as data comes in!!! Scaling same in x and y as same data
+
 class PoincareView extends Ui.View {
 
 	hidden var floorVar;
@@ -15,7 +34,6 @@ class PoincareView extends Ui.View {
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-    	var app = App.getApp();
 
     }
 
