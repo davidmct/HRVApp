@@ -122,6 +122,7 @@ class TestController {
 		mState.isTesting = false;
 		mState.isFinished = true;
 		mState.isNotSaved = true;
+		mState.isSaved = false;
 		utcStop = timeNow();
     }
     
@@ -143,7 +144,7 @@ class TestController {
 		utcStop = 0;
 		mState.isTesting = false;
 		mState.isFinished = false;
-		mState.isNotSaved = false;
+		mState.isNotSaved = true;
 		mState.isSaved = false;
     }
     
@@ -199,7 +200,7 @@ class TestController {
     
 	// called by startTest() to initial test timers etc
     function start() {
-		Sys.println("Start: entered");
+		if (mDebugging == true) {Sys.println("Start: entered");}
 		// assumes that we have isAntRx true
 		// Set up test type and timer up or down.
 		
@@ -230,38 +231,39 @@ class TestController {
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
 
-    	Sys.println("Start: leaving func");
+    	if (mDebugging == true) {Sys.println("Start: leaving func");}
     }
       
     function onEnterPressed() {
-    	if(mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
-			Sys.println("TestControl: onEnterPressed() - save option");
-			// user can either save or discard. in either event we are done
-			mState.isNotSaved = false;
-			mState.isSaved = true;
-			// set isFinished???
-			return true;
-    	}
-    	else if(mState.isFinished) {
-    		Sys.println("TestControl: onEnterPressed() - Finished");
+    	// tells HRVDelegate not to save
+    	var mValue = false;
+    	
+    	if(mState.isFinished) {
+    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Finished");}
     		resetTest();
     		Ui.requestUpdate();
     	}
     	else if(mState.isTesting) {
-    		Sys.println("TestControl: onEnterPressed() - Stop test");
-    		stopTest();
+    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Stop test");}
+    		if(mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
+				if (mDebugging == true) {Sys.println("TestControl: save option");}
+				// user can either save or discard. in either event we are done
+				// returning true tells HRV Delegate to ask to save
+				mValue = true;
+	    	}
+	    	stopTest();
     		Ui.requestUpdate();
     	}
     	else if(!mApp.mSensor.mHRData.isAntRx || !mApp.mSensor.mHRData.isPulseRx ){
-    		Sys.println("TestControl: onEnterPressed() - no ANT");
+    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - no ANT");}
     		alert(TONE_ERROR);
     	}
     	else {
-    		Sys.println("TestControl: onEnterPressed() - start branch");
+    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - start branch");}
     		startTest();
     	}  
-   		// no save needed
-   		return false;    
+   		// signal whether save needed
+   		return mValue;    
     }
     
     function onEscapePressed() {
@@ -282,10 +284,11 @@ class TestController {
     function UpdateTestStatus() {
     	// this should drive the state transistions and state view information
     	// AntHandler drives data model information in sampleProcessing
-		Sys.println("TestControl: UpdateTestStatus()");
+    	// called every second
+		if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
 		
 		// Timer information for view
-		var timerTime = utcStop - utcStart;
+		var timerTime = 0; // = utcStop - utcStart;
 		var testType = mApp.testTypeSet;
 		
 		// set default time display and adjust in tests below
@@ -302,7 +305,7 @@ class TestController {
     	var testTime = timeNow() - utcStart;
 
 		if(mState.isFinished) {
-			Sys.println("TestControl: isFinished branch");
+			if (mDebugging == true) {Sys.println("TestControl: isFinished branch");}
 			testTime = utcStop - utcStart;
 
 			if(MIN_SAMPLES > mApp.mSensor.mHRData.dataCount) {
@@ -316,7 +319,7 @@ class TestController {
 			}
     	}
     	else if(mState.isTesting) {
-    		Sys.println("TestControl: isTesting branch");
+    		if (mDebugging == true) {Sys.println("TestControl: isTesting branch");}
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
 			var cycle = 1 + testTime % (mApp.inhaleTimeSet + mApp.exhaleTimeSet + mApp.relaxTimeSet);
 			if(cycle <= mApp.inhaleTimeSet) {
@@ -338,6 +341,7 @@ class TestController {
 				timerTime = testTime;
 				if (testTime >= mManualTestStopTime) {
 					// reached limit set by user
+					if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
 					finishTest();
 				}
 			}
@@ -354,12 +358,12 @@ class TestController {
     		msgTxt = "Searching for HRM";
     	}
 
-		Sys.println("TestControl: invoking test view");
+		if (mDebugging == true) {Sys.println("TestControl: invoking test view");}
 		// update Test View data  
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
     	}
-    	Sys.println("TestControl: exiting UpdateStatus");
+    	if (mDebugging == true) {Sys.println("TestControl: exiting UpdateStatus");}
     }   
 	
 }

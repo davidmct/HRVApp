@@ -52,7 +52,7 @@ class TestView extends Ui.View {
     
     function onLayout(dc) {
 		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
-		Sys.println("TestView: onLayout() called ");
+		if (mDebugging == true) {Sys.println("TestView: onLayout() called ");}
 		if ( mTestViewLayout != null ) {
 			setLayout (mTestViewLayout);
 		} else {
@@ -64,7 +64,8 @@ class TestView extends Ui.View {
 		oldLblCol = app.lblColSet;
 		oldValCol = app.txtColSet;
 
-		Sys.println("TextView: onLayout(): starting field update");		
+		if (mDebugging == true) {Sys.println("TextView: onLayout(): starting field update");}
+				
 		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
 		mViewResultLblID = getLayoutFieldIDandInit("ViewResultLbl", null, mLabelColour, mJust);
 		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
@@ -165,9 +166,7 @@ class TestView extends Ui.View {
    		
    		View.onUpdate(dc);
    		
-   		if(mDebugging) {
-			Sys.println("TestView:onUpdate() exit");
-		}
+   		if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
    		//return true;		
     }
 

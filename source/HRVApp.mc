@@ -22,7 +22,7 @@ using Toybox.System as Sys;
 //9. how to make trial version and possible payment
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
-var mDebugging = true;
+var mDebugging = false;
 var mDebuggingANT = false;
 
 using Toybox.Lang;
@@ -100,7 +100,7 @@ class HRVApp extends App.AppBase {
     const UI_UPDATE_PERIOD_MS = 1000;
     
     function initialize() {
-    	if (mDebugging) { 	Sys.println("HRVApp initialisation called");}
+    	Sys.println("HRVApp INITIALISATION called");
         
         mApp = App.getApp();
          
