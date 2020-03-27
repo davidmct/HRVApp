@@ -141,8 +141,6 @@ class TestController {
     function resetTest() {
     	mApp.mSensor.mHRData.initForTest();
     	// need to be careful we have shown all results first!!!
-    	Sys.println("TestControl: resetTest() - clearing sample buffer - is this right place?");
-    	mApp.mSampleProc.resetSampleBuffer();
 		utcStart = 0;
 		utcStop = 0;
 		mState.isTesting = false;
@@ -208,6 +206,8 @@ class TestController {
 		// Set up test type and timer up or down.
 		
 		resetTest();
+		Sys.println("TestControl: start() - clearing sample buffer - is this right place?");
+    	mApp.mSampleProc.resetSampleBuffer();
 		
 		//set test state
 		// now in isTesting = true can start processing ANT samples!

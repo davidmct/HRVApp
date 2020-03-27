@@ -24,6 +24,7 @@ using Toybox.System as Sys;
 
 var mDebugging = false;
 var mDebuggingANT = false;
+var mDumpIntervals = true;
 
 using Toybox.Lang;
 
@@ -100,6 +101,9 @@ class HRVApp extends App.AppBase {
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
+    
+    // Block size for dump to debug of intervals
+    const BLOCK_SIZE = 40;
     
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
@@ -191,6 +195,9 @@ class HRVApp extends App.AppBase {
 		mTestControl.stopControl();
 		_uiTimer.stop();
 		
+		// Dump all interval data to txt file on device
+		if (mDumpIntervals == true) {DumpIntervals();}
+		
 		Sys.println("App stopped");
     }
     
@@ -248,6 +255,40 @@ class HRVApp extends App.AppBase {
 		}
 		
 		return true;	
+	}
+	
+	function DumpIntervals() {
+		// to reduce write time group up the data
+
+		var mNumEntries = mSampleProc.getNumberOfSamples();
+		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
+		var mRemainder = mNumEntries % BLOCK_SIZE ;
+		var mString = "";
+		var i;
+		var base;
+		
+		if (mDebugging == true) {
+			Sys.println("DumpIntervals: mNumEntries " + mNumEntries);
+			Sys.println("DumpIntervals: mNumBlocks " + mNumBlocks);	
+			Sys.println("DumpIntervals: mRemainder " + mRemainder);						
+		}
+		
+		// should propably use getSample(index) if using circular buffer
+		for (i=0; i < mNumBlocks; i++) {
+			base = i*BLOCK_SIZE;
+			var j;
+			for (j=0; j< BLOCK_SIZE; j++) {
+				mString += mIntervalSampleBuffer[base+j].toString()+",";			
+			}
+			Sys.println(mString);		
+		}
+		mString = "";
+		// Write tail end of buffer
+		base = BLOCK_SIZE * mNumBlocks;
+		for (i=0; i < mRemainder; i++) {	
+			mString += mIntervalSampleBuffer[base+i].toString()+",";				
+		}	
+		Sys.println(mString);
 	}
 }
 

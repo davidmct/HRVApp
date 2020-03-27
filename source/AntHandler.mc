@@ -71,6 +71,9 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		
 		function resetTestVariables() {
+			mApp.mSampleProc.resetHRVData();
+			
+			// delete below
 			hrv = 0;
 			avgPulse = 0;
 			devSqSum = 0;

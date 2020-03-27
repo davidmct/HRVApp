@@ -46,7 +46,7 @@ using Toybox.System as Sys;
 //Similarly for sample standard deviation,
 
 //s= sqrt ((N*s(2)-s(1)^2) / (N*(N-1)) ).
-//In a computer implementation, as the three sj sums become large, we need to consider round-off error, 
+//In a computer implementation, as the three s(j) sums become large, we need to consider round-off error, 
 //arithmetic overflow, and arithmetic underflow. The method below calculates the running sums method with
 // reduced rounding errors.[16] This is a "one pass" algorithm for calculating variance of n samples without the 
 //need to store prior data during the calculation. Applying this method to a time series will result in 
@@ -69,18 +69,25 @@ using Toybox.System as Sys;
 //Population variance:
 //	sigma(n)^2 = Q(n)/n
 
+// RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
+
 const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
-const MAX_TIME = 400; // seconds
+const MAX_TIME = 6; // minutes
+const LOG_SCALE = 50; // scales ln(RMSSD)
 
 class SampleProcessing {
 
 	// these need to be moved from ANThandler and references changed
-	var devMs;
-	var devSqSum;
-	var pulseSum;
-	var dataCount;
-	var hrv;
+	hidden var devMs;
+	hidden var devSqSum;
+	hidden var pulseSum;
+	hidden var dataCount;
+	
 	var avgPulse;
+	var minIntervalFound;
+	var maxIntervalFound;
+	var mRMSSD;
+	var mLnRMSSD;
 	
 	hidden var mSampleIndex;
 	hidden var mApp;
@@ -93,6 +100,18 @@ class SampleProcessing {
 		mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
 		mSampleIndex = 0;
 		mApp.mIntervalSampleBuffer[0] = 0;
+		mLnRMSSD = 0;
+		mRMSSD = 0;
+	}
+	
+	function resetHRVData() {
+		devMs = 0;
+		devSqSum = 0;
+		pulseSum = 0
+		dataCount = 0;	
+		avgPulse = 0;
+		mRMSSD = 0;
+		mLnRMSSD = 0;	
 	}
 	
 	function getNumberOfSamples() {
@@ -115,7 +134,7 @@ class SampleProcessing {
 				maxMs > previousIntMs && 
 				minMs < previousIntMs) {		
 				
-				addSample(intMs, 0);				
+				addSample(intMs, beatsInGap);				
 				updateRunningStats(previousIntMs, intMs, livePulse);			
 			}					
 	}
@@ -123,6 +142,8 @@ class SampleProcessing {
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
 		mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
+		minIntervalFound = 1000;
+		maxIntervalFound = 0;
 	}
 
 	function addSample( intervalMs, beatsInGap) {
@@ -130,6 +151,10 @@ class SampleProcessing {
 		// input is an interval time in ms
 		// this is always last entry in buufer
 		mSampleIndex++;
+		
+		// pre process bounds for poincare plot of RR interval
+		if (intervalMS > maxIntervalFound) { maxIntervalFound = intervalMs);}
+		if (intervalMS < minIntervalFound) { minIntervalFound = intervalMs);}
 		
 		// Might want to implement circular buffer to avoid this...
 		if ( mSampleIndex > mApp.mIntervalSampleBuffer.size()) {
@@ -139,13 +164,15 @@ class SampleProcessing {
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 	}
 	
-	function getSample( index) {
+	function getSample(index) {
 		return mApp.mIntervalSampleBuffer[index];
 	}
 	
 	// update the per sample stats
 	function updateRunningStats(previousIntMs, intMs, livePulse) {
 		// implement running equations
+		// note that Math lib has stdev(data, mean) for standard deviation
+		
 		if(intMs > previousIntMs) {
 			devMs = intMs - previousIntMs;
 		} else {
@@ -157,13 +184,14 @@ class SampleProcessing {
 		dataCount++;
 	
 		if(1 < dataCount) {
-			var rmssd = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
-			hrv = ((Math.log(rmssd, 1.0512712)) + 0.5).toNumber();
+			// HRV is actually RMSSD
+			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
+			// many people compand rmssd to a scaled range 0-100
+			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber;
 			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();
 		}		
 		// May need to change stats source from Ant to this module
 	}
-
 
 }
 

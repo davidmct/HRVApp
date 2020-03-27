@@ -6,6 +6,8 @@ using Toybox.System as Sys;
 // look at sensor example for line graph
 
 // This file draws a Poincare plot of the HRV values
+// Ploy y = RR(i+1), x = RR(i) (or i and i-1)
+
 // Simple method:
 // 	scan through every sample, work out range and plot in x-y scatter
 //	number of points could be ~300-1000 as have 5 minutes of roughly 50-150 samples (BPM). Worse case 200 BPM
