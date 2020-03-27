@@ -81,8 +81,8 @@ class SampleProcessing {
 	hidden var devMs;
 	hidden var devSqSum;
 	hidden var pulseSum;
-	hidden var dataCount;
 	
+	var dataCount;
 	var avgPulse;
 	var minIntervalFound;
 	var maxIntervalFound;

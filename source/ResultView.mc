@@ -58,7 +58,7 @@ class ResultView extends Ui.View {
 		else if(app.mTestControl.mState.isFinished) {
 			time = app.mTestControl.utcStop - app.mTestControl.utcStart;
 		}
-		expected = (((1 + time) / 60.0) * app.app.mSampleProc.avgPulse).toNumber();
+		expected = (((1 + time) / 60.0) * app.mSampleProc.avgPulse).toNumber();
 
 		var mLabelColour = mapColour( app.lblColSet);
 		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER;
@@ -73,9 +73,9 @@ class ResultView extends Ui.View {
 		updateLayoutField("expectedY", null, mLabelColour, mLabelJust);	
 
 		updateLayoutField( "timeValue", timerFormat(time).toString(), mValueColour, mValueJust);
-		updateLayoutField( "pulseValue", app.app.mSampleProc.avgPulse.toString(), mValueColour, mValueJust);
+		updateLayoutField( "pulseValue", app.mSampleProc.avgPulse.toString(), mValueColour, mValueJust);
 		updateLayoutField( "hrvValue", app.mSampleProc.mLnRMSSD.toString(), mValueColour, mValueJust);
-		updateLayoutField( "samplesValue", mSampleProc.dataCount.toString(), mValueColour, mValueJust);
+		updateLayoutField( "samplesValue", app.mSampleProc.dataCount.toString(), mValueColour, mValueJust);
 		updateLayoutField( "expectedValue", "xx", mValueColour, mValueJust);
 		
 		//dc.drawText(100, 100, Graphics.FONT_MEDIUM, "WHAT IS HAPPENING", Graphics.TEXT_JUSTIFY_CENTER);

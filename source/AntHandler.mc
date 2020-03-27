@@ -44,7 +44,10 @@ class AntHandler extends Ant.GenericChannel {
 		var mPrevBeatCount;
 		var mPrevBeatEvent;
 		
-    	function initialize() {
+		hidden var appLnk;
+		
+    	function initialize(app) {
+        	appLnk = app;
         	isChOpen = false;
     		isAntRx = false;
 			isStrapRx = false;
@@ -62,7 +65,7 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		
 		function resetTestVariables() {
-			mApp.mSampleProc.resetHRVData();
+			appLnk.mSampleProc.resetHRVData();
 		} 
     }
 	
@@ -70,7 +73,7 @@ class AntHandler extends Ant.GenericChannel {
     	mApp = Application.getApp();
     	mSearching = true;
   	
-    	mHRData = new HRStatus();
+    	mHRData = new HRStatus(mApp);
     	// Strap & pulse indicators
     	mHRData.strapCol = RED;
     	mHRData.pulseCol = RED;
