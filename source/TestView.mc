@@ -76,8 +76,8 @@ class TestView extends Ui.View {
 		mViewPulseTxtID = getLayoutFieldIDandInit("ViewPulseTxt", "PULSE", mapColour(RED), mJust);	
 					
 		mViewMsgTxtID = getLayoutFieldIDandInit("ViewMsgTxt", msgTxt, mValueColour, mJust);
-		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", app.mSampleProc.mLnRMSSD.toString(), mValueColour, mJust);
-		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  app.mSampleProc.avgPulse.toString(), mValueColour, mJust);
+		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", "0", mValueColour, mJust);
+		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  "0", mValueColour, mJust);
 		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);			
 	}
         
@@ -160,8 +160,8 @@ class TestView extends Ui.View {
 		updateLayoutField(mViewStrapTxtID, app.mSensor.mHRData.strapTxt, mapColour(app.mSensor.mHRData.strapCol));	
 		updateLayoutField(mViewPulseTxtID, app.mSensor.mHRData.pulseTxt, mapColour(app.mSensor.mHRData.pulseCol));					
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
-		updateLayoutField(mViewResultTxtID, app.mSampleProc.mLnRMSSD.toString(), mValueColour);
-		updateLayoutField(mViewPulseValID, app.mSampleProc.avgPulse.toString(), mValueColour);
+		updateLayoutField(mViewResultTxtID, app.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
+		updateLayoutField(mViewPulseValID, app.mSampleProc.avgPulse.format("%d"), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
    		
    		View.onUpdate(dc);

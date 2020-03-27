@@ -73,8 +73,8 @@ class ResultView extends Ui.View {
 		updateLayoutField("expectedY", null, mLabelColour, mLabelJust);	
 
 		updateLayoutField( "timeValue", timerFormat(time).toString(), mValueColour, mValueJust);
-		updateLayoutField( "pulseValue", app.mSampleProc.avgPulse.toString(), mValueColour, mValueJust);
-		updateLayoutField( "hrvValue", app.mSampleProc.mLnRMSSD.toString(), mValueColour, mValueJust);
+		updateLayoutField( "pulseValue", app.mSampleProc.avgPulse.format("%d"), mValueColour, mValueJust);
+		updateLayoutField( "hrvValue", app.mSampleProc.mLnRMSSD.format("%d"), mValueColour, mValueJust);
 		updateLayoutField( "samplesValue", app.mSampleProc.dataCount.toString(), mValueColour, mValueJust);
 		updateLayoutField( "expectedValue", "xx", mValueColour, mValueJust);
 		
