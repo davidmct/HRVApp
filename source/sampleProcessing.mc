@@ -88,6 +88,12 @@ class SampleProcessing {
 	var maxIntervalFound;
 	var mRMSSD;
 	var mLnRMSSD;
+	var mSDANN;
+	var mSDSD; 
+	var mNN50;
+	var mpNN50; 
+	var mNN20;
+	var mpNN20;
 	
 	hidden var mSampleIndex;
 	hidden var mApp;
@@ -98,20 +104,31 @@ class SampleProcessing {
 		// if we make a circular buffer then will need to make lots of calls to get data
 		mApp = App.getApp();
 		mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		resetSampleBuffer();
+		resetHRVData();
+	}
+	
+	function resetSampleBuffer() { 
 		mSampleIndex = 0;
-		mApp.mIntervalSampleBuffer[0] = 0;
-		mLnRMSSD = 0;
-		mRMSSD = 0;
+		mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
+		minIntervalFound = 1000;
+		maxIntervalFound = 0;
 	}
 	
 	function resetHRVData() {
 		devMs = 0;
 		devSqSum = 0;
-		pulseSum = 0
+		pulseSum = 0;
 		dataCount = 0;	
 		avgPulse = 0;
 		mRMSSD = 0;
 		mLnRMSSD = 0;	
+		mSDANN = 0;
+		mSDSD = 0; 
+		mNN50 = 0;
+		mpNN50 = 0; 
+		mNN20 = 0;
+		mpNN20 = 0;
 	}
 	
 	function getNumberOfSamples() {
@@ -139,13 +156,6 @@ class SampleProcessing {
 			}					
 	}
 
-	function resetSampleBuffer() { 
-		mSampleIndex = 0;
-		mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
-		minIntervalFound = 1000;
-		maxIntervalFound = 0;
-	}
-
 	function addSample( intervalMs, beatsInGap) {
 		// might assume circular buffer?
 		// input is an interval time in ms
@@ -153,10 +163,11 @@ class SampleProcessing {
 		mSampleIndex++;
 		
 		// pre process bounds for poincare plot of RR interval
-		if (intervalMS > maxIntervalFound) { maxIntervalFound = intervalMs);}
-		if (intervalMS < minIntervalFound) { minIntervalFound = intervalMs);}
+		if (intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
+		if (intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
 		
 		// Might want to implement circular buffer to avoid this...
+		// also can notify testControl to stop testing
 		if ( mSampleIndex > mApp.mIntervalSampleBuffer.size()) {
 			new mApp.myException("Buffer limit reached in sample Processing");
 		}
@@ -189,6 +200,13 @@ class SampleProcessing {
 			// many people compand rmssd to a scaled range 0-100
 			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber;
 			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();
+			
+			mSDANN = 0;
+			mSDSD = 0; 
+			mNN50 = 0;
+			mpNN50 = 0; 
+			mNN20 = 0;
+			mpNN20 = 0;
 		}		
 		// May need to change stats source from Ant to this module
 	}

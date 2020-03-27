@@ -163,8 +163,8 @@ class TestController {
 		//index = ((timeNow() / 60) % 30) * 5;
 
 		mApp.results[index + 0] = utcStart;
-		mApp.results[index + 1] = mApp.mSensor.mHRData.hrv;
-		mApp.results[index + 2] = mApp.mSensor.mHRData.avgPulse;
+		mApp.results[index + 1] = mApp.mSampleProc.mLnRMSSD;
+		mApp.results[index + 2] = mApp.mSampleProc.avgPulse;
 
 		// Calculate averages
 		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
@@ -190,8 +190,8 @@ class TestController {
     		date.hour,
     		date.min.format("%02d"),
     		date.sec.format("%02d"),
-    		mApp.mSensor.mHRData.hrv,
-    		mApp.mSensor.mHRData.avgPulse,
+    		mApp.mSampleProc.mLnRMSSD,
+    		mApp.mSampleProc.avgPulse,
     		sumHrv / count,
     		sumPulse / count]));
     		
@@ -248,7 +248,7 @@ class TestController {
     	}
     	else if(mState.isTesting) {
     		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Stop test");}
-    		if(mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
+    		if(mState.isNotSaved && MIN_SAMPLES < mApp.mSampleProc.dataCount) {
 				if (mDebugging == true) {Sys.println("TestControl: save option");}
 				// user can either save or discard. in either event we are done
 				// returning true tells HRV Delegate to ask to save
@@ -274,7 +274,7 @@ class TestController {
 			stopTest();
 		}
 			
-		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < mApp.mSensor.mHRData.dataCount) {
+		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < mApp.mSampleProc.dataCount) {
 			mState.isClosing = true;
 			return true;
 		}
@@ -311,7 +311,7 @@ class TestController {
 			if (mDebugging == true) {Sys.println("TestControl: isFinished branch");}
 			testTime = utcStop - utcStart;
 
-			if(MIN_SAMPLES > mApp.mSensor.mHRData.dataCount) {
+			if(MIN_SAMPLES > mApp.mSampleProc.dataCount) {
 				msgTxt = "Not enough data";
 			}
 			else if(mState.isSaved) {
@@ -323,6 +323,10 @@ class TestController {
     	}
     	else if(mState.isTesting) {
     		if (mDebugging == true) {Sys.println("TestControl: isTesting branch");}
+    		
+    		// get rid of this and just show text box saying breathe calmly
+    		// aslo remove menu option
+    		
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
 			var cycle = 1 + testTime % (mApp.inhaleTimeSet + mApp.exhaleTimeSet + mApp.relaxTimeSet);
 			if(cycle <= mApp.inhaleTimeSet) {
@@ -362,6 +366,7 @@ class TestController {
     	}
 
 		if (mDebugging == true) {Sys.println("TestControl: invoking test view");}
+		
 		// update Test View data  
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);

@@ -43,14 +43,6 @@ class AntHandler extends Ant.GenericChannel {
 		var mNoPulseCount;
 		var mPrevBeatCount;
 		var mPrevBeatEvent;
-		var mPrevIntMs;
-		var hrv;
-		var avgPulse;
-		var	devSqSum;
-		var	pulseSum;
-		var	dataCount;
-		var devMs;
-		var mAntEvent;
 		
     	function initialize() {
         	isChOpen = false;
@@ -66,20 +58,11 @@ class AntHandler extends Ant.GenericChannel {
 			mNoPulseCount = 0;
 			mPrevBeatCount = 0;
 			mPrevBeatEvent = 0;
-			mPrevIntMs = 0;	
 			resetTestVariables();	
 		}
 		
 		function resetTestVariables() {
 			mApp.mSampleProc.resetHRVData();
-			
-			// delete below
-			hrv = 0;
-			avgPulse = 0;
-			devSqSum = 0;
-			pulseSum = 0;
-			dataCount = 0;
-			devMs = 0;
 		} 
     }
 	
@@ -128,7 +111,7 @@ class AntHandler extends Ant.GenericChannel {
     	}
     	mSearching = true;   	
 		mHRData.isChOpen = GenericChannel.open();
-		if (mDebuggingANT == true) {	Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
+		if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
 		
 		mHRData.strapCol = RED;
     	mHRData.pulseCol = RED;
@@ -274,84 +257,4 @@ class AntHandler extends Ant.GenericChannel {
 		//Sys.println("HRSampleProcessing - end");
 	}
     
-    function HRSampleProcessing(beatCount, beatEvent) {
-		if (mDebuggingANT) {Sys.println("HR-SP");}
-	
-		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
-			//if (mDebuggingANT) { Sys.println("ANT HR - step 1");}
-			mHRData.isPulseRx = true;
-	    	mHRData.pulseCol = GREEN;
-			mHRData.mNoPulseCount = 0;
-			
-			// Calculate estimated ranges for reliable data
-			var maxMs = 60000 / (mHRData.livePulse * 0.7);
-			var minMs = 60000 / (mHRData.livePulse * 1.4);
-			
-			// Get interval
-			var intMs = 0;
-			if(mHRData.mPrevBeatEvent > beatEvent) {
-				intMs = 64000 - mHRData.mPrevBeatEvent + beatEvent;
-			} else {
-				intMs = beatEvent - mHRData.mPrevBeatEvent;
-			}
-			
-			if (mDebuggingANT == true) {
-				// maybe too much data for speed");
-				//Sys.println("HRSampleProcessing - step 2");
-				Sys.println("HRSP T?, cnt - "+ mApp.mTestControl.mState.isTesting+" , "+beatCount);
-				//Sys.println("HRSP isTesting - "+ mApp.mTestControl.mState.isTesting);		
-				//Sys.println("HRSampleProcessing livePulse - "+mHRData.livePulse);			
-				//Sys.println("HRSampleProcessing maxMs - "+maxMs);
-				//Sys.println("HRSampleProcessing intMs - "+intMs);
-				//Sys.println("HRSampleProcessing minMs - "+minMs);	
-				//Sys.println("HRSampleProcessing PrevIntMs - "+mHRData.mPrevIntMs);	
-				//Sys.println("HRSampleProcessing	mNoPulseCount - "+  mHRData.mNoPulseCount);
-				//Sys.println("HRSampleProcessing mPrevBeatCount - "+ mHRData.mPrevBeatCount);
-				//Sys.println("HRSampleProcessing mPrevBeatEvent - "+ mHRData.mPrevBeatEvent);			
-			} 
-			
-			// Only update hrv data if testing started, & values look to be error free			
-			if(mApp.mTestControl.mState.isTesting && 
-				maxMs > intMs && 
-				minMs < intMs && 
-				maxMs > mHRData.mPrevIntMs && 
-				minMs < mHRData.mPrevIntMs) {		
-
-				if (mDebuggingANT == true) {Sys.println("ANT HR - step 3");}
-				
-				if(intMs > mHRData.mPrevIntMs) {
-					mHRData.devMs = intMs - mHRData.mPrevIntMs;
-				} else {
-					mHRData.devMs = mHRData.mPrevIntMs - intMs;
-				}
-				
-				//Sys.println("ANT - step 4");
-				mHRData.devSqSum += mHRData.devMs * mHRData.devMs;
-				mHRData.pulseSum += mHRData.livePulse;
-				mHRData.dataCount++;
-			
-				if(1 < mHRData.dataCount) {
-					var rmssd = Math.sqrt(mHRData.devSqSum.toFloat() / (mHRData.dataCount - 1));
-					mHRData.hrv = ((Math.log(rmssd, 1.0512712)) + 0.5).toNumber();
-					mHRData.avgPulse = ((mHRData.pulseSum.toFloat() / mHRData.dataCount) + 0.5).toNumber();
-				}
-			
-			}
-			mHRData.mPrevIntMs = intMs;
-			//Sys.println("HRSampleProcessing - step 4");
-		} else {
-			//Sys.println("HRSampleProcessing - step 5");
-			mHRData.mNoPulseCount += 1;
-			if(0 < mHRData.livePulse) {
-				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
-				if(limit < mHRData.mNoPulseCount) {
-					mHRData.isPulseRx = false;
-					mHRData.pulseCol = RED;
-				}
-			}
-		}
-		mHRData.mPrevBeatCount = beatCount;
-		mHRData.mPrevBeatEvent = beatEvent;
-		//Sys.println("HRSampleProcessing - end");
-	} 
 }
