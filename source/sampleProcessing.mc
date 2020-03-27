@@ -1,5 +1,6 @@
 using Toybox.Application as App;
 using Toybox.System as Sys;
+using Toybox.Math;
 
 
 // add here functions to post process HR data once we have it!
@@ -95,6 +96,7 @@ class SampleProcessing {
 	var mNN20;
 	var mpNN20;
 	
+	// index always points to next available slot
 	hidden var mSampleIndex;
 	hidden var mApp;
 	
@@ -132,10 +134,14 @@ class SampleProcessing {
 	}
 	
 	function getNumberOfSamples() {
+		// starts at zero
 		return mSampleIndex;
 	}
 
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
+			// shouldn't capture data
+			if (!isTesting) {return;}
+			
 			// Calculate estimated ranges for reliable data
 			var maxMs = 60000 / (livePulse * 0.7);
 			var minMs = 60000 / (livePulse * 1.4);
@@ -144,13 +150,25 @@ class SampleProcessing {
 			// eg missed beats ie beatsInGap > 1
 						
 			// Only update hrv data if testing started, & values look to be error free	
-			var previousIntMs = getSample(mSampleIndex);		
-			if (isTesting && 
-				maxMs > intMs && 
+			
+			// special case of 1st sample as previous will be zero!
+			// make sure not stupid number
+			if (mSampleIndex == 0) {
+				if ( maxMs > intMs && minMs < intMs) { 				
+					addSample(intMs, null); 
+					Sys.println("S0 "+intMs); 
+				}
+				return;
+			}
+			
+			var previousIntMs = getSample(mSampleIndex-1);	
+			Sys.println("S p "+ previousIntMs + " i " +intMs);	
+			if (maxMs > intMs && 
 				minMs < intMs && 
 				maxMs > previousIntMs && 
 				minMs < previousIntMs) {		
 				
+				Sys.println("Sb");
 				addSample(intMs, beatsInGap);				
 				updateRunningStats(previousIntMs, intMs, livePulse);			
 			}					
@@ -159,8 +177,9 @@ class SampleProcessing {
 	function addSample( intervalMs, beatsInGap) {
 		// might assume circular buffer?
 		// input is an interval time in ms
-		// this is always last entry in buufer
-		mSampleIndex++;
+				
+		// 1st sample needs to by pass processing
+		if (beatsInGap == null) { }
 		
 		// pre process bounds for poincare plot of RR interval
 		if (intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
@@ -171,7 +190,8 @@ class SampleProcessing {
 		if ( mSampleIndex > mApp.mIntervalSampleBuffer.size()) {
 			new mApp.myException("Buffer limit reached in sample Processing");
 		}
-		mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs;		
+		mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs;	
+		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 	}
 	
@@ -195,12 +215,13 @@ class SampleProcessing {
 		dataCount++;
 	
 		if(1 < dataCount) {
+			Sys.println("S");
+			
 			// HRV is actually RMSSD
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
 			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber;
-			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();
-			
+			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
 			mSDANN = 0;
 			mSDSD = 0; 
 			mNN50 = 0;

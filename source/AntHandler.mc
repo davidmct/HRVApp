@@ -241,6 +241,7 @@ class AntHandler extends Ant.GenericChannel {
 				intMs = beatEvent - mHRData.mPrevBeatEvent;
 			}
 			
+			//Sys.println("HR->S");
 			var beatsInGap = beatCount - mHRData.mPrevBeatCount;			
 			mApp.mSampleProc.rawSampleProcessing(mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, beatsInGap );
 
