@@ -74,7 +74,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	    	Sys.println("HRVBehaviour onEnter()");
 	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ app.viewNum);
 	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.mTestControl.mState.isNotSaved);
-	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSensor.mHRData.dataCount);
+	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSampleProc.dataCount);
 	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.mTestControl.mState.isFinished);
 	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.mTestControl.mState.isTesting);
 	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);

@@ -22,9 +22,12 @@ using Toybox.System as Sys;
 //9. how to make trial version and possible payment
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
-var mDebugging = false;
+var mDebugging = true;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
+
+// access App variables and classes
+var _mApp;
 
 using Toybox.Lang;
 
@@ -108,7 +111,7 @@ class HRVApp extends App.AppBase {
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
         
-        mApp = App.getApp();
+        $._mApp = App.getApp();
          
         mStorage = new HRVStorageHandler();
         mTestControl = new TestController();
@@ -116,13 +119,13 @@ class HRVApp extends App.AppBase {
         mStorage.readProperties();  
              
 		if (Toybox.Application has :Storage) {
-			mAntID = mApp.Properties.getValue("pAuxHRAntID");
+			mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
-			mFitWriteEnabled = mApp.Properties.getValue("pFitWriteEnabled"); 		
+			mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 		
 		} else {
-			mAntID = mApp.getProperty("pAuxHRAntID");
+			mAntID = $._mApp.getProperty("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
+			mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
 		}
 		Sys.println("ANT ID set to : " + mAntID);
 		//Menu title size

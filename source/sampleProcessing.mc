@@ -162,7 +162,7 @@ class SampleProcessing {
 			}
 			
 			var previousIntMs = getSample(mSampleIndex-1);	
-			Sys.println("S p "+ previousIntMs + " i " +intMs);	
+			//Sys.println("S p "+ previousIntMs + " i " +intMs);	
 			if (maxMs > intMs && 
 				minMs < intMs && 
 				maxMs > previousIntMs && 
@@ -179,7 +179,7 @@ class SampleProcessing {
 		// input is an interval time in ms
 				
 		// 1st sample needs to by pass processing
-		if (beatsInGap == null) { }
+		//if (beatsInGap == null) { }
 		
 		// pre process bounds for poincare plot of RR interval
 		if (intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
@@ -215,7 +215,7 @@ class SampleProcessing {
 		dataCount++;
 	
 		if(1 < dataCount) {
-			Sys.println("S");
+			//Sys.println("S");
 			
 			// HRV is actually RMSSD
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
