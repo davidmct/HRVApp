@@ -126,7 +126,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
 			} else {
 				Ui.popView(Ui.SLIDE_RIGHT);
-				app.onStop(null);
+				// suspect onStop is called anyway
+				//app.onStop(null);
 			}			
 		}
 		else {

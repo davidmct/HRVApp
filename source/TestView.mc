@@ -106,8 +106,8 @@ class TestView extends Ui.View {
     	// might need to go in test controller
     	if(app.mTestControl.mState.isClosing) {
     		// stop app?????
-    		//CHECK
-			app.onStop( null );
+    		//CHECK - causes two calls as one in HRV delegate
+			//app.onStop( null );
 			popView(SLIDE_RIGHT);
 		}
     }

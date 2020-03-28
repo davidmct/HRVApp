@@ -118,6 +118,8 @@ class HRVApp extends App.AppBase {
         mTestControl = new TestController();
         mSampleProc = new SampleProcessing();
         mStorage.readProperties();  
+        
+        //mFitContributor = new AuxHRFitContributor(self);
              
 		if (Toybox.Application has :Storage) {
 			mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
@@ -196,6 +198,8 @@ class HRVApp extends App.AppBase {
     
     //! onStop() is called when your application is exiting
     function onStop(state) {
+		// this is called by both TextView and HRVBehaviour!!! so get two iterations
+		
 		if (state == null) { 		}
 	
 		mStorage.saveProperties();
@@ -274,6 +278,8 @@ class HRVApp extends App.AppBase {
 		var i;
 		var base;
 		
+		if (mNumEntries <= 0) { return;}
+		
 		if (mDebugging == true) {
 			Sys.println("DumpIntervals: mNumEntries " + mNumEntries);
 			Sys.println("DumpIntervals: mNumBlocks " + mNumBlocks);	
@@ -314,10 +320,13 @@ class HRVApp extends App.AppBase {
 		var mSize = 0; 
 		var mlivePulse = 0;
 		var heartBeatIntervals = [];
+		Sys.println("sensorData "+sensorData);
 		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
 			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
-			mlivePulse = sensorData.info.heartRate;
-		}		
+			var sensorInfo = Sensor.getInfo();
+			mlivePulse = sensorInfo.heartRate;
+		}	
+		
 		Sys.println("optical?: live "+ mlivePulse+" intervals "+heartBeatIntervals);
 	}
 	
