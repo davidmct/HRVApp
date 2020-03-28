@@ -157,7 +157,7 @@ class TestView extends Ui.View {
     	// can call onNotify with onNotify(:State_x, self, array);
     	//Sys.println("onUpdate: update fields " +app.mSampleProc.mLnRMSSD+" "+app.mSampleProc.avgPulse);
     	
-		updateLayoutField(mViewStrapTxtID, app.mSensor.mHRData.strapTxt, mapColour(app.mSensor.mHRData.strapCol));	
+	 	updateLayoutField(mViewStrapTxtID, app.mSensor.mHRData.strapTxt, mapColour(app.mSensor.mHRData.strapCol));	
 		updateLayoutField(mViewPulseTxtID, app.mSensor.mHRData.pulseTxt, mapColour(app.mSensor.mHRData.pulseCol));					
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
 		updateLayoutField(mViewResultTxtID, app.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
