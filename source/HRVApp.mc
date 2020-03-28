@@ -21,6 +21,7 @@ using Toybox.Sensor;
 //7. History and HRV plot over time views
 //8. change summary page to include rMSSD SSRR(10, 20...), skipped or double beats
 //9. how to make trial version and possible payment
+//10. Revise ANT/Sensor handling to provide choice between them!!
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = true;
@@ -149,6 +150,10 @@ class HRVApp extends App.AppBase {
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
 
+// Move this to Sensor handling
+// onStartSensor(mAntID) .. do we need to wrap a new class around AntHandler and AntHandler extends that
+// then can have either route
+// Also need menu option...
    		// Start up ANT device
 	    try {
 	    	//Create the sensor object and open it
@@ -160,7 +165,8 @@ class HRVApp extends App.AppBase {
 	    }
 	    
 	    // set if we can find both ant and optical
-	    SensorSetup();
+	    //SensorSetup();
+// end stuff to move
 	    
 	    if (mDebugging) {
 	    	Sys.println("AUX sensor created: " + mSensor);
@@ -302,32 +308,6 @@ class HRVApp extends App.AppBase {
 			mString += mIntervalSampleBuffer[base+i].toString()+",";				
 		}	
 		Sys.println(mString);
-	}
-	
-	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
-	// 3.0.0 on feature
-	function SensorSetup() {
-		var options = {
-			:period => 1, 	// 1 second data packets
-			:heartBeatIntervals => {:enabled => true}
-		};
-		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
-		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
-	}
-	
-	// call back for HR data
-	function onHeartRateData( sensorData) {
-		var mSize = 0; 
-		var mlivePulse = 0;
-		var heartBeatIntervals = [];
-		Sys.println("sensorData "+sensorData);
-		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
-			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
-			var sensorInfo = Sensor.getInfo();
-			mlivePulse = sensorInfo.heartRate;
-		}	
-		
-		Sys.println("optical?: live "+ mlivePulse+" intervals "+heartBeatIntervals);
 	}
 	
 }

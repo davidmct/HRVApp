@@ -260,5 +260,38 @@ class AntHandler extends Ant.GenericChannel {
 		mHRData.mPrevBeatEvent = beatEvent;
 		//Sys.println("HRSampleProcessing - end");
 	}
+ 
+ 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
+	// 3.0.0 on feature
+	function SensorSetup() {
+		var options = {
+			:period => 1, 	// 1 second data packets
+			:heartBeatIntervals => {:enabled => true}
+		};
+		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
+		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
+	}
+	
+	// call back for HR data
+	function onHeartRateData( sensorData) {
+		var mSize = 0; 
+		var mlivePulse = 0;
+		var heartBeatIntervals = [];
+		Sys.println("sensorData "+sensorData);
+		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
+			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
+			// send each datum to processing here...
+			
+			var sensorInfo = Sensor.getInfo();
+			if (sensorInfo == null || sensorInfo.heartRate == null) {
+				// flag no data and 
+				mlivePulse = 0;
+			} else {
+				mlivePulse = sensorInfo.heartRate;
+			}
+		}	
+		
+		Sys.println("optical?: live "+ mlivePulse+" intervals "+heartBeatIntervals);
+	}
     
 }
