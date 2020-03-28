@@ -27,13 +27,6 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_LEFT );  
         }
-        else if ( id.equals("breathe"))  { 
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Breathe")});
-	        menu.addItem(new Ui.MenuItem("Inhale", null, "inhale", null));
-	        menu.addItem(new Ui.MenuItem("Exhale", null, "exhale", null));
-	        menu.addItem(new Ui.MenuItem("Relax", null, "relax", null));	        
-	        Ui.pushView(menu, new BreatheMenuDelegate(), Ui.SLIDE_LEFT );
-        }
         else if ( id.equals("colour"))   {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
 	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));

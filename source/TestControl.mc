@@ -32,6 +32,9 @@ enum {
 	//Test types
 	TYPE_MANUAL = 0,  //runs as long as useer wants up to max time
 	TYPE_TIMER = 1,   // to 5 mins and can be changed down or to max-time
+	
+	SENSOR_INTERNAL = 0, // false
+	SENSOR_SEARCH = 1 // true
 }	
 
 class TestController {
@@ -322,20 +325,7 @@ class TestController {
     	else if(mState.isTesting) {
     		if (mDebugging == true) {Sys.println("TestControl: isTesting branch");}
     		
-    		// get rid of this and just show text box saying breathe calmly
-    		// aslo remove menu option
-    		
-    		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			var cycle = 1 + testTime % ($._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet + $._mApp.relaxTimeSet);
-			if(cycle <= $._mApp.inhaleTimeSet) {
-				msgTxt = "Inhale through nose " + cycle;
-			}
-			else if(cycle <= $._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet) {
-				msgTxt = "Exhale out mouth " + (cycle - $._mApp.inhaleTimeSet);
-			}
-			else {
-				msgTxt = "Relax " + (cycle - ($._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet));
-			}
+    		msgTxt = "Breathe regularly";
 
 			if(TYPE_TIMER == testType) {
 				// reduce time left

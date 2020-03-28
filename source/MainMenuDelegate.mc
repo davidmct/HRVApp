@@ -26,11 +26,24 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Timer, "Timer", (TYPE_TIMER== mTestSelected)) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
+     	else if( id.equals("source")) {
+
+  			var mTestSelected = $._mApp.testTypeSet;		
+		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
+		    	{
+		        :focusItemHeight=>45,
+		        :foreground=>new Rez.Drawables.MenuForeground_id(),
+		        :title=>new DrawableMenuTitle("Source"),
+		        :footer=>new DrawableMenuFooter()
+		    	});
+		    customMenu.addItem(new CustomItem(:Internal, "Internal", false) );
+		    customMenu.addItem(new CustomItem(:Search, "Search", true) );				
+     		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
+        }
         else if( id.equals("settings") ) {
         	// create long sub-menus
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
 	        menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
-	        menu.addItem(new Ui.MenuItem("Breathe Cycle", null, "breathe", null));
 	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
 	        menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
 	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));

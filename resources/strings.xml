@@ -5,6 +5,8 @@
 	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledTitle">FIT File Write</string> 
 	<string id="mFitWriteEnabledPrompt">Set  true to write FIR file</string>
+	<string id="pSensorSelectTitle">Use connect HRM?</string> 
+	<string id="pSensorSelectPrompt">True for internal else unknown strap</string>
 	<string id="soundSetTitle">Sound?</string>
 	<string id="soundSetPrompt">On or Off</string>
 	<string id="vibeSetTitle">Vibrate?</string>
@@ -14,13 +16,6 @@
 	<string id="TimeTooLargeError">Maximum value is 300 seconds</string>
 	<string id="ManualTimeSetTitle">Manual test time</string> 
 	<string id="ManualTimeSetPrompt">Maximum allowed manual time seconds</string>
-	<string id="inhaleTimeSetTitle">Inhale time</string> 
-	<string id="inhaleTimeSetPrompt">Length of inhale - seconds</string>
-	<string id="BreatheTimeError">Length > 10 seconds</string>
-	<string id="exhaleTimeSetTitle">Exhale time</string>
-	<string id="exhaleTimeSetPrompt">Length of exhale - seconds</string>
-	<string id="relaxTimeSetTitle">Relax time </string>
-	<string id="relaxTimeSetPrompt">Length of relax - seconds</string>
 	<string id="bgColSetTitle">Background colour</string>
 	<string id="bgColSetPrompt">Pick Colour</string>
 	<string id="WHITE">WHITE</string>

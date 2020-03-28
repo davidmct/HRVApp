@@ -42,7 +42,8 @@ class HRVStorageHandler {
 			// use Storage.get/setValue("", value) for storage or properties not used in settings			
 			$._mApp.Properties.setValue("pAuxHRAntID", 0);
 			Storage.setValue("firstLoadEver", true);
-			Storage.setValue("pFitWriteEnabled", false);
+			$._mApp.Properties.setValue("pFitWriteEnabled", false);
+			$._mApp.Properties.setValue("pSensorSelect", true);
 			$._mApp.Properties.setValue("soundSet", true);
 			$._mApp.Properties.setValue("vibeSet", false);
 			$._mApp.Properties.setValue("testTypeSet", 0);
@@ -55,14 +56,12 @@ class HRVStorageHandler {
 			$._mApp.Properties.setValue("hrvColSet", 10);
 			$._mApp.Properties.setValue("avgHrvColSet", 12);
 			$._mApp.Properties.setValue("pulseColSet", 13);
-			$._mApp.Properties.setValue("avgPulseColSet", 6);
-			$._mApp.Properties.setValue("inhaleTimeSet", 4);
-			$._mApp.Properties.setValue("exhaleTimeSet", 4);
-			$._mApp.Properties.setValue("relaxTimeSet", 2);				
+			$._mApp.Properties.setValue("avgPulseColSet", 6);		
 		} else {
 			$._mApp.setProperty("pAuxHRAntID", 0);
 			$._mApp.setProperty("firstLoadEver", true);
 			$._mApp.setProperty("pFitWriteEnabled", false);
+			$._mApp.setProperty("pSensorSelect", true);
 			$._mApp.setProperty("soundSet", true);
 			$._mApp.setProperty("vibeSet", false);
 			$._mApp.setProperty("testTypeSet", 0);
@@ -75,10 +74,7 @@ class HRVStorageHandler {
 			$._mApp.setProperty("hrvColSet", 10);
 			$._mApp.setProperty("avgHrvColSet", 12);
 			$._mApp.setProperty("pulseColSet", 13);
-			$._mApp.setProperty("avgPulseColSet", 6);
-			$._mApp.setProperty("inhaleTimeSet", 4);
-			$._mApp.setProperty("exhaleTimeSet", 4);
-			$._mApp.setProperty("relaxTimeSet", 2);			
+			$._mApp.setProperty("avgPulseColSet", 6);		
 		}
 	
 		// now load up variables
@@ -117,6 +113,7 @@ class HRVStorageHandler {
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
+			$._mApp.sensorType = $._mApp.getProperty("pSensorSelect");	
 			$._mApp.soundSet = $._mApp.getProperty("soundSet");
 			$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
 			$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
@@ -132,9 +129,6 @@ class HRVStorageHandler {
 			$._mApp.pulseColSet = $._mApp.getProperty("pulseColSet").toNumber();
 			$._mApp.avgPulseColSet = $._mApp.getProperty("avgPulseColSet").toNumber();
 	
-			$._mApp.inhaleTimeSet = $._mApp.getProperty("inhaleTimeSet").toNumber();
-			$._mApp.exhaleTimeSet = $._mApp.getProperty("exhaleTimeSet").toNumber();
-			$._mApp.relaxTimeSet = $._mApp.getProperty("relaxTimeSet").toNumber();	
 		//}
 	}
 	
@@ -153,7 +147,8 @@ class HRVStorageHandler {
 			$._mApp.timestampSet = Storage.getValue("timestampSet");
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			$._mApp.mFitWriteEnabled = Storage.getValue("pFitWriteEnabled");
+			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
+			$._mApp.sensorType = $._mApp.Properties.getValue("pSensorSelect");
 			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
 			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
 			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet").toNumber();
@@ -169,15 +164,13 @@ class HRVStorageHandler {
 			$._mApp.avgHrvColSet = $._mApp.Properties.getValue("avgHrvColSet").toNumber();
 			$._mApp.pulseColSet = $._mApp.Properties.getValue("pulseColSet").toNumber();
 			$._mApp.avgPulseColSet = $._mApp.Properties.getValue("avgPulseColSet").toNumber();	
-			$._mApp.inhaleTimeSet = $._mApp.Properties.getValue("inhaleTimeSet").toNumber();
-			$._mApp.exhaleTimeSet = $._mApp.Properties.getValue("exhaleTimeSet").toNumber();
-			$._mApp.relaxTimeSet = $._mApp.Properties.getValue("relaxTimeSet").toNumber();	
 		//}	
 	}
 	
 	function _CallSavePropStorage() {
 		Storage.setValue("timestampSet", $._mApp.timestampSet);
-		Storage.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
+		$._mApp.Properties.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
+		$._mApp.Properties.setValue("pSensorSelect", $._mApp.sensorType);
 		
 		// user changable
 		$._mApp.Properties.setValue("soundSet", $._mApp.soundSet);
@@ -195,15 +188,14 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("avgHrvColSet", $._mApp.avgHrvColSet);
 		$._mApp.Properties.setValue("pulseColSet", $._mApp.pulseColSet);
 		$._mApp.Properties.setValue("avgPulseColSet", $._mApp.avgPulseColSet);	
-		$._mApp.Properties.setValue("inhaleTimeSet", $._mApp.inhaleTimeSet);
-		$._mApp.Properties.setValue("exhaleTimeSet", $._mApp.exhaleTimeSet);
-		$._mApp.Properties.setValue("relaxTimeSet", $._mApp.relaxTimeSet);			
+		
 	}
 	
 	function _CallSavePropProperty() {
 		$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
 		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
-		
+		$._mApp.setProperty("pSensorSelect", $._mApp.mFitWriteEnabled);
+
 		$._mApp.setProperty("soundSet", $._mApp.soundSet);
 		$._mApp.setProperty("vibeSet", $._mApp.vibeSet);
 		$._mApp.setProperty("testTypeSet", $._mApp.testTypeSet);
@@ -219,9 +211,7 @@ class HRVStorageHandler {
 		$._mApp.setProperty("avgHrvColSet", $._mApp.avgHrvColSet);
 		$._mApp.setProperty("pulseColSet", $._mApp.pulseColSet);
 		$._mApp.setProperty("avgPulseColSet", $._mApp.avgPulseColSet);	
-		$._mApp.setProperty("inhaleTimeSet", $._mApp.inhaleTimeSet);
-		$._mApp.setProperty("exhaleTimeSet", $._mApp.exhaleTimeSet);
-		$._mApp.setProperty("relaxTimeSet", $._mApp.relaxTimeSet);	
+
 	}
 
 	function resetResults() {

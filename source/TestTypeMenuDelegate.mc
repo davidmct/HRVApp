@@ -31,6 +31,16 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }
+        else if( mId == :Internal)  {
+            $._mApp.sensorType = SENSOR_INTERNAL;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);   
+        }
+        else if( mId == :Search)  {
+            $._mApp.sensorType= SENSOR_SEARCH;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);   
+        }
         
         // this should turn item blue...
         Sys.println("calling request update in TestTypeMenuDelegate");       

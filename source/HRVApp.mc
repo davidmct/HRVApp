@@ -83,12 +83,9 @@ class HRVApp extends App.AppBase {
 	var avgHrvColSet;
 	var pulseColSet;
 	var avgPulseColSet;
-
-	var inhaleTimeSet;
-	var exhaleTimeSet;
-	var relaxTimeSet;
 	
 	var mMenuTitleSize;
+	var sensorType;
 
 	// Results array variable
 	var results;

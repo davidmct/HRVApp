@@ -4,6 +4,9 @@
 	</setting>	
 	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWriteEnabledTitle" prompt="@Strings.mFitWriteEnabledPrompt">
 		<settingConfig type="boolean" />
+	</setting>	
+	<setting propertyKey="@Properties.pSensorSelect" title="@Strings.pSensorSelectTitle" prompt="@Strings.pSensorSelectPrompt">
+		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetTitle" prompt="@Strings.soundSetPrompt">
 		<settingConfig type="boolean" />
@@ -16,16 +19,6 @@
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.ManualTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
-	</setting>	
-	
-	<setting propertyKey="@Properties.inhaleTimeSet" title="@Strings.inhaleTimeSetTitle" prompt="@Strings.inhaleTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
-	</setting>		
-	<setting propertyKey="@Properties.exhaleTimeSet" title="@Strings.exhaleTimeSetTitle" prompt="@Strings.exhaleTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
-	</setting>		
-	<setting propertyKey="@Properties.relaxTimeSet" title="@Strings.relaxTimeSetTitle" prompt="@Strings.relaxTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="10" errorMessage="@Strings.BreatheTimeError" />
 	</setting>		
 		
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
