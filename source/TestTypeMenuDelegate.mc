@@ -19,16 +19,15 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
     }   
  
     function onSelect(item) {
-		var app = App.getApp();
 		var mId = item.getId();
 		
 		if( mId == :Manual) {
-            app.testTypeSet = TYPE_MANUAL;
+            $._mApp.testTypeSet = TYPE_MANUAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);           
         }
         else if( mId == :Timer)  {
-            app.testTypeSet = TYPE_TIMER;
+            $._mApp.testTypeSet = TYPE_TIMER;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }

@@ -30,9 +30,8 @@ class PoincareView extends Ui.View {
 
 	hidden var floorVar;
 	hidden var scaleVar;
-	var app;
 
-	function initialize() { app = App.getApp(); View.initialize();}
+	function initialize() { View.initialize();}
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
@@ -67,12 +66,12 @@ class PoincareView extends Ui.View {
 			var ii = i * 5;
 
 			// Only process if newer than epoch
-			if(epoch <= app.results[ii]) {
+			if(epoch <= $._mApp.results[ii]) {
 
 				// Get range
 				for(var iii = 1; iii <= 4; iii++) {
 
-					var value = app.results[ii + iii];
+					var value = $._mApp.results[ii + iii];
 
 					if(min > value) {
 						min = value;
@@ -126,18 +125,18 @@ class PoincareView extends Ui.View {
 	    var line1Y = 60;
 	    var line2Y = 90;
 
-	    if(FENIX == app.device) {
+	    if(FENIX == $._mApp.device) {
 			line1Y = 94;
 			line2Y = 124;
 		}
 
 		// add code here
 		// Draw the view
-		//MapSetColour(dc, app.txtColSet, app.bgColSet);
+		//MapSetColour(dc, $._mApp.txtColSet, $._mApp.bgColSet);
 		dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_BLACK);
 		dc.clear();
 		dc.drawText(100, 80, Gfx.FONT_MEDIUM, "POINCARE", Gfx.TEXT_JUSTIFY_CENTER); 
-		dc.drawText(100, 150, Gfx.FONT_MEDIUM, app.mSensor.mHRData.livePulse.toString(), Gfx.TEXT_JUSTIFY_CENTER); 
+		dc.drawText(100, 150, Gfx.FONT_MEDIUM, $._mApp.mSensor.mHRData.livePulse.toString(), Gfx.TEXT_JUSTIFY_CENTER); 
 		
 		//Sys.println("In POINCARE VIEW");
 		

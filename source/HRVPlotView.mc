@@ -19,8 +19,6 @@ class HrvPlotView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-    	var app = App.getApp();
-
     	// Default layout settings
 	    var titleFont = 4;		// Gfx.FONT_LARGE
 		var meridiemFont = 3;	// Gfx.FONT_MEDIUM
@@ -34,12 +32,12 @@ class HrvPlotView extends Ui.View {
 	    var col1 = 102;
 
 	    // Customize layout for device. Defaults = Epix & Vivo
-        if(FORERUNNER == app.device) {
+        if(FORERUNNER == $._mApp.device) {
 			titleY = 128;
 			meridiemX = 4;
 			meridiemY = 75;
         }
-        else if(FENIX == app.device) {
+        else if(FENIX == $._mApp.device) {
         	meridiemFont = 2;		// Gfx.FONT_SMALL
 			timeY = 104;
 			titleY = 176;
@@ -48,7 +46,7 @@ class HrvPlotView extends Ui.View {
 			line1Y = 94;
 			line2Y = 124;
 			col1 = 109;
-        } else if(FENIX6 == app.device) {
+        } else if(FENIX6 == $._mApp.device) {
         	meridiemFont = 2;		// Gfx.FONT_SMALL
 			timeY = 104;
 			titleY = 176;
@@ -98,21 +96,21 @@ class HrvPlotView extends Ui.View {
 		var col2 = col1 + meridiemX + textW / 2;
 
 		// Draw the view
-		MapSetColour(dc, TRANSPARENT, app.bgColSet);
+		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		dc.clear();
 
 		// Draw the lines
-		MapSetColour(dc, app.lblColSet, app.bgColSet);
+		MapSetColour(dc, $._mApp.lblColSet, $._mApp.bgColSet);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 
 		// Fix for Forerunner. Text doesn't leave gap to lines
-		if(FORERUNNER == app.device) {
+		if(FORERUNNER == $._mApp.device) {
 			var x = (dc.getWidth() / 2) - (textW / 2) - 3;
-			MapSetColour(dc, app.bgColSet, app.bgColSet);
+			MapSetColour(dc, $._mApp.bgColSet, $._mApp.bgColSet);
 			dc.drawLine(x, line1Y, x + textW + 6, line1Y);
 			dc.drawLine(x, line2Y, x + textW + 6, line2Y);
-			MapSetColour(dc, lblColSet, app.bgColSet);
+			MapSetColour(dc, lblColSet, $._mApp.bgColSet);
         }
 
 		dc.drawText(col1, timeY, numFont, timeStr, just);

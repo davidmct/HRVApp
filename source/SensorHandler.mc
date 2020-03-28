@@ -22,7 +22,6 @@ class AntHandler extends Ant.GenericChannel {
     const DEVICE_TYPE = 120;  //strap
     const PERIOD = 8070; // 4x per second
     
-    var mApp;
     var mHRData;
     var deviceCfg;
     hidden var mMessageCount=0;
@@ -44,10 +43,7 @@ class AntHandler extends Ant.GenericChannel {
 		var mPrevBeatCount;
 		var mPrevBeatEvent;
 		
-		hidden var appLnk;
-		
-    	function initialize(app) {
-        	appLnk = app;
+    	function initialize() {
         	isChOpen = false;
     		isAntRx = false;
 			isStrapRx = false;
@@ -65,15 +61,15 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		
 		function resetTestVariables() {
-			appLnk.mSampleProc.resetHRVData();
+			$._mApp.mSampleProc.resetHRVData();
 		} 
     }
 	
 	function initialize(mAntID) {
-    	mApp = Application.getApp();
+    	//mApp = Application.getApp();
     	mSearching = true;
   	
-    	mHRData = new HRStatus(mApp);
+    	mHRData = new HRStatus();
     	// Strap & pulse indicators
     	mHRData.strapCol = RED;
     	mHRData.pulseCol = RED;
@@ -243,7 +239,7 @@ class AntHandler extends Ant.GenericChannel {
 			
 			//Sys.println("HR->S");
 			var beatsInGap = beatCount - mHRData.mPrevBeatCount;			
-			mApp.mSampleProc.rawSampleProcessing(mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, beatsInGap );
+			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, beatsInGap );
 
 		} else {
 			// either no longer have a pulse or Count not changing
@@ -260,9 +256,15 @@ class AntHandler extends Ant.GenericChannel {
 		mHRData.mPrevBeatEvent = beatEvent;
 		//Sys.println("HRSampleProcessing - end");
 	}
+}
  
+class InternalSensor {
  	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
 	// 3.0.0 on feature
+	
+	function initialize(){
+	
+	}
 	function SensorSetup() {
 		var options = {
 			:period => 1, 	// 1 second data packets
@@ -292,6 +294,5 @@ class AntHandler extends Ant.GenericChannel {
 		}	
 		
 		Sys.println("optical?: live "+ mlivePulse+" intervals "+heartBeatIntervals);
-	}
-    
+	}  
 }

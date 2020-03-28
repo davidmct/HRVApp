@@ -4,12 +4,9 @@ using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
 class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
-
-    var app;
     
     function initialize() {
 		BehaviorDelegate.initialize();
-		app = App.getApp();
 	}
       
     function onSelect() {
@@ -24,13 +21,13 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	
 	function onNextPage() {
 		// down or swipe UP
-		Ui.switchToView(app.plusView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_LEFT));
+		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_LEFT));
 		return true;
     }
 
     function onPreviousPage() {
 		// Up or swipe down
-		Ui.switchToView(app.subView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_RIGHT));
+		Ui.switchToView($._mApp.subView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_RIGHT));
 		return true;
     }
 
@@ -56,12 +53,12 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     function slide(direction) {
 
-    	//if((Ui.SLIDE_LEFT == direction || Ui.SLIDE_UP == direction) && GRAPH_VIEW == app.viewNum) {
-    	if(Ui.SLIDE_LEFT == direction && HISTORY_VIEW == app.viewNum) {
+    	//if((Ui.SLIDE_LEFT == direction || Ui.SLIDE_UP == direction) && GRAPH_VIEW == $._mApp.viewNum) {
+    	if(Ui.SLIDE_LEFT == direction && HISTORY_VIEW == $._mApp.viewNum) {
     		return Ui.SLIDE_IMMEDIATE;
 		}
-    	//else if((Ui.SLIDE_RIGHT == direction || Ui.SLIDE_DOWN == direction) && GRAPH_VIEW == app.viewNum) {
-    	else if(Ui.SLIDE_RIGHT == direction && HISTORY_VIEW == app.viewNum) {
+    	//else if((Ui.SLIDE_RIGHT == direction || Ui.SLIDE_DOWN == direction) && GRAPH_VIEW == $._mApp.viewNum) {
+    	else if(Ui.SLIDE_RIGHT == direction && HISTORY_VIEW == $._mApp.viewNum) {
     		return Ui.SLIDE_IMMEDIATE;
     	}
     	else {
@@ -72,23 +69,23 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     function onEnter() {
     	if (mDebugging) {
 	    	Sys.println("HRVBehaviour onEnter()");
-	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ app.viewNum);
-	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + app.mTestControl.mState.isNotSaved);
-	    	Sys.println("HRVBehaviour onEnter(): datacount " + app.mSampleProc.dataCount);
-	    	Sys.println("HRVBehaviour onEnter(): isFinished " + app.mTestControl.mState.isFinished);
-	    	Sys.println("HRVBehaviour onEnter(): isTesting " + app.mTestControl.mState.isTesting);
-	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + app.mSensor.mHRData.isAntRx);
-	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + app.mSensor.mHRData.isChOpen);
+	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ $._mApp.viewNum);
+	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
+	    	Sys.println("HRVBehaviour onEnter(): datacount " + $._mApp.mSampleProc.dataCount);
+	    	Sys.println("HRVBehaviour onEnter(): isFinished " + $._mApp.mTestControl.mState.isFinished);
+	    	Sys.println("HRVBehaviour onEnter(): isTesting " + $._mApp.mTestControl.mState.isTesting);
+	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
+	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
 	    }
     	// 
-		if(app.viewNum != TEST_VIEW) {
+		if($._mApp.viewNum != TEST_VIEW) {
 			Sys.println("HRVBehaviour onEnter() - switch to test view");
-			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
 		else {
 			// in test view so means stop or start test
-			var res = app.HRVStateChange(:enterPressed);
+			var res = $._mApp.HRVStateChange(:enterPressed);
 			if (res == true) {
 				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
@@ -116,8 +113,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     }
 
 	function onEscape() {
-		if(TEST_VIEW == app.viewNum) {
-			var res = app.HRVStateChange(:escapePressed);
+		if(TEST_VIEW == $._mApp.viewNum) {
+			var res = $._mApp.HRVStateChange(:escapePressed);
 			if (res == true) {		
 				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
@@ -127,11 +124,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			} else {
 				Ui.popView(Ui.SLIDE_RIGHT);
 				// suspect onStop is called anyway
-				//app.onStop(null);
+				//$._mApp.onStop(null);
 			}			
 		}
 		else {
-			Ui.switchToView(app.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 		}
 		return true;
 	}
@@ -142,10 +139,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	
 	function setSave(value) {
 		if (value == "optOne") { 
-            app.mTestControl.saveTest();
+            $._mApp.mTestControl.saveTest();
         }
         else {
-        	app.mTestControl.discardTest();
+        	$._mApp.mTestControl.discardTest();
         }		
     }
 	
@@ -155,11 +152,9 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 class DrawableMenuTitle extends Ui.Drawable {
     var mIsTitleSelected = false;
     hidden var mTitle = "unset";
-    hidden var app;
 
     function initialize(label) {
         Drawable.initialize({});
-        app = App.getApp();
         mTitle = label;
     }
 
@@ -172,7 +167,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         var spacing = 2;
         var appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
         var bitmapWidth = appIcon.getWidth();
-        var labelWidth = dc.getTextWidthInPixels(mTitle, app.mMenuTitleSize);
+        var labelWidth = dc.getTextWidthInPixels(mTitle, $._mApp.mMenuTitleSize);
 
         var bitmapX = (dc.getWidth() - (bitmapWidth + spacing + labelWidth)) / 2;
         var bitmapY = (dc.getHeight() - appIcon.getHeight()) / 2;
@@ -185,6 +180,6 @@ class DrawableMenuTitle extends Ui.Drawable {
 
         dc.drawBitmap(bitmapX, bitmapY, appIcon);
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(labelX, labelY, app.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(labelX, labelY, $._mApp.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 }

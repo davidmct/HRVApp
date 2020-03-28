@@ -21,11 +21,8 @@ class HRVStorageHandler {
 // Storage.clearValues();
 // then save default set of properties
 
-	var mApp;
-
 	// setup storage functions	
     function initialize() {
-    	mApp = App.getApp();
     	// create buffers here? use function so external can call parts
     	
     }
@@ -43,45 +40,45 @@ class HRVStorageHandler {
 	
 		if (Toybox.Application has :Storage) {
 			// use Storage.get/setValue("", value) for storage or properties not used in settings			
-			mApp.Properties.setValue("pAuxHRAntID", 0);
+			$._mApp.Properties.setValue("pAuxHRAntID", 0);
 			Storage.setValue("firstLoadEver", true);
 			Storage.setValue("pFitWriteEnabled", false);
-			mApp.Properties.setValue("soundSet", true);
-			mApp.Properties.setValue("vibeSet", false);
-			mApp.Properties.setValue("testTypeSet", 0);
-			mApp.Properties.setValue("timerTimeSet", 300);
-			mApp.Properties.setValue("MaxTimerTimeSet", 300);
-			mApp.Properties.setValue("ManualTimeSet", 300);
-			mApp.Properties.setValue("bgColSet", 3);
-			mApp.Properties.setValue("lblColSet", 10);
-			mApp.Properties.setValue("txtColSet", 13);
-			mApp.Properties.setValue("hrvColSet", 10);
-			mApp.Properties.setValue("avgHrvColSet", 12);
-			mApp.Properties.setValue("pulseColSet", 13);
-			mApp.Properties.setValue("avgPulseColSet", 6);
-			mApp.Properties.setValue("inhaleTimeSet", 4);
-			mApp.Properties.setValue("exhaleTimeSet", 4);
-			mApp.Properties.setValue("relaxTimeSet", 2);				
+			$._mApp.Properties.setValue("soundSet", true);
+			$._mApp.Properties.setValue("vibeSet", false);
+			$._mApp.Properties.setValue("testTypeSet", 0);
+			$._mApp.Properties.setValue("timerTimeSet", 300);
+			$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
+			$._mApp.Properties.setValue("ManualTimeSet", 300);
+			$._mApp.Properties.setValue("bgColSet", 3);
+			$._mApp.Properties.setValue("lblColSet", 10);
+			$._mApp.Properties.setValue("txtColSet", 13);
+			$._mApp.Properties.setValue("hrvColSet", 10);
+			$._mApp.Properties.setValue("avgHrvColSet", 12);
+			$._mApp.Properties.setValue("pulseColSet", 13);
+			$._mApp.Properties.setValue("avgPulseColSet", 6);
+			$._mApp.Properties.setValue("inhaleTimeSet", 4);
+			$._mApp.Properties.setValue("exhaleTimeSet", 4);
+			$._mApp.Properties.setValue("relaxTimeSet", 2);				
 		} else {
-			mApp.setProperty("pAuxHRAntID", 0);
-			mApp.setProperty("firstLoadEver", true);
-			mApp.setProperty("pFitWriteEnabled", false);
-			mApp.setProperty("soundSet", true);
-			mApp.setProperty("vibeSet", false);
-			mApp.setProperty("testTypeSet", 0);
-			mApp.setProperty("timerTimeSet", 300);
-			mApp.setProperty("MaxTimerTimeSet", 300);
-			mApp.setProperty("ManualTimeSet", 300);
-			mApp.setProperty("bgColSet", 3);
-			mApp.setProperty("lblColSet", 10);
-			mApp.setProperty("txtColSet", 13);
-			mApp.setProperty("hrvColSet", 10);
-			mApp.setProperty("avgHrvColSet", 12);
-			mApp.setProperty("pulseColSet", 13);
-			mApp.setProperty("avgPulseColSet", 6);
-			mApp.setProperty("inhaleTimeSet", 4);
-			mApp.setProperty("exhaleTimeSet", 4);
-			mApp.setProperty("relaxTimeSet", 2);			
+			$._mApp.setProperty("pAuxHRAntID", 0);
+			$._mApp.setProperty("firstLoadEver", true);
+			$._mApp.setProperty("pFitWriteEnabled", false);
+			$._mApp.setProperty("soundSet", true);
+			$._mApp.setProperty("vibeSet", false);
+			$._mApp.setProperty("testTypeSet", 0);
+			$._mApp.setProperty("timerTimeSet", 300);
+			$._mApp.setProperty("MaxTimerTimeSet", 300);
+			$._mApp.setProperty("ManualTimeSet", 300);
+			$._mApp.setProperty("bgColSet", 3);
+			$._mApp.setProperty("lblColSet", 10);
+			$._mApp.setProperty("txtColSet", 13);
+			$._mApp.setProperty("hrvColSet", 10);
+			$._mApp.setProperty("avgHrvColSet", 12);
+			$._mApp.setProperty("pulseColSet", 13);
+			$._mApp.setProperty("avgPulseColSet", 6);
+			$._mApp.setProperty("inhaleTimeSet", 4);
+			$._mApp.setProperty("exhaleTimeSet", 4);
+			$._mApp.setProperty("relaxTimeSet", 2);			
 		}
 	
 		// now load up variables
@@ -109,35 +106,35 @@ class HRVStorageHandler {
 		//var value;
 		
 		// FORCE NOT OVER WRITE
-		//value = mApp.getProperty("firstLoadEver");
+		//value = $._mApp.getProperty("firstLoadEver");
 		//if (mDebugging == true) {value = null;}
 			
 		//if (value == null) {
-		//	mApp.setProperty("firstLoadEver", true);
+		//	$._mApp.setProperty("firstLoadEver", true);
 		//} else {
 			// assumes all these values exist
-			mApp.timestampSet = mApp.getProperty("timestampSet");
-			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mApp.mFitWriteEnabled = mApp.getProperty("pFitWriteEnabled");
-			mApp.soundSet = mApp.getProperty("soundSet");
-			mApp.vibeSet = mApp.getProperty("vibeSet");
-			mApp.testTypeSet = mApp.getProperty("testTypeSet").toNumber();
-			mApp.timerTimeSet = mApp.getProperty("timerTimeSet").toNumber();
-			mApp.mMaxTimerTimeSet = mApp.getProperty("MaxTimerTimeSet").toNumber();
-			mApp.mManualTimeSet = mApp.getProperty("ManualTimeSet").toNumber();	      
+			$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
+			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+			$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
+			$._mApp.soundSet = $._mApp.getProperty("soundSet");
+			$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
+			$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
+			$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
+			$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
+			$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
 			// ColSet are index into colour map
-			mApp.bgColSet = mApp.getProperty("bgColSet").toNumber();
-			mApp.lblColSet = mApp.getProperty("lblColSet").toNumber();
-			mApp.txtColSet = mApp.getProperty("txtColSet").toNumber();
-			mApp.hrvColSet = mApp.getProperty("hrvColSet").toNumber();
-			mApp.avgHrvColSet = mApp.getProperty("avgHrvColSet").toNumber();
-			mApp.pulseColSet = mApp.getProperty("pulseColSet").toNumber();
-			mApp.avgPulseColSet = mApp.getProperty("avgPulseColSet").toNumber();
+			$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
+			$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
+			$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
+			$._mApp.hrvColSet = $._mApp.getProperty("hrvColSet").toNumber();
+			$._mApp.avgHrvColSet = $._mApp.getProperty("avgHrvColSet").toNumber();
+			$._mApp.pulseColSet = $._mApp.getProperty("pulseColSet").toNumber();
+			$._mApp.avgPulseColSet = $._mApp.getProperty("avgPulseColSet").toNumber();
 	
-			mApp.inhaleTimeSet = mApp.getProperty("inhaleTimeSet").toNumber();
-			mApp.exhaleTimeSet = mApp.getProperty("exhaleTimeSet").toNumber();
-			mApp.relaxTimeSet = mApp.getProperty("relaxTimeSet").toNumber();	
+			$._mApp.inhaleTimeSet = $._mApp.getProperty("inhaleTimeSet").toNumber();
+			$._mApp.exhaleTimeSet = $._mApp.getProperty("exhaleTimeSet").toNumber();
+			$._mApp.relaxTimeSet = $._mApp.getProperty("relaxTimeSet").toNumber();	
 		//}
 	}
 	
@@ -153,86 +150,86 @@ class HRVStorageHandler {
 		//if (value == null) {
 			//Storage.setValue("firstLoadEver", true);
 		//} else {	
-			mApp.timestampSet = Storage.getValue("timestampSet");
-			mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mApp.mFitWriteEnabled = Storage.getValue("pFitWriteEnabled");
-			mApp.soundSet = mApp.Properties.getValue("soundSet");
-			mApp.vibeSet = mApp.Properties.getValue("vibeSet");
-			mApp.testTypeSet = mApp.Properties.getValue("testTypeSet").toNumber();
-			mApp.timerTimeSet = mApp.Properties.getValue("timerTimeSet").toNumber();
-			mApp.mMaxTimerTimeSet = mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
-			mApp.mManualTimeSet = mApp.Properties.getValue("ManualTimeSet").toNumber();
+			$._mApp.timestampSet = Storage.getValue("timestampSet");
+			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+			$._mApp.mFitWriteEnabled = Storage.getValue("pFitWriteEnabled");
+			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
+			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
+			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet").toNumber();
+			$._mApp.timerTimeSet = $._mApp.Properties.getValue("timerTimeSet").toNumber();
+			$._mApp.mMaxTimerTimeSet = $._mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
+			$._mApp.mManualTimeSet = $._mApp.Properties.getValue("ManualTimeSet").toNumber();
 	      
 			// ColSet are index into colour map
-			mApp.bgColSet = mApp.Properties.getValue("bgColSet").toNumber();
-			mApp.lblColSet = mApp.Properties.getValue("lblColSet").toNumber();
-			mApp.txtColSet = mApp.Properties.getValue("txtColSet").toNumber();
-			mApp.hrvColSet = mApp.Properties.getValue("hrvColSet").toNumber();
-			mApp.avgHrvColSet = mApp.Properties.getValue("avgHrvColSet").toNumber();
-			mApp.pulseColSet = mApp.Properties.getValue("pulseColSet").toNumber();
-			mApp.avgPulseColSet = mApp.Properties.getValue("avgPulseColSet").toNumber();	
-			mApp.inhaleTimeSet = mApp.Properties.getValue("inhaleTimeSet").toNumber();
-			mApp.exhaleTimeSet = mApp.Properties.getValue("exhaleTimeSet").toNumber();
-			mApp.relaxTimeSet = mApp.Properties.getValue("relaxTimeSet").toNumber();	
+			$._mApp.bgColSet = $._mApp.Properties.getValue("bgColSet").toNumber();
+			$._mApp.lblColSet = $._mApp.Properties.getValue("lblColSet").toNumber();
+			$._mApp.txtColSet = $._mApp.Properties.getValue("txtColSet").toNumber();
+			$._mApp.hrvColSet = $._mApp.Properties.getValue("hrvColSet").toNumber();
+			$._mApp.avgHrvColSet = $._mApp.Properties.getValue("avgHrvColSet").toNumber();
+			$._mApp.pulseColSet = $._mApp.Properties.getValue("pulseColSet").toNumber();
+			$._mApp.avgPulseColSet = $._mApp.Properties.getValue("avgPulseColSet").toNumber();	
+			$._mApp.inhaleTimeSet = $._mApp.Properties.getValue("inhaleTimeSet").toNumber();
+			$._mApp.exhaleTimeSet = $._mApp.Properties.getValue("exhaleTimeSet").toNumber();
+			$._mApp.relaxTimeSet = $._mApp.Properties.getValue("relaxTimeSet").toNumber();	
 		//}	
 	}
 	
 	function _CallSavePropStorage() {
-		Storage.setValue("timestampSet", mApp.timestampSet);
-		Storage.setValue("pFitWriteEnabled", mApp.mFitWriteEnabled);
+		Storage.setValue("timestampSet", $._mApp.timestampSet);
+		Storage.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
 		
 		// user changable
-		mApp.Properties.setValue("soundSet", mApp.soundSet);
-		mApp.Properties.setValue("vibeSet", mApp.vibeSet);
-		mApp.Properties.setValue("testTypeSet", mApp.testTypeSet);
-		mApp.Properties.setValue("timerTimeSet", mApp.timerTimeSet);
-		mApp.Properties.setValue("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
-		mApp.Properties.setValue("ManualTimeSet", mApp.mManualTimeSet);
+		$._mApp.Properties.setValue("soundSet", $._mApp.soundSet);
+		$._mApp.Properties.setValue("vibeSet", $._mApp.vibeSet);
+		$._mApp.Properties.setValue("testTypeSet", $._mApp.testTypeSet);
+		$._mApp.Properties.setValue("timerTimeSet", $._mApp.timerTimeSet);
+		$._mApp.Properties.setValue("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
+		$._mApp.Properties.setValue("ManualTimeSet", $._mApp.mManualTimeSet);
       
 		// ColSet are index into colour map
-		mApp.Properties.setValue("bgColSet", mApp.bgColSet);
-		mApp.Properties.setValue("lblColSet", mApp.lblColSet);
-		mApp.Properties.setValue("txtColSet", mApp.txtColSet);
-		mApp.Properties.setValue("hrvColSet", mApp.hrvColSet);
-		mApp.Properties.setValue("avgHrvColSet", mApp.avgHrvColSet);
-		mApp.Properties.setValue("pulseColSet", mApp.pulseColSet);
-		mApp.Properties.setValue("avgPulseColSet", mApp.avgPulseColSet);	
-		mApp.Properties.setValue("inhaleTimeSet", mApp.inhaleTimeSet);
-		mApp.Properties.setValue("exhaleTimeSet", mApp.exhaleTimeSet);
-		mApp.Properties.setValue("relaxTimeSet", mApp.relaxTimeSet);			
+		$._mApp.Properties.setValue("bgColSet", $._mApp.bgColSet);
+		$._mApp.Properties.setValue("lblColSet", $._mApp.lblColSet);
+		$._mApp.Properties.setValue("txtColSet", $._mApp.txtColSet);
+		$._mApp.Properties.setValue("hrvColSet", $._mApp.hrvColSet);
+		$._mApp.Properties.setValue("avgHrvColSet", $._mApp.avgHrvColSet);
+		$._mApp.Properties.setValue("pulseColSet", $._mApp.pulseColSet);
+		$._mApp.Properties.setValue("avgPulseColSet", $._mApp.avgPulseColSet);	
+		$._mApp.Properties.setValue("inhaleTimeSet", $._mApp.inhaleTimeSet);
+		$._mApp.Properties.setValue("exhaleTimeSet", $._mApp.exhaleTimeSet);
+		$._mApp.Properties.setValue("relaxTimeSet", $._mApp.relaxTimeSet);			
 	}
 	
 	function _CallSavePropProperty() {
-		mApp.setProperty("timestampSet", mApp.timestampSet);
-		mApp.setProperty("pFitWriteEnabled", mApp.mFitWriteEnabled);
+		$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
+		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
 		
-		mApp.setProperty("soundSet", mApp.soundSet);
-		mApp.setProperty("vibeSet", mApp.vibeSet);
-		mApp.setProperty("testTypeSet", mApp.testTypeSet);
-		mApp.setProperty("timerTimeSet", mApp.timerTimeSet);
-		mApp.setProperty("MaxTimerTimeSet", mApp.mMaxTimerTimeSet);
-		mApp.setProperty("ManualTimeSet", mApp.mManualTimeSet);
+		$._mApp.setProperty("soundSet", $._mApp.soundSet);
+		$._mApp.setProperty("vibeSet", $._mApp.vibeSet);
+		$._mApp.setProperty("testTypeSet", $._mApp.testTypeSet);
+		$._mApp.setProperty("timerTimeSet", $._mApp.timerTimeSet);
+		$._mApp.setProperty("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
+		$._mApp.setProperty("ManualTimeSet", $._mApp.mManualTimeSet);
       
 		// ColSet are index into colour map
-		mApp.setProperty("bgColSet", mApp.bgColSet);
-		mApp.setProperty("lblColSet", mApp.lblColSet);
-		mApp.setProperty("txtColSet", mApp.txtColSet);
-		mApp.setProperty("hrvColSet", mApp.hrvColSet);
-		mApp.setProperty("avgHrvColSet", mApp.avgHrvColSet);
-		mApp.setProperty("pulseColSet", mApp.pulseColSet);
-		mApp.setProperty("avgPulseColSet", mApp.avgPulseColSet);	
-		mApp.setProperty("inhaleTimeSet", mApp.inhaleTimeSet);
-		mApp.setProperty("exhaleTimeSet", mApp.exhaleTimeSet);
-		mApp.setProperty("relaxTimeSet", mApp.relaxTimeSet);	
+		$._mApp.setProperty("bgColSet", $._mApp.bgColSet);
+		$._mApp.setProperty("lblColSet", $._mApp.lblColSet);
+		$._mApp.setProperty("txtColSet", $._mApp.txtColSet);
+		$._mApp.setProperty("hrvColSet", $._mApp.hrvColSet);
+		$._mApp.setProperty("avgHrvColSet", $._mApp.avgHrvColSet);
+		$._mApp.setProperty("pulseColSet", $._mApp.pulseColSet);
+		$._mApp.setProperty("avgPulseColSet", $._mApp.avgPulseColSet);	
+		$._mApp.setProperty("inhaleTimeSet", $._mApp.inhaleTimeSet);
+		$._mApp.setProperty("exhaleTimeSet", $._mApp.exhaleTimeSet);
+		$._mApp.setProperty("relaxTimeSet", $._mApp.relaxTimeSet);	
 	}
 
 	function resetResults() {
 		// should only be called from settings
-		mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			mApp.results[i] = 0;
+			$._mApp.results[i] = 0;
 		}
 	}
 	
@@ -240,20 +237,20 @@ class HRVStorageHandler {
 		// currently references a results array in HRVApp
 		if (Toybox.Application has :Storage) {
 			var mCheck = Storage.getValue("resultsArray");
-			if (mCheck == null) {new mApp.myException("retrieveResults: no results array");}
+			if (mCheck == null) {new $._mApp.myException("retrieveResults: no results array");}
 			else {
-				mApp.results = mCheck;
+				$._mApp.results = mCheck;
 			} 
 		} else {		
 			for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-				var result = mApp.getProperty(RESULTS + i);
+				var result = $._mApp.getProperty(RESULTS + i);
 				var ii = i * DATA_SET_SIZE;
 				if(null != result) {
-					mApp.results[ii + 0] = result[0];
-					mApp.results[ii + 1] = result[1];
-					mApp.results[ii + 2] = result[2];
-					mApp.results[ii + 3] = result[3];
-					mApp.results[ii + 4] = result[4];
+					$._mApp.results[ii + 0] = result[0];
+					$._mApp.results[ii + 1] = result[1];
+					$._mApp.results[ii + 2] = result[2];
+					$._mApp.results[ii + 3] = result[3];
+					$._mApp.results[ii + 4] = result[4];
 				}
 			}
 		}
@@ -262,18 +259,18 @@ class HRVStorageHandler {
 	function storeResults() {
 	    // Save results to memory
 	    if (Toybox.Application has :Storage) {
-			Storage.setValue("resultsArray", mApp.results);
+			Storage.setValue("resultsArray", $._mApp.results);
 		} else {	
 	    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 				var ii = i * DATA_SET_SIZE;
-				var result = mApp.getProperty(RESULTS + i);
-				if(null == result || mApp.results[ii] != result[0]) {
-					mApp.setProperty(RESULTS + i, [
-						mApp.results[ii + 0],
-						mApp.results[ii + 1],
-						mApp.results[ii + 2],
-						mApp.results[ii + 3],
-						mApp.results[ii + 4]]);
+				var result = $._mApp.getProperty(RESULTS + i);
+				if(null == result || $._mApp.results[ii] != result[0]) {
+					$._mApp.setProperty(RESULTS + i, [
+						$._mApp.results[ii + 0],
+						$._mApp.results[ii + 1],
+						$._mApp.results[ii + 2],
+						$._mApp.results[ii + 3],
+						$._mApp.results[ii + 4]]);
 				}
 			}
 		}

@@ -1,10 +1,8 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 
-
 class ChoiceMenu2Delegate extends Ui.Menu2InputDelegate {
 
-	hidden var app = App.getApp();
 	hidden var mFunc;
 	
 	function onSelect(item) {

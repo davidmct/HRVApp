@@ -45,7 +45,6 @@ class TestController {
 	var startMoment;
 	var mManualTestStopTime;
 	//var stopMoment;
-	hidden var mApp;
 	hidden var mFunc;
 	    
 	class cTestState {
@@ -66,7 +65,6 @@ class TestController {
 	}
 
 	function initialize() {
-		mApp = App.getApp();
 		mState = new cTestState();
 		testTimer = new Timer.Timer();
 		
@@ -91,7 +89,7 @@ class TestController {
 	// application is stopping
 	function stopControl() { 
 		testTimer.stop();
-		mApp.mStorage.storeResults(); 			
+		$._mApp.mStorage.storeResults(); 			
 	}
 	
 	function startTest() {
@@ -128,10 +126,10 @@ class TestController {
     
     function alert(type)
 	{
-    	if(mApp.soundSet) {
+    	if($._mApp.soundSet) {
     		Attention.playTone(type);
     	}
-    	if(mApp.vibeSet) {
+    	if($._mApp.vibeSet) {
     		Attention.vibrate([new Attention.VibeProfile(100,400)]);
     	}
     }
@@ -139,7 +137,7 @@ class TestController {
     function discardTest() { mState.isNotSaved = false;  }
 
     function resetTest() {
-    	mApp.mSensor.mHRData.initForTest();
+    	$._mApp.mSensor.mHRData.initForTest();
     	// need to be careful we have shown all results first!!!
 		utcStart = 0;
 		utcStop = 0;
@@ -162,24 +160,24 @@ class TestController {
 		// REMOVE FOR PUBLISH
 		//index = ((timeNow() / 60) % 30) * 5;
 
-		mApp.results[index + 0] = utcStart;
-		mApp.results[index + 1] = mApp.mSampleProc.mLnRMSSD;
-		mApp.results[index + 2] = mApp.mSampleProc.avgPulse;
+		$._mApp.results[index + 0] = utcStart;
+		$._mApp.results[index + 1] = $._mApp.mSampleProc.mLnRMSSD;
+		$._mApp.results[index + 2] = $._mApp.mSampleProc.avgPulse;
 
 		// Calculate averages
 		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 
 			var ii = i * DATA_SET_SIZE;
 
-			if(epoch <= mApp.results[ii]) {
+			if(epoch <= $._mApp.results[ii]) {
 
-				sumHrv += mApp.results[ii + 1];
-				sumPulse += mApp.results[ii + 2];
+				sumHrv += $._mApp.results[ii + 1];
+				sumPulse += $._mApp.results[ii + 2];
 				count++;
 			}
 		}
-		mApp.results[index + 3] = sumHrv / count;
-		mApp.results[index + 4] = sumPulse / count;
+		$._mApp.results[index + 3] = sumHrv / count;
+		$._mApp.results[index + 4] = sumPulse / count;
 
 		// Print values to file in csv format with ISO 8601 date & time
 		var date = Calendar.info(startMoment, 0);
@@ -190,8 +188,8 @@ class TestController {
     		date.hour,
     		date.min.format("%02d"),
     		date.sec.format("%02d"),
-    		mApp.mSampleProc.mLnRMSSD,
-    		mApp.mSampleProc.avgPulse,
+    		$._mApp.mSampleProc.mLnRMSSD,
+    		$._mApp.mSampleProc.avgPulse,
     		sumHrv / count,
     		sumPulse / count]));
     		
@@ -207,7 +205,7 @@ class TestController {
 		
 		resetTest();
 		Sys.println("TestControl: start() - clearing sample buffer - is this right place?");
-    	mApp.mSampleProc.resetSampleBuffer();
+    	$._mApp.mSampleProc.resetSampleBuffer();
 		
 		//set test state
 		// now in isTesting = true can start processing ANT samples!
@@ -215,17 +213,17 @@ class TestController {
 		mManualTestStopTime = 0;
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	
-    	var testType = mApp.testTypeSet;
+    	var testType = $._mApp.testTypeSet;
     				
     	if(TYPE_MANUAL == testType){
  			// kick off a timer for max period of testing allowed
  			// going to stop a manual test at the time set by user OR when Start pressed again
  			// note value here is in elapsed seconds
- 			mManualTestStopTime = mApp.mManualTimeSet;	 			
-			testTimer.start(method(:finishTest),mApp.mMaxTimerTimeSet,false); // false   	
+ 			mManualTestStopTime = $._mApp.mManualTimeSet;	 			
+			testTimer.start(method(:finishTest),$._mApp.mMaxTimerTimeSet,false); // false   	
     	} else {
     		// kick off a timer for period of test
-    		timerTime = mApp.timerTimeSet;
+    		timerTime = $._mApp.timerTimeSet;
 			testTimer.start(method(:finishTest),timerTime*1000,false); // false
 		}
 
@@ -248,7 +246,7 @@ class TestController {
     	}
     	else if(mState.isTesting) {
     		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Stop test");}
-    		if(mState.isNotSaved && MIN_SAMPLES < mApp.mSampleProc.dataCount) {
+    		if(mState.isNotSaved && MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {
 				if (mDebugging == true) {Sys.println("TestControl: save option");}
 				// user can either save or discard. in either event we are done
 				// returning true tells HRV Delegate to ask to save
@@ -257,7 +255,7 @@ class TestController {
 	    	stopTest();
     		Ui.requestUpdate();
     	}
-    	else if(!mApp.mSensor.mHRData.isAntRx || !mApp.mSensor.mHRData.isPulseRx ){
+    	else if(!$._mApp.mSensor.mHRData.isAntRx || !$._mApp.mSensor.mHRData.isPulseRx ){
     		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - no ANT");}
     		alert(TONE_ERROR);
     	}
@@ -274,7 +272,7 @@ class TestController {
 			stopTest();
 		}
 			
-		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < mApp.mSampleProc.dataCount) {
+		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {
 			mState.isClosing = true;
 			return true;
 		}
@@ -292,11 +290,11 @@ class TestController {
 		
 		// Timer information for view
 		timerTime = 0; // = utcStop - utcStart;
-		var testType = mApp.testTypeSet;
+		var testType = $._mApp.testTypeSet;
 		
 		// set default time display and adjust in tests below
 		if(TYPE_TIMER == testType) {
-			timerTime = mApp.timerTimeSet;
+			timerTime = $._mApp.timerTimeSet;
 		}
 		else if(TYPE_MANUAL == testType) {
 			// driven by user stopping or hitting limit
@@ -311,7 +309,7 @@ class TestController {
 			if (mDebugging == true) {Sys.println("TestControl: isFinished branch");}
 			testTime = utcStop - utcStart;
 
-			if(MIN_SAMPLES > mApp.mSampleProc.dataCount) {
+			if(MIN_SAMPLES > $._mApp.mSampleProc.dataCount) {
 				msgTxt = "Not enough data";
 			}
 			else if(mState.isSaved) {
@@ -328,15 +326,15 @@ class TestController {
     		// aslo remove menu option
     		
     		//var cycleTime = (app.inhaleTimeSet + app.exhaleTimeSet + app.relaxTimeSet);
-			var cycle = 1 + testTime % (mApp.inhaleTimeSet + mApp.exhaleTimeSet + mApp.relaxTimeSet);
-			if(cycle <= mApp.inhaleTimeSet) {
+			var cycle = 1 + testTime % ($._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet + $._mApp.relaxTimeSet);
+			if(cycle <= $._mApp.inhaleTimeSet) {
 				msgTxt = "Inhale through nose " + cycle;
 			}
-			else if(cycle <= mApp.inhaleTimeSet + mApp.exhaleTimeSet) {
-				msgTxt = "Exhale out mouth " + (cycle - mApp.inhaleTimeSet);
+			else if(cycle <= $._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet) {
+				msgTxt = "Exhale out mouth " + (cycle - $._mApp.inhaleTimeSet);
 			}
 			else {
-				msgTxt = "Relax " + (cycle - (mApp.inhaleTimeSet + mApp.exhaleTimeSet));
+				msgTxt = "Relax " + (cycle - ($._mApp.inhaleTimeSet + $._mApp.exhaleTimeSet));
 			}
 
 			if(TYPE_TIMER == testType) {
@@ -353,7 +351,7 @@ class TestController {
 				}
 			}
     	}
-    	else if(mApp.mSensor.mHRData.isStrapRx) {
+    	else if($._mApp.mSensor.mHRData.isStrapRx) {
 			if(TYPE_TIMER == testType) {
 				msgTxt = "Timer test ready";
 			}

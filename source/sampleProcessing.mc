@@ -98,21 +98,19 @@ class SampleProcessing {
 	
 	// index always points to next available slot
 	hidden var mSampleIndex;
-	hidden var mApp;
 	
 	function initialize() {
 		// do we keep big buffer of intervals here?
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
-		mApp = App.getApp();
-		mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		$._mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
 		resetSampleBuffer();
 		resetHRVData();
 	}
 	
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
-		mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
+		$._mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
 		minIntervalFound = 1000;
 		maxIntervalFound = 0;
 	}
@@ -188,15 +186,15 @@ class SampleProcessing {
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
 		if ( mSampleIndex > mApp.mIntervalSampleBuffer.size()) {
-			new mApp.myException("Buffer limit reached in sample Processing");
+			new $._mApp.myException("Buffer limit reached in sample Processing");
 		}
-		mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs;	
+		$._mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs;	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 	}
 	
 	function getSample(index) {
-		return mApp.mIntervalSampleBuffer[index];
+		return $._mApp.mIntervalSampleBuffer[index];
 	}
 	
 	// update the per sample stats

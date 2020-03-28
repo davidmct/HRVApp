@@ -4,8 +4,6 @@ using Toybox.Time;
 using Toybox.System as Sys;
 
 class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
-
-	hidden var app = App.getApp();
 	
 	function initialize() { Menu2InputDelegate.initialize();}
 
@@ -64,15 +62,15 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function setSound(value) {
-		if (value == "optOne") { app.soundSet = true;} else { app.soundSet = false;}
+		if (value == "optOne") { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
     }
 
     function setVibe(value) {
-		if (value == "optOne") { app.vibeSet = true; } else { app.vibeSet = false;}
+		if (value == "optOne") { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
     }
  
     function setFitWrite(value) {
-		if (value == "optOne") { app.mFitWriteEnabled = true; } else { app.mFitWriteEnabled = false;}
+		if (value == "optOne") { $._mApp.mFitWriteEnabled = true; } else { $._mApp.mFitWriteEnabled = false;}
     }   
     
     function onBack() {

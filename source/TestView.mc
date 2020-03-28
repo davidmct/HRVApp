@@ -5,7 +5,6 @@ using Toybox.System as Sys;
 
 class TestView extends Ui.View {
 
-	hidden var app;
 	hidden var mTestViewLayout;
 	var mLabelColour;
 	var oldLblCol;
@@ -32,7 +31,6 @@ class TestView extends Ui.View {
 	
     function initialize() {
     	View.initialize();
-    	app = App.getApp();
     	oldLblCol = 20;
     	oldValCol = 20;
     }
@@ -59,10 +57,10 @@ class TestView extends Ui.View {
 			Sys.println("layout null");
 		}
 	
-		mLabelColour = mapColour( app.lblColSet);
-		mValueColour = mapColour( app.txtColSet);
-		oldLblCol = app.lblColSet;
-		oldValCol = app.txtColSet;
+		mLabelColour = mapColour( $._mApp.lblColSet);
+		mValueColour = mapColour( $._mApp.txtColSet);
+		oldLblCol = $._mApp.lblColSet;
+		oldValCol = $._mApp.txtColSet;
 
 		if (mDebugging == true) {Sys.println("TextView: onLayout(): starting field update");}
 				
@@ -84,13 +82,13 @@ class TestView extends Ui.View {
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
     	// have colours changed?
-    	if ((app.lblColSet != oldLblCol) || (app.txtColSet != oldValCol)) {
+    	if (($._mApp.lblColSet != oldLblCol) || ($._mApp.txtColSet != oldValCol)) {
     		Sys.println("Updating colours in onShow() TestView()");
-    		oldLblCol = app.lblColSet;
-    		oldValCol = app.txtColSet;    	
+    		oldLblCol = $._mApp.lblColSet;
+    		oldValCol = $._mApp.txtColSet;    	
 	    	// update colours if they have changed
-	        mLabelColour = mapColour( app.lblColSet);
-			mValueColour = mapColour( app.txtColSet);
+	        mLabelColour = mapColour( $._mApp.lblColSet);
+			mValueColour = mapColour( $._mApp.txtColSet);
 			mViewTitleID.setColor( mLabelColour);
 			mViewResultLblID.setColor( mLabelColour);
 			mViewPulseLblID.setColor( mLabelColour);
@@ -101,13 +99,13 @@ class TestView extends Ui.View {
 			mViewTimerValID.setColor( mValueColour);	
 		}
 		
-		app.mTestControl.setObserver(self.method(:onNotify));
+		$._mApp.mTestControl.setObserver(self.method(:onNotify));
 				
     	// might need to go in test controller
-    	if(app.mTestControl.mState.isClosing) {
+    	if($._mApp.mTestControl.mState.isClosing) {
     		// stop app?????
     		//CHECK - causes two calls as one in HRV delegate
-			//app.onStop( null );
+			//$._mApp.onStop( null );
 			popView(SLIDE_RIGHT);
 		}
     }
@@ -138,8 +136,8 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			Sys.println("Test View ANT pulse: " + app.mSensor.mHRData.livePulse.toString());
-			Sys.println("Test state = "+ app.mTestControl.mState.isTesting);
+			Sys.println("Test View ANT pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
+			Sys.println("Test state = "+ $._mApp.mTestControl.mState.isTesting);
 		}
 		    	
     	// optimisation....
@@ -155,13 +153,13 @@ class TestView extends Ui.View {
     	// test :symbol_x
     	// }
     	// can call onNotify with onNotify(:State_x, self, array);
-    	//Sys.println("onUpdate: update fields " +app.mSampleProc.mLnRMSSD+" "+app.mSampleProc.avgPulse);
+    	//Sys.println("onUpdate: update fields " +$._mApp.mSampleProc.mLnRMSSD+" "+$._mApp.mSampleProc.avgPulse);
     	
-	 	updateLayoutField(mViewStrapTxtID, app.mSensor.mHRData.strapTxt, mapColour(app.mSensor.mHRData.strapCol));	
-		updateLayoutField(mViewPulseTxtID, app.mSensor.mHRData.pulseTxt, mapColour(app.mSensor.mHRData.pulseCol));					
+	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.strapTxt, mapColour($._mApp.mSensor.mHRData.strapCol));	
+		updateLayoutField(mViewPulseTxtID, $._mApp.mSensor.mHRData.pulseTxt, mapColour($._mApp.mSensor.mHRData.pulseCol));					
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
-		updateLayoutField(mViewResultTxtID, app.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
-		updateLayoutField(mViewPulseValID, app.mSampleProc.avgPulse.format("%d"), mValueColour);
+		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
+		updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
    		
    		View.onUpdate(dc);
@@ -173,7 +171,7 @@ class TestView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
-    	app.mTestControl.setObserver(null);
+    	$._mApp.mTestControl.setObserver(null);
     }
 
 }

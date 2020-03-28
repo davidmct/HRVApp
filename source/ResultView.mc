@@ -6,10 +6,9 @@ using Toybox.System as Sys;
 // display a summary of the current test data eg rMSSD
 class ResultView extends Ui.View {
 
-	hidden var app;
 	var mResultsLayout;
 
-	function initialize() { app=App.getApp(); View.initialize();}
+	function initialize() { View.initialize();}
 	
 	function onLayout(dc) {
 		mResultsLayout = Rez.Layouts.ResultsViewLayout(dc);
@@ -52,18 +51,18 @@ class ResultView extends Ui.View {
 		var pulse = 0;
 		var expected = 0;
 
-		if(app.mTestControl.mState.isTesting) {
-			time = app.timeNow() - app.mTestControl.utcStart;
+		if($._mApp.mTestControl.mState.isTesting) {
+			time = $._mApp.timeNow() - $._mApp.mTestControl.utcStart;
 		}
-		else if(app.mTestControl.mState.isFinished) {
-			time = app.mTestControl.utcStop - app.mTestControl.utcStart;
+		else if($._mApp.mTestControl.mState.isFinished) {
+			time = $._mApp.mTestControl.utcStop - $._mApp.mTestControl.utcStart;
 		}
-		expected = (((1 + time) / 60.0) * app.mSampleProc.avgPulse).toNumber();
+		expected = (((1 + time) / 60.0) * $._mApp.mSampleProc.avgPulse).toNumber();
 
-		var mLabelColour = mapColour( app.lblColSet);
+		var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
-		var mValueColour = mapColour( app.txtColSet);
+		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		//Sys.println("ResultView: update fields of layout: labelCol: "+ mLabelColour + " Value colour " + mValueColour);
 		updateLayoutField("timeY", null, mLabelColour, mLabelJust);
@@ -73,9 +72,9 @@ class ResultView extends Ui.View {
 		updateLayoutField("expectedY", null, mLabelColour, mLabelJust);	
 
 		updateLayoutField( "timeValue", timerFormat(time).toString(), mValueColour, mValueJust);
-		updateLayoutField( "pulseValue", app.mSampleProc.avgPulse.format("%d"), mValueColour, mValueJust);
-		updateLayoutField( "hrvValue", app.mSampleProc.mLnRMSSD.format("%d"), mValueColour, mValueJust);
-		updateLayoutField( "samplesValue", app.mSampleProc.dataCount.toString(), mValueColour, mValueJust);
+		updateLayoutField( "pulseValue", $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour, mValueJust);
+		updateLayoutField( "hrvValue", $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour, mValueJust);
+		updateLayoutField( "samplesValue", $._mApp.mSampleProc.dataCount.toString(), mValueColour, mValueJust);
 		updateLayoutField( "expectedValue", "xx", mValueColour, mValueJust);
 		
 		//dc.drawText(100, 100, Graphics.FONT_MEDIUM, "WHAT IS HAPPENING", Graphics.TEXT_JUSTIFY_CENTER);

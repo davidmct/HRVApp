@@ -4,8 +4,6 @@ using Toybox.Time;
 using Toybox.System as Sys;
 
 class TimerMenuDelegate extends Ui.Menu2InputDelegate {
-
-	var app = App.getApp();
 		
     function initialize() { Menu2InputDelegate.initialize(); }
     
@@ -14,9 +12,9 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
     
      	if( id.equals("duration")) {    
      		// Picker set to initial value and max
-     		Sys.println("TimerMenuDelegate: timerTimeSet value : " + app.timerTimeSet);
-     		Ui.pushView(new NumberPicker(app.timerTimeSet, 5959, 1), new SecondsPickerDelegate(self.method(:setTimerTime)), Ui.SLIDE_IMMEDIATE);
+     		Sys.println("TimerMenuDelegate: timerTimeSet value : " + $._mApp.timerTimeSet);
+     		Ui.pushView(new NumberPicker($._mApp.timerTimeSet, 5959, 1), new SecondsPickerDelegate(self.method(:setTimerTime)), Ui.SLIDE_IMMEDIATE);
        	}
     }
-    function setTimerTime(value) { app.timerTimeSet = value;}
+    function setTimerTime(value) { $._mApp.timerTimeSet = value;}
 }

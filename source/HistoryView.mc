@@ -12,8 +12,6 @@ class HistoryView extends Ui.View {
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
-    	var app = App.getApp();
     }
 
     function scale(num) {
@@ -24,10 +22,8 @@ class HistoryView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-		var app = App.getApp();
-
-		var today = (app.timeToday() / 86400) % 30;	// Todays index
-		var epoch = app.timeToday() - (86400 * 29);	// Index 29 days ago
+		var today = ($._mApp.timeToday() / 86400) % 30;	// Todays index
+		var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
 
 		// REMOVE FOR PUBLISH
 		//today = (app.timeNow() / 3600) % 30;	// Todays index
@@ -46,12 +42,12 @@ class HistoryView extends Ui.View {
 			var ii = i * 5;
 
 			// Only process if newer than epoch
-			if(epoch <= app.results[ii]) {
+			if(epoch <= $._mApp.results[ii]) {
 
 				// Get range
 				for(var iii = 1; iii <= 4; iii++) {
 
-					var value = app.results[ii + iii];
+					var value = $._mApp.results[ii + iii];
 
 					if(min > value) {
 						min = value;
@@ -105,28 +101,28 @@ class HistoryView extends Ui.View {
 	    var line1Y = 60;
 	    var line2Y = 90;
 
-	    if(FENIX == app.device) {
+	    if(FENIX == $._mApp.device) {
 			line1Y = 94;
 			line2Y = 124;
 		}
 
 		// Prepare the screen
-		MapSetColour(dc, TRANSPARENT, app.bgColSet);
+		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		dc.clear();
 
 		// Draw the lines
-		MapSetColour(dc,DK_GRAY, app.bgColSet);
+		MapSetColour(dc,DK_GRAY, $._mApp.bgColSet);
 		for(var i = 0; i < 7; i++) {
 
 			var y = line1Y - 30 + i * 15;
 			dc.drawLine(leftX, y, rightX, y);
 		}
-		MapSetColour(dc, app.lblColSet, TRANSPARENT);
+		MapSetColour(dc, $._mApp.lblColSet, TRANSPARENT);
         dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
 		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
 
 		// Draw the numbers
-		MapSetColour(dc, DK_GRAY, app.bgColSet);
+		MapSetColour(dc, DK_GRAY, $._mApp.bgColSet);
 		for(var i = 1; i < 6; i += 2) {
 
 			var y = ceilY + (((i * gap) * scaleY) / 2);
@@ -154,39 +150,39 @@ class HistoryView extends Ui.View {
 			// Start 30 days ago and work forwards
  			var ii = ((today + 1 + i) % 30) * 5;
 
-			if(epoch < app.results[ii]) {
+			if(epoch < $._mApp.results[ii]) {
 
 				var index1 = i * 6 + 3;
-	 			var hrv1 = scale(app.results[ii + 1]);
-	 			var pulse1 = scale(app.results[ii + 2]);
-	 			var avgHrv1 = scale(app.results[ii + 3]);
-	 			var avgPulse1 = scale(app.results[ii + 4]);
+	 			var hrv1 = scale($._mApp.results[ii + 1]);
+	 			var pulse1 = scale($._mApp.results[ii + 2]);
+	 			var avgHrv1 = scale($._mApp.results[ii + 3]);
+	 			var avgPulse1 = scale($._mApp.results[ii + 4]);
 	 			drawDots++;
 
 	 			for(var iii = i + 1; iii < 30; iii++) {
 
 					var iiii = ((today + 1 + iii) % 30) * 5;
 
-		 			if(epoch < app.results[iiii]) {
+		 			if(epoch < $._mApp.results[iiii]) {
 
 			 			var index2 = iii * 6 + 3;
-			 			var hrv2 = scale(app.results[iiii + 1]);
-			 			var pulse2 = scale(app.results[iiii + 2]);
-			 			var avgHrv2 = scale(app.results[iiii + 3]);
-			 			var avgPulse2 = scale(app.results[iiii + 4]);
+			 			var hrv2 = scale($._mApp.results[iiii + 1]);
+			 			var pulse2 = scale($._mApp.results[iiii + 2]);
+			 			var avgHrv2 = scale($._mApp.results[iiii + 3]);
+			 			var avgPulse2 = scale($._mApp.results[iiii + 4]);
 
 						dc.setPenWidth(2);
-						MapSetColour(dc, DK_RED, app.bgColSet);
+						MapSetColour(dc, DK_RED, $._mApp.bgColSet);
 						dc.drawLine(leftX + index1, floorY - avgPulse1, leftX + index2, floorY - avgPulse2);
 
-						MapSetColour(dc, DK_BLUE, app.bgColSet);
+						MapSetColour(dc, DK_BLUE, $._mApp.bgColSet);
 						dc.drawLine(leftX + index1, floorY - avgHrv1, leftX + index2, floorY - avgHrv2);
 
 						dc.setPenWidth(3);
-						MapSetColour(dc, ORANGE, app.bgColSet);
+						MapSetColour(dc, ORANGE, $._mApp.bgColSet);
 						dc.drawLine(leftX + index1, floorY - pulse1, leftX + index2, floorY - pulse2);
 
-						MapSetColour(dc, BLUE, app.bgColSet);
+						MapSetColour(dc, BLUE, $._mApp.bgColSet);
 						dc.drawLine(leftX + index1, floorY - hrv1, leftX + index2, floorY - hrv2);
 
 						// Change the value of i. So that it starts back at this point. Break loop
@@ -198,10 +194,10 @@ class HistoryView extends Ui.View {
 				// If only one reading then draw dots. There are no averages
 				if(1 == drawDots) {
 
-					MapSetColour(dc, ORANGE, app.bgColSet);
+					MapSetColour(dc, ORANGE, $._mApp.bgColSet);
 					dc.fillCircle(leftX + index1, floorY - pulse1, 2);
 
-					MapSetColour(dc, BLUE, app.bgColSet);
+					MapSetColour(dc, BLUE, $._mApp.bgColSet);
 					dc.fillCircle(leftX + index1, floorY - hrv1, 2);
 				}
 			}
@@ -210,16 +206,16 @@ class HistoryView extends Ui.View {
 		// Draw the labels
 		dc.setPenWidth(1);
 
-		MapSetColour(dc, DK_RED, app.bgColSet);
+		MapSetColour(dc, DK_RED, $._mApp.bgColSet);
 		dc.drawText(ctrX, floorY + 20, font, " AVG PULSE", 6);
 
-		MapSetColour(dc, ORANGE, app.bgColSet);
+		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
 		dc.drawText(ctrX, ceilY - 20, font, " PULSE", 6);
 
-		MapSetColour(dc, DK_BLUE, app.bgColSet);
+		MapSetColour(dc, DK_BLUE, $._mApp.bgColSet);
 		dc.drawText(ctrX, floorY + 20, font, "AVG HRV ", 4);
 
-		MapSetColour(dc, BLUE, app.bgColSet);
+		MapSetColour(dc, BLUE, $._mApp.bgColSet);
 		dc.drawText(ctrX, ceilY - 20, font, "HRV ", 4);
 
 		// Testing only. Draw used memory

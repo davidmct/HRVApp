@@ -3,8 +3,6 @@ using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 
 class ColourMenuDelegate extends Ui.Menu2InputDelegate {
-
-	hidden var app = App.getApp();
      
 	function initialize() { Menu2InputDelegate.initialize(); }  
 	
@@ -50,21 +48,21 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
 
     function setBackground(value) {
     	if(value == "optOne") {
-    		app.bgColSet = WHITE;
-    		if(WHITE == app.txtColSet) {
-	    		app.txtColSet = BLACK;
+    		$._mApp.bgColSet = WHITE;
+    		if(WHITE == $._mApp.txtColSet) {
+	    		$._mApp.txtColSet = BLACK;
 	    	}
     	}
     	else {
-    		app.bgColSet = BLACK;
-    		if(BLACK == app.txtColSet) {
-	    		app.txtColSet = WHITE;
+    		$._mApp.bgColSet = BLACK;
+    		if(BLACK == $._mApp.txtColSet) {
+	    		$._mApp.txtColSet = WHITE;
 	    	}
     	}
     }
 
-    function setLabel(value) { app.lblColSet = value;  }
-    function setText(value) { app.txtColSet = value; }
+    function setLabel(value) { $._mApp.lblColSet = value;  }
+    function setText(value) { $._mApp.txtColSet = value; }
 }
 
 
