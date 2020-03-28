@@ -6,6 +6,7 @@ using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 using Toybox.Attention;
 using Toybox.System as Sys;
+using Toybox.Sensor;
 
 // we should be saving results to storage NOT properties
 //Storage.setValue( tag, value) eg ("results_array", results); where results is an array
@@ -156,6 +157,9 @@ class HRVApp extends App.AppBase {
 	   		mSensor = null;
 	    }
 	    
+	    // set if we can find both ant and optical
+	    SensorSetup();
+	    
 	    if (mDebugging) {
 	    	Sys.println("AUX sensor created: " + mSensor);
 	    	Sys.println("Sensor channel open? " + mSensor.mHRData.isChOpen);
@@ -293,6 +297,30 @@ class HRVApp extends App.AppBase {
 		}	
 		Sys.println(mString);
 	}
+	
+	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
+	// 3.0.0 on feature
+	function SensorSetup() {
+		var options = {
+			:period => 1, 	// 1 second data packets
+			:heartBeatIntervals => {:enabled => true}
+		};
+		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
+		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
+	}
+	
+	// call back for HR data
+	function onHeartRateData( sensorData) {
+		var mSize = 0; 
+		var mlivePulse = 0;
+		var heartBeatIntervals = [];
+		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
+			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
+			mlivePulse = sensorData.info.heartRate;
+		}		
+		Sys.println("optical?: live "+ mlivePulse+" intervals "+heartBeatIntervals);
+	}
+	
 }
 
 
