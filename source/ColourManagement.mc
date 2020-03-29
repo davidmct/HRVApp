@@ -13,30 +13,12 @@ var colours =[Graphics.COLOR_WHITE, Graphics.COLOR_LT_GRAY,Graphics.COLOR_DK_GRA
 	
 var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics.FONT_MEDIUM,Graphics.FONT_LARGE,
              Graphics.FONT_NUMBER_MILD,Graphics.FONT_NUMBER_MEDIUM,Graphics.FONT_NUMBER_HOT,Graphics.FONT_NUMBER_THAI_HOT];
-			
-enum {
-	// Colors index. Arrays start at zero
-	WHITE = 0,
-	LT_GRAY = 1,
-	DK_GRAY = 2,
-	BLACK = 3,
-	RED = 4,
-	DK_RED = 5,
-	ORANGE = 6,
-	YELLOW = 7,
-	GREEN = 8,
-	DK_GREEN = 9,
-	BLUE = 10,
-	DK_BLUE = 11,
-	PURPLE = 12,
-	PINK = 13,
-	TRANSPARENT = 14
-}
 
-	// for menu construction .. and could get rid of enum and change map at some point
-	var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
-		"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
-		"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
+
+// for menu construction .. and could get rid of enum and change map at some point
+var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
+	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
+	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
 
 function mapColour(index) {
 	var col;

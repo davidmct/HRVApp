@@ -1,31 +1,31 @@
 <layouts>
     <!-- Results view layout for round-280x280 -->
     <layout id="ResultsViewLayout">
-        <label id="timeY" text="Time" x="130" y="58" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="pulseY" text="Pulse" x="130" y="88" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="hrvY" text="HRV" x="130" y="118" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="samplesY" text="Samples" x="130" y="148" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="expectedY" text="Expected" x="130" y="178" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="timeValue" x="center" y="58" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="pulseValue" x="center" y="88" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="hrvValue" x="center" y="118" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="samplesValue" x="center" y="148" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="expectedValue" x="center" y="178" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="timeY" text="Time" x="130" y="58" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="pulseY" text="Pulse" x="130" y="88" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="hrvY" text="HRV" x="130" y="118" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="samplesY" text="Samples" x="130" y="148" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="expectedY" text="Expected" x="130" y="178" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="timeValue" x="center" y="58" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="pulseValue" x="center" y="88" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="hrvValue" x="center" y="118" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="samplesValue" x="center" y="148" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="expectedValue" x="center" y="178" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
 		<drawable id="ResultsLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
-        <label id="ViewTitle" text="HRV TEST" x="140" y="43" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="ViewHRV_Lbl" text="HRV" x="210" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewHRV_Val" text="value" x="210" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewTitle" text="HRV TEST" x="140" y="43" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="ViewHRV_Lbl" text="Ln(HRV)" x="210" y="185" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewHRV_Val" text="value" x="210" y="216" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
 
-        <label id="ViewStrapStatus" text="no source" x="90" y="150" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseLbl" text="BPM" x="180" y="150" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-         <label id="ViewPulseVal" text="xx" x="230" y="152" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewStrapStatus" text="no source" x="90" y="150" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewPulseLbl" text="BPM" x="180" y="150" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+         <label id="ViewPulseVal" text="xx" x="230" y="152" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
  
-        <label id="ViewTimerLbl" text="TIMER" x="70" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewTimerVal" text="value" x="70" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewTimerLbl" text="TIMER" x="70" y="185" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewTimerVal" text="value" x="70" y="216" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
      	<text-area id="bodyText" 
-	        color="Graphics.COLOR_BLACK" justification="Graphics.TEXT_JUSTIFY_CENTER"
+	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
 	        text="Starting up..." 
 	        x="10%" y="17%" width="80%" height="32%">
 	        <!-- The fonts will be tried in order. This allows scaling the font size

@@ -47,7 +47,8 @@ class AntHandler extends Ant.GenericChannel {
     		isAntRx = false;
 			isStrapRx = false;
 			isPulseRx = false;
-			mHRMStatusCol = RED;
+			// had to add $ to find RED symbol. enum stopped working here but was OK in other code!!
+			mHRMStatusCol = $.RED;
     		mHRMStatus = "Searching...";
 			initForTest();
 			resetTestVariables();

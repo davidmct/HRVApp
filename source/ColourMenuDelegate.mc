@@ -20,7 +20,7 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
             // get labels for colours ie key 
             var mKeys = $.mColourNumbersString.keys();
             var i;
-            for (i = 0; i < mColourNumbersString.size() ; i++) {
+            for (i = 0; i < $.mColourNumbersString.size() ; i++) {
             	var mColName = mKeys[i].toString();
             	var mColValue = $.mColourNumbersString.get(mColName);
             	if (mColValue != TRANSPARENT) {
@@ -34,7 +34,7 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
             // get labels for colour keys
             var mKeys = $.mColourNumbersString.keys();
             var i;
-            for (i = 0; i < mColourNumbersString.size() ; i++) {
+            for (i = 0; i < $.mColourNumbersString.size() ; i++) {
             	var mColName = mKeys[i].toString();
             	var mColValue = $.mColourNumbersString.get(mColName);
             	if (mColValue != TRANSPARENT) {

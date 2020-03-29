@@ -55,8 +55,27 @@ enum {
 	HISTORY_VIEW = 2,
 	HRVPLOT_VIEW = 3,
 	POINCARE_VIEW = 4,
-	NUM_VIEWS = 5,
+	NUM_VIEWS = 5
 }
+
+//enum {
+	// Colors index. Arrays start at zero
+const 	WHITE = 0;
+const	LT_GRAY = 1;
+const	DK_GRAY = 2;
+const	BLACK = 3;
+const	RED = 4;
+const	DK_RED = 5;
+const	ORANGE = 6;
+const	YELLOW = 7;
+const	GREEN = 8;
+const	DK_GREEN = 9;
+const	BLUE = 10;
+const	DK_BLUE = 11;
+const	PURPLE = 12;
+const	PINK = 13;
+const	TRANSPARENT = 14;
+//}
 
 class HRVApp extends App.AppBase {
 
