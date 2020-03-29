@@ -2,6 +2,7 @@ using Toybox.Ant as Ant;
 using Toybox.Time as Time;
 using Toybox.System as Sys;
 using Toybox.Math;
+using Toybox.Graphics as Gfx;
 
 // Sample processing changes
 // 1. Each batch update
@@ -35,10 +36,8 @@ class AntHandler extends Ant.GenericChannel {
 		var isStrapRx;
 		var isPulseRx;
 		var livePulse;
-		var strapCol;
-    	var pulseCol;
-    	var strapTxt;
-    	var pulseTxt;
+		var mHRMStatusCol;
+    	var mHRMStatus;
 		var mNoPulseCount;
 		var mPrevBeatCount;
 		var mPrevBeatEvent;
@@ -48,6 +47,8 @@ class AntHandler extends Ant.GenericChannel {
     		isAntRx = false;
 			isStrapRx = false;
 			isPulseRx = false;
+			mHRMStatusCol = RED;
+    		mHRMStatus = "Searching...";
 			initForTest();
 			resetTestVariables();
 		}
@@ -70,11 +71,6 @@ class AntHandler extends Ant.GenericChannel {
     	mSearching = true;
   	
     	mHRData = new HRStatus();
-    	// Strap & pulse indicators
-    	mHRData.strapCol = RED;
-    	mHRData.pulseCol = RED;
-    	mHRData.strapTxt = "STRAP";
-    	mHRData.pulseTxt = "PULSE";
     	
     	// Get the channel
         mChanAssign = new Ant.ChannelAssignment(
@@ -112,10 +108,8 @@ class AntHandler extends Ant.GenericChannel {
 		mHRData.isChOpen = GenericChannel.open();
 		if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
 		
-		mHRData.strapCol = RED;
-    	mHRData.pulseCol = RED;
-    	mHRData.strapTxt = "STRAP";
-    	mHRData.pulseTxt = "PULSE";
+		mHRData.mHRMStatusCol = RED;
+    	mHRData.mHRMStatus = "Found strap";
         // may need some other changes
     }
     
@@ -131,11 +125,9 @@ class AntHandler extends Ant.GenericChannel {
     	mHRData.isAntRx = false;
 		mHRData.isStrapRx = false;
 		mHRData.isPulseRx = false;
-		mHRData.strapCol = RED;
-	    mHRData.pulseCol = RED;
+		mHRData.mHRMStatusCol = RED;
+    	mHRData.mHRMStatus = "HRM closed";
 	    mHRData.livePulse = 0;
-		mHRData.strapTxt = "SAVING";
-		mHRData.pulseTxt = "BATTERY";
 		mSearching = true;
     } 
 
@@ -161,7 +153,8 @@ class AntHandler extends Ant.GenericChannel {
 			// not sure this handles all page types and 65th special page correctly
             mHRData.isAntRx = true;
             mHRData.isStrapRx = true;
-            mHRData.strapCol = GREEN;
+            mHRData.mHRMStatusCol = GREEN;
+    		mHRData.mHRMStatus = "HR data";
             
             mHRData.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
@@ -189,8 +182,8 @@ class AntHandler extends Ant.GenericChannel {
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
 						mHRData.isStrapRx = false;
 						mHRData.isPulseRx = false;
-						mHRData.strapCol = RED;
-	    				mHRData.pulseCol = RED;
+						mHRData.mHRMStatusCol = RED;
+    					mHRData.mHRMStatus = "Lost strap";
 	    				mHRData.livePulse = 0;
 						mSearching = true;
 						// wait for another message?
@@ -225,7 +218,7 @@ class AntHandler extends Ant.GenericChannel {
 		// check we have a pulse and another beat recorded 
 		if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
 			mHRData.isPulseRx = true;
-	    	mHRData.pulseCol = GREEN;
+			mHRData.mHRMStatusCol = GREEN;
 			mHRData.mNoPulseCount = 0;
 					
 			// Get interval
@@ -248,7 +241,8 @@ class AntHandler extends Ant.GenericChannel {
 				var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
 				if(limit < mHRData.mNoPulseCount) {
 					mHRData.isPulseRx = false;
-					mHRData.pulseCol = RED;
+					mHRData.mHRMStatusCol = RED;
+    				mHRData.mHRMStatus = "Lost Pulse";
 				}
 			}
 		}

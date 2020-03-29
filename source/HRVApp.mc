@@ -22,6 +22,7 @@ using Toybox.Sensor;
 //8. change summary page to include rMSSD SSRR(10, 20...), skipped or double beats
 //9. how to make trial version and possible payment
 //10. Revise ANT/Sensor handling to provide choice between them!!
+//11. Move all time functions to use libraries to avoid time wrap - 136 years so maybe no tissue
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = true;
@@ -200,9 +201,7 @@ class HRVApp extends App.AppBase {
     }
     
     //! onStop() is called when your application is exiting
-    function onStop(state) {
-		// this is called by both TextView and HRVBehaviour!!! so get two iterations
-		
+    function onStop(state) {		
 		if (state == null) { 		}
 	
 		mStorage.saveProperties();

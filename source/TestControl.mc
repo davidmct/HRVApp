@@ -92,7 +92,8 @@ class TestController {
 	// application is stopping
 	function stopControl() { 
 		testTimer.stop();
-		$._mApp.mStorage.storeResults(); 			
+		// Save should be done in saveResults()
+		//$._mApp.mStorage.storeResults(); 			
 	}
 	
 	function startTest() {
@@ -151,9 +152,20 @@ class TestController {
     }
     
     function saveTest() {
+    	Sys.println("TestControl: saveTest() called");
+    	
+    	// seconds in day = 86400
+    	// make whole number of days (still seconds since UNIX epoch)
+    	// This ignores possiblity of 32 bit integar of time wrapping on testday and epoch
+    	// should change to use time functions available
 		var testDay = utcStart - (utcStart % 86400);
+		// 29 days ago...
 		var epoch = testDay - (86400 * 29);
+		// (testDay modulo 30) * 5 ...
 		var index = ((testDay / 86400) % 30) * 5;
+		
+		Sys.println("utcStart, testday, epoch, index = "+utcStart+","+testDay+","+epoch+","+index);
+		
 		var sumHrv = 0;
 		var sumPulse = 0;
 		var count = 0;
@@ -169,11 +181,8 @@ class TestController {
 
 		// Calculate averages
 		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-
 			var ii = i * DATA_SET_SIZE;
-
 			if(epoch <= $._mApp.results[ii]) {
-
 				sumHrv += $._mApp.results[ii + 1];
 				sumPulse += $._mApp.results[ii + 2];
 				count++;
@@ -195,6 +204,9 @@ class TestController {
     		$._mApp.mSampleProc.avgPulse,
     		sumHrv / count,
     		sumPulse / count]));
+    	
+    	// better write results to memory!!
+    	$._mApp.mStorage.storeResults(); 
     		
     	mState.isNotSaved = false;
     	mState.isSaved = true;

@@ -25,13 +25,6 @@ class HistoryView extends Ui.View {
 		var today = ($._mApp.timeToday() / 86400) % 30;	// Todays index
 		var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
 
-		// REMOVE FOR PUBLISH
-		//today = (app.timeNow() / 3600) % 30;	// Todays index
-		//epoch = app.timeNow() - (3600 * 29);	// Index 29 days ago
-		// REMOVE FOR PUBLISH
-		//today = (app.timeNow() / 60) % 30;	// Todays index
-		//epoch = app.timeNow() - (60 * 29);	// Index 29 days ago
-
 		var dataCount = 0;
 		var max = 0;
 		var min = 310;

@@ -14,16 +14,29 @@
 		<drawable id="ResultsLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
-        <label id="ViewTitle" text="HRV TEST" x="140" y="45" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="ViewMsgTxt" text="Starting..." x="140" y="147" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="ViewResultLbl" text="HRV" x="210" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
-        <label id="ViewResultTxt" text="value" x="210" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
-        <label id="ViewStrapTxt" text="strap" x="70" y="90" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseLbl" text="BPM" x="210" y="72" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseTxt" text="pulse" x="70" y="116" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
-        <label id="ViewPulseVal" text="xx" x="210" y="110" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+        <label id="ViewTitle" text="HRV TEST" x="140" y="43" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_MEDIUM" />
+        <label id="ViewHRV_Lbl" text="HRV" x="210" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="ViewHRV_Val" text="value" x="210" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+
+        <label id="ViewStrapStatus" text="no source" x="90" y="150" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+        <label id="ViewPulseLbl" text="BPM" x="180" y="150" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
+         <label id="ViewPulseVal" text="xx" x="230" y="152" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+ 
         <label id="ViewTimerLbl" text="TIMER" x="70" y="185" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_TINY" />
         <label id="ViewTimerVal" text="value" x="70" y="216" background="Graphics.COLOR_TRANSPARENT" font="Graphics.FONT_NUMBER_MILD" />
+     	<text-area id="bodyText" 
+	        color="Graphics.COLOR_BLACK" justification="Graphics.TEXT_JUSTIFY_CENTER"
+	        text="Starting up..." 
+	        x="10%" y="17%" width="80%" height="32%">
+	        <!-- The fonts will be tried in order. This allows scaling the font size
+	             as the text grows -->        
+	        <fonts>
+	            <font>Gfx.FONT_MEDIUM</font>
+	            <font>Gfx.FONT_SMALL</font>            
+	            <font>Gfx.FONT_TINY</font>
+	            <font>Gfx.FONT_XTINY</font>
+	        </fonts>
+    	</text-area>  
  		<drawable id="TestViewLayoutLines_id" />     
     </layout>
 </layouts>

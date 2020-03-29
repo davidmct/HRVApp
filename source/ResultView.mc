@@ -57,6 +57,8 @@ class ResultView extends Ui.View {
 		else if($._mApp.mTestControl.mState.isFinished) {
 			time = $._mApp.mTestControl.utcStop - $._mApp.mTestControl.utcStart;
 		}
+		
+		// don't need expected
 		expected = (((1 + time) / 60.0) * $._mApp.mSampleProc.avgPulse).toNumber();
 
 		var mLabelColour = mapColour( $._mApp.lblColSet);

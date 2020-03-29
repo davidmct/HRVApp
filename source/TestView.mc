@@ -63,20 +63,27 @@ class TestView extends Ui.View {
 		oldValCol = $._mApp.txtColSet;
 
 		if (mDebugging == true) {Sys.println("TextView: onLayout(): starting field update");}
-				
-		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
-		mViewResultLblID = getLayoutFieldIDandInit("ViewResultLbl", null, mLabelColour, mJust);
-		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
-		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour, mJust);
-
 		
-		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapTxt", "STRAP", mapColour(RED), mJust);	
-		mViewPulseTxtID = getLayoutFieldIDandInit("ViewPulseTxt", "PULSE", mapColour(RED), mJust);	
-					
-		mViewMsgTxtID = getLayoutFieldIDandInit("ViewMsgTxt", msgTxt, mValueColour, mJust);
-		mViewResultTxtID = getLayoutFieldIDandInit("ViewResultTxt", "0", mValueColour, mJust);
+		// title		
+		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
+		
+		// HRV label and value
+		mViewResultLblID = getLayoutFieldIDandInit("ViewHRV_Lbl", null, mLabelColour, mJust);
+		mViewResultTxtID = getLayoutFieldIDandInit("ViewHRV_Val", "0", mValueColour, mJust);
+				
+		// Pulse lable and value
+		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
 		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  "0", mValueColour, mJust);
-		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);			
+				
+		// Time placement
+		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour, mJust);
+		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);	
+		
+		// Status of strap
+		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapStatus", null, mapColour(RED), mJust);	
+					
+		mViewMsgTxtID = getLayoutFieldIDandInit("bodyText", null, mValueColour, mJust);
+			
 	}
         
     //! Restore the state of the app and prepare the view to be shown
@@ -155,8 +162,8 @@ class TestView extends Ui.View {
     	// can call onNotify with onNotify(:State_x, self, array);
     	//Sys.println("onUpdate: update fields " +$._mApp.mSampleProc.mLnRMSSD+" "+$._mApp.mSampleProc.avgPulse);
     	
-	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.strapTxt, mapColour($._mApp.mSensor.mHRData.strapCol));	
-		updateLayoutField(mViewPulseTxtID, $._mApp.mSensor.mHRData.pulseTxt, mapColour($._mApp.mSensor.mHRData.pulseCol));					
+	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.mHRMStatus, mapColour($._mApp.mSensor.mHRData.mHRMStatusCol));	
+		//updateLayoutField(mViewPulseTxtID, $._mApp.mSensor.mHRData.pulseTxt, mapColour($._mApp.mSensor.mHRData.pulseCol));					
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
 		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
 		updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
