@@ -121,15 +121,14 @@ class SampleProcessing {
 		pulseSum = 0;
 		dataCount = 0;	
 		avgPulse = 0;
-		// change these back to zero
-		mRMSSD = 50;
-		mLnRMSSD = 50;	
-		mSDANN = 50;
-		mSDSD = 50; 
-		mNN50 = 50;
-		mpNN50 = 50; 
-		mNN20 = 50;
-		mpNN20 = 50;
+		mRMSSD = 0;
+		mLnRMSSD = 0;	
+		mSDANN = 0;
+		mSDSD = 0; 
+		mNN50 = 0;
+		mpNN50 = 0; 
+		mNN20 = 0;
+		mpNN20 = 0;
 	}
 	
 	function getNumberOfSamples() {
