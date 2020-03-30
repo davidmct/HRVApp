@@ -25,7 +25,7 @@ using Toybox.Sensor;
 //11. Move all time functions to use libraries to avoid time wrap - 136 years so maybe no tissue
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
-var mDebugging = true;
+var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 

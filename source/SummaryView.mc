@@ -56,19 +56,10 @@ class SummaryView extends Ui.View {
     
     //! Update the view
     function onUpdate(dc) { 
-    	Sys.println("SummaryView: onUpdate() called");
-    	
-    	var time = 0;
-		var pulse = 0;
-
-		if($._mApp.mTestControl.mState.isTesting) {
-			time = $._mApp.timeNow() - $._mApp.mTestControl.utcStart;
-		}
-		else if($._mApp.mTestControl.mState.isFinished) {
-			time = $._mApp.mTestControl.utcStop - $._mApp.mTestControl.utcStart;
-		}
+    	//Sys.println("SummaryView: onUpdate() called");
 		
 		var mLabelColour = mapColour( $._mApp.lblColSet);
+		// oddly doing this in layout now works!!
 //		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER;
 //		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueColour = mapColour( $._mApp.txtColSet);
@@ -76,6 +67,7 @@ class SummaryView extends Ui.View {
 		//Sys.println("SummaryView: update fields of layout: labelCol: "+ mLabelColour + " Value colour " + mValueColour);
 		
 		// should be able to set justification in layout!!
+		updateLayoutField("ViewTitle", null, mLabelColour);
 		updateLayoutField("rMSSD", null, mLabelColour);
 		updateLayoutField("Ln_HRV", null, mLabelColour);		
 		updateLayoutField("avgPulse", null, mLabelColour);		
@@ -96,7 +88,6 @@ class SummaryView extends Ui.View {
 		updateLayoutField( "NN20_Value", $._mApp.mSampleProc.mNN20.format("%d"), mValueColour);		
 		updateLayoutField( "pNN20_Value", $._mApp.mSampleProc.mpNN20.format("%d"), mValueColour);		
 			
-		//dc.drawText(100, 100, Graphics.FONT_MEDIUM, "WHAT IS HAPPENING", Graphics.TEXT_JUSTIFY_CENTER);
    		View.onUpdate(dc);
    		//return true;
     }
