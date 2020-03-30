@@ -195,7 +195,7 @@ class HRVApp extends App.AppBase {
     	}
 
 		// Retrieve saved results from memory
-		// clear buffer
+		// clear buffer - means only one set per day
 		mStorage.resetResults();
 		//restore previous results from properties/store		
 		mStorage.retrieveResults();

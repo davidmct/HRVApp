@@ -15,7 +15,6 @@ class HistoryView extends Ui.View {
     }
 
     function scale(num) {
-
 		return (((num - floorVar) * scaleVar) + 0.5).toNumber();
 	}
 
@@ -31,17 +30,12 @@ class HistoryView extends Ui.View {
 
 		// Find result limits
 		for(var i = 0; i < 30; i++) {
-
 			var ii = i * 5;
-
 			// Only process if newer than epoch
 			if(epoch <= $._mApp.results[ii]) {
-
 				// Get range
 				for(var iii = 1; iii <= 4; iii++) {
-
 					var value = $._mApp.results[ii + iii];
-
 					if(min > value) {
 						min = value;
 					}
@@ -49,7 +43,6 @@ class HistoryView extends Ui.View {
 						max = value;
 					}
 				}
-
 				dataCount++;
 			}
 		}
@@ -106,7 +99,6 @@ class HistoryView extends Ui.View {
 		// Draw the lines
 		MapSetColour(dc,DK_GRAY, $._mApp.bgColSet);
 		for(var i = 0; i < 7; i++) {
-
 			var y = line1Y - 30 + i * 15;
 			dc.drawLine(leftX, y, rightX, y);
 		}
@@ -129,7 +121,6 @@ class HistoryView extends Ui.View {
 		}
 
 		for(var i = 0; i < 7; i += 2) {
-
 			var y = ceilY + (((i * gap) * scaleY) / 2);
 			var str = format(" $1$ ",[(ceil - ((i * gap)/2)).format("%d")]);
 			dc.drawText(textX, y, font, str, just);
@@ -137,14 +128,16 @@ class HistoryView extends Ui.View {
 
 		// Draw the data
 		var drawDots = 0;
-
+		
+		// results = [ utcStart; mLnRMSSD, avgPulse, average mLnRMSSD; average of average pulses] 
+		// seem to have lost code to do average of average!!
+		
+		$._mApp.results[index + 4] = sumPulse / count;
+		
 		for(var i = 0; i < 30; i++) {
-
 			// Start 30 days ago and work forwards
  			var ii = ((today + 1 + i) % 30) * 5;
-
 			if(epoch < $._mApp.results[ii]) {
-
 				var index1 = i * 6 + 3;
 	 			var hrv1 = scale($._mApp.results[ii + 1]);
 	 			var pulse1 = scale($._mApp.results[ii + 2]);
@@ -153,11 +146,8 @@ class HistoryView extends Ui.View {
 	 			drawDots++;
 
 	 			for(var iii = i + 1; iii < 30; iii++) {
-
 					var iiii = ((today + 1 + iii) % 30) * 5;
-
 		 			if(epoch < $._mApp.results[iiii]) {
-
 			 			var index2 = iii * 6 + 3;
 			 			var hrv2 = scale($._mApp.results[iiii + 1]);
 			 			var pulse2 = scale($._mApp.results[iiii + 2]);

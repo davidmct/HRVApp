@@ -215,7 +215,7 @@ class HRVStorageHandler {
 	}
 
 	function resetResults() {
-		// should only be called from settings
+		// should only be called from settings - also called onStart()
 		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
