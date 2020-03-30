@@ -1,6 +1,6 @@
 <layouts>
-    <!-- Results view undefined -->
-    <layout id="ResultsViewLayout">
+    <!-- Summary view undefined -->
+    <layout id="SummaryViewLayout">
     </layout>
     <layout id="TestViewLayout">
     </layout>

@@ -259,7 +259,7 @@ class HRVApp extends App.AppBase {
 		Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
 		if(RESULT_VIEW == viewNum) {
-			return new ResultView();
+			return new SummaryView();
 		}
 		else if(HISTORY_VIEW == viewNum) {
 			return new HistoryView();

@@ -1,17 +1,28 @@
 <layouts>
-    <!-- Results view layout for round-280x280 -->
-    <layout id="ResultsViewLayout">
-        <label id="timeY" text="Time" x="130" y="58" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="pulseY" text="Pulse" x="130" y="88" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="hrvY" text="HRV" x="130" y="118" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="samplesY" text="Samples" x="130" y="148" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="expectedY" text="Expected" x="130" y="178" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="timeValue" x="center" y="58" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="pulseValue" x="center" y="88" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="hrvValue" x="center" y="118" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="samplesValue" x="center" y="148" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="expectedValue" x="center" y="178" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-		<drawable id="ResultsLayoutLines_id" />
+    <!-- Summary view layout for round-280x280 -->
+    <layout id="SummaryViewLayout">
+    	<!-- Labels columns of 4 needed -->
+    	<!-- see if we can or together justifications -->
+        <label id="rMSSD" text="rMSSD" x="130" y="58" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="Ln_HRV" text="Ln(HRV)" x="130" y="118" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="avgPulse" text="avgBPM" x="130" y="88" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="SDSD" text="SDSD" x="130" y="148" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN50" text="NN50" x="130" y="178" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN50" text="pNN50" x="130" y="178" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN20" text="NN20" x="130" y="178" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN20" text="pNN20" x="130" y="178" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />   
+        <label id="SDANN" text="SDANN" x="130" y="148" justification="Gfx.TEXT_JUSTIFY_RIGHT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />   
+        <!-- values - use strings as more fonts -->
+        <label id="rMSSD_Value" x="center" y="58" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="Ln_HRV_Value" x="center" y="88" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="avgPulse_Value" x="center" y="118" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="SDSD_Value" x="center" y="148" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN50_Value" x="center" y="178" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN50_Value" x="center" y="178" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN20_Value" x="center" y="178" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN20_Value" x="center" y="178" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="SDANN_Value" x="130" y="148" justification="Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+		<drawable id="SummaryLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
         <label id="ViewTitle" text="HRV TEST" x="140" y="43" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
