@@ -3,12 +3,13 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
+// need to update this to use justification in layout!
+
 class TestView extends Ui.View {
 
 	hidden var mTestViewLayout;
 	var mLabelColour;
 	var oldLblCol;
-	var mJust = Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER;
 	var mValueColour;
 	var oldValCol;
 	
@@ -65,24 +66,24 @@ class TestView extends Ui.View {
 		if (mDebugging == true) {Sys.println("TextView: onLayout(): starting field update");}
 		
 		// title		
-		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour, mJust);
+		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour);
 		
 		// HRV label and value
-		mViewResultLblID = getLayoutFieldIDandInit("ViewHRV_Lbl", null, mLabelColour, mJust);
-		mViewResultTxtID = getLayoutFieldIDandInit("ViewHRV_Val", "0", mValueColour, mJust);
+		mViewResultLblID = getLayoutFieldIDandInit("ViewHRV_Lbl", null, mLabelColour);
+		mViewResultTxtID = getLayoutFieldIDandInit("ViewHRV_Val", "0", mValueColour);
 				
 		// Pulse lable and value
-		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour, mJust);
-		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  "0", mValueColour, mJust);
+		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour);
+		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  "0", mValueColour);
 				
 		// Time placement
-		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour, mJust);
-		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour, mJust);	
+		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour);
+		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour);	
 		
 		// Status of strap
-		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapStatus", null, mapColour(RED), mJust);	
+		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapStatus", null, mapColour(RED));	
 					
-		mViewMsgTxtID = getLayoutFieldIDandInit("bodyText", null, mValueColour, mJust);
+		mViewMsgTxtID = getLayoutFieldIDandInit("bodyText", null, mValueColour);
 			
 	}
         
@@ -119,11 +120,10 @@ class TestView extends Ui.View {
    
    // could be common function as in ResultsView 
 
-   hidden function getLayoutFieldIDandInit(fieldId, fieldValue, fieldColour, fieldJust) {
+   hidden function getLayoutFieldIDandInit(fieldId, fieldValue, fieldColour) {
         var drawable = findDrawableById(fieldId);
         if (drawable != null) {
             drawable.setColor(fieldColour);
-            drawable.setJustification(fieldJust);
             if (fieldValue != null) {
             	drawable.setText(fieldValue);
             }
@@ -147,12 +147,6 @@ class TestView extends Ui.View {
 			Sys.println("Test state = "+ $._mApp.mTestControl.mState.isTesting);
 		}
 		    	
-    	// optimisation....
-    	// We should cache drawable ID in on layout
-    	// The lablels are fixed and can be done in layout
-    	// Would need to change colours if these variables got changed
-    	// dynamic fields updated using cached ID. Ideally only on change but these should be frequent as HR
-    	// could use a call back to update based on model changes (Model-View-Controller pattern)
     	// All of the test logic above should be else where and call an update function here
     	// function onShow() { getModel().setObserver(self.method(:onNotify));}
     	// function onHide() {getModel().setObserver(null);}
@@ -160,10 +154,10 @@ class TestView extends Ui.View {
     	// test :symbol_x
     	// }
     	// can call onNotify with onNotify(:State_x, self, array);
+    	
     	//Sys.println("onUpdate: update fields " +$._mApp.mSampleProc.mLnRMSSD+" "+$._mApp.mSampleProc.avgPulse);
     	
-	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.mHRMStatus, mapColour($._mApp.mSensor.mHRData.mHRMStatusCol));	
-		//updateLayoutField(mViewPulseTxtID, $._mApp.mSensor.mHRData.pulseTxt, mapColour($._mApp.mSensor.mHRData.pulseCol));					
+	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.mHRMStatus, mapColour($._mApp.mSensor.mHRData.mHRMStatusCol));						
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
 		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
 		updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);

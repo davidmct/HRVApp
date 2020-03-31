@@ -26,16 +26,16 @@
 		<drawable id="SummaryLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
-        <label id="ViewTitle" text="HRV TEST" x="140" y="43" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="ViewHRV_Lbl" text="Ln(HRV)" x="210" y="185" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-        <label id="ViewHRV_Val" text="value" x="210" y="216" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+        <label id="ViewTitle" text="HRV Test" x="140" y="35" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="ViewHRV_Lbl" text="Ln(HRV)" x="210" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewHRV_Val" text="value" x="210" y="216" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
 
-        <label id="ViewStrapStatus" text="no source" x="90" y="150" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-        <label id="ViewPulseLbl" text="BPM" x="180" y="150" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-         <label id="ViewPulseVal" text="xx" x="230" y="152" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+        <label id="ViewStrapStatus" text="no source" x="90" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewPulseLbl" text="BPM" x="180" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+         <label id="ViewPulseVal" text="xx" x="230" y="152" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
  
-        <label id="ViewTimerLbl" text="TIMER" x="70" y="185" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-        <label id="ViewTimerVal" text="value" x="70" y="216" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+        <label id="ViewTimerLbl" text="TIMER" x="70" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewTimerVal" text="value" x="70" y="216" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
      	<text-area id="bodyText" 
 	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
 	        text="Starting up..." 

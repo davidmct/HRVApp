@@ -26,14 +26,14 @@ class HistoryView extends Ui.View {
 
 		var dataCount = 0;
 		var max = 0;
-		var min = 310;
+		var min = 1000;
 
 		// Find result limits
 		for(var i = 0; i < 30; i++) {
 			var ii = i * 5;
 			// Only process if newer than epoch
 			if(epoch <= $._mApp.results[ii]) {
-				// Get range
+				// Get range of all four results ... may not be correlated range
 				for(var iii = 1; iii <= 4; iii++) {
 					var value = $._mApp.results[ii + iii];
 					if(min > value) {
@@ -53,44 +53,41 @@ class HistoryView extends Ui.View {
 			max = 5;
 		}
 
-		// Create the range
+		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
 		var floor = min - (min % 5);
-
-		var range = ceil - floor;
-		var toggle = 0;
-		while(0 != range % 15) {
-			if(1 == toggle % 2) {
-				ceil += 5;
-			}
-			else {
-				floor -= 5;
-			}
-			range = ceil - floor;
-			toggle++;
+		
+		var test = (ceil - floor) % 15;
+		if (test == 5) { 
+			floor -= 5;
+		} else if (test == 10) {
+			ceil += 5;
+			floor -= 5;
 		}
-		var scaleY = 90 / range.toFloat();
+		var range = ceil - floor;
+		
+		// chartHeight defines height of chart and sets scale
+		// needs to divide by 6 for horizontal lines
+		var chartHeight = 120;
+		var scaleY = chartHeight / range.toFloat();
 
 		floorVar = floor;
 		scaleVar = scaleY;
 
-		var font = 0; 	// Gfx.FONT_XTINY;
-		var just = 5;	// Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER;
+		var font = Gfx.FONT_XTINY; //0
+		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER; //5
 		var ctrX = dc.getWidth() / 2;
 		var ctrY = dc.getHeight() / 2;
+		// define box about centre
 		var leftX = ctrX - 90;
 		var rightX = ctrX + 90;
-		var ceilY = ctrY - 45;
-		var floorY = ctrY + 45;
-		var textX = leftX + 20;
+		// 45 *2 is height of chart
+		var ceilY = ctrY - chartHeight/2;
+		var floorY = ctrY + chartHeight/2;
+		var mLabelOffsetCeil = ceilY - 15;
+		var mLabelOffsetFloor = floorY + 20;		
+		var textX = leftX - 20; // was +
 		var gap = (ceil - floor) / 3;
-	    var line1Y = 60;
-	    var line2Y = 90;
-
-	    if(FENIX == $._mApp.device) {
-			line1Y = 94;
-			line2Y = 124;
-		}
 
 		// Prepare the screen
 		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
@@ -99,12 +96,11 @@ class HistoryView extends Ui.View {
 		// Draw the lines
 		MapSetColour(dc,DK_GRAY, $._mApp.bgColSet);
 		for(var i = 0; i < 7; i++) {
-			var y = line1Y - 30 + i * 15;
+			var y = ceilY + i * chartHeight/6;
 			dc.drawLine(leftX, y, rightX, y);
 		}
-		MapSetColour(dc, $._mApp.lblColSet, TRANSPARENT);
-        dc.drawLine(0, line1Y, dc.getWidth(), line1Y);
-		dc.drawLine(0, line2Y, dc.getWidth(), line2Y);
+		MapSetColour(dc, $._mApp.lblColSet, TRANSPARENT);		
+		dc.drawText(ctrX, 35, Gfx.FONT_MEDIUM, "History", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER); 
 
 		// Draw the numbers
 		MapSetColour(dc, DK_GRAY, $._mApp.bgColSet);
@@ -113,10 +109,13 @@ class HistoryView extends Ui.View {
 			var y = ceilY + (((i * gap) * scaleY) / 2);
 			var num = ceil - ((i * gap) / 2.0);
 			if(num != num.toNumber()) {
-				dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
+				// may need to stagger on smaller screens
+				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
+				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%0.1f")]), just);				
 			}
 			else {
-				dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
+				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
+				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
 			}
 		}
 
@@ -130,9 +129,6 @@ class HistoryView extends Ui.View {
 		var drawDots = 0;
 		
 		// results = [ utcStart; mLnRMSSD, avgPulse, average mLnRMSSD; average of average pulses] 
-		// seem to have lost code to do average of average!!
-		
-		$._mApp.results[index + 4] = sumPulse / count;
 		
 		for(var i = 0; i < 30; i++) {
 			// Start 30 days ago and work forwards
@@ -176,7 +172,6 @@ class HistoryView extends Ui.View {
 				}
 				// If only one reading then draw dots. There are no averages
 				if(1 == drawDots) {
-
 					MapSetColour(dc, ORANGE, $._mApp.bgColSet);
 					dc.fillCircle(leftX + index1, floorY - pulse1, 2);
 
@@ -190,16 +185,16 @@ class HistoryView extends Ui.View {
 		dc.setPenWidth(1);
 
 		MapSetColour(dc, DK_RED, $._mApp.bgColSet);
-		dc.drawText(ctrX, floorY + 20, font, " AVG PULSE", 6);
+		dc.drawText(ctrX, mLabelOffsetFloor, font, " AVG PULSE", 6);
 
 		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-		dc.drawText(ctrX, ceilY - 20, font, " PULSE", 6);
+		dc.drawText(ctrX, mLabelOffsetCeil, font, " PULSE", 6);
 
 		MapSetColour(dc, DK_BLUE, $._mApp.bgColSet);
-		dc.drawText(ctrX, floorY + 20, font, "AVG HRV ", 4);
+		dc.drawText(ctrX, mLabelOffsetFloor, font, "AVG HRV ", 4);
 
 		MapSetColour(dc, BLUE, $._mApp.bgColSet);
-		dc.drawText(ctrX, ceilY - 20, font, "HRV ", 4);
+		dc.drawText(ctrX, mLabelOffsetCeil, font, "HRV ", 4);
 
 		// Testing only. Draw used memory
 		//var str = System.getSystemStats().usedMemory.toString();
