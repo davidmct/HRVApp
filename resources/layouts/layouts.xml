@@ -6,4 +6,6 @@
     </layout>
     <layout id="PoincareViewLayout">
     </layout>
+    <layout id="CurrentViewLayout">
+    </layout>    
 </layouts>

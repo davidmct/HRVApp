@@ -16,13 +16,14 @@ using Toybox.Sensor;
 // Things still to fix
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
-//5. Redo HRV measurements and fix graph
-//6. Add poincare view - look at onPartialUpdate...
-//7. History and HRV plot over time views
-//8. change summary page to include rMSSD SSRR(10, 20...), skipped or double beats
+//5. Check history works - need stored data or test data
+//6. Add poincare view 
+//7. Remove watch view - useless
+//8. sample processing check skipped or double beats
 //9. how to make trial version and possible payment
 //10. Revise ANT/Sensor handling to provide choice between them!!
 //11. Move all time functions to use libraries to avoid time wrap - 136 years so maybe no tissue
+//12. Add fit session and record saving
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = false;
@@ -51,9 +52,9 @@ enum {
 
 	// Views
 	TEST_VIEW = 0,
-	RESULT_VIEW = 1,
+	SUMMARY_VIEW = 1,
 	HISTORY_VIEW = 2,
-	HRVPLOT_VIEW = 3,
+	CURRENT_VIEW = 3,
 	POINCARE_VIEW = 4,
 	NUM_VIEWS = 5
 }
@@ -258,14 +259,14 @@ class HRVApp extends App.AppBase {
 		
 		Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
-		if(RESULT_VIEW == viewNum) {
+		if(SUMMARY_VIEW == viewNum) {
 			return new SummaryView();
 		}
 		else if(HISTORY_VIEW == viewNum) {
 			return new HistoryView();
 		}
-		else if(HRVPLOT_VIEW == viewNum) {
-			return new HrvPlotView();
+		else if(CURRENT_VIEW == viewNum) {
+			return new CurrentValueView();
 		}
 		else if(POINCARE_VIEW == viewNum) {
 			return new PoincareView();

@@ -59,9 +59,6 @@ class SummaryView extends Ui.View {
     	//Sys.println("SummaryView: onUpdate() called");
 		
 		var mLabelColour = mapColour( $._mApp.lblColSet);
-		// oddly doing this in layout now works!!
-//		var mLabelJust = Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER;
-//		var mValueJust = Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER;
 		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		//Sys.println("SummaryView: update fields of layout: labelCol: "+ mLabelColour + " Value colour " + mValueColour);

@@ -32,7 +32,7 @@
 
         <label id="ViewStrapStatus" text="no source" x="90" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
         <label id="ViewPulseLbl" text="BPM" x="180" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-         <label id="ViewPulseVal" text="xx" x="230" y="152" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+        <label id="ViewPulseVal" text="xx" x="230" y="152" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
  
         <label id="ViewTimerLbl" text="TIMER" x="70" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
         <label id="ViewTimerVal" text="value" x="70" y="216" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
@@ -55,4 +55,25 @@
         <label id="PoincareTitle" text="Poincare" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
     	<drawable id="PoincareLayoutLines_id" />
     </layout>
+    <layout id="CurrentViewLayout">
+        <label id="CurrentViewTitle" text="Current" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+    	<text-area id="CurrentViewString" 
+	        color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"
+	        text="0:00 out of 0:00" 
+	        x="10%" y="20%" width="80%" height="32%">
+	        <!-- The fonts will be tried in order. This allows scaling the font size
+	             as the text grows -->        
+	        <fonts>
+	            <font>Gfx.FONT_MEDIUM</font>
+	            <font>Gfx.FONT_SMALL</font>            
+	            <font>Gfx.FONT_TINY</font>
+	            <font>Gfx.FONT_XTINY</font>
+	        </fonts>
+    	</text-area>  
+         <label id="CurrentrMSSD_txt" text="Ln(rMSSD)" x="80" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+         <label id="CurrentrMSSD_val" text="aaa" x="80" y="180" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+         <label id="CurrentInterval_txt" text="Interval" x="200" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+         <label id="CurrentInterval_val" text="xx" x="200" y="180" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+    </layout>
+    
 </layouts>
