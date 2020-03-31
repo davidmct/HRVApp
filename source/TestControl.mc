@@ -49,6 +49,7 @@ class TestController {
 	var mManualTestStopTime;
 	//var stopMoment;
 	hidden var mFunc;
+	hidden var mFuncCurrent;
 	    
 	class cTestState {
 		// App states
@@ -83,10 +84,14 @@ class TestController {
 		// resetTest() is called after sensor opened by onStart in main	
 	}
 	
-	// function to call to update Results view
+	// function to call to update Summary view
 	function setObserver(func) {
 		mFunc = func;
 	}
+	
+	function setObserver2(func) {
+		mFuncCurrent = func;
+	}	
 	
 	// function onHide() {getModel().setObserver(null);}
 	// application is stopping
@@ -371,6 +376,13 @@ class TestController {
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
     	}
+    	
+    	// update Current  View data  
+    	if (mFuncCurrent != null) {
+    		var limit = TYPE_MANUAL == testType ? mManualTestStopTime : $._mApp.timerTimeSet;
+    		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
+    	}
+    	    	
     	if (mDebugging == true) {Sys.println("TestControl: exiting UpdateStatus");}
     }   
 	

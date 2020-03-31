@@ -10,6 +10,8 @@ using Toybox.System as Sys;
 class CurrentValueView extends Ui.View {
 
 	var mCurrentLayout;
+	var timer = "";
+	var timeLimit = "";
 	
 	function initialize() { View.initialize();}
 	
@@ -25,8 +27,14 @@ class CurrentValueView extends Ui.View {
 		
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-
+		$._mApp.mTestControl.setObserver2(self.method(:onNotify));
     }
+    
+    function onNotify(symbol, params) {
+		// [ timer, timer limit]
+		timer = params[0];
+		timeLimit = params[1];	
+	}
     
     hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
         var drawable = findDrawableById(fieldId);
@@ -49,12 +57,7 @@ class CurrentValueView extends Ui.View {
 		updateLayoutField("CurrentViewTitle", null, mLabelColour);
 		// text area so check
 		// $._mApp.
-		mMessage = "Running for ";
-		// current time
-		mMessage += "A:AA";
-		mMessage += " out of ";
-		// add max time
-		mMessage +="X:XX";
+		mMessage = "Running for "+timer+" out of "+timeLimit;
 		
 		updateLayoutField("CurrentViewString", mMessage, mValueColour);	
 			
