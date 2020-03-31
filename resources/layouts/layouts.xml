@@ -4,4 +4,6 @@
     </layout>
     <layout id="TestViewLayout">
     </layout>
+    <layout id="PoincareViewLayout">
+    </layout>
 </layouts>

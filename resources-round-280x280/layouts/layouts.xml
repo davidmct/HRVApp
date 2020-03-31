@@ -51,4 +51,8 @@
     	</text-area>  
  		<drawable id="TestViewLayoutLines_id" />     
     </layout>
+    <layout id="PoincareViewLayout">
+        <label id="PoincareTitle" text="Poincare" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+    	<drawable id="PoincareLayoutLines_id" />
+    </layout>
 </layouts>

@@ -6,15 +6,15 @@ using Toybox.System as Sys;
 // display a summary of the current test data eg rMSSD
 class SummaryView extends Ui.View {
 
-	var mResultsLayout;
+	var mSummaryLayout;
 
 	function initialize() { View.initialize();}
 	
 	function onLayout(dc) {
-		mResultsLayout = Rez.Layouts.SummaryViewLayout(dc);
+		mSummaryLayout = Rez.Layouts.SummaryViewLayout(dc);
 		//Sys.println("SummaryView: onLayout() called ");
-		if ( mResultsLayout != null ) {
-			setLayout (mResultsLayout);
+		if ( mSummaryLayout != null ) {
+			setLayout (mSummaryLayout);
 		} else {
 			Sys.println("layout null");
 		}
