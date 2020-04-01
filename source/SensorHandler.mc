@@ -22,8 +22,9 @@ using Toybox.Graphics as Gfx;
 class SensorHandler {//extends Ant.GenericChannel {
    
     var mHRData;
-    hidden var sensor; 
-    hidden var mSensorType;  
+    var sensor; 
+    hidden var mSensorType; 
+    hidden var mAntIDLocal; 
     var mSearching;
     
     class HRStatus {
@@ -65,16 +66,20 @@ class SensorHandler {//extends Ant.GenericChannel {
 	
 	function initialize(mAntID, sensorType) {
     	mSearching = true;  	
-    	mHRData = new HRStatus();
-    	
-    	if (sensorType) {
+    	mHRData = new HRStatus();   		
+    	mSensorType = sensorType;
+    	mAntIDLocal = mAntID;
+    }
+    
+    function SetUpSensors() {
+    	// has to be called after initialize as mSensor not created!!
+        if (mSensorType) {
     		// ANT case
-    		sensor = new AntHandler(mAntID);
+    		sensor = new AntHandler(mAntIDLocal, mHRData);
     	} else {
     		// Internal or registered strap
-    		sensor = new InternalSensor();
-    	}	
-    	mSensorType = sensor;
+    		sensor = new InternalSensor(mHRData);
+    	}
     }
     
     function openCh() { 
@@ -85,7 +90,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     		//GenericChannel.close();
     	}
     	mSearching = true;  
-    	if (mSensorType) { 	
+    	if ($._mApp.mSensor.mSensorType) { 	
     		// only applies to ANT
 			mHRData.isChOpen = sensor.GenericChannel.open();
 		}
@@ -113,212 +118,220 @@ class SensorHandler {//extends Ant.GenericChannel {
 	    mHRData.livePulse = 0;
 		mSearching = true;
     } 
-  
-  	class AntHandler extends Ant.GenericChannel {  
-      	const DEVICE_TYPE = 120;  //strap
-    	const PERIOD = 8070; // 4x per second	
-    	hidden var mChanAssign;
-    	hidden var deviceCfg;
-    	hidden var mMessageCount=0;
-    	
-	    function initialize(mAntID) { 
-	        // Get the channel
-	        mChanAssign = new Ant.ChannelAssignment(
-	            //Ant.CHANNEL_TYPE_RX_NOT_TX,
-	            Ant.CHANNEL_TYPE_RX_ONLY,
-	            Ant.NETWORK_PLUS);
-	            		
-	        // Set the configuration
-	        deviceCfg = new Ant.DeviceConfig( {
-	            :deviceNumber => mAntID,             //Set to 0 to use wildcard search
-	            :deviceType => DEVICE_TYPE,
-	            :transmissionType => 0,
-	            :messagePeriod => PERIOD,
-	            :radioFrequency => 57,              //Ant+ Frequency
-	            :searchTimeoutLowPriority => 10,    // was 10 Timeout in 25s
-	            //:searchTimeoutHighPriority => 2, 
-	            :searchThreshold => 0} );           //Pair to all transmitting sensors, 0 disabled, 1 = nearest
-	       	//mChanAssign.setBackgroundScan(true);
-	       	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
-	       	GenericChannel.setDeviceConfig(deviceCfg);
-	       	mHRData.isChOpen = GenericChannel.open();
-	       	
-			// will now be searching for strap after openCh()
-			Sys.println("ANT initialised");
-		}	
+}
+
+class AntHandler extends Ant.GenericChannel {  
+    const DEVICE_TYPE = 120;  //strap
+	const PERIOD = 8070; // 4x per second	
+	hidden var mChanAssign;
+	hidden var deviceCfg;
+	hidden var mMessageCount=0;
+	hidden var mHRDataLnk;
 	
-	    function onAntMsg(msg)
-	    {
-			var payload = msg.getPayload();		
+    function initialize(mAntID, mHRData) {
+    	mHRDataLnk = mHRData;
+    	 
+        // Get the channel
+        mChanAssign = new Ant.ChannelAssignment(
+            //Ant.CHANNEL_TYPE_RX_NOT_TX,
+            Ant.CHANNEL_TYPE_RX_ONLY,
+            Ant.NETWORK_PLUS);
+            		
+        // Set the configuration
+        deviceCfg = new Ant.DeviceConfig( {
+            :deviceNumber => mAntID,             //Set to 0 to use wildcard search
+            :deviceType => DEVICE_TYPE,
+            :transmissionType => 0,
+            :messagePeriod => PERIOD,
+            :radioFrequency => 57,              //Ant+ Frequency
+            :searchTimeoutLowPriority => 10,    // was 10 Timeout in 25s
+            //:searchTimeoutHighPriority => 2, 
+            :searchThreshold => 0} );           //Pair to all transmitting sensors, 0 disabled, 1 = nearest
+       	//mChanAssign.setBackgroundScan(true);
+       	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
+       	GenericChannel.setDeviceConfig(deviceCfg);
+       	mHRDataLnk.isChOpen = GenericChannel.open();
+       	
+		// will now be searching for strap after openCh()
+		Sys.println("ANT initialised");
+	}	
+
+    function onAntMsg(msg)
+    {
+		var payload = msg.getPayload();		
+		if (mDebuggingANT == true) {
+	        //Sys.println("device ID = " + msg.deviceNumber);
+			//Sys.println("deviceType = " + msg.deviceType);
+			//Sys.println("transmissionType= " + msg.transmissionType);
+			//Sys.println("getPayload = " + msg.getPayload());
+			//Sys.println("messageId = " + msg.messageId);	
+			Sys.println("A - "+mMessageCount);
+			mMessageCount++;
+		}
+		
+        if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
+        	if ($._mApp.mSensor.mSearching) {
+                $._mApp.mSensor.mSearching = false;
+                // Update our device configuration primarily to see the device number of the sensor we paired to
+                deviceCfg = GenericChannel.getDeviceConfig();
+            }
+			// not sure this handles all page types and 65th special page correctly
+            mHRDataLnk.isAntRx = true;
+            mHRDataLnk.isStrapRx = true;
+            mHRDataLnk.mHRMStatusCol = GREEN;
+    		mHRDataLnk.mHRMStatus = "HR data";
+            
+            mHRDataLnk.livePulse = payload[7].toNumber();
+			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
+			var beatCount = payload[6].toNumber();
+	
 			if (mDebuggingANT == true) {
-		        //Sys.println("device ID = " + msg.deviceNumber);
-				//Sys.println("deviceType = " + msg.deviceType);
-				//Sys.println("transmissionType= " + msg.transmissionType);
-				//Sys.println("getPayload = " + msg.getPayload());
-				//Sys.println("messageId = " + msg.messageId);	
-				Sys.println("A - "+mMessageCount);
-				mMessageCount++;
+				Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
+				Sys.println("beatEvent is :" + beatEvent);
+				Sys.println("beatCount is :" + beatCount);
+			}
+						
+			newHRSampleProcessing(beatCount, beatEvent);
+        }
+        else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
+        	if (mDebuggingANT) {
+        		//Sys.println("ANT EVENT msg");
+        	}
+       		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
+	            var event = (payload[1] & 0xFF);	            
+	            switch( event) {
+	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
+	            		//if (mDebuggingANT) {Sys.println("ANT:EVENT: closed");}
+	            		openCh();
+	            		break;
+	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
+						mHRDataLnk.isStrapRx = false;
+						mHRDataLnk.isPulseRx = false;
+						mHRDataLnk.mHRMStatusCol = RED;
+    					mHRDataLnk.mHRMStatus = "Lost strap";
+	    				mHRDataLnk.livePulse = 0;
+						$._mApp.mSensor.mSearching = true;
+						// wait for another message?
+						//Sys.println( "RX_FAIL in AntHandler");
+						break;
+					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
+						//Sys.println( "ANT:RX_FAIL, search/wait");
+						$._mApp.mSensor.mSearching = true;	
+						break;
+					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
+						//Sys.println( "ANT: EVENT timeout");
+						////closeCh();
+						////openCh();
+						break;
+	            	default:
+	            		// channel response
+	            		//Sys.println( "ANT:EVENT: default");
+	            		break;
+	    		} 
+        	} else {
+        		//Sys.println("Not an RF EVENT");
+        	} 
+        } else {
+    		//other message!
+    		//Sys.println( "ANT other message " + msg.messageId);
+    	}
+    }
+    
+	function newHRSampleProcessing(beatCount, beatEvent) {
+		if (mDebuggingANT) {Sys.println("HR-SP");}
+	
+		// check we have a pulse and another beat recorded 
+		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {
+			mHRDataLnk.isPulseRx = true;
+			mHRDataLnk.mHRMStatusCol = GREEN;
+			mHRDataLnk.mNoPulseCount = 0;
+					
+			// Get interval
+			// need to check 64000 in ANT spec for roll-over number
+			var intMs = 0;
+			if(mHRDataLnk.mPrevBeatEvent > beatEvent) {
+				intMs = 64000 - mHRDataLnk.mPrevBeatEvent + beatEvent;
+			} else {
+				intMs = beatEvent - mHRDataLnk.mPrevBeatEvent;
 			}
 			
-	        if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
-	        	if (mSearching) {
-	                mSearching = false;
-	                // Update our device configuration primarily to see the device number of the sensor we paired to
-	                deviceCfg = GenericChannel.getDeviceConfig();
-	            }
-				// not sure this handles all page types and 65th special page correctly
-	            mHRData.isAntRx = true;
-	            mHRData.isStrapRx = true;
-	            mHRData.mHRMStatusCol = GREEN;
-	    		mHRData.mHRMStatus = "HR data";
-	            
-	            mHRData.livePulse = payload[7].toNumber();
-				var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
-				var beatCount = payload[6].toNumber();
-		
-				if (mDebuggingANT == true) {
-					Sys.println("ANT: Pulse is :" + mHRData.livePulse);
-					Sys.println("beatEvent is :" + beatEvent);
-					Sys.println("beatCount is :" + beatCount);
-				}
-							
-				newHRSampleProcessing(beatCount, beatEvent);
-	        }
-	        else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
-	        	if (mDebuggingANT) {
-	        		//Sys.println("ANT EVENT msg");
-	        	}
-	       		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
-		            var event = (payload[1] & 0xFF);	            
-		            switch( event) {
-		            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
-		            		//if (mDebuggingANT) {Sys.println("ANT:EVENT: closed");}
-		            		openCh();
-		            		break;
-		            	case Ant.MSG_CODE_EVENT_RX_FAIL:
-							mHRData.isStrapRx = false;
-							mHRData.isPulseRx = false;
-							mHRData.mHRMStatusCol = RED;
-	    					mHRData.mHRMStatus = "Lost strap";
-		    				mHRData.livePulse = 0;
-							mSearching = true;
-							// wait for another message?
-							//Sys.println( "RX_FAIL in AntHandler");
-							break;
-						case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
-							//Sys.println( "ANT:RX_FAIL, search/wait");
-							mSearching = true;	
-							break;
-						case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
-							//Sys.println( "ANT: EVENT timeout");
-							////closeCh();
-							////openCh();
-							break;
-		            	default:
-		            		// channel response
-		            		//Sys.println( "ANT:EVENT: default");
-		            		break;
-		    		} 
-	        	} else {
-	        		//Sys.println("Not an RF EVENT");
-	        	} 
-	        } else {
-	    		//other message!
-	    		//Sys.println( "ANT other message " + msg.messageId);
-	    	}
-	    }
-	    
-		function newHRSampleProcessing(beatCount, beatEvent) {
-			if (mDebuggingANT) {Sys.println("HR-SP");}
-		
-			// check we have a pulse and another beat recorded 
-			if(mHRData.mPrevBeatCount != beatCount && 0 < mHRData.livePulse) {
-				mHRData.isPulseRx = true;
-				mHRData.mHRMStatusCol = GREEN;
-				mHRData.mNoPulseCount = 0;
-						
-				// Get interval
-				// need to check 64000 in ANT spec for roll-over number
-				var intMs = 0;
-				if(mHRData.mPrevBeatEvent > beatEvent) {
-					intMs = 64000 - mHRData.mPrevBeatEvent + beatEvent;
-				} else {
-					intMs = beatEvent - mHRData.mPrevBeatEvent;
-				}
-				
-				//Sys.println("HR->S");
-				var beatsInGap = beatCount - mHRData.mPrevBeatCount;			
-				$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, beatsInGap );
-			} else {
-				// either no longer have a pulse or Count not changing
-				mHRData.mNoPulseCount += 1;
-				if(0 < mHRData.livePulse) {
-					var limit = 1 + 60000 / mHRData.livePulse / 246; // 246 = 4.06 KHz
-					if(limit < mHRData.mNoPulseCount) {
-						mHRData.isPulseRx = false;
-						mHRData.mHRMStatusCol = RED;
-	    				mHRData.mHRMStatus = "Lost Pulse";
-					}
+			//Sys.println("HR->S");
+			var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;			
+			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+		} else {
+			// either no longer have a pulse or Count not changing
+			mHRDataLnk.mNoPulseCount += 1;
+			if(0 < mHRDataLnk.livePulse) {
+				var limit = 1 + 60000 / mHRDataLnk.livePulse / 246; // 246 = 4.06 KHz
+				if(limit < mHRDataLnk.mNoPulseCount) {
+					mHRDataLnk.isPulseRx = false;
+					mHRDataLnk.mHRMStatusCol = RED;
+    				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				}
 			}
-			mHRData.mPrevBeatCount = beatCount;
-			mHRData.mPrevBeatEvent = beatEvent;
-			//Sys.println("HRSampleProcessing - end");
 		}
+		mHRDataLnk.mPrevBeatCount = beatCount;
+		mHRDataLnk.mPrevBeatEvent = beatEvent;
+		//Sys.println("HRSampleProcessing - end");
+	}
+}
+
+class InternalSensor { 
+	hidden var mHRDataLnk;
+	 
+	function initialize(mHR) { 
+		mHRDataLnk = mHR; 
+		SensorSetup();
 	}
 	
-	class InternalSensor { 
+	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
+	// 3.0.0 on feature
+	function SensorSetup() {
+		var options = {
+			:period => 1, 	// 1 second data packets
+			:heartBeatIntervals => {:enabled => true}
+		};
+		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
+		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
+		// fake ANT or sensor status
+		
+		Sys.println("SensorSetup ... mHRDataLnk :"+mHRDataLnk);
+		
+		mHRDataLnk.isChOpen = true;
+		$._mApp.mSensor.mSearching = false;
+	    mHRDataLnk.isAntRx = true;
+	    mHRDataLnk.isStrapRx = true;
+	}
 	
-		function initialize() { SensorSetup();}
-		
-		// lets see if we can use sensor Toybox to get RR from both optical and ANT+
-		// 3.0.0 on feature
-		function SensorSetup() {
-			var options = {
-				:period => 1, 	// 1 second data packets
-				:heartBeatIntervals => {:enabled => true}
-			};
-			Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
-			Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
-			// fake ANT or sensor status
-			mHRData.isChOpen = true;
-			mSearching = false;
-		    mHRData.isAntRx = true;
-		    mHRData.isStrapRx = true;
-		    mHRData.mHRMStatusCol = GREEN;
-			mHRData.mHRMStatus = "HR data";
-		}
-		
-		// call back for HR data
-		function onHeartRateData( sensorData) {
-			var mSize = 0; 
-			var heartBeatIntervals = [];
-		
-			Sys.println("sensorData "+sensorData);
-			if (sensorData has :heartRateData && sensorData.heartRateData != null) {
-				heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
-				
-				var sensorInfo = Sensor.getInfo();
-				if (sensorInfo == null || sensorInfo.heartRate == null) {
-					// flag no data and 
-					mHRData.livePulse = 0;
-					mHRData.mHRMStatusCol = RED;
-					mHRData.isPulseRx = false;
-					mHRData.mHRMStatus = "Lost Pulse";
-				} else {
-					mHRData.livePulse = sensorInfo.heartRate;
-					mHRData.mHRMStatusCol = GREEN;
-					mHRData.isPulseRx = true;
-					mHRData.mHRMStatus = "HR data";
-				}
-			}	
+	// call back for HR data
+	function onHeartRateData( sensorData) {
+		var mSize = 0; 
+		var heartBeatIntervals = [];
+	
+		Sys.println("sensorData "+sensorData);
+		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
+			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
 			
-			// now feed machine...
-			for ( var i=0; i< heartBeatIntervals.size(); i++) {
-				var intMs = heartBeatIntervals[i];
-				$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRData.livePulse, intMs, 1 );
-			}					
-			Sys.println("optical?: live "+ mHRData.livePulse+" intervals "+heartBeatIntervals);
-		} 
+			var sensorInfo = Sensor.getInfo();
+			if (sensorInfo == null || sensorInfo.heartRate == null) {
+				// flag no data and 
+				mHRDataLnk.livePulse = 0;
+				mHRDataLnk.mHRMStatusCol = RED;
+				mHRDataLnk.isPulseRx = false;
+				mHRDataLnk.mHRMStatus = "Lost Pulse";
+			} else {
+				mHRDataLnk.livePulse = sensorInfo.heartRate;
+				mHRDataLnk.mHRMStatusCol = GREEN;
+				mHRDataLnk.isPulseRx = true;
+				mHRDataLnk.mHRMStatus = "HR data";
+			}
+		}	
+		
+		// now feed machine...
+		for ( var i=0; i< heartBeatIntervals.size(); i++) {
+			var intMs = heartBeatIntervals[i];
+			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, 1 );
+		}					
+		Sys.println("optical?: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
 	} 
-}
+} 

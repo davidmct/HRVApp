@@ -176,6 +176,11 @@ class HRVApp extends App.AppBase {
 
    		// Start up HR sensor. Create the sensor object and open it
 	   	mSensor = new SensorHandler(mAntID, mSensorTypeExt);
+
+	   	Sys.println("HRVApp: Sensor set to "+mSensorTypeExt);
+	   	
+	   	// now setup sensors as have created data structures
+	   	mSensor.SetUpSensors();
 	    
 	    if (mDebugging) {
 	    	Sys.println("sensor created: " + mSensor);
