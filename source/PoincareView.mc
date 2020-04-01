@@ -6,7 +6,7 @@ using Toybox.System as Sys;
 // look at sensor example for line graph
 
 // This file draws a Poincare plot of the HRV values
-// Ploy y = RR(i+1), x = RR(i) (or i and i-1)
+// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 
 // Simple method:
 // 	scan through every sample, work out range and plot in x-y scatter
@@ -116,9 +116,8 @@ class PoincareView extends Ui.View {
 		var scaleY = chartHeight / range.toFloat();
 		// for moment we have a square layout and hence same scaling!!
 		var scaleX = scaleY;
-
-		floorVar = floor;
-		scaleVar = scaleY;
+		
+		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
 
 		var ctrX = dc.getWidth() / 2;
 		var ctrY = dc.getHeight() / 2;
@@ -156,14 +155,31 @@ class PoincareView extends Ui.View {
 		// Draw the data
 		var drawDots = 0;
 		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-		// iterate through available data drawing rectangles as less expensive than circles
-		// for( var i= 0; i < indexmax; i++ ){
-		// work out x and y from numbers and scales
-
-		//dc.drawRectangle(leftX+x, floorY-y, 2, 2);
-		// repeat
+		// reduce entries by 1 as points to next free slot
+		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples()-1;
 		
-		//dc.fillCircle(leftX + x, floorY - y, 2);
+		Sys.println("Poincare plotting # :"+mNumberEntries);
+
+		var mBufferptr = 0; // does setting up a variable and equal array copy whole array???
+		
+		// iterate through available data drawing rectangles as less expensive than circles
+		// reduce number of array accesses
+		var previousSample = $._mApp.mIntervalSampleBuffer[1];
+		// can't do same with x value as maybe different scale factors
+		
+		for( var i=2; i < mNumberEntries; i++ ){
+			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
+			// should use getSample() in case of circular buffer implemented
+			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
+			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
+			// work out x and y from numbers and scales
+			var x = (previousSample * scaleX).toNumber();
+			var y = (sampleN1 * scaleY).toNumber(); 
+			dc.drawRectangle(leftX+x, floorY-y, 2, 2);			
+			//dc.fillCircle(leftX + x, floorY - y, 2);
+			previousSample = sampleN1;
+		}
+		
    		return true;
     }
 }
