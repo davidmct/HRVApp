@@ -110,8 +110,8 @@ class SampleProcessing {
 	
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
-		$._mApp.mIntervalSampleBuffer[mSampleIndex] = 0;
-		minIntervalFound = 1000;
+		$._mApp.mIntervalSampleBuffer[0] = 0;
+		minIntervalFound = 2000; // around 30 BPM
 		maxIntervalFound = 0;
 	}
 	
@@ -180,8 +180,9 @@ class SampleProcessing {
 		//if (beatsInGap == null) { }
 		
 		// pre process bounds for poincare plot of RR interval
-		if (intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
-		if (intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
+		// first sample will have null beatsInGap so ignore as 
+		if (beatsInGap != null && intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
+		if (beatsInGap != null && intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing

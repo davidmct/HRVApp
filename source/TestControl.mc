@@ -379,7 +379,7 @@ class TestController {
     	
     	// update Current  View data  
     	if (mFuncCurrent != null) {
-    		var limit = TYPE_MANUAL == testType ? mManualTestStopTime : $._mApp.timerTimeSet;
+    		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
     		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
     	}
     	    	

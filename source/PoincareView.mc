@@ -49,6 +49,16 @@ class PoincareView extends Ui.View {
 		}
 		return true;
 	}
+	
+	hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
+        var drawable = findDrawableById(fieldId);
+        if (drawable != null) {
+            drawable.setColor(fieldColour);
+            if (fieldValue != null) {
+            	drawable.setText(fieldValue);
+            }
+        }
+    }
 
     function scale(num) {
 		return (((num - floorVar) * scaleVar) + 0.5).toNumber();
@@ -76,6 +86,12 @@ class PoincareView extends Ui.View {
 		// draw the layout
     	View.onUpdate(dc);
     	
+    	var mLabelColour = mapColour( $._mApp.lblColSet);
+		var mValueColour = mapColour( $._mApp.txtColSet);
+		
+		updateLayoutField("PoincareTitle", null, mLabelColour);
+		updateLayoutField("IntervalLbl", null, mLabelColour);
+		
     	// range saved in sampleprocessing already
 		var max = $._mApp.mSampleProc.maxIntervalFound;
 		var min = $._mApp.mSampleProc.minIntervalFound;
@@ -95,14 +111,15 @@ class PoincareView extends Ui.View {
 		
 		// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
-		var chartHeight = 120;
+		// impacts all layout numbers!
+		var chartHeight = 180;
 		var scaleY = chartHeight / range.toFloat();
+		// for moment we have a square layout and hence same scaling!!
+		var scaleX = scaleY;
 
 		floorVar = floor;
 		scaleVar = scaleY;
 
-		var font = Gfx.FONT_XTINY; //0
-		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER; //5
 		var ctrX = dc.getWidth() / 2;
 		var ctrY = dc.getHeight() / 2;
 		// define box about centre
@@ -111,79 +128,42 @@ class PoincareView extends Ui.View {
 		// 45 *2 is height of chart
 		var ceilY = ctrY - chartHeight/2;
 		var floorY = ctrY + chartHeight/2;
-		var mLabelOffsetCeil = ceilY - 15;
-		var mLabelOffsetFloor = floorY + 20;		
-		var textX = leftX - 20; // was +
-		var gap = (ceil - floor) / 3;
 
 		// Prepare the screen
 		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		
-		// Draw the lines
-		MapSetColour(dc,DK_GRAY, $._mApp.bgColSet);
-		for(var i = 0; i < 7; i++) {
-			var y = ceilY + i * chartHeight/6;
-			dc.drawLine(leftX, y, rightX, y);
-		}
-
-		// NEED TO CHANGE TITLE COLOUR	
-        var drawable = findDrawableById("PoincareTitle");
-        if (drawable != null) {
-            drawable.setColor(mapColour( $._mApp.lblColSet));
-		}
-
-		// Draw the numbers
-		MapSetColour(dc, DK_GRAY, $._mApp.bgColSet);
-		for(var i = 1; i < 6; i += 2) {
-
-			var y = ceilY + (((i * gap) * scaleY) / 2);
-			var num = ceil - ((i * gap) / 2.0);
-			if(num != num.toNumber()) {
-				// may need to stagger on smaller screens
-				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
-				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%0.1f")]), just);				
-			}
-			else {
-				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
-				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
-			}
-		}
-
-		for(var i = 0; i < 7; i += 2) {
-			var y = ceilY + (((i * gap) * scaleY) / 2);
-			var str = format(" $1$ ",[(ceil - ((i * gap)/2)).format("%d")]);
-			dc.drawText(textX, y, font, str, just);
-		}
+		// calc numbers on axis and update label
+		var mid = (ceil - floor) / 2;
+		updateLayoutField("TopValY", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
+		updateLayoutField("MidValY", format(" $1$ ",[mid.format("%d")]), mLabelColour);
+		updateLayoutField("LowerValY", format(" $1$ ",[floor.format("%d")]), mLabelColour);
+		updateLayoutField("TopValX", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
+		updateLayoutField("MidValX", format(" $1$ ",[mid.format("%d")]), mLabelColour);
+		updateLayoutField("LowerValX", format(" $1$ ",[floor.format("%d")]), mLabelColour);			
+			
+		//var num = ceil - ((i * gap) / 2.0);
+		//if(num != num.toNumber()) {
+			// may need to stagger on smaller screens
+			//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
+		//	dc.drawText(textX, y, font, format(" $1$ ",[num.format("%0.1f")]), just);				
+		//	}
+		//	else {
+		//		//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
+		//		dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
+		//	}
+		//}
 
 		// Draw the data
 		var drawDots = 0;
+		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
+		// iterate through available data drawing rectangles as less expensive than circles
+		// for( var i= 0; i < indexmax; i++ ){
+		// work out x and y from numbers and scales
 
-		dc.setPenWidth(2);
-		MapSetColour(dc, DK_RED, $._mApp.bgColSet);
-		//dc.drawLine(leftX + index1, floorY - avgPulse1, leftX + index2, floorY - avgPulse2);
-		drawDots++;
-
-		// If only one reading then draw dots. There are no averages
-		if(1 == drawDots) {
-			MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-		//	dc.fillCircle(leftX + index1, floorY - pulse1, 2);
-
-		//	MapSetColour(dc, BLUE, $._mApp.bgColSet);
-		//	dc.fillCircle(leftX + index1, floorY - hrv1, 2);
-		}
-
-		// Draw the labels
-		dc.setPenWidth(1);
-
-		MapSetColour(dc, DK_RED, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetFloor, font, " AVG PULSE", 6);
-
-		MapSetColour(dc, BLUE, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetCeil, font, "HRV ", 4);
-    		
-		//If using layout then calling onUpdate() works. If drawing explicitly then overwrites screen
-		// Possibly needs to be at start! 
-   		//View.onUpdate(dc);
+		//dc.drawRectangle(leftX+x, floorY-y, 2, 2);
+		// repeat
+		
+		//dc.fillCircle(leftX + x, floorY - y, 2);
    		return true;
     }
 }

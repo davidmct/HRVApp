@@ -52,8 +52,17 @@
  		<drawable id="TestViewLayoutLines_id" />     
     </layout>
     <layout id="PoincareViewLayout">
-        <label id="PoincareTitle" text="Poincare" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-    	<drawable id="PoincareLayoutLines_id" />
+        <!-- Key assumption is chart height - 180 (hard coded in view) -->
+        <!-- width of chart area is +-90 from center as is height-->
+        <label id="PoincareTitle" text="Poincare" x="140" y="30" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="IntervalLbl" text="RR ms" x="140" y="260" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="TopValY" text="x" x="30" y="50" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="MidValY" text="x" x="30" y="140" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="LowerValY" text="x" x="30" y="230" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="TopValX" text="x" x="80" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="MidValX" text="x" x="140" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="LowerValX" text="x" x="210" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+     	<drawable id="PoincareLayoutLines_id" />
     </layout>
     <layout id="CurrentViewLayout">
         <label id="CurrentViewTitle" text="Current" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
@@ -74,6 +83,5 @@
          <label id="CurrentrMSSD_val" text="aaa" x="80" y="180" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
          <label id="CurrentInterval_txt" text="Interval" x="200" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
          <label id="CurrentInterval_val" text="xx" x="200" y="180" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
-    </layout>
-    
+    </layout>   
 </layouts>

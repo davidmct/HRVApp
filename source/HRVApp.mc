@@ -292,7 +292,8 @@ class HRVApp extends App.AppBase {
 	
 	function DumpIntervals() {
 		// to reduce write time group up the data
-
+		Sys.println("Dummping intervals");
+		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
