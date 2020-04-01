@@ -30,6 +30,9 @@ class PoincareView extends Ui.View {
 
 	hidden var floorVar;
 	hidden var scaleVar;
+	// updating every second is a little much
+	const UPDATE_VIEW_SECONDS = 5;
+	hidden var mShowCount;
 	
 	hidden var mPoincareLayout;
 
@@ -47,6 +50,9 @@ class PoincareView extends Ui.View {
 		} else {
 			Sys.println("layout null");
 		}
+		
+		mShowCount = 0;
+		
 		return true;
 	}
 	
@@ -84,7 +90,30 @@ class PoincareView extends Ui.View {
 		// need left and right range labels eg
 		// Lowest value - a bit, median, Highest plus a bit : might be very small!
 		// draw the layout
+    	
+    	mShowCount++;
+    	
+    	// chartHeight defines height of chart and sets scale
+		// needs to divide by 6 for horizontal lines
+		// impacts all layout numbers!
+		var chartHeight = 180;
+    	var ctrX = dc.getWidth() / 2;
+		var ctrY = dc.getHeight() / 2;
+		// define box about centre
+		var leftX = ctrX - 90;
+		var rightX = ctrX + 90;
+		// 45 *2 is height of chart
+		var ceilY = ctrY - chartHeight/2;
+		var floorY = ctrY + chartHeight/2;
+    	
     	View.onUpdate(dc);
+    	
+    	//var mRem = mShowCount % UPDATE_VIEW_SECONDS;
+		//if ( mRem != 0) {
+		//	var text = "Updating in "+(UPDATE_VIEW_SECONDS-mRem)+"secs";
+		//	dc.drawText(ctrX, ctrY, Gfx.FONT_MEDIUM, text, Gfx.TEXT_JUSTIFY_VCENTER|Gfx.TEXT_JUSTIFY_CENTER);	
+		//	return true;
+		//}
     	
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
@@ -107,26 +136,13 @@ class PoincareView extends Ui.View {
 			ceil += 5;
 			floor -= 5;
 		}
-		var range = ceil - floor;
 		
-		// chartHeight defines height of chart and sets scale
-		// needs to divide by 6 for horizontal lines
-		// impacts all layout numbers!
-		var chartHeight = 180;
-		var scaleY = chartHeight / range.toFloat();
+		//var range = ceil - floor;
+		var scaleY = chartHeight / (ceil - floor).toFloat();
 		// for moment we have a square layout and hence same scaling!!
 		var scaleX = scaleY;
 		
 		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
-
-		var ctrX = dc.getWidth() / 2;
-		var ctrY = dc.getHeight() / 2;
-		// define box about centre
-		var leftX = ctrX - 90;
-		var rightX = ctrX + 90;
-		// 45 *2 is height of chart
-		var ceilY = ctrY - chartHeight/2;
-		var floorY = ctrY + chartHeight/2;
 
 		// Prepare the screen
 		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
