@@ -32,12 +32,12 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }
         else if( mId == :Internal)  {
-            $._mApp.sensorType = SENSOR_INTERNAL;
+            $._mApp.mSensorTypeExt = SENSOR_INTERNAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);   
         }
         else if( mId == :Search)  {
-            $._mApp.sensorType= SENSOR_SEARCH;
+            $._mApp.mSensorTypeExt = SENSOR_SEARCH;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);   
         }

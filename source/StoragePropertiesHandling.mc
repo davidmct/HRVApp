@@ -113,7 +113,7 @@ class HRVStorageHandler {
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
-			$._mApp.sensorType = $._mApp.getProperty("pSensorSelect");	
+			$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
 			$._mApp.soundSet = $._mApp.getProperty("soundSet");
 			$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
 			$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
@@ -148,7 +148,7 @@ class HRVStorageHandler {
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
-			$._mApp.sensorType = $._mApp.Properties.getValue("pSensorSelect");
+			$._mApp.mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");
 			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
 			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
 			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet").toNumber();
@@ -170,7 +170,7 @@ class HRVStorageHandler {
 	function _CallSavePropStorage() {
 		Storage.setValue("timestampSet", $._mApp.timestampSet);
 		$._mApp.Properties.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
-		$._mApp.Properties.setValue("pSensorSelect", $._mApp.sensorType);
+		$._mApp.Properties.setValue("pSensorSelect", $._mApp.mSensorTypeExt);
 		
 		// user changable
 		$._mApp.Properties.setValue("soundSet", $._mApp.soundSet);

@@ -85,6 +85,8 @@ class HRVApp extends App.AppBase {
 	var mApp;
 	var mSensor;
 	var mAntID;
+	// true if external unknown strap ie not enabled in watch
+	var mSensorTypeExt;
 
 	// Settings variables
     var timestampSet;
@@ -106,7 +108,6 @@ class HRVApp extends App.AppBase {
 	var avgPulseColSet;
 	
 	var mMenuTitleSize;
-	var sensorType;
 
 	// Results array variable
 	var results;
@@ -143,13 +144,18 @@ class HRVApp extends App.AppBase {
 		if (Toybox.Application has :Storage) {
 			mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
-			mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 		
+			mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
+			mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");		
 		} else {
 			mAntID = $._mApp.getProperty("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
+			mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
 		}
+		
 		Sys.println("ANT ID set to : " + mAntID);
+		Sys.println("SensorType = "+mSensorTypeExt);
+		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();			
     	AppBase.initialize();
@@ -168,26 +174,11 @@ class HRVApp extends App.AppBase {
 		// Retrieve device type
 		device = Ui.loadResource(Rez.Strings.Device).toNumber();
 
-// Move this to Sensor handling
-// onStartSensor(mAntID) .. do we need to wrap a new class around AntHandler and AntHandler extends that
-// then can have either route
-// Also need menu option...
-   		// Start up ANT device
-	    try {
-	    	//Create the sensor object and open it
-	   		mSensor = new AntHandler(mAntID);
-	    	//mSensor.openCh();
-	    } catch(e instanceof Ant.UnableToAcquireChannelException) {
-	    	System.println(e.getErrorMessage());
-	   		mSensor = null;
-	    }
-	    
-	    // set if we can find both ant and optical
-	    //SensorSetup();
-// end stuff to move
+   		// Start up HR sensor. Create the sensor object and open it
+	   	mSensor = new SensorHandler(mAntID, mSensorTypeExt);
 	    
 	    if (mDebugging) {
-	    	Sys.println("AUX sensor created: " + mSensor);
+	    	Sys.println("sensor created: " + mSensor);
 	    	Sys.println("Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
 
