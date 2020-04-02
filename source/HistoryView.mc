@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
+using Toybox.System as Sys;
 
 // Show the previous test results over time
 class HistoryView extends Ui.View {
@@ -196,10 +197,9 @@ class HistoryView extends Ui.View {
 		MapSetColour(dc, BLUE, $._mApp.bgColSet);
 		dc.drawText(ctrX, mLabelOffsetCeil, font, "HRV ", 4);
 
-		// Testing only. Draw used memory
-		//var str = System.getSystemStats().usedMemory.toString();
-		//dc.setColor(WHITE, BLACK);
-		//dc.drawText(dc.getWidth() / 2, 0, font, str, Gfx.TEXT_JUSTIFY_CENTER);
+		// TEST CODE
+		var str = System.getSystemStats().usedMemory.toString();
+		Sys.println("Testview memory use "+str);
 
     }
 }

@@ -72,6 +72,8 @@ class PoincareView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
+    	// performance check
+    	var startTime = Sys.getTimer();
     
     	// use exclude in jungle for different screen formats ??? or layouts
 		// Largest square on a circular screen is 
@@ -187,6 +189,8 @@ class PoincareView extends Ui.View {
 		var previousSample = $._mApp.mIntervalSampleBuffer[1];
 		// can't do same with x value as maybe different scale factors
 		
+		// global access is up to 8x slower than local. Could potentially copy in as temp
+		
 		for( var i=2; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
@@ -199,6 +203,12 @@ class PoincareView extends Ui.View {
 			//dc.fillCircle(leftX + x, floorY - y, 2);
 			previousSample = sampleN1;
 		}
+		
+		// perfromance check only on real devices
+		var currentTime = Sys.getTimer();
+		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms");
+		var str = System.getSystemStats().usedMemory.toString();
+		Sys.println("Poincare memory use "+str);
 		
    		return true;
     }

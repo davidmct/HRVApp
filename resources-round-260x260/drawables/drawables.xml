@@ -1,0 +1,32 @@
+<drawables>
+    <drawable-list id="MenuForeground_id" background="Gfx.COLOR_TRANSPARENT">
+        <shape type="polygon" points="[[140,9],[127,16],[113,16]]" color="Gfx.COLOR_WHITE" />
+        <shape type="polygon" points="[[140,10],[125,15],[115,15]]" color="Gfx.COLOR_BLACK" />
+        <shape type="polygon" points="[[140,231],[127,224],[113,224]]" color="Gfx.COLOR_WHITE" />
+        <shape type="polygon" points="[[140,230],[125,225],[115,225]]" color="Gfx.COLOR_BLACK" />
+    </drawable-list>
+    <drawable-list id="SummaryLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+    	<shape type="rectangle" x="40" y="75" width="210" height="1" color="Gfx.COLOR_WHITE" />
+		<shape type="rectangle" x="40" y="128" width="210" height="1" color="Gfx.COLOR_WHITE" /> 
+		<shape type="rectangle" x="40" y="177" width="210" height="1" color="Gfx.COLOR_WHITE" /> 
+		<shape type="rectangle" x="40" y="225" width="210" height="1" color="Gfx.COLOR_WHITE" /> 
+		<!-- vertical lines -->		
+		<shape type="rectangle" x="40" y="75" width="1" height="150" color="Gfx.COLOR_WHITE" /> 		
+		<shape type="rectangle" x="110" y="75" width="1" height="150" color="Gfx.COLOR_WHITE" /> 
+		<shape type="rectangle" x="180" y="75" width="1" height="150" color="Gfx.COLOR_WHITE" /> 
+		<shape type="rectangle" x="250" y="75" width="1" height="150" color="Gfx.COLOR_WHITE" /> 											
+    </drawable-list>
+    <drawable-list id="TestViewLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+    	<shape type="rectangle" x="0" y="132" width="100%" height="1" color="Gfx.COLOR_WHITE" />
+		<shape type="rectangle" x="0" y="170" width="100%" height="1" color="Gfx.COLOR_WHITE" /> 		
+    </drawable-list>
+    <drawable-list id="PoincareLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+       	<!-- width of chart area is +-90 from center and 120 high -->
+    	<shape type="rectangle" x="50" y="50" width="180" height="1" color="Gfx.COLOR_DK_GRAY" />
+		<shape type="rectangle" x="50" y="230" width="180" height="1" color="Gfx.COLOR_DK_GRAY" /> 
+		<shape type="rectangle" x="50" y="50" width="1" height="180" color="Gfx.COLOR_DK_GRAY" />
+		<shape type="rectangle" x="230" y="50" width="1" height="180" color="Gfx.COLOR_DK_GRAY" /> 
+		<shape type="rectangle" x="50" y="140" width="180" height="1" color="Gfx.COLOR_DK_GRAY" />
+		<shape type="rectangle" x="140" y="50" width="1" height="180" color="Gfx.COLOR_DK_GRAY" /> 				
+    </drawable-list>
+</drawables>
