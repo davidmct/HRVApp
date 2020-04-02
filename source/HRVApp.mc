@@ -25,7 +25,7 @@ using Toybox.Sensor;
 //13. When using optical should call it PRV not HRV
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
-var mDebugging = false;
+var mDebugging = true;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 
@@ -152,8 +152,8 @@ class HRVApp extends App.AppBase {
 			mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
 		}
 		
-		Sys.println("ANT ID set to : " + mAntID);
-		Sys.println("SensorType = "+mSensorTypeExt);
+		Sys.println("HRVApp: ANT ID set to : " + mAntID);
+		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();			
@@ -176,14 +176,14 @@ class HRVApp extends App.AppBase {
    		// Start up HR sensor. Create the sensor object and open it
 	   	mSensor = new SensorHandler(mAntID, mSensorTypeExt);
 
-	   	Sys.println("HRVApp: Sensor set to "+mSensorTypeExt);
+	   	Sys.println("HRVApp: onStart() Sensor set to "+mSensorTypeExt);
 	   	
 	   	// now setup sensors as have created data structures
 	   	mSensor.SetUpSensors();
 	    
 	    if (mDebugging) {
-	    	Sys.println("sensor created: " + mSensor);
-	    	Sys.println("Sensor channel open? " + mSensor.mHRData.isChOpen);
+	    	Sys.println("HRVApp: sensor created: " + mSensor);
+	    	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
 
     	if(VIVOACTIVE == device) {

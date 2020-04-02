@@ -74,6 +74,14 @@ class PoincareView extends Ui.View {
     function onUpdate(dc) {
     	// performance check
     	var startTime = Sys.getTimer();
+    	
+    	// if we need a local copy of data... this saves 8x time to access variables trading duplicate buffer
+    	// var intervals = [ $._mApp.mSampleProc.getNumberOfSamples()];
+    	// for(i=0; i < intervals.size(); i++) {
+    	//	intervals[i] = $._mApp.mIntervalSampleBuffer[i];
+    	// }
+    	// shame simple assignment can't make access local ie
+    	// intervals = $._mApp.mIntervalSampleBuffer;
     
     	// use exclude in jungle for different screen formats ??? or layouts
 		// Largest square on a circular screen is 

@@ -15,12 +15,6 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_LEFT );
         }
- //       else if ( id.equals("auto"))  {
- //           var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Auto")});
-//	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
-//	        menu.addItem(new Ui.MenuItem("Schedule", null, "schedule", null));
-//	        Ui.pushView(menu, new AutoMenuDelegate(), Ui.SLIDE_LEFT );
-//        }
         else if ( id.equals("fitOutput"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
@@ -55,15 +49,15 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function setSound(value) {
-		if (value == "optOne") { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
+		if (value == 1) { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
     }
 
     function setVibe(value) {
-		if (value == "optOne") { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
+		if (value == 1) { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
     }
  
     function setFitWrite(value) {
-		if (value == "optOne") { $._mApp.mFitWriteEnabled = true; } else { $._mApp.mFitWriteEnabled = false;}
+		if (value == 1) { $._mApp.mFitWriteEnabled = true; } else { $._mApp.mFitWriteEnabled = false;}
     }   
     
     function onBack() {

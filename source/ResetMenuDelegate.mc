@@ -25,13 +25,13 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function setResetSettings(value) {
-		if (value == "optOne") { 
+		if (value == 1) { 
             $._mApp.mStorage.resetSettings();
         }	
     }
     
     function setResetResults(value) {
-		if (value == "optOne") { 
+		if (value == 1) { 
             $._mApp.mStorage.resetResults();
         }	
     }

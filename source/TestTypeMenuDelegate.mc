@@ -32,14 +32,18 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
         }
         else if( mId == :Internal)  {
+        	var oldSensor = $._mApp.mSensorTypeExt;
             $._mApp.mSensorTypeExt = SENSOR_INTERNAL;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);   
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);
+            $._mApp.mSensor.fSwitchSensor( oldSensor);   
         }
         else if( mId == :Search)  {
+            var oldSensor = $._mApp.mSensorTypeExt;
             $._mApp.mSensorTypeExt = SENSOR_SEARCH;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);   
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);  
+            $._mApp.mSensor.fSwitchSensor( oldSensor);  
         }
         
         // this should turn item blue...

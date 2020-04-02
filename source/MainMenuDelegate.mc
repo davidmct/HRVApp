@@ -27,8 +27,8 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
      	else if( id.equals("source")) {
-
-  			var mTestSelected = $._mApp.testTypeSet;		
+			// optical/regsitered strap or unknown/disabled
+  			var mExtStrap = $._mApp.mSensorTypeExt;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -36,8 +36,8 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		        :title=>new DrawableMenuTitle("Source"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
-		    customMenu.addItem(new CustomItem(:Internal, "Internal", false) );
-		    customMenu.addItem(new CustomItem(:Search, "Search", true) );				
+		    customMenu.addItem(new CustomItem(:Internal, "Internal", mExtStrap == SENSOR_INTERNAL) );
+		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
         else if( id.equals("settings") ) {

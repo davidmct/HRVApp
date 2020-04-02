@@ -66,18 +66,35 @@ class SensorHandler {//extends Ant.GenericChannel {
 	
 	function initialize(mAntID, sensorType) {
     	mSearching = true;  	
-    	mHRData = new HRStatus();   		
+    	mHRData = new HRStatus();  
+    	// true if external strap 		
     	mSensorType = sensorType;
     	mAntIDLocal = mAntID;
+    }
+    
+    function fSwitchSensor( oldSensor) {
+    	Sys.println("fSwitchSensor() potential sensor change");
+    	return;
+    	// work out how to change sensors on settings change!!
+    	// need to stop test
+    	// SetUpSensors() is called on Start;
+    	if (oldSensor != $._mApp.mSensorTypeExt) {
+    		// do change stuff - force test to stop and redo start
+    		$._mApp.mTestControl.resetTest();
+    		// make local version same as system
+			mSensorType =  $._mApp.mSensorTypeExt;
+    	}   	
     }
     
     function SetUpSensors() {
     	// has to be called after initialize as mSensor not created!!
         if (mSensorType) {
     		// ANT case
+    		Sys.println("ANT sensor selected");
     		sensor = new AntHandler(mAntIDLocal, mHRData);
     	} else {
     		// Internal or registered strap
+    		Sys.println("OHR or registered sensor selected");
     		sensor = new InternalSensor(mHRData);
     	}
     }
@@ -295,7 +312,7 @@ class InternalSensor {
 		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
 		// fake ANT or sensor status
 		
-		Sys.println("SensorSetup ... mHRDataLnk :"+mHRDataLnk);
+		Sys.println("Internal SensorSetup() ... mHRDataLnk :"+mHRDataLnk);
 		
 		mHRDataLnk.isChOpen = true;
 		$._mApp.mSensor.mSearching = false;
@@ -336,6 +353,6 @@ class InternalSensor {
 			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						
-		//Sys.println("optical?: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
+		Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
 	} 
 } 

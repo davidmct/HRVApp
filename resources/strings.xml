@@ -11,8 +11,8 @@
 	<string id="lDeltaHeartRateChartTitle">Delta Title</string> 
 	<string id="lDeltaHeartRate">Delta HR</string> 
 	<string id="lHeartRateUnits">BPM</string>
-	<string id="pSensorSelectTitle">Use connect HRM?</string> 
-	<string id="pSensorSelectPrompt">True for internal else unknown strap</string>
+	<string id="pSensorSelectTitle">Use unregistered HRM?</string> 
+	<string id="pSensorSelectPrompt">True for unregistered/disabled strap</string>
 	<string id="soundSetTitle">Sound?</string>
 	<string id="soundSetPrompt">On or Off</string>
 	<string id="vibeSetTitle">Vibrate?</string>

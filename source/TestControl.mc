@@ -146,7 +146,9 @@ class TestController {
     function discardTest() { mState.isNotSaved = false;  }
 
     function resetTest() {
+    	Sys.println("TestControl: resetTest() called");
     	$._mApp.mSensor.mHRData.initForTest();
+    	testTimer.stop();	
     	// need to be careful we have shown all results first!!!
 		utcStart = 0;
 		utcStop = 0;
@@ -293,7 +295,8 @@ class TestController {
 		}
 			
 		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {
-			mState.isClosing = true;
+			//mState.isClosing = true;
+			mState.isFinished = false;
 			return true;
 		}
 		else {
@@ -342,7 +345,7 @@ class TestController {
     	else if(mState.isTesting) {
     		if (mDebugging == true) {Sys.println("TestControl: isTesting branch");}
     		
-    		msgTxt = "Breathe regularly";
+    		msgTxt = "Breathe regularly and stay still";
 
 			if(TYPE_TIMER == testType) {
 				// reduce time left

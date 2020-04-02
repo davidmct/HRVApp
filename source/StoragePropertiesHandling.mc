@@ -90,6 +90,8 @@ class HRVStorageHandler {
 	}	
 	
 	function saveProperties() {	
+		Sys.println("saveProperties() called");
+		
 		if (Toybox.Application has :Storage) {
 			_CallSavePropStorage();
 		} else {

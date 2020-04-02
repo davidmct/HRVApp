@@ -47,18 +47,23 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function setBackground(value) {
-    	if(value == "optOne") {
+    	//Sys.println("setBackground called: "+value);
+    	
+    	if(value == 1) {
     		$._mApp.bgColSet = WHITE;
+    		//Sys.println("WHITE background set");
     		if(WHITE == $._mApp.txtColSet) {
 	    		$._mApp.txtColSet = BLACK;
 	    	}
     	}
     	else {
     		$._mApp.bgColSet = BLACK;
+    		//Sys.println("BLACK background set");
     		if(BLACK == $._mApp.txtColSet) {
 	    		$._mApp.txtColSet = WHITE;
 	    	}
-    	}
+    	}   	
+    	//Sys.println("Colours: back, text "+$._mApp.bgColSet+" "+$._mApp.txtColSet);
     }
 
     function setLabel(value) { $._mApp.lblColSet = value;  }
