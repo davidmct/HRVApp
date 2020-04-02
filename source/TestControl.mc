@@ -112,6 +112,7 @@ class TestController {
     }
 
     function finishTest() {
+    	Sys.println("finishTest()");
     	endTest();
     	alert(TONE_SUCCESS);
     }
@@ -125,6 +126,7 @@ class TestController {
     }
 
     function endTest() {
+    	Sys.println("endTest()");
     	testTimer.stop();
 		mState.isTesting = false;
 		mState.isFinished = true;
@@ -143,7 +145,7 @@ class TestController {
     	}
     }
     
-    function discardTest() { mState.isNotSaved = false;  }
+    function discardTest() { mState.isNotSaved = false; mState.isFinished = false; }
 
     function resetTest() {
     	Sys.println("TestControl: resetTest() called");
@@ -217,6 +219,7 @@ class TestController {
     		
     	mState.isNotSaved = false;
     	mState.isSaved = true;
+    	mState.isFinished = false;
     }
     
 	// called by startTest() to initial test timers etc
@@ -254,7 +257,7 @@ class TestController {
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
 
-    	if (mDebugging == true) {Sys.println("Start: leaving func");}
+    	if (mDebugging == true) {Sys.println("Start: leaving func isT and isF "+mState.isTesting+" "+mState.isFinished);}
     }
       
     function onEnterPressed() {
@@ -309,6 +312,16 @@ class TestController {
     	// this should drive the state transistions and state view information
     	// AntHandler drives data model information in sampleProcessing
     	// called every second
+    	if (mDebugging == true) {
+    		Sys.println("UpdateTestStatus");
+	    	Sys.println("UpdateTestStatus: isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
+	    	Sys.println("UpdateTestStatus: datacount " + $._mApp.mSampleProc.dataCount);
+	    	Sys.println("UpdateTestStatus isFinished " + $._mApp.mTestControl.mState.isFinished);
+	    	Sys.println("UpdateTestStatus: isTesting " + $._mApp.mTestControl.mState.isTesting);
+	    	Sys.println("UpdateTestStatus: isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
+	    	Sys.println("UpdateTestStatus: isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
+	    }
+    	
 		if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
 		
 		// Timer information for view
@@ -329,7 +342,7 @@ class TestController {
     	var testTime = timeNow() - utcStart;
 
 		if(mState.isFinished) {
-			if (mDebugging == true) {Sys.println("TestControl: isFinished branch");}
+			if (mDebugging == true) {Sys.println("TestControl: isFinished branch "+mState.isFinished);}
 			testTime = utcStop - utcStart;
 
 			if(MIN_SAMPLES > $._mApp.mSampleProc.dataCount) {
