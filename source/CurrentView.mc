@@ -66,7 +66,7 @@ class CurrentValueView extends Ui.View {
 		
 		// need to sort out values			
 		updateLayoutField( "CurrentrMSSD_val", $._mApp.mSampleProc.mRMSSD.format("%d"), mValueColour);
-		updateLayoutField( "CurrentInterval_val", $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
+		updateLayoutField( "CurrentInterval_val", $._mApp.mSampleProc.getCurrentEntry().format("%d"), mValueColour);
 
 		// Testing only. Draw used memory
 		//var str = System.getSystemStats().usedMemory.toString();

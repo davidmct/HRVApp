@@ -135,6 +135,16 @@ class SampleProcessing {
 		// starts at zero
 		return mSampleIndex;
 	}
+	
+	function getCurrentEntry() {
+		var index;
+		index = getNumberOfSamples();
+		if (index == 0) {
+			return 0;
+		} else {
+			return getSample(index-1);
+		}
+	}
 
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 			// shouldn't capture data
@@ -154,7 +164,7 @@ class SampleProcessing {
 			if (mSampleIndex == 0) {
 				if ( maxMs > intMs && minMs < intMs) { 				
 					addSample(intMs, null); 
-					Sys.println("S0 "+intMs); 
+					//Sys.println("S0 "+intMs); 
 				}
 				return;
 			}
@@ -166,7 +176,7 @@ class SampleProcessing {
 				maxMs > previousIntMs && 
 				minMs < previousIntMs) {		
 				
-				Sys.println("Sb");
+				//Sys.println("Sb");
 				addSample(intMs, beatsInGap);				
 				updateRunningStats(previousIntMs, intMs, livePulse);			
 			}					
@@ -186,12 +196,13 @@ class SampleProcessing {
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
-		if ( mSampleIndex > mApp.mIntervalSampleBuffer.size()) {
+		if ( mSampleIndex > $._mApp.mIntervalSampleBuffer.size()) {
 			new $._mApp.myException("Buffer limit reached in sample Processing");
 		}
 		$._mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs;	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
+		//Sys.println("Sample count: "+mSampleIndex);
 	}
 	
 	function getSample(index) {

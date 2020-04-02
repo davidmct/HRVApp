@@ -308,7 +308,8 @@ class InternalSensor {
 		var mSize = 0; 
 		var heartBeatIntervals = [];
 	
-		Sys.println("sensorData "+sensorData);
+		//Sys.println("sensorData "+sensorData);
+		
 		if (sensorData has :heartRateData && sensorData.heartRateData != null) {
 			heartBeatIntervals = sensorData.heartRateData.heartBeatIntervals;
 			
@@ -328,10 +329,13 @@ class InternalSensor {
 		}	
 		
 		// now feed machine...
+		//Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
+		
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
 			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, 1 );
-		}					
-		Sys.println("optical?: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
+		}	
+						
+		//Sys.println("optical?: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
 	} 
 } 

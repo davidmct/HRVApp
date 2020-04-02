@@ -17,13 +17,12 @@ using Toybox.Sensor;
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //5. Check history works - need stored data or test data
-//6. Add poincare view 
-//7. Remove watch view - useless
+//6. Add poincare view - done but need to check update rate
 //8. sample processing check skipped or double beats
 //9. how to make trial version and possible payment
-//10. Revise ANT/Sensor handling to provide choice between them!!
-//11. Move all time functions to use libraries to avoid time wrap - 136 years so maybe no tissue
+//10. Need to change sensor handling when Porperty changes (or say only on restart)
 //12. Add fit session and record saving
+//13. When using optical should call it PRV not HRV
 // "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
 
 var mDebugging = false;

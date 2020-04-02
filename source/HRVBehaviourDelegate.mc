@@ -139,6 +139,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 	
 	function setSave(value) {
+		Sys.println("setSave() called with "+value);
 		if (value == "optOne") { 
             $._mApp.mTestControl.saveTest();
         }

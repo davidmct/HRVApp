@@ -124,6 +124,8 @@ class PoincareView extends Ui.View {
     	// range saved in sampleprocessing already
 		var max = $._mApp.mSampleProc.maxIntervalFound;
 		var min = $._mApp.mSampleProc.minIntervalFound;
+		
+		Sys.println("Poincare: max, min "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
@@ -136,7 +138,9 @@ class PoincareView extends Ui.View {
 			ceil += 5;
 			floor -= 5;
 		}
-		
+
+		Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
+				
 		//var range = ceil - floor;
 		var scaleY = chartHeight / (ceil - floor).toFloat();
 		// for moment we have a square layout and hence same scaling!!
@@ -148,7 +152,7 @@ class PoincareView extends Ui.View {
 		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		
 		// calc numbers on axis and update label
-		var mid = (ceil - floor) / 2;
+		var mid = floor + (ceil - floor) / 2;
 		updateLayoutField("TopValY", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
 		updateLayoutField("MidValY", format(" $1$ ",[mid.format("%d")]), mLabelColour);
 		updateLayoutField("LowerValY", format(" $1$ ",[floor.format("%d")]), mLabelColour);
@@ -174,7 +178,7 @@ class PoincareView extends Ui.View {
 		// reduce entries by 1 as points to next free slot
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples()-1;
 		
-		Sys.println("Poincare plotting # :"+mNumberEntries);
+		Sys.println("Poincare # dots :"+mNumberEntries);
 
 		var mBufferptr = 0; // does setting up a variable and equal array copy whole array???
 		
@@ -188,9 +192,9 @@ class PoincareView extends Ui.View {
 			// should use getSample() in case of circular buffer implemented
 			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
 			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
-			// work out x and y from numbers and scales
-			var x = (previousSample * scaleX).toNumber();
-			var y = (sampleN1 * scaleY).toNumber(); 
+			// work out x and y from numbers and scales - was * but should be / 
+			var x = (previousSample / scaleX).toNumber();
+			var y = (sampleN1 / scaleY).toNumber(); 
 			dc.drawRectangle(leftX+x, floorY-y, 2, 2);			
 			//dc.fillCircle(leftX + x, floorY - y, 2);
 			previousSample = sampleN1;
