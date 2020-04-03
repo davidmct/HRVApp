@@ -70,11 +70,9 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     	if (mDebugging) {
 	    	Sys.println("HRVBehaviour onEnter()");
 	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ $._mApp.viewNum);
-	    	Sys.println("HRVBehaviour onEnter(): isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
+	    	Sys.println("HRVBehaviour onEnter(): TestState " + $._mApp.mTestControl.mTestState);
 	    	Sys.println("HRVBehaviour onEnter(): datacount " + $._mApp.mSampleProc.dataCount);
-	    	Sys.println("HRVBehaviour onEnter(): isFinished " + $._mApp.mTestControl.mState.isFinished);
-	    	Sys.println("HRVBehaviour onEnter(): isTesting " + $._mApp.mTestControl.mState.isTesting);
-	    	Sys.println("HRVBehaviour onEnter(): isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
+	    	//Sys.println("HRVBehaviour onEnter(): isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
 	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
 	    }
     	// 
@@ -85,7 +83,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		}
 		else {
 			// in test view so means stop or start test
-			var res = $._mApp.HRVStateChange(:enterPressed);
+			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
 			if (res == true) {
 				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
@@ -115,7 +113,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
 	function onEscape() {
 		if(TEST_VIEW == $._mApp.viewNum) {
-			var res = $._mApp.HRVStateChange(:escapePressed);
+			var res = $._mApp.mTestControl.StateMachine(:escapePressed);
 			if (res == true) {		
 				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});

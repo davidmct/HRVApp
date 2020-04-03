@@ -26,12 +26,13 @@ class SensorHandler {//extends Ant.GenericChannel {
     hidden var mSensorType; 
     hidden var mAntIDLocal; 
     var mSearching;
+    hidden var mFunc;
     
     class HRStatus {
      	var isChOpen;
-		var isAntRx;
-		var isStrapRx;
-		var isPulseRx;
+		//var isAntRx;
+		//var isStrapRx;
+		//var isPulseRx;
 		var livePulse;
 		var mHRMStatusCol;
     	var mHRMStatus;
@@ -41,9 +42,9 @@ class SensorHandler {//extends Ant.GenericChannel {
 		
     	function initialize() {
         	isChOpen = false;
-    		isAntRx = false;
-			isStrapRx = false;
-			isPulseRx = false;
+    		//isAntRx = false;
+			//isStrapRx = false;
+			//isPulseRx = false;
 			// had to add $ to find RED symbol. enum stopped working here but was OK in other code!!
 			mHRMStatusCol = $.RED;
     		mHRMStatus = "Searching...";
@@ -72,6 +73,11 @@ class SensorHandler {//extends Ant.GenericChannel {
     	mAntIDLocal = mAntID;
     }
     
+    // function to call to update TestController
+	function setObserver(func) {
+		mFunc = func;
+	}
+    
     function fSwitchSensor( oldSensor) {
     	Sys.println("fSwitchSensor() potential sensor change");
     	return;
@@ -80,7 +86,14 @@ class SensorHandler {//extends Ant.GenericChannel {
     	// SetUpSensors() is called on Start;
     	if (oldSensor != $._mApp.mSensorTypeExt) {
     		// do change stuff - force test to stop and redo start
-    		$._mApp.mTestControl.resetTest();
+    		
+    		//$._mApp.mTestControl.resetTest();
+    		// probably need to let state machine know to reinit the world
+    		
+    		// update Test controller data  
+			if ($._mApp.mSensor.mFunc != null) {
+				$._mApp.mSensor.mFunc.invoke(:Update, [ "Switching sensor", false]);
+			}
     		// make local version same as system
 			mSensorType =  $._mApp.mSensorTypeExt;
     	}   	
@@ -96,6 +109,11 @@ class SensorHandler {//extends Ant.GenericChannel {
     		// Internal or registered strap
     		Sys.println("OHR or registered sensor selected");
     		sensor = new InternalSensor(mHRData);
+    	}
+    	// update Test controller data  
+    	if (mFunc != null) {
+    		// no message and not ready
+    		mFunc.invoke(:Update, [ "Setup sensor", false]);
     	}
     }
     
@@ -127,13 +145,19 @@ class SensorHandler {//extends Ant.GenericChannel {
     		if (mSensorType) { sensor.GenericChannel.close();}
     	}
     	mHRData.isChOpen = false;
-    	mHRData.isAntRx = false;
-		mHRData.isStrapRx = false;
-		mHRData.isPulseRx = false;
+    	//mHRData.isAntRx = false;
+		//mHRData.isStrapRx = false;
+		//mHRData.isPulseRx = false;
 		mHRData.mHRMStatusCol = RED;
     	mHRData.mHRMStatus = "HRM closed";
 	    mHRData.livePulse = 0;
 		mSearching = true;
+		
+		// update Test controller data  
+    	if (mFunc != null) {
+    		// no message and not ready
+    		mFunc.invoke(:Update, [ "", false]);
+    	}
     } 
 }
 
@@ -193,11 +217,11 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
-            mHRDataLnk.isAntRx = true;
-            mHRDataLnk.isStrapRx = true;
-            mHRDataLnk.mHRMStatusCol = GREEN;
-    		mHRDataLnk.mHRMStatus = "HR data";
-            
+            //mHRDataLnk.isAntRx = true;
+            //mHRDataLnk.isStrapRx = true;
+            //mHRDataLnk.mHRMStatusCol = GREEN;
+    		//mHRDataLnk.mHRMStatus = "HR data";
+    		      
             mHRDataLnk.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
@@ -222,12 +246,17 @@ class AntHandler extends Ant.GenericChannel {
 	            		openCh();
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
-						mHRDataLnk.isStrapRx = false;
-						mHRDataLnk.isPulseRx = false;
+						//mHRDataLnk.isStrapRx = false;
+						//HRDataLnk.isPulseRx = false;
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
 						$._mApp.mSensor.mSearching = true;
+						// update Test controller data  
+    					if ($._mApp.mSensor.mFunc != null) {
+							// no message and not ready
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "", false]);
+						}
 						// wait for another message?
 						//Sys.println( "RX_FAIL in AntHandler");
 						break;
@@ -259,10 +288,17 @@ class AntHandler extends Ant.GenericChannel {
 	
 		// check we have a pulse and another beat recorded 
 		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {
-			mHRDataLnk.isPulseRx = true;
+			//mHRDataLnk.isPulseRx = true;
 			mHRDataLnk.mHRMStatusCol = GREEN;
+			mHRDataLnk.mHRMStatus = "HR data";
 			mHRDataLnk.mNoPulseCount = 0;
-					
+			
+			// update Test controller data  
+			if ($._mApp.mSensor.mFunc != null) {
+				// no message and not ready
+				$._mApp.mSensor.mFunc.invoke(:Update, [ "HR data incoming", true]);
+			}
+  					
 			// Get interval
 			// need to check 64000 in ANT spec for roll-over number
 			var intMs = 0;
@@ -273,17 +309,24 @@ class AntHandler extends Ant.GenericChannel {
 			}
 			
 			//Sys.println("HR->S");
-			var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;			
-			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+			var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
+			var isTesting = false;
+			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
+			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
 		} else {
 			// either no longer have a pulse or Count not changing
 			mHRDataLnk.mNoPulseCount += 1;
 			if(0 < mHRDataLnk.livePulse) {
 				var limit = 1 + 60000 / mHRDataLnk.livePulse / 246; // 246 = 4.06 KHz
 				if(limit < mHRDataLnk.mNoPulseCount) {
-					mHRDataLnk.isPulseRx = false;
+					//mHRDataLnk.isPulseRx = false;
 					mHRDataLnk.mHRMStatusCol = RED;
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
+    				// update Test controller data  
+					if ($._mApp.mSensor.mFunc != null) {
+						// no message and not ready
+						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false]);
+					}
 				}
 			}
 		}
@@ -316,8 +359,14 @@ class InternalSensor {
 		
 		mHRDataLnk.isChOpen = true;
 		$._mApp.mSensor.mSearching = false;
-	    mHRDataLnk.isAntRx = true;
-	    mHRDataLnk.isStrapRx = true;
+	    //mHRDataLnk.isAntRx = true;
+	    //mHRDataLnk.isStrapRx = true;
+	    
+    	// update Test controller data  
+		if ($._mApp.mSensor.mFunc != null) {
+			// no message and not ready
+			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false]);
+		}
 	}
 	
 	// call back for HR data
@@ -335,22 +384,31 @@ class InternalSensor {
 				// flag no data and 
 				mHRDataLnk.livePulse = 0;
 				mHRDataLnk.mHRMStatusCol = RED;
-				mHRDataLnk.isPulseRx = false;
+				//mHRDataLnk.isPulseRx = false;
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
+				// update Test controller data  
+				if ($._mApp.mSensor.mFunc != null) {
+					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false]);
+				}
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;
 				mHRDataLnk.mHRMStatusCol = GREEN;
-				mHRDataLnk.isPulseRx = true;
+				//mHRDataLnk.isPulseRx = true;
 				mHRDataLnk.mHRMStatus = "HR data";
+				// update Test controller data  
+				if ($._mApp.mSensor.mFunc != null) {
+					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true]);
+				}
 			}
 		}	
 		
 		// now feed machine...
 		Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
-		
+		var isTesting = false;
+		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
-			$._mApp.mSampleProc.rawSampleProcessing($._mApp.mTestControl.mState.isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						
 		Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);

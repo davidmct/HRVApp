@@ -211,7 +211,7 @@ class HRVApp extends App.AppBase {
     //! A wrapper function to allow the timer to request a screen update
     function updateScreen() {
     	// drive teststate transitions outside UI
-    	mTestControl.UpdateTestStatus();
+    	mTestControl.StateMachine(:UpdateUI);
     	// update views
         Ui.requestUpdate();
     }
@@ -221,7 +221,7 @@ class HRVApp extends App.AppBase {
 		if (state == null) { 		}
 	
 		mStorage.saveProperties();
-		mTestControl.stopControl();
+		mTestControl.stopTest();
 		_uiTimer.stop();
 		
 		// Dump all interval data to txt file on device
@@ -270,20 +270,6 @@ class HRVApp extends App.AppBase {
 		else {
 			return new TestView();
 		}
-	}
-	
-	function HRVStateChange(type) {
-		if (type == null) {
-			// ignore
-		} 
-		else if (type == :enterPressed) {
-			return mTestControl.onEnterPressed();// call test controller		
-		} 
-		else if (type == :escapePressed) {
-			return mTestControl.onEscapePressed();		
-		}
-		
-		return true;	
 	}
 	
 	function DumpIntervals() {

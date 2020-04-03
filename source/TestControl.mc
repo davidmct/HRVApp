@@ -34,14 +34,26 @@ enum {
 	TYPE_TIMER = 1,   // to 5 mins and can be changed down or to max-time
 	
 	SENSOR_INTERNAL = 0, // false
-	SENSOR_SEARCH = 1 // true
+	SENSOR_SEARCH = 1, // true
+	
+	// define test states
+	TS_INIT,
+	TS_WAITING,
+	TS_READY,
+	TS_TESTING,
+	TS_ABORT,
+	TS_CLOSE
 }	
 
 class TestController {
 
 	var timerTime;	
 	hidden var testTimer;
-	var mState;
+	
+	var mTestState;
+	var mTestMessage;
+	var mSensorReady;
+	
 	var utcStart;
 	var utcStop;	
 	var utcNow; 
@@ -50,28 +62,12 @@ class TestController {
 	//var stopMoment;
 	hidden var mFunc;
 	hidden var mFuncCurrent;
-	    
-	class cTestState {
-		// App states
-		var isTesting;
-		var isFinished;
-		var isNotSaved;
-		var isSaved;
-		var isClosing;
-	
-		function initialize() {
-			isTesting = false;
-			isFinished = false;
-			isNotSaved = false;
-			isSaved = false;
-			isClosing = false;		
-		}
-	}
+	hidden var mHRmsgTxt;
 
 	function initialize() {
-		mState = new cTestState();
 		testTimer = new Timer.Timer();
-		
+		mTestState = TS_INIT;
+		mTestMessage = "";
 		// Init test variables
 		startMoment = 0;
     	timerTime = 0;
@@ -79,9 +75,9 @@ class TestController {
 		utcStop = 0;
 		utcNow = 0;		
 		startMoment = 0;
-		mManualTestStopTime = 0;	
-		
-		// resetTest() is called after sensor opened by onStart in main	
+		mManualTestStopTime = 0;
+		mSensorReady = false;
+		mHRmsgTxt = "";	
 	}
 	
 	// function to call to update Summary view
@@ -93,13 +89,166 @@ class TestController {
 		mFuncCurrent = func;
 	}	
 	
-	// function onHide() {getModel().setObserver(null);}
-	// application is stopping
-	function stopControl() { 
-		testTimer.stop();
-		// Save should be done in saveResults()
-		//$._mApp.mStorage.storeResults(); 			
+	// allow 
+	function onNotify(symbol, params) {
+		// [ msgTxt, HR status]
+		mHRmsgTxt = params[0];
+		mSensorReady = params[1];	
 	}
+	
+	// probably need to modify Sensor to notify statemachine when found strap etc
+	// sets mSensorReady = true or false
+	function StateMachine(caller) {
+		// we have a set of callers who can influence state
+		// :enterPressed - obvious
+		// :escapePressed - bvious
+		// :timerExpired - we have reached end of test naturally
+		// :HR_ready - found strap has a pulse - make this a variable... set by notify
+		// :UpdateUI
+		var mResponse = false; // some UI inputs require response
+		var enoughSamples = false;
+		
+		// Timer information for view
+		timerTime = 0; // = utcStop - utcStart;
+		var testType = $._mApp.testTypeSet;
+		
+		// set default time display and adjust below
+		if(TYPE_TIMER == testType) {
+			timerTime = $._mApp.timerTimeSet;
+		}
+		else if(TYPE_MANUAL == testType) {
+			// driven by user stopping or hitting limit
+			timerTime = 0;
+		}
+    	var testTime = timeNow() - utcStart;
+		
+		switch (mTestState) {
+			case TS_INIT:
+				// We may need to reinitialise sensors if swapped here
+				mTestMessage = "Initialising...";
+				resetTest();
+				mTestState = TS_WAITING; 
+				// Sensor status update method
+				$._mApp.mSensor.setObserver(self.method(:onNotify));
+			break;
+			case TS_WAITING:
+				// we are waiting for the HR strap to be ready
+				if ( mSensorReady ) { 
+					mTestMessage = "Sensor ready";
+					mTestState = TS_READY; 
+				} else {
+					mTestMessage = "Waiting for HR data";
+				}
+				if (caller == :enterPressed) {
+					// we might be lucky and HR is ready at the same time as sensor is ready
+					// ignore this
+					alert(TONE_ERROR);				
+				} else if (caller == :escapePressed) {
+					// just pop the view by returning false
+				}				
+			break;
+			case TS_READY:
+				// stars are aligned. we have a source of data and waiting to go
+				if(TYPE_TIMER == testType) {
+					mTestMessage = "Timer test ready. Press Enter";
+				}
+				else if(TYPE_MANUAL == testType) {
+					mTestMessage= "Manual test ready. Press Enter";
+				}
+
+				if (caller == :enterPressed) {
+					// now we can setup test ready to go
+					startTest();
+					mTestState = TS_TESTING; 			
+				} else if (caller == :escapePressed) {
+					// just pop the view by returning false
+					// go back to initialising or READY?
+					endTest(); // maybe in line as only timer to stop
+					mTestState = TS_INIT; 
+					mTestMessage = "escape pressed";
+				}				
+			break;
+			case TS_TESTING:
+				// now we are in the mist of testing
+				mTestMessage = "Breathe regularly and stay still";
+				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
+				switch (caller) {
+					case :timerExpired:
+					case :manualExpired:
+						// need to check enough samples
+						if (enoughSamples) {
+							autoFinish();
+						} else {
+							// no save
+							finishTest();
+						}
+						mTestState = TS_CLOSE; 	
+						mTestMessage = "Test time ended";
+					case :enterPressed:
+					case :escapePressed:
+						// test stopped by user so saving is UI issue if enough
+						stopTest();
+						if (enoughSamples) {mResponse = true;}					
+						mTestState = TS_ABORT; 	
+						mTestMessage = "Test terminated";
+					default:
+						if(TYPE_TIMER == testType) {
+							// reduce time left
+							timerTime -= testTime;
+						}
+						else {
+							// manual timer counts up
+							timerTime = testTime;
+							if (testTime >= mManualTestStopTime) {
+								mTestMessage = "Manual Test Finished";
+								// reached limit set by user
+								if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
+								if (enoughSamples) {
+									autoFinish();
+								} else {
+									// no save
+									finishTest();
+								}
+								mTestState = TS_CLOSE;
+							}
+						}
+					break;				
+				} // end caller switch	
+							
+			break;
+			case TS_ABORT:
+				// go back to ready or maybe INIT if new sensors
+				mTestState = TS_READY;	
+				resetTest();
+			break;
+			case TS_CLOSE:
+				// go back to ready or maybe INIT if new sensors
+				// maybe TestView is popped at this point?
+				mTestState = TS_READY;	
+				resetTest();
+			break;
+			default:
+				Sys.println("UNKNOWN state in test controller!");
+			break;	
+		} // end switch
+		
+		// update Test View data  
+    	if (mFunc != null) {
+    		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
+    	}
+    	
+    	// update Current  View data  
+    	if (mFuncCurrent != null) {
+    		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
+    		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
+    	}
+    	    	
+    	if (mDebugging == true) {Sys.println("TestControl: exiting State machine");}
+		Ui.requestUpdate();
+		return mResponse;
+	}
+	
+	// function onHide() {getModel().setObserver(null);}
 	
 	function startTest() {
     	alert(TONE_START);
@@ -121,43 +270,32 @@ class TestController {
     function autoFinish() {
     	endTest();
     	saveTest();
-    	mState.isNotSaved = false;
-    	mState.isSaved = true;
+    	alert(TONE_SUCCESS);
     }
 
     function endTest() {
     	Sys.println("endTest()");
     	testTimer.stop();
-		mState.isTesting = false;
-		mState.isFinished = true;
-		mState.isNotSaved = true;
-		mState.isSaved = false;
 		utcStop = timeNow();
     }
     
     function alert(type)
 	{
-    	if($._mApp.soundSet) {
-    		Attention.playTone(type);
-    	}
-    	if($._mApp.vibeSet) {
-    		Attention.vibrate([new Attention.VibeProfile(100,400)]);
-    	}
+    	if($._mApp.soundSet) { Attention.playTone(type);  }
+    	if($._mApp.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
     }
-    
-    function discardTest() { mState.isNotSaved = false; mState.isFinished = false; }
 
     function resetTest() {
     	Sys.println("TestControl: resetTest() called");
     	$._mApp.mSensor.mHRData.initForTest();
     	testTimer.stop();	
-    	// need to be careful we have shown all results first!!!
 		utcStart = 0;
 		utcStop = 0;
-		mState.isTesting = false;
-		mState.isFinished = false;
-		mState.isNotSaved = true;
-		mState.isSaved = false;
+    }
+    
+    function discardTest() {
+    	// called from HRVBahaviourDelegate
+    	resetTest(); // may not be necessary as handled by state machine
     }
     
     function saveTest() {
@@ -216,25 +354,18 @@ class TestController {
     	
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 
-    		
-    	mState.isNotSaved = false;
-    	mState.isSaved = true;
-    	mState.isFinished = false;
     }
     
 	// called by startTest() to initial test timers etc
+	// need to remove STATE updates
     function start() {
 		if (mDebugging == true) {Sys.println("START() ENTERED");}
-		// assumes that we have isAntRx true
 		// Set up test type and timer up or down.
 		
 		resetTest();
 		Sys.println("TestControl: start() - clearing sample buffer - is this right place?");
     	$._mApp.mSampleProc.resetSampleBuffer();
 		
-		//set test state
-		// now in isTesting = true can start processing ANT samples!
-		mState.isTesting = true;
 		mManualTestStopTime = 0;
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	
@@ -245,172 +376,22 @@ class TestController {
  			// going to stop a manual test at the time set by user OR when Start pressed again
  			// note value here is in elapsed seconds
  			mManualTestStopTime = $._mApp.mManualTimeSet;	 			
-			testTimer.start(method(:finishTest),$._mApp.mMaxTimerTimeSet*1000,false); // false   	
+			testTimer.start(method(:timerEnded),$._mApp.mMaxTimerTimeSet*1000,false); // false   	
     	} else {
     		// kick off a timer for period of test
     		timerTime = $._mApp.timerTimeSet;
-			testTimer.start(method(:finishTest),timerTime*1000,false); // false
+			testTimer.start(method(:timerEnded),timerTime*1000,false); // false
 		}
 
 		// Common start
 		startMoment = Time.now();
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
-
-    	if (mDebugging == true) {
-    		Sys.println("START: leaving func isT and isF "+mState.isTesting+" "+mState.isFinished);
-    		Sys.println("START: manual time set is :"+mManualTestStopTime);
-    	}
-    }
-      
-    function onEnterPressed() {
-    	// tells HRVDelegate not to save
-    	var mValue = false;
-    	
-    	if(mState.isFinished) {
-    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Finished");}
-    		resetTest();
-    		Ui.requestUpdate();
-    	}
-    	else if(mState.isTesting) {
-    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - Stop test");}
-    		if(mState.isNotSaved && MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {
-				if (mDebugging == true) {Sys.println("TestControl: save option");}
-				// user can either save or discard. in either event we are done
-				// returning true tells HRV Delegate to ask to save
-				mValue = true;
-	    	}
-	    	stopTest();
-    		Ui.requestUpdate();
-    	}
-    	else if(!$._mApp.mSensor.mHRData.isAntRx || !$._mApp.mSensor.mHRData.isPulseRx ){
-    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - no ANT");}
-    		alert(TONE_ERROR);
-    	}
-    	else {
-    		if (mDebugging == true) {Sys.println("TestControl: onEnterPressed() - start branch");}
-    		startTest();
-    	}  
-   		// signal whether save needed
-   		return mValue;    
-    }
+    } 
     
-    function onEscapePressed() {
-  		if(mState.isTesting) {
-			stopTest();
-		}
-			
-		if(mState.isFinished && mState.isNotSaved && MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {
-			//mState.isClosing = true;
-			mState.isFinished = false;
-			return true;
-		}
-		else {
-			// hand back to UI to close app
-			return false;
-		}     
-    }
-    
-    function UpdateTestStatus() {
-    	// this should drive the state transistions and state view information
-    	// AntHandler drives data model information in sampleProcessing
-    	// called every second
-    	if (mDebugging == true) {
-    		Sys.println("UpdateTestStatus");
-	    	Sys.println("UpdateTestStatus: isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
-	    	Sys.println("UpdateTestStatus: datacount " + $._mApp.mSampleProc.dataCount);
-	    	Sys.println("UpdateTestStatus isFinished " + $._mApp.mTestControl.mState.isFinished);
-	    	Sys.println("UpdateTestStatus: isTesting " + $._mApp.mTestControl.mState.isTesting);
-	    	Sys.println("UpdateTestStatus: isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
-	    	Sys.println("UpdateTestStatus: isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
-	    }
-    	
-		//if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
-		
-		// Timer information for view
-		timerTime = 0; // = utcStop - utcStart;
-		var testType = $._mApp.testTypeSet;
-		
-		// set default time display and adjust in tests below
-		if(TYPE_TIMER == testType) {
-			timerTime = $._mApp.timerTimeSet;
-		}
-		else if(TYPE_MANUAL == testType) {
-			// driven by user stopping or hitting limit
-			timerTime = 0;
-		}
-
-		// Message
-    	var msgTxt ="";
-    	var testTime = timeNow() - utcStart;
-
-		if(mState.isFinished) {
-			if (mDebugging == true) {Sys.println("TestControl: isFinished branch "+mState.isFinished);}
-			testTime = utcStop - utcStart;
-
-			if(MIN_SAMPLES > $._mApp.mSampleProc.dataCount) {
-				msgTxt = "Not enough data";
-			}
-			else if(mState.isSaved) {
-				msgTxt = "Result saved";
-			}
-			else {
-				msgTxt = "Finished";
-			}
-    	}
-    	else if(mState.isTesting) {
-    		if (mDebugging == true) {Sys.println("TestControl: isTesting branch");}
+    function timerEnded() {
+    	// either hit limit on manual or test time finsished on auto
+    	StateMachine(:timerExpired);
+	}
     		
-    		msgTxt = "Breathe regularly and stay still";
-
-			if(TYPE_TIMER == testType) {
-				// reduce time left
-				timerTime -= testTime;
-			}
-			else {
-				// manual timer counts up
-				timerTime = testTime;
-				if (testTime >= mManualTestStopTime) {
-					// reached limit set by user
-					if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
-					finishTest();
-				}
-			}
-    	}
-    	else if($._mApp.mSensor.mHRData.isStrapRx) {
-			if(TYPE_TIMER == testType) {
-				msgTxt = "Timer test ready";
-			}
-			else if(TYPE_MANUAL == testType) {
-				msgTxt = "Manual test ready";
-			}
-    	}
-    	else {
-    		msgTxt = "Searching for HRM";
-    	}
-
-		if (mDebugging == true) {Sys.println("TestControl: invoking test view");}
-		
-		// update Test View data  
-    	if (mFunc != null) {
-    		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
-    	}
-    	
-    	// update Current  View data  
-    	if (mFuncCurrent != null) {
-    		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
-    		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
-    	}
-    	    	
-    	if (mDebugging == true) {Sys.println("TestControl: exiting UpdateStatus");}
-    	if (mDebugging == true) {
-	    	Sys.println("UpdateTestStatus: isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
-	    	Sys.println("UpdateTestStatus: datacount " + $._mApp.mSampleProc.dataCount);
-	    	Sys.println("UpdateTestStatus isFinished " + $._mApp.mTestControl.mState.isFinished);
-	    	Sys.println("UpdateTestStatus: isTesting " + $._mApp.mTestControl.mState.isTesting);
-	    	Sys.println("UpdateTestStatus: isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
-	    	Sys.println("UpdateTestStatus: isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
-	    }
-    }   
-	
 }

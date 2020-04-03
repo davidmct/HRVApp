@@ -110,7 +110,7 @@ class TestView extends Ui.View {
 		$._mApp.mTestControl.setObserver(self.method(:onNotify));
 				
     	// might need to go in test controller
-    	if($._mApp.mTestControl.mState.isClosing) {
+    	if($._mApp.mTestControl.mTestState == TS_CLOSE) {
     		// stop app?????
     		//CHECK - causes two calls as one in HRV delegate
 			//$._mApp.onStop( null );
@@ -144,7 +144,7 @@ class TestView extends Ui.View {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
 			Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
-			Sys.println("Test state = "+ $._mApp.mTestControl.mState.isTesting);
+			Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
 		}
 		    	
     	// All of the test logic above should be else where and call an update function here
