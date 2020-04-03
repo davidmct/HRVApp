@@ -26,7 +26,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     hidden var mSensorType; 
     hidden var mAntIDLocal; 
     var mSearching;
-    hidden var mFunc;
+    var mFunc;
     
     class HRStatus {
      	var isChOpen;
@@ -71,6 +71,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     	// true if external strap 		
     	mSensorType = sensorType;
     	mAntIDLocal = mAntID;
+    	mFunc = null;
     }
     
     // function to call to update TestController

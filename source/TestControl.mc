@@ -42,7 +42,8 @@ enum {
 	TS_READY,
 	TS_TESTING,
 	TS_ABORT,
-	TS_CLOSE
+	TS_CLOSE,
+	TS_PAUSE
 }	
 
 class TestController {
@@ -105,6 +106,8 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
+		Sys.println("TestControl: StateMachine() entered");
+		
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
 		
@@ -124,6 +127,7 @@ class TestController {
 		
 		switch (mTestState) {
 			case TS_INIT:
+				Sys.println("TS_INIT");
 				// We may need to reinitialise sensors if swapped here
 				mTestMessage = "Initialising...";
 				resetTest();
@@ -132,6 +136,7 @@ class TestController {
 				$._mApp.mSensor.setObserver(self.method(:onNotify));
 			break;
 			case TS_WAITING:
+				Sys.println("TS_WAITING");
 				// we are waiting for the HR strap to be ready
 				if ( mSensorReady ) { 
 					mTestMessage = "Sensor ready";
@@ -149,15 +154,19 @@ class TestController {
 			break;
 			case TS_READY:
 				// stars are aligned. we have a source of data and waiting to go
+				Sys.println("TS_READY");
 				if(TYPE_TIMER == testType) {
 					mTestMessage = "Timer test ready. Press Enter";
 				}
 				else if(TYPE_MANUAL == testType) {
 					mTestMessage= "Manual test ready. Press Enter";
 				}
-
+				Sys.println("TS_READY: message: "+mTestMessage);
+				
 				if (caller == :enterPressed) {
 					// now we can setup test ready to go
+					// KEEP OLD data until actually starting the test!
+					$._mApp.mSensor.mHRData.initForTest();
 					startTest();
 					mTestState = TS_TESTING; 			
 				} else if (caller == :escapePressed) {
@@ -169,6 +178,7 @@ class TestController {
 				}				
 			break;
 			case TS_TESTING:
+				Sys.println("TS_TESTING");
 				// now we are in the mist of testing
 				mTestMessage = "Breathe regularly and stay still";
 				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
@@ -217,15 +227,24 @@ class TestController {
 							
 			break;
 			case TS_ABORT:
+				Sys.println("TS_ABORT");
 				// go back to ready or maybe INIT if new sensors
-				mTestState = TS_READY;	
+				mTestMessage = "Results available until you return to view";
+				mTestState = TS_PAUSE;	
 				resetTest();
 			break;
 			case TS_CLOSE:
+				Sys.println("TS_CLOSE");
 				// go back to ready or maybe INIT if new sensors
 				// maybe TestView is popped at this point?
-				mTestState = TS_READY;	
+				mTestState = TS_PAUSE;	
+				mTestMessage = "Results available until you return to view";
 				resetTest();
+			break;
+			case TS_PAUSE:
+				// allow one update cycle to show close and and abort messages
+				Sys.println("TS_PAUSE");
+				mTestState = TS_READY;					
 			break;
 			default:
 				Sys.println("UNKNOWN state in test controller!");
@@ -234,7 +253,7 @@ class TestController {
 		
 		// update Test View data  
     	if (mFunc != null) {
-    		mFunc.invoke(:Update, [ msgTxt, timerFormat(timerTime)]);
+    		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
     	}
     	
     	// update Current  View data  
@@ -287,7 +306,8 @@ class TestController {
 
     function resetTest() {
     	Sys.println("TestControl: resetTest() called");
-    	$._mApp.mSensor.mHRData.initForTest();
+    	// don't call this as useful to see old data before starting a new test
+    	//$._mApp.mSensor.mHRData.initForTest();
     	testTimer.stop();	
 		utcStart = 0;
 		utcStop = 0;
@@ -363,8 +383,9 @@ class TestController {
 		// Set up test type and timer up or down.
 		
 		resetTest();
-		Sys.println("TestControl: start() - clearing sample buffer - is this right place?");
-    	$._mApp.mSampleProc.resetSampleBuffer();
+		Sys.println("TestControl: start() - clearing stats and interval buffer");
+    	//$._mApp.mSampleProc.resetSampleBuffer();
+		$._mApp.mSensor.mHRData.initForTest();
 		
 		mManualTestStopTime = 0;
 		testTimer.stop();	// This is in case user has changed test type while waiting

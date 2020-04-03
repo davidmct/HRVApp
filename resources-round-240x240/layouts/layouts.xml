@@ -38,7 +38,7 @@
         <label id="ViewTimerVal" text="value" x="70" y="218" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
      	<text-area id="bodyText" 
 	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
-	        text="Starting up..." 
+	        text=" " 
 	        x="10%" y="17%" width="80%" height="32%">
 	        <!-- The fonts will be tried in order. This allows scaling the font size
 	             as the text grows -->        

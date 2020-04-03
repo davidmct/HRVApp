@@ -84,7 +84,8 @@ class TestView extends Ui.View {
 		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapStatus", null, mapColour(RED));	
 					
 		mViewMsgTxtID = getLayoutFieldIDandInit("bodyText", null, mValueColour);
-			
+		
+		$._mApp.mTestControl.setObserver(self.method(:onNotify));			
 	}
         
     //! Restore the state of the app and prepare the view to be shown
@@ -106,8 +107,6 @@ class TestView extends Ui.View {
 			mViewPulseValID.setColor( mValueColour);
 			mViewTimerValID.setColor( mValueColour);	
 		}
-		
-		$._mApp.mTestControl.setObserver(self.method(:onNotify));
 				
     	// might need to go in test controller
     	if($._mApp.mTestControl.mTestState == TS_CLOSE) {

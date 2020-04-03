@@ -116,6 +116,7 @@ class SampleProcessing {
 	}
 	
 	function resetHRVData() {
+		resetSampleBuffer();
 		devMs = 0;
 		devSqSum = 0;
 		pulseSum = 0;
