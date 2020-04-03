@@ -113,7 +113,7 @@ class TestController {
 
     function finishTest() {
     	Sys.println("finishTest()");
-    	endTest();
+    	//endTest();
     	alert(TONE_SUCCESS);
     }
 
@@ -224,7 +224,7 @@ class TestController {
     
 	// called by startTest() to initial test timers etc
     function start() {
-		if (mDebugging == true) {Sys.println("Start: entered");}
+		if (mDebugging == true) {Sys.println("START() ENTERED");}
 		// assumes that we have isAntRx true
 		// Set up test type and timer up or down.
 		
@@ -257,7 +257,10 @@ class TestController {
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
 
-    	if (mDebugging == true) {Sys.println("Start: leaving func isT and isF "+mState.isTesting+" "+mState.isFinished);}
+    	if (mDebugging == true) {
+    		Sys.println("START: leaving func isT and isF "+mState.isTesting+" "+mState.isFinished);
+    		Sys.println("START: manual time set is :"+mManualTestStopTime);
+    	}
     }
       
     function onEnterPressed() {
@@ -322,7 +325,7 @@ class TestController {
 	    	Sys.println("UpdateTestStatus: isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
 	    }
     	
-		if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
+		//if (mDebugging == true) {Sys.println("TestControl: UpdateTestStatus()");}
 		
 		// Timer information for view
 		timerTime = 0; // = utcStop - utcStart;
@@ -400,6 +403,14 @@ class TestController {
     	}
     	    	
     	if (mDebugging == true) {Sys.println("TestControl: exiting UpdateStatus");}
+    	if (mDebugging == true) {
+	    	Sys.println("UpdateTestStatus: isNotSaved " + $._mApp.mTestControl.mState.isNotSaved);
+	    	Sys.println("UpdateTestStatus: datacount " + $._mApp.mSampleProc.dataCount);
+	    	Sys.println("UpdateTestStatus isFinished " + $._mApp.mTestControl.mState.isFinished);
+	    	Sys.println("UpdateTestStatus: isTesting " + $._mApp.mTestControl.mState.isTesting);
+	    	Sys.println("UpdateTestStatus: isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
+	    	Sys.println("UpdateTestStatus: isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
+	    }
     }   
 	
 }

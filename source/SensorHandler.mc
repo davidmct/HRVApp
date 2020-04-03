@@ -346,7 +346,7 @@ class InternalSensor {
 		}	
 		
 		// now feed machine...
-		//Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
+		Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
 		
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];

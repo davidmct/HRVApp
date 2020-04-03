@@ -38,6 +38,7 @@ class myException extends Lang.Exception {
     function initialize(message) {
     	Sys.println(message);
         Exception.initialize();
+		//Exception.printStackTrace;
     }
 }
 

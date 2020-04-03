@@ -150,6 +150,13 @@ class SampleProcessing {
 			// shouldn't capture data
 			if (!isTesting) {return;}
 			
+			if (livePulse == 0) {
+				// could happen on first loop - avoids divide by 0
+				// If we still have an intervale could create BPM from that...
+				Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
+				return;
+			}
+			
 			// Calculate estimated ranges for reliable data
 			var maxMs = 60000 / (livePulse * 0.7);
 			var minMs = 60000 / (livePulse * 1.4);

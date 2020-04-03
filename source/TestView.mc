@@ -143,7 +143,7 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			Sys.println("Test View ANT pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
+			Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
 			Sys.println("Test state = "+ $._mApp.mTestControl.mState.isTesting);
 		}
 		    	
@@ -160,7 +160,8 @@ class TestView extends Ui.View {
 	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.mHRMStatus, mapColour($._mApp.mSensor.mHRData.mHRMStatusCol));						
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
 		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
-		updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
+		updateLayoutField(mViewPulseValID, $._mApp.mSensor.mHRData.livePulse.format("%d"), mValueColour);		
+		//updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
    		
    		View.onUpdate(dc);
