@@ -113,7 +113,7 @@ class TestController {
 
     function finishTest() {
     	Sys.println("finishTest()");
-    	//endTest();
+    	endTest();
     	alert(TONE_SUCCESS);
     }
 
@@ -245,7 +245,7 @@ class TestController {
  			// going to stop a manual test at the time set by user OR when Start pressed again
  			// note value here is in elapsed seconds
  			mManualTestStopTime = $._mApp.mManualTimeSet;	 			
-			testTimer.start(method(:finishTest),$._mApp.mMaxTimerTimeSet,false); // false   	
+			testTimer.start(method(:finishTest),$._mApp.mMaxTimerTimeSet*1000,false); // false   	
     	} else {
     		// kick off a timer for period of test
     		timerTime = $._mApp.timerTimeSet;
