@@ -154,7 +154,6 @@ class TestController {
 			break;
 			case TS_READY:
 				// stars are aligned. we have a source of data and waiting to go
-				Sys.println("TS_READY");
 				if(TYPE_TIMER == testType) {
 					mTestMessage = "Timer test ready. Press Enter";
 				}
@@ -383,7 +382,7 @@ class TestController {
 		// Set up test type and timer up or down.
 		
 		resetTest();
-		Sys.println("TestControl: start() - clearing stats and interval buffer");
+		//Sys.println("TestControl: start() - clearing stats and interval buffer");
     	//$._mApp.mSampleProc.resetSampleBuffer();
 		$._mApp.mSensor.mHRData.initForTest();
 		

@@ -68,16 +68,16 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     function onEnter() {
     	if (mDebugging) {
-	    	Sys.println("HRVBehaviour onEnter()");
-	    	Sys.println("HRVBehaviour onEnter(): viewNum "+ $._mApp.viewNum);
-	    	Sys.println("HRVBehaviour onEnter(): TestState " + $._mApp.mTestControl.mTestState);
-	    	Sys.println("HRVBehaviour onEnter(): datacount " + $._mApp.mSampleProc.dataCount);
+	    	//Sys.println("HRVBehaviour onEnter()");
+	    	//Sys.println("HRVBehaviour onEnter(): viewNum "+ $._mApp.viewNum);
+	    	//Sys.println("HRVBehaviour onEnter(): TestState " + $._mApp.mTestControl.mTestState);
+	    	//Sys.println("HRVBehaviour onEnter(): datacount " + $._mApp.mSampleProc.dataCount);
 	    	//Sys.println("HRVBehaviour onEnter(): isAntRx " + $._mApp.mSensor.mHRData.isAntRx);
-	    	Sys.println("HRVBehaviour onEnter(): isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
+	    	//Sys.println("HRVBehaviour onEnter(): isOpenCh " + $._mApp.mSensor.mHRData.isChOpen);
 	    }
     	// 
 		if($._mApp.viewNum != TEST_VIEW) {
-			Sys.println("HRVBehaviour onEnter() - switch to test view");
+			//Sys.println("HRVBehaviour onEnter() - switch to test view");
 			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
 			return true;
 		}
@@ -94,7 +94,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			}
 		}
 				
- 		Sys.println("HRVBehaviour onEnter() - leaving");   	
+ 		//Sys.println("HRVBehaviour onEnter() - leaving");   	
     	return true;
 	}
 
@@ -137,7 +137,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 	
 	function setSave(value) {
-		Sys.println("setSave() called with "+value);
+		//Sys.println("setSave() called with "+value);
 		if (value == 1) { 
 			Sys.println("saveTest() called");
             $._mApp.mTestControl.saveTest();

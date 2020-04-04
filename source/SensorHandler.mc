@@ -30,9 +30,6 @@ class SensorHandler {//extends Ant.GenericChannel {
     
     class HRStatus {
      	var isChOpen;
-		//var isAntRx;
-		//var isStrapRx;
-		//var isPulseRx;
 		var livePulse;
 		var mHRMStatusCol;
     	var mHRMStatus;
@@ -42,9 +39,6 @@ class SensorHandler {//extends Ant.GenericChannel {
 		
     	function initialize() {
         	isChOpen = false;
-    		//isAntRx = false;
-			//isStrapRx = false;
-			//isPulseRx = false;
 			// had to add $ to find RED symbol. enum stopped working here but was OK in other code!!
 			mHRMStatusCol = $.RED;
     		mHRMStatus = "Searching...";
@@ -130,7 +124,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     		// only applies to ANT
 			mHRData.isChOpen = sensor.GenericChannel.open();
 		}
-		if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
+		//if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
 		
 		mHRData.mHRMStatusCol = RED;
     	mHRData.mHRMStatus = "Found strap";
@@ -142,13 +136,10 @@ class SensorHandler {//extends Ant.GenericChannel {
     	// release dumps whole config
     	if(mHRData.isChOpen) {
     		//GenericChannel.release();
-    		if (mDebuggingANT == true) {Sys.println("CloseCh(): closing open channel");}
+    		//if (mDebuggingANT == true) {Sys.println("CloseCh(): closing open channel");}
     		if (mSensorType) { sensor.GenericChannel.close();}
     	}
     	mHRData.isChOpen = false;
-    	//mHRData.isAntRx = false;
-		//mHRData.isStrapRx = false;
-		//mHRData.isPulseRx = false;
 		mHRData.mHRMStatusCol = RED;
     	mHRData.mHRMStatus = "HRM closed";
 	    mHRData.livePulse = 0;
@@ -218,10 +209,6 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
             }
 			// not sure this handles all page types and 65th special page correctly
-            //mHRDataLnk.isAntRx = true;
-            //mHRDataLnk.isStrapRx = true;
-            //mHRDataLnk.mHRMStatusCol = GREEN;
-    		//mHRDataLnk.mHRMStatus = "HR data";
     		      
             mHRDataLnk.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
@@ -320,7 +307,6 @@ class AntHandler extends Ant.GenericChannel {
 			if(0 < mHRDataLnk.livePulse) {
 				var limit = 1 + 60000 / mHRDataLnk.livePulse / 246; // 246 = 4.06 KHz
 				if(limit < mHRDataLnk.mNoPulseCount) {
-					//mHRDataLnk.isPulseRx = false;
 					mHRDataLnk.mHRMStatusCol = RED;
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
@@ -360,8 +346,6 @@ class InternalSensor {
 		
 		mHRDataLnk.isChOpen = true;
 		$._mApp.mSensor.mSearching = false;
-	    //mHRDataLnk.isAntRx = true;
-	    //mHRDataLnk.isStrapRx = true;
 	    
     	// update Test controller data  
 		if ($._mApp.mSensor.mFunc != null) {
@@ -385,7 +369,6 @@ class InternalSensor {
 				// flag no data and 
 				mHRDataLnk.livePulse = 0;
 				mHRDataLnk.mHRMStatusCol = RED;
-				//mHRDataLnk.isPulseRx = false;
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
@@ -394,7 +377,6 @@ class InternalSensor {
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;
 				mHRDataLnk.mHRMStatusCol = GREEN;
-				//mHRDataLnk.isPulseRx = true;
 				mHRDataLnk.mHRMStatus = "HR data";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
@@ -404,7 +386,7 @@ class InternalSensor {
 		}	
 		
 		// now feed machine...
-		Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
+		//Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
 		var isTesting = false;
 		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
@@ -412,6 +394,6 @@ class InternalSensor {
 			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						
-		Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
+		//Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
 	} 
 } 

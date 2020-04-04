@@ -63,7 +63,7 @@ class TestView extends Ui.View {
 		oldLblCol = $._mApp.lblColSet;
 		oldValCol = $._mApp.txtColSet;
 
-		if (mDebugging == true) {Sys.println("TextView: onLayout(): starting field update");}
+		//if (mDebugging == true) {Sys.println("TestView: onLayout(): starting field update");}
 		
 		// title		
 		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour);
@@ -142,8 +142,8 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
-			Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
+			//Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
+			//Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
 		}
 		    	
     	// All of the test logic above should be else where and call an update function here

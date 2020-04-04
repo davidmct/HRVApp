@@ -19,9 +19,9 @@
 	<string id="vibeSetPrompt">On or Off</string>
 	<string id="timerTimeSetTitle">Timer based test</string>
 	<string id="timerTimeSetPrompt">Set length of test in seconds - should be 300 (5mins)</string>
-	<string id="TimeTooLargeError">Maximum value is 300 seconds</string>
+	<string id="TimeTooLargeError">Maximum value is 300 timed and 600 manual</string>
 	<string id="ManualTimeSetTitle">Manual test time</string> 
-	<string id="ManualTimeSetPrompt">Maximum allowed manual time seconds</string>
+	<string id="ManualTimeSetPrompt">Maximum allowed manual time 600 seconds</string>
 	<string id="bgColSetTitle">Background colour</string>
 	<string id="bgColSetPrompt">Pick Colour</string>
 	<string id="WHITE">WHITE</string>
@@ -37,7 +37,7 @@
 	<string id="BLUE">BLUE</string>
 	<string id="DK_BLUE">DK_BLUE</string>
 	<string id="PURPLE">PURPLE</string>
-	<string id="PINK">PINK"</string>		
+	<string id="PINK">PINK</string>		
 	<string id="lblColSetTitle">Label colour</string> 
 	<string id="lblColSetPrompt">Select colour</string>
 	<string id="txtColSetTitle" >Text colour</string>

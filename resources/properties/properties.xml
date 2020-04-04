@@ -8,7 +8,7 @@
 	<property id="vibeSet" type="boolean">false</property>
 	<property id="testTypeSet" type="number">0</property>
 	<property id="timerTimeSet" type="number">300</property>
-	<property id="MaxTimerTimeSet" type="number">300</property>
+	<property id="MaxTimerTimeSet" type="number">600</property>
 	<property id="ManualTimeSet" type="number">300</property>
 	<property id="bgColSet" type="number">3</property>
 	<property id="lblColSet" type="number">10</property>

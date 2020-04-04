@@ -73,7 +73,7 @@ using Toybox.Math;
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
 const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
-const MAX_TIME = 6; // minutes
+const MAX_TIME = 10; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)
 
 class SampleProcessing {
@@ -221,12 +221,9 @@ class SampleProcessing {
 	function updateRunningStats(previousIntMs, intMs, livePulse) {
 		// implement running equations
 		// note that Math lib has stdev(data, mean) for standard deviation
-		
-		if(intMs > previousIntMs) {
-			devMs = intMs - previousIntMs;
-		} else {
-			devMs = previousIntMs - intMs;
-		}
+
+		// don't need to take abs value as only being squared!
+		//devMs = (intMs - previousIntMs).abs();
 		
 		devSqSum += devMs * devMs;
 		pulseSum += livePulse;

@@ -135,7 +135,7 @@ class PoincareView extends Ui.View {
 		var max = $._mApp.mSampleProc.maxIntervalFound;
 		var min = $._mApp.mSampleProc.minIntervalFound;
 		
-		Sys.println("Poincare: max, min "+max+" , "+min);
+		//Sys.println("Poincare: max, min "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
@@ -149,14 +149,14 @@ class PoincareView extends Ui.View {
 			floor -= 5;
 		}
 
-		Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
+		//Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
 				
 		//var range = ceil - floor;
 		var scaleY = chartHeight / (ceil - floor).toFloat();
 		// for moment we have a square layout and hence same scaling!!
 		var scaleX = scaleY;
 		
-		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
+		//Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
 
 		// Prepare the screen
 		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);

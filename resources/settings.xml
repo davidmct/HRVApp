@@ -18,7 +18,7 @@
 		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.ManualTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>		
 		
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
