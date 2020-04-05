@@ -23,7 +23,10 @@ using Toybox.Sensor;
 //10. Need to change sensor handling when Porperty changes (or say only on restart)
 //12. Add fit session and record saving
 //13. When using optical should call it PRV not HRV
-// "using-relative-layouts-and-textarea WatchUi.TextArea for scaling to fit window
+//14. Change history view to layout? Change saved parameters and structure
+//15. reduce number of colour sets used
+//16. Make sure background colour set works
+//17. Add icon to testView title
 
 var mDebugging = true;
 var mDebuggingANT = false;

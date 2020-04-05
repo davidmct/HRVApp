@@ -113,14 +113,16 @@ class PoincareView extends Ui.View {
     	var ctrX = dc.getWidth() / 2;
 		var ctrY = dc.getHeight() / 2;
 		// define box about centre
-		var leftX = ctrX - 90;
-		var rightX = ctrX + 90;
+		var leftX = ctrX - cGridWith/2;
+		var rightX = ctrX + cGridWith/2;
 		// 45 *2 is height of chart
 		var ceilY = ctrY - chartHeight/2;
 		var floorY = ctrY + chartHeight/2;
     	
+    	// draw the layout
     	View.onUpdate(dc);
     	
+    	// we could update less frequently if necessary
     	//var mRem = mShowCount % UPDATE_VIEW_SECONDS;
 		//if ( mRem != 0) {
 		//	var text = "Updating in "+(UPDATE_VIEW_SECONDS-mRem)+"secs";
@@ -130,7 +132,9 @@ class PoincareView extends Ui.View {
     	
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
-		
+		//var mBackColour = mapColour( $._mApp.bgColSet);
+		// sadly drawables in layout don't have a colour attribute you can change!
+		//updateLayoutField("PoincareBack_id", null, mBackColour);
 		updateLayoutField("PoincareTitle", null, mLabelColour);
 		updateLayoutField("IntervalLbl", null, mLabelColour);
 		

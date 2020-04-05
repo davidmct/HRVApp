@@ -26,7 +26,13 @@
 		<drawable id="SummaryLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
-        <label id="ViewTitle" text="HRV Test" x="140" y="35" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="ViewTitle" text="HRV" x="170" y="35" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+	    <bitmap id="HRV_ICON" x="90" y="10" filename="../../resources/images/hrv-icon-40.png" dithering="none" >
+	       <!-- <palette disableTransparency="true">
+	           <color>000000</color>
+	           <color>FFFFFF</color>
+	       </palette> -->
+	    </bitmap>
         <label id="ViewHRV_Lbl" text="Ln(HRV)" x="210" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
         <label id="ViewHRV_Val" text="value" x="210" y="218" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
 
@@ -63,6 +69,7 @@
         <label id="MidValX" text="x" x="140" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
         <label id="LowerValX" text="x" x="80" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
      	<drawable id="PoincareLayoutLines_id" />
+     	<drawable id="PoincareBack_id"/>
     </layout>
     <layout id="CurrentViewLayout">
         <label id="CurrentViewTitle" text="Current" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
