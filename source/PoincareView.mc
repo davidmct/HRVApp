@@ -35,6 +35,7 @@ class PoincareView extends Ui.View {
 	hidden var mShowCount;
 	
 	hidden var mPoincareLayout;
+	hidden var cGridWith;
 
 	function initialize() { View.initialize();}
 	
@@ -52,6 +53,8 @@ class PoincareView extends Ui.View {
 		}
 		
 		mShowCount = 0;
+		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
+		cGridWith = a.toNumber();
 		
 		return true;
 	}
@@ -106,7 +109,7 @@ class PoincareView extends Ui.View {
     	// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
 		// impacts all layout numbers!
-		var chartHeight = 180;
+		var chartHeight = cGridWith;
     	var ctrX = dc.getWidth() / 2;
 		var ctrY = dc.getHeight() / 2;
 		// define box about centre
