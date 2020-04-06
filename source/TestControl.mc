@@ -9,6 +9,12 @@
 // data model should accept commands
 // views should register for change notifications if needed
 
+// NOTE:
+// Adding a PAUSE state still doesn't allow ABORT/CLOSE states to show message and we go back to READY before
+// TestView Ui appears to be updated. However, state changes and Ui update requests are in sync!
+// Might need this type of code...
+// https://forums.garmin.com/developer/connect-iq/f/discussion/4396/how-can-i-update-watch-app-ui-in-realtime-when-receiving-messages-from-android-app
+
 using Toybox.Application as App;
 using Toybox.Application.Storage as Store;
 using Toybox.Application.Properties as Property;
@@ -83,6 +89,7 @@ class TestController {
 	
 	// function to call to update Summary view
 	function setObserver(func) {
+		Sys.println("Testcontrol: setObserver() called with "+func);
 		mFunc = func;
 	}
 	
@@ -251,8 +258,10 @@ class TestController {
 		} // end switch
 		
 		// update Test View data  
+		//if (mFunc == null) {Sys.println("TestControl: Statemachine: mFunc NULL "); }
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
+    		Sys.println("TestControl: Statemachine: Testview update - "+mTestMessage);
     	}
     	
     	// update Current  View data  
@@ -262,7 +271,7 @@ class TestController {
     	}
     	    	
     	if (mDebugging == true) {Sys.println("TestControl: exiting State machine");}
-		Ui.requestUpdate();
+		//Ui.requestUpdate();
 		return mResponse;
 	}
 	

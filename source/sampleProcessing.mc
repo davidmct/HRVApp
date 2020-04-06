@@ -223,7 +223,7 @@ class SampleProcessing {
 		// note that Math lib has stdev(data, mean) for standard deviation
 
 		// don't need to take abs value as only being squared!
-		//devMs = (intMs - previousIntMs).abs();
+		devMs = (intMs - previousIntMs);
 		
 		devSqSum += devMs * devMs;
 		pulseSum += livePulse;

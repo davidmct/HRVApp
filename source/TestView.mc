@@ -172,7 +172,8 @@ class TestView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
-    	$._mApp.mTestControl.setObserver(null);
+    	// don't want to send null as state machine still running
+    	//$._mApp.mTestControl.setObserver(null);
     }
 
 }
