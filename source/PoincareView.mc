@@ -36,6 +36,13 @@ class PoincareView extends Ui.View {
 	
 	hidden var mPoincareLayout;
 	hidden var cGridWith;
+	hidden var chartHeight = cGridWith;
+    hidden var ctrX;
+	hidden var ctrY;
+	hidden var leftX;
+	hidden var rightX;
+	hidden var ceilY;
+	hidden var floorY;
 
 	function initialize() { View.initialize();}
 	
@@ -55,6 +62,19 @@ class PoincareView extends Ui.View {
 		mShowCount = 0;
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
+		
+		// chartHeight defines height of chart and sets scale
+		// needs to divide by 6 for horizontal lines
+		// impacts all layout numbers!
+		chartHeight = cGridWith;
+    	ctrX = dc.getWidth() / 2;
+		ctrY = dc.getHeight() / 2;
+		// define box about centre
+		leftX = ctrX - cGridWith/2;
+		rightX = ctrX + cGridWith/2;
+		// 45 *2 is height of chart
+		ceilY = ctrY - chartHeight/2;
+		floorY = ctrY + chartHeight/2;
 		
 		return true;
 	}
@@ -94,31 +114,9 @@ class PoincareView extends Ui.View {
 		// top_right = (mRadius + width, mRadius - height);
 		// bottom_left = (mRadius - width, mRadius + height);
 		// bottom_right = (mRadius + width, mRadius + height);	
-		
-		// will need to work out range on X which is same as Y
-		// draw overall box
-		// draw grid lines on both dimensions at say N_GRID_LINES (odd number), goes beyond axis lines left and bottom
-		// Make centre grid marker bolder or longer
-		// put median variation at this point and label
-		// need left and right range labels eg
-		// Lowest value - a bit, median, Highest plus a bit : might be very small!
-		// draw the layout
     	
     	mShowCount++;
-    	
-    	// chartHeight defines height of chart and sets scale
-		// needs to divide by 6 for horizontal lines
-		// impacts all layout numbers!
-		var chartHeight = cGridWith;
-    	var ctrX = dc.getWidth() / 2;
-		var ctrY = dc.getHeight() / 2;
-		// define box about centre
-		var leftX = ctrX - cGridWith/2;
-		var rightX = ctrX + cGridWith/2;
-		// 45 *2 is height of chart
-		var ceilY = ctrY - chartHeight/2;
-		var floorY = ctrY + chartHeight/2;
-    	
+    	   	
     	// draw the layout. remove if trying manual draw of layout elements
     	View.onUpdate(dc);
     	
@@ -172,7 +170,7 @@ class PoincareView extends Ui.View {
 		//Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
 
 		// Prepare the screen
-		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
+		//MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		
 		// calc numbers on axis and update label
 		var mid = floor + (ceil - floor) / 2;
@@ -197,7 +195,10 @@ class PoincareView extends Ui.View {
 
 		// Draw the data
 		var drawDots = 0;
+		
+		// set colour of rectangles
 		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
+		
 		// reduce entries by 1 as points to next free slot
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples()-1;
 		
@@ -220,8 +221,7 @@ class PoincareView extends Ui.View {
 			// work out x and y from numbers and scales - was * but should be / 
 			var x = (previousSample / scaleX).toNumber();
 			var y = (sampleN1 / scaleY).toNumber(); 
-			dc.drawRectangle(leftX+x, floorY-y, 2, 2);			
-			//dc.fillCircle(leftX + x, floorY - y, 2);
+			dc.fillRectangle(leftX+x, floorY-y, 2, 2);			
 			previousSample = sampleN1;
 		}
 		

@@ -329,8 +329,8 @@ class AntHandler extends Ant.GenericChannel {
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
 					if ($._mApp.mSensor.mFunc != null) {
-						// no message and not ready, no state change
-						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, false]);
+						// no message and not ready, restart
+						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, true]);
 					}
 				}
 			}
@@ -395,7 +395,7 @@ class InternalSensor {
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
-					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false]);
+					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false, true]);
 				}
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;

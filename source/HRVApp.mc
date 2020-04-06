@@ -28,7 +28,7 @@ using Toybox.Sensor;
 //16. Make sure background colour set works
 //17. Add icon to testView title
 
-var mDebugging = true;
+var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 

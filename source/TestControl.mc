@@ -104,6 +104,7 @@ class TestController {
 		mHRmsgTxt = params[0];
 		mSensorReady = params[1];	
 		stateInit = params[2];
+		Sys.println("TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
 			Sys.println("TestControl: statemachine forced INIT");
