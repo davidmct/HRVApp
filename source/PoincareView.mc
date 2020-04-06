@@ -111,8 +111,13 @@ class PoincareView extends Ui.View {
     	// for(i=0; i < intervals.size(); i++) {
     	//	intervals[i] = $._mApp.mIntervalSampleBuffer[i];
     	// }
+    	// HOWEVER we should only need to add new data NOT all the old samplesBUT this would only work on variables maintained
+    	// between calls ie globals!! However some variables do seem to survice so ..
+    	// in init would need to create buffer and initial pointer
+    	// mLocalIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+    	
     	// shame simple assignment can't make access local ie
-    	// intervals = $._mApp.mIntervalSampleBuffer;
+    	//var intervals = $._mApp.mIntervalSampleBuffer;
     	
     	mShowCount++;
     	   	
@@ -164,6 +169,7 @@ class PoincareView extends Ui.View {
 		//var range = ceil - floor;
 		var scaleY = chartHeight / (ceil - floor).toFloat();
 		// for moment we have a square layout and hence same scaling!!
+		// New main plot loop assumes this!!
 		var scaleX = scaleY;
 		
 		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
@@ -210,19 +216,31 @@ class PoincareView extends Ui.View {
 		var previousSample = $._mApp.mIntervalSampleBuffer[1];
 		// can't do same with x value as maybe different scale factors
 		
-		// global access is up to 8x slower than local. Could potentially copy in as temp
+		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
 		//var debugPlot = "x, y: ";
+		// assume scaleX and ScaleY are the SAME
+		var mPrevY = ((previousSample - floor) * scaleX).toNumber();
+		
+		// try integer algo
+		var intScale = (scaleX * 32).toNumber();
+		
+		// DEBUG
+		var a = (1000 * intScale) >> 5;
+		var error = 1000*scaleX - a.toFloat();
+		Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
+		
 		for( var i=2; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
-			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
 			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
-			// work out x and y from numbers and scales - was * but should be / 
-			var x = ((previousSample - floor) * scaleX).toNumber();
-			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			// work out x and y from numbers and scales
+			var x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
+			//var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			// avoid floating point numbers
+			var y = ((sampleN1 - floor) * intScale) >> 5;
 			dc.fillRectangle(leftX+x, floorY-y, 3, 3);
 			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
-			previousSample = sampleN1;
+			mPrevY = y;  //previousSample = sampleN1;
 		}
 		
 		//Sys.println(debugPlot);
@@ -236,3 +254,26 @@ class PoincareView extends Ui.View {
    		return true;
     }
 }
+
+
+		//var mBufferptr = 0; // does setting up a variable and equal array copy whole array???
+		
+		// iterate through available data drawing rectangles as less expensive than circles
+		// reduce number of array accesses
+		//var previousSample = $._mApp.mIntervalSampleBuffer[1];
+		// can't do same with x value as maybe different scale factors
+		
+
+		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
+		//var debugPlot = "x, y: ";
+		//for( var i=2; i < mNumberEntries; i++ ){
+			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
+			// should use getSample() in case of circular buffer implemented
+			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
+			//var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
+			// work out x and y from numbers and scales
+			//var x = ((previousSample - floor) * scaleX).toNumber();
+			//var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			//dc.fillRectangle(leftX+x, floorY-y, 3, 3);
+			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
+			//previousSample = sampleN1;
