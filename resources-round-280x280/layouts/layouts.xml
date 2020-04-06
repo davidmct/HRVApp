@@ -58,6 +58,7 @@
  		<drawable id="TestViewLayoutLines_id" />     
     </layout>
     <layout id="PoincareViewLayout">
+    	<drawable id="PoincareBack_id" class="CustomBackground" />
         <!-- Key assumption is chart height - 180 (hard coded in view) -->
         <!-- width of chart area is +-90 from center as is height-->
         <label id="PoincareTitle" text="Poincare" x="140" y="30" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
@@ -69,7 +70,6 @@
         <label id="MidValX" text="x" x="140" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
         <label id="LowerValX" text="x" x="80" y="240" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
      	<drawable id="PoincareLayoutLines_id" />
-     	<drawable id="PoincareBack_id"/>
     </layout>
     <layout id="CurrentViewLayout">
         <label id="CurrentViewTitle" text="Current" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />

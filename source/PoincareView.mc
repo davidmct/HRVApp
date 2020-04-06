@@ -119,8 +119,14 @@ class PoincareView extends Ui.View {
 		var ceilY = ctrY - chartHeight/2;
 		var floorY = ctrY + chartHeight/2;
     	
-    	// draw the layout
+    	// draw the layout. remove if trying manual draw of layout elements
     	View.onUpdate(dc);
+    	
+    	// This should draw layout but doesn't. fails on draw(dc)
+    	//for (var i = 0; i < mLayout.size(); ++i) {
+		//	mLayout.draw(dc);
+		//	Sys.println(i);
+		//}
     	
     	// we could update less frequently if necessary
     	//var mRem = mShowCount % UPDATE_VIEW_SECONDS;
