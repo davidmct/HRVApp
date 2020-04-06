@@ -1,6 +1,7 @@
 <layouts>
     <!-- Summary view layout for round-280x280 -->
     <layout id="SummaryViewLayout">
+        <drawable id="PoincareBack_id" class="CustomBackground" />
     	<!-- Labels columns of 4 needed -->
     	<!-- see if we can or together justifications -->
     	<label id="ViewTitle" text="Summary" x="center" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
@@ -26,6 +27,7 @@
 		<drawable id="SummaryLayoutLines_id" />
     </layout>
     <layout id = "TestViewLayout">
+       	<drawable id="PoincareBack_id" class="CustomBackground" />
         <label id="ViewTitle" text="HRV" x="170" y="35" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
 	    <bitmap id="HRV_ICON" x="90" y="10" filename="../../resources/images/hrv-icon-40.png" dithering="none" >
 	       <!-- <palette disableTransparency="true">
@@ -40,8 +42,8 @@
         <label id="ViewPulseLbl" text="BPM" x="180" y="150" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
         <label id="ViewPulseVal" text="xx" x="230" y="152" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
  
-        <label id="ViewTimerLbl" text="TIMER" x="70" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
-        <label id="ViewTimerVal" text="value" x="70" y="218" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+        <label id="ViewTimerLbl" text="TIMER" x="75" y="185" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewTimerVal" text="value" x="75" y="218" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
      	<text-area id="bodyText" 
 	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
 	        text=" " 
@@ -72,6 +74,7 @@
      	<drawable id="PoincareLayoutLines_id" />
     </layout>
     <layout id="CurrentViewLayout">
+       	<drawable id="PoincareBack_id" class="CustomBackground" />
         <label id="CurrentViewTitle" text="Current" x="140" y="35" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
     	<text-area id="CurrentViewString" 
 	        color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"
