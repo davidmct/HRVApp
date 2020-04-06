@@ -3,34 +3,42 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
-// look at sensor example for line graph
-
 // This file draws a Poincare plot of the HRV values
 // Plot y = RR(i+1), x = RR(i) (or i and i-1)
 
 // Simple method:
 // 	scan through every sample, work out range and plot in x-y scatter
 //	number of points could be ~300-1000 as have 5 minutes of roughly 50-150 samples (BPM). Worse case 200 BPM
+
 // Grouping
 //	We could scan data and find unique values and only plot these
 //	Consumes lots of memory as need a flag per entry and order(N) reads of data ie N+(N-1)+(N-2) as we scan and mark used
 //	Could do this scan every time value is added ie per second or so in which case plot reads once
 //	Major issue is that it is a difference plot from previous which is important => would have to compare ajacent triplets
+
 // Sampling
 //	Only do every Nth/Nth-1 sample .. could potentially miss outliers which will be infrequent
+
 //Drawing
 //	Simplistically we would plot a point at each entry. This shows clustering if some variation but at scale of chart TBD
-// 	dc.drawPoint(x, y)
-//	Could draw circle/rectangle but execution time much higher
-//	Every single value would need scaling in both x and y though x becomes y of next sample
+// could sample dataset
+
 //Scaling
-//	Will need to run through all data finding min and max .. or capture as data comes in!!! Scaling same in x and y as same data
+//	Min/max found as data captured. Scaling same in x and y as same data
+//	Every single value would need scaling in both x and y though x becomes y of next sample
+    
+// use exclude in jungle for different screen formats ??? or layouts
+// Largest square on a circular screen is 
+// mRadius = dc.getwidth/2;
+// height = width = mRadius / sqrt(2);
+// top_left = (mRadius - width, mRadius - height);
+// top_right = (mRadius + width, mRadius - height);
+// bottom_left = (mRadius - width, mRadius + height);
+// bottom_right = (mRadius + width, mRadius + height);	
 
 class PoincareView extends Ui.View {
 
-	hidden var floorVar;
-	hidden var scaleVar;
-	// updating every second is a little much
+	// maybe updating every second is a little much
 	const UPDATE_VIEW_SECONDS = 5;
 	hidden var mShowCount;
 	
@@ -89,9 +97,9 @@ class PoincareView extends Ui.View {
         }
     }
 
-    function scale(num) {
-		return (((num - floorVar) * scaleVar) + 0.5).toNumber();
-	}
+    //function scale(num) {
+	//	return (((num - floorVar) * scaleVar) + 0.5).toNumber();
+	//}
 
     //! Update the view
     function onUpdate(dc) {
@@ -105,15 +113,6 @@ class PoincareView extends Ui.View {
     	// }
     	// shame simple assignment can't make access local ie
     	// intervals = $._mApp.mIntervalSampleBuffer;
-    
-    	// use exclude in jungle for different screen formats ??? or layouts
-		// Largest square on a circular screen is 
-		// mRadius = dc.getwidth/2;
-		// height = width = mRadius / sqrt(2);
-		// top_left = (mRadius - width, mRadius - height);
-		// top_right = (mRadius + width, mRadius - height);
-		// bottom_left = (mRadius - width, mRadius + height);
-		// bottom_right = (mRadius + width, mRadius + height);	
     	
     	mShowCount++;
     	   	
