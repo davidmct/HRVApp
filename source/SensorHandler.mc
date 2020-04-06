@@ -160,7 +160,7 @@ class SensorHandler {//extends Ant.GenericChannel {
 		// update Test controller data  
     	if (mFunc != null) {
     		// no message and not ready
-    		mFunc.invoke(:Update, [ "", false, false]);
+    		mFunc.invoke(:Update, [ "Closing channel", false, false]);
     	}
     } 
 }
@@ -261,7 +261,7 @@ class AntHandler extends Ant.GenericChannel {
 						// update Test controller data  
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "", false, false]);
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
 						}
 						// wait for another message?
 						//Sys.println( "RX_FAIL in AntHandler");
@@ -329,8 +329,8 @@ class AntHandler extends Ant.GenericChannel {
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
 					if ($._mApp.mSensor.mFunc != null) {
-						// no message and not ready, restart
-						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, true]);
+						// no message and not ready, see if reacquire
+						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, false]);
 					}
 				}
 			}
@@ -351,7 +351,8 @@ class InternalSensor {
 	
 	function stopIntSensor() {
 		Sys.println("Stopping internal sensors");
-		Sensor.setEnabledSensors( [] );
+		// suspicion that having no sensors kills optical after testing until long timeout
+		//Sensor.setEnabledSensors( [] );
 		Sensor.unregisterSensorDataListener( );
 	}
 	
@@ -395,7 +396,7 @@ class InternalSensor {
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
-					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false, true]);
+					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false, false]);
 				}
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;

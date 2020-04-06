@@ -27,7 +27,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
      	else if( id.equals("source")) {
-			// optical/regsitered strap or unknown/disabled
+			// optical/registered strap or unknown/disabled
   			var mExtStrap = $._mApp.mSensorTypeExt;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{

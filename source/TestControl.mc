@@ -126,6 +126,7 @@ class TestController {
 		
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
+		var setSensorStr = ($._mApp.mSensorTypeExt ? "External" : "Known");
 		
 		// Timer information for view
 		timerTime = 0; // = utcStop - utcStart;
@@ -155,10 +156,10 @@ class TestController {
 				Sys.println("TS_WAITING");
 				// we are waiting for the HR strap to be ready
 				if ( mSensorReady ) { 
-					mTestMessage = "Sensor ready";
+					mTestMessage = setSensorStr+" sensor ready";
 					mTestState = TS_READY; 
 				} else {
-					mTestMessage = "Waiting for HR data";
+					mTestMessage = "Waiting for "+setSensorStr+" HR data";
 				}
 				if (caller == :enterPressed) {
 					// we might be lucky and HR is ready at the same time as sensor is ready

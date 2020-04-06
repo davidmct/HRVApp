@@ -160,14 +160,14 @@ class PoincareView extends Ui.View {
 			floor -= 5;
 		}
 
-		//Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
+		Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
 				
 		//var range = ceil - floor;
 		var scaleY = chartHeight / (ceil - floor).toFloat();
 		// for moment we have a square layout and hence same scaling!!
 		var scaleX = scaleY;
 		
-		//Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
+		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
 
 		// Prepare the screen
 		//MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
@@ -197,7 +197,7 @@ class PoincareView extends Ui.View {
 		var drawDots = 0;
 		
 		// set colour of rectangles
-		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
+		MapSetColour(dc, WHITE, $._mApp.bgColSet);
 		
 		// reduce entries by 1 as points to next free slot
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples()-1;
@@ -212,18 +212,21 @@ class PoincareView extends Ui.View {
 		// can't do same with x value as maybe different scale factors
 		
 		// global access is up to 8x slower than local. Could potentially copy in as temp
-		
+		//var debugPlot = "x, y: ";
 		for( var i=2; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
 			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
 			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
 			// work out x and y from numbers and scales - was * but should be / 
-			var x = (previousSample / scaleX).toNumber();
-			var y = (sampleN1 / scaleY).toNumber(); 
-			dc.fillRectangle(leftX+x, floorY-y, 2, 2);			
+			var x = ((previousSample - floor) * scaleX).toNumber();
+			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			dc.fillRectangle(leftX+x, floorY-y, 3, 3);
+			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
 			previousSample = sampleN1;
 		}
+		
+		//Sys.println(debugPlot);
 		
 		// perfromance check only on real devices
 		var currentTime = Sys.getTimer();
