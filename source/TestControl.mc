@@ -99,9 +99,17 @@ class TestController {
 	
 	// allow 
 	function onNotify(symbol, params) {
-		// [ msgTxt, HR status]
+		// [ msgTxt, HR status, state INIT]
+		var stateInit;
 		mHRmsgTxt = params[0];
 		mSensorReady = params[1];	
+		stateInit = params[2];
+		// sensor has changed so force INIT
+		if (stateInit) { 
+			Sys.println("TestControl: statemachine forced INIT");
+			mTestState = TS_INIT;
+			StateMachine(:restart);
+		}		
 	}
 	
 	// probably need to modify Sensor to notify statemachine when found strap etc

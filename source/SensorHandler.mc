@@ -75,27 +75,39 @@ class SensorHandler {//extends Ant.GenericChannel {
     
     function fSwitchSensor( oldSensor) {
     	Sys.println("fSwitchSensor() potential sensor change");
-    	return;
-    	// work out how to change sensors on settings change!!
-    	// need to stop test
-    	// SetUpSensors() is called on Start;
+
     	if (oldSensor != $._mApp.mSensorTypeExt) {
-    		// do change stuff - force test to stop and redo start
-    		
-    		//$._mApp.mTestControl.resetTest();
-    		// probably need to let state machine know to reinit the world
-    		
+    		// firstly close down original sensor   		
+       		if (oldSensor) { // ANT
+    			if (sensor != null) {sensor.stopExtSensor(); }
+    		} else { // internal strap or OHR
+    			if (sensor != null) {sensor.stopIntSensor(); }  		
+    		}
+  	
+	    	// now we can change local sensor type
+	    	mSensorType =  $._mApp.mSensorTypeExt;
+
+	    	// reset local variables
+	    	mHRData.initialize();
+	    		    	
+	    	// now create connection
+	    	SetUpSensors();
+	    				
     		// update Test controller data  
-			if ($._mApp.mSensor.mFunc != null) {
-				$._mApp.mSensor.mFunc.invoke(:Update, [ "Switching sensor", false]);
+			if (mFunc != null) {
+				mFunc.invoke(:Update, [ "Switching sensor", false, true]);
 			}
-    		// make local version same as system
-			mSensorType =  $._mApp.mSensorTypeExt;
-    	}   	
+
+			Sys.println("Sensor switched");
+    	} else {
+    		Sys.println("Sensor unchanged");
+    	}  	
     }
     
     function SetUpSensors() {
     	// has to be called after initialize as mSensor not created!!
+    	mSearching = true;
+    	
         if (mSensorType) {
     		// ANT case
     		Sys.println("ANT sensor selected");
@@ -107,8 +119,8 @@ class SensorHandler {//extends Ant.GenericChannel {
     	}
     	// update Test controller data  
     	if (mFunc != null) {
-    		// no message and not ready
-    		mFunc.invoke(:Update, [ "Setup sensor", false]);
+    		// no message and not ready; no state change needed
+    		mFunc.invoke(:Update, [ "Setup sensor", false, false]);
     	}
     }
     
@@ -148,7 +160,7 @@ class SensorHandler {//extends Ant.GenericChannel {
 		// update Test controller data  
     	if (mFunc != null) {
     		// no message and not ready
-    		mFunc.invoke(:Update, [ "", false]);
+    		mFunc.invoke(:Update, [ "", false, false]);
     	}
     } 
 }
@@ -188,6 +200,12 @@ class AntHandler extends Ant.GenericChannel {
 		// will now be searching for strap after openCh()
 		Sys.println("ANT initialised");
 	}	
+	
+	function stopExtSensor() {
+		Sys.println("Stopping external sensors");
+    	GenericChannel.close();
+    	GenericChannel.release();
+	}
 
     function onAntMsg(msg)
     {
@@ -242,8 +260,8 @@ class AntHandler extends Ant.GenericChannel {
 						$._mApp.mSensor.mSearching = true;
 						// update Test controller data  
     					if ($._mApp.mSensor.mFunc != null) {
-							// no message and not ready
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "", false]);
+							// no message and not ready, no state change
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "", false, false]);
 						}
 						// wait for another message?
 						//Sys.println( "RX_FAIL in AntHandler");
@@ -283,8 +301,8 @@ class AntHandler extends Ant.GenericChannel {
 			
 			// update Test controller data  
 			if ($._mApp.mSensor.mFunc != null) {
-				// no message and not ready
-				$._mApp.mSensor.mFunc.invoke(:Update, [ "HR data incoming", true]);
+				// no message and not ready, no state change
+				$._mApp.mSensor.mFunc.invoke(:Update, [ "HR data incoming", true, false]);
 			}
   					
 			// Get interval
@@ -311,8 +329,8 @@ class AntHandler extends Ant.GenericChannel {
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
 					if ($._mApp.mSensor.mFunc != null) {
-						// no message and not ready
-						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false]);
+						// no message and not ready, no state change
+						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, false]);
 					}
 				}
 			}
@@ -331,6 +349,12 @@ class InternalSensor {
 		SensorSetup();
 	}
 	
+	function stopIntSensor() {
+		Sys.println("Stopping internal sensors");
+		Sensor.setEnabledSensors( [] );
+		Sensor.unregisterSensorDataListener( );
+	}
+	
 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
 	// 3.0.0 on feature
 	function SensorSetup() {
@@ -340,7 +364,6 @@ class InternalSensor {
 		};
 		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
 		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);	
-		// fake ANT or sensor status
 		
 		Sys.println("Internal SensorSetup() ... mHRDataLnk :"+mHRDataLnk);
 		
@@ -349,8 +372,8 @@ class InternalSensor {
 	    
     	// update Test controller data  
 		if ($._mApp.mSensor.mFunc != null) {
-			// no message and not ready
-			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false]);
+			// no message and not ready, no state change
+			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, false]);
 		}
 	}
 	
@@ -380,7 +403,7 @@ class InternalSensor {
 				mHRDataLnk.mHRMStatus = "HR data";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
-					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true]);
+					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true, false]);
 				}
 			}
 		}	
