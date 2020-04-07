@@ -222,12 +222,12 @@ class PoincareView extends Ui.View {
 		var mPrevY = ((previousSample - floor) * scaleX).toNumber();
 		
 		// try integer algo
-		var intScale = (scaleX * 32).toNumber();
+		//var intScale = (scaleX * 64).toNumber();
 		
 		// DEBUG
-		var a = (1000 * intScale) >> 5;
-		var error = 1000*scaleX - a.toFloat();
-		Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
+		//var a = (1000 * intScale) >> 6;
+		//var error = 1000*scaleX - a.toFloat();
+		//Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
 		
 		for( var i=2; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
@@ -235,9 +235,9 @@ class PoincareView extends Ui.View {
 			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
 			// work out x and y from numbers and scales
 			var x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
-			//var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
 			// avoid floating point numbers
-			var y = ((sampleN1 - floor) * intScale) >> 5;
+			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			dc.fillRectangle(leftX+x, floorY-y, 3, 3);
 			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
 			mPrevY = y;  //previousSample = sampleN1;

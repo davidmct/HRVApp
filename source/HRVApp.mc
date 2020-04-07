@@ -288,11 +288,9 @@ class HRVApp extends App.AppBase {
 		
 		if (mNumEntries <= 0) { return;}
 		
-		if (mDebugging == true) {
-			Sys.println("DumpIntervals: mNumEntries " + mNumEntries);
-			Sys.println("DumpIntervals: mNumBlocks " + mNumBlocks);	
-			Sys.println("DumpIntervals: mRemainder " + mRemainder);						
-		}
+		//if (mDebugging == true) {
+			Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
+		//}
 		
 		// should propably use getSample(index) if using circular buffer
 		for (i=0; i < mNumBlocks; i++) {
@@ -301,7 +299,8 @@ class HRVApp extends App.AppBase {
 			for (j=0; j< BLOCK_SIZE; j++) {
 				mString += mIntervalSampleBuffer[base+j].toString()+",";			
 			}
-			Sys.println(mString);		
+			Sys.println(mString);
+			mString = "";		
 		}
 		mString = "";
 		// Write tail end of buffer

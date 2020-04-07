@@ -197,7 +197,9 @@ class TestController {
 				Sys.println("TS_TESTING");
 				// now we are in the mist of testing
 				mTestMessage = "Breathe regularly and stay still";
+				
 				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
+				
 				switch (caller) {
 					case :timerExpired:
 					case :manualExpired:
