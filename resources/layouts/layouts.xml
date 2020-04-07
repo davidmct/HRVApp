@@ -7,5 +7,7 @@
     <layout id="PoincareViewLayout">
     </layout>
     <layout id="CurrentViewLayout">
-    </layout>    
+    </layout> 
+    <layout id="HistoryViewLayout"> 
+    </layout>  
 </layouts>

@@ -5,12 +5,59 @@ using Toybox.System as Sys;
 
 // Show the previous test results over time
 class HistoryView extends Ui.View {
-
+	
+	hidden var mHistoryLayout;
+	hidden var cGridWith;
+	hidden var chartHeight;
+    hidden var ctrX;
+	hidden var ctrY;
+	hidden var leftX;
+	hidden var rightX;
+	hidden var ceilY;
+	hidden var floorY;
+	
 	hidden var floorVar;
 	hidden var scaleVar;
 
 	function initialize() { View.initialize();}
 	
+	hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
+	    var drawable = findDrawableById(fieldId);
+	    if (drawable != null) {
+	        drawable.setColor(fieldColour);
+	        if (fieldValue != null) {
+	        	drawable.setText(fieldValue);
+	        }
+	    }
+    }
+	
+	function onLayout(dc) {
+		mHistoryLayout = Rez.Layouts.HistoryViewLayout(dc);
+		Sys.println("HistoryView: onLayout() called ");
+		if ( mHistoryLayout != null ) {
+			setLayout(mHistoryLayout);
+		} else {
+			Sys.println("layout null");
+		}
+		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
+		cGridWith = a.toNumber();
+		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
+		chartHeight = a.toNumber();
+		
+		// chartHeight defines height of chart and sets scale
+		// impacts all layout numbers!
+    	ctrX = dc.getWidth() / 2;
+		ctrY = dc.getHeight() / 2;
+		// define box about centre
+		leftX = ctrX - cGridWith/2;
+		rightX = ctrX + cGridWith/2;
+		// 45 *2 is height of chart
+		ceilY = ctrY - chartHeight/2;
+		floorY = ctrY + chartHeight/2;
+		
+		return true;
+	}
+		
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
     }
@@ -28,6 +75,18 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+		
+		// draw the layout. remove if trying manual draw of layout elements
+    	View.onUpdate(dc);
+    	
+    	var mLabelColour = mapColour( $._mApp.lblColSet);
+		var mValueColour = mapColour( $._mApp.txtColSet);
+
+		updateLayoutField("HistoryTitle", null, mLabelColour);
+		updateLayoutField("rMSSDLbl", null,  mapColour($._mApp.RMSSDColSet));
+		updateLayoutField("LnRMSSDLbl", null,  mapColour($._mApp.LnRMSSDColSet));
+		updateLayoutField("avgPulseLbl", null,  mapColour($._mApp.avgPulseColSet));
+		
 		
 		//		$._mApp.results[index + 0] = utcStart;
 		//$._mApp.results[index + 1] = $._mApp.mSampleProc.mRMSSD;
@@ -73,8 +132,6 @@ class HistoryView extends Ui.View {
 		var range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale
-		// needs to divide by 6 for horizontal lines
-		var chartHeight = 120;
 		var scaleY = chartHeight / range.toFloat();
 
 		floorVar = floor;
@@ -95,19 +152,7 @@ class HistoryView extends Ui.View {
 		var textX = leftX - 20; // was +
 		var gap = (ceil - floor) / 3;
 
-		// Prepare the screen
-		MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
-		dc.clear();
-
-		// Draw the lines
-		MapSetColour(dc,DK_GRAY, $._mApp.bgColSet);
-		for(var i = 0; i < 7; i++) {
-			var y = ceilY + i * chartHeight/6;
-			dc.drawLine(leftX, y, rightX, y);
-		}
-		MapSetColour(dc, $._mApp.lblColSet, TRANSPARENT);		
-		dc.drawText(ctrX, 35, Gfx.FONT_MEDIUM, "History", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER); 
-
+		
 		// Draw the numbers
 		MapSetColour(dc, DK_GRAY, $._mApp.bgColSet);
 		for(var i = 1; i < 6; i += 2) {
@@ -123,12 +168,14 @@ class HistoryView extends Ui.View {
 				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
 				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
 			}
+			Sys.println("Num, textX, y "+i+","+textX+","+y);
 		}
 
 		for(var i = 0; i < 7; i += 2) {
 			var y = ceilY + (((i * gap) * scaleY) / 2);
 			var str = format(" $1$ ",[(ceil - ((i * gap)/2)).format("%d")]);
 			dc.drawText(textX, y, font, str, just);
+			Sys.println("textX, y "+textX+","+y);
 		}
 
 		// Draw the data
@@ -164,7 +211,9 @@ class HistoryView extends Ui.View {
 						dc.setPenWidth(3);
 						MapSetColour(dc,$._mApp.LnRMSSDColSet, $._mApp.bgColSet);
 						dc.drawLine(leftX + x1, floorY - mLnRMSSD1, leftX + x2, floorY - mLnRMSSD1);
-
+						
+						Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);
+						Sys.println("x2, mRMSSD2, mLnRMSSD2 "+x2+","+mRMSSD2+","+mLnRMSSD2);
 						// Change the value of i. So that it starts back at this point. Break loop
 						i = iii - 1;
 						iii = 30;
@@ -180,23 +229,12 @@ class HistoryView extends Ui.View {
 					dc.fillCircle(leftX + x1, floorY - mRMSSD1, 2);
 					
 					MapSetColour(dc,  $._mApp.LnRMSSDColSet, $._mApp.bgColSet);
-					dc.fillCircle(leftX + x1, floorY - mLnRMSSD1, 2);					
+					dc.fillCircle(leftX + x1, floorY - mLnRMSSD1, 2);	
 					
+					Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);					
 				}
 			}
 		}
-
-		// Draw the labels
-		dc.setPenWidth(1);
-
-		MapSetColour(dc, $._mApp.avgPulseColSet, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetFloor, font, " AVG PULSE", 6);
-
-		MapSetColour(dc, $._mApp.LnRMSSDColSet, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetFloor, font, "Ln(rMSSD) ", 4);
-
-		MapSetColour(dc, $._mApp.RMSSDColSet, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetCeil, font, "rMSSD ", 4);
 
 		// TEST CODE
 		var str = System.getSystemStats().usedMemory.toString();

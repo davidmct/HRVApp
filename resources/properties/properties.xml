@@ -12,9 +12,8 @@
 	<property id="ManualTimeSet" type="number">300</property>
 	<property id="bgColSet" type="number">3</property>
 	<property id="lblColSet" type="number">10</property>
-	<property id="txtColSet" type="number">13</property>
+	<property id="txtColSet" type="number">8</property>
 	<property id="RMSSDColSet" type="number">10</property>
-	<property id="avgRMSSDColSet" type="number">12</property>
-	<property id="pulseColSet" type="number">13</property>
+	<property id="LnRMSSDColSet" type="number">12</property>
 	<property id="avgPulseColSet" type="number">6</property>
 </properties>

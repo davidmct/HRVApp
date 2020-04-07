@@ -44,7 +44,7 @@ class PoincareView extends Ui.View {
 	
 	hidden var mPoincareLayout;
 	hidden var cGridWith;
-	hidden var chartHeight = cGridWith;
+	hidden var chartHeight;
     hidden var ctrX;
 	hidden var ctrY;
 	hidden var leftX;
@@ -140,9 +140,7 @@ class PoincareView extends Ui.View {
     	
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
-		//var mBackColour = mapColour( $._mApp.bgColSet);
-		// sadly drawables in layout don't have a colour attribute you can change!
-		//updateLayoutField("PoincareBack_id", null, mBackColour);
+
 		updateLayoutField("PoincareTitle", null, mLabelColour);
 		updateLayoutField("IntervalLbl", null, mLabelColour);
 		
@@ -205,15 +203,16 @@ class PoincareView extends Ui.View {
 		MapSetColour(dc, WHITE, $._mApp.bgColSet);
 		
 		// reduce entries by 1 as points to next free slot
-		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples()-1;
+		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
 		
 		Sys.println("Poincare # dots :"+mNumberEntries);
-
-		var mBufferptr = 0; // does setting up a variable and equal array copy whole array???
+		
+		// need two entries before we start!
+		if ( mNumberEntries < 2) { return true;}
 		
 		// iterate through available data drawing rectangles as less expensive than circles
 		// reduce number of array accesses
-		var previousSample = $._mApp.mIntervalSampleBuffer[1];
+		var previousSample = $._mApp.mIntervalSampleBuffer[0];
 		// can't do same with x value as maybe different scale factors
 		
 		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
@@ -229,7 +228,8 @@ class PoincareView extends Ui.View {
 		//var error = 1000*scaleX - a.toFloat();
 		//Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
 		
-		for( var i=2; i < mNumberEntries; i++ ){
+		// buffer starts from zero
+		for( var i=1; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
 			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
@@ -238,7 +238,8 @@ class PoincareView extends Ui.View {
 			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
 			// avoid floating point numbers
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
-			dc.fillRectangle(leftX+x, floorY-y, 3, 3);
+			// 2x2 rectangle too small on real screen
+			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
 			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
 			mPrevY = y;  //previousSample = sampleN1;
 		}

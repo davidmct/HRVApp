@@ -29,6 +29,16 @@
 		<shape type="rectangle" x="50" y="140" width="180" height="1" color="Gfx.COLOR_RED" />
 		<shape type="rectangle" x="140" y="50" width="1" height="180" color="Gfx.COLOR_RED" /> 				
     </drawable-list>
+    <drawable-list id="HistoryLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+       	<!-- width of chart area is +-90 from center and 120 high -->
+    	<shape type="rectangle" x="50" y="80" width="180" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="50" y="100" width="180" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="50" y="120" width="180" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="50" y="140" width="180" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="50" y="160" width="180" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="50" y="180" width="180" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="50" y="200" width="180" height="1" color="Gfx.COLOR_RED" /> 					
+    </drawable-list>
     <!-- <drawable-list id="PoincareBack_id" background="Gfx.COLOR_TRANSPARENT">
 		<shape type="rectangle" x="0" y="0" width="fill" height="fill" color="Gfx.COLOR_BLACK" />
 	</drawable-list> -->

@@ -93,7 +93,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.avgRMSSDColSet" title="@Strings.avgRMSSDColSetTitle" prompt="@Strings.avgRMSSDColSetPrompt">
+	<setting propertyKey="@Properties.LnRMSSDColSet" title="@Strings.LnRMSSDColSetTitle" prompt="@Strings.LnRMSSDColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -110,24 +110,6 @@
 			<listEntry value="12">@Strings.PURPLE</listEntry>
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
-	</setting>
-	<setting propertyKey="@Properties.pulseColSet" title="@Strings.pulseColSetTitle" prompt="@Strings.pulseColSetPrompt">
-		<settingConfig type="list" >
-			<listEntry value="0">@Strings.WHITE</listEntry>
-			<listEntry value="1">@Strings.LT_GRAY</listEntry>
-			<listEntry value="2">@Strings.DK_GRAY</listEntry>
-			<listEntry value="3">@Strings.BLACK</listEntry>
-			<listEntry value="4">@Strings.RED</listEntry>
-			<listEntry value="5">@Strings.DK_RED</listEntry>
-			<listEntry value="6">@Strings.ORANGE</listEntry>
-			<listEntry value="7">@Strings.YELLOW</listEntry>
-			<listEntry value="8">@Strings.GREEN</listEntry>
-			<listEntry value="9">@Strings.DK_GREEN</listEntry>
-			<listEntry value="10">@Strings.BLUE</listEntry>
-			<listEntry value="11">@Strings.DK_BLUE</listEntry>
-			<listEntry value="12">@Strings.PURPLE</listEntry>
-			<listEntry value="13">@Strings.PINK</listEntry>	
-		</settingConfig>		
 	</setting>
 	<setting propertyKey="@Properties.avgPulseColSet" title="@Strings.avgPulseColSetTitle" prompt="@Strings.avgPulseColSetPrompt">
 		<settingConfig type="list" >

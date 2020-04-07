@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.3.2</string>
+	<string id="AppVersion">0.3.3</string>
 	<string id="pAuxHRAntIDTitle">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledTitle">FIT File Write</string> 
@@ -42,12 +42,10 @@
 	<string id="lblColSetPrompt">Select colour</string>
 	<string id="txtColSetTitle" >Text colour</string>
 	<string id="txtColSetPrompt">Select colour</string>
-	<string id="RMSSDColSetTitle" >HRV colour</string>
+	<string id="RMSSDColSetTitle" >rMSSD colour</string>
 	<string id="RMSSDColSetPrompt">Select colour</string>
-	<string id="avgRMSSDColSetTitle">Average HR colour</string> 
-	<string id="avgRMSSDColSetPrompt">Select colour</string>
-	<string id="pulseColSetTitle">Pulse colour</string>
-	<string id="pulseColSetPrompt">Select colour</string>
+	<string id="LnRMSSDColSetTitle">Ln(rMSSD) colour</string> 
+	<string id="LnRMSSDColSetPrompt">Select colour</string>
 	<string id="avgPulseColSetTitle">Average pulse colour</string> 
 	<string id="avgPulseColSetPrompt">Select colour</string>
 
