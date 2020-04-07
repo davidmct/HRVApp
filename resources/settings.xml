@@ -75,7 +75,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.hrvColSet" title="@Strings.hrvColSetTitle" prompt="@Strings.hrvColSetPrompt">
+	<setting propertyKey="@Properties.RMSSDColSet" title="@Strings.RMSSDColSetTitle" prompt="@Strings.RMSSDColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -93,7 +93,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.avgHrvColSet" title="@Strings.avgHrvColSetTitle" prompt="@Strings.avgHrvColSetPrompt">
+	<setting propertyKey="@Properties.avgRMSSDColSet" title="@Strings.avgRMSSDColSetTitle" prompt="@Strings.avgRMSSDColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>

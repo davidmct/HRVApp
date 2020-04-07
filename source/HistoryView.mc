@@ -28,15 +28,20 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+		
+		//		$._mApp.results[index + 0] = utcStart;
+		//$._mApp.results[index + 1] = $._mApp.mSampleProc.mRMSSD;
+		//$._mApp.results[index + 2] = $._mApp.mSampleProc.mLnRMSSD;
+		//$._mApp.results[index + 3] = $._mApp.mSampleProc.avgPulse;
 
 		// Find result limits
-		for(var i = 0; i < 30; i++) {
-			var ii = i * 5;
+		// change this to step i to each time stamp then look at next three samples
+		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
 			// Only process if newer than epoch
-			if(epoch <= $._mApp.results[ii]) {
-				// Get range of all four results ... may not be correlated range
-				for(var iii = 1; iii <= 4; iii++) {
-					var value = $._mApp.results[ii + iii];
+			if(epoch <= $._mApp.results[i]) {
+				// Get range of all three results ... may not be correlated range for each set
+				for(var y = 1; y <= 3; y++) {
+					var value = $._mApp.results[i+y];
 					if(min > value) {
 						min = value;
 					}
@@ -129,41 +134,36 @@ class HistoryView extends Ui.View {
 		// Draw the data
 		var drawDots = 0;
 		
-		// results = [ utcStart; mLnRMSSD, avgPulse, average mLnRMSSD; average of average pulses] 
+		// results = [ utcStart; mRMSSD, mLnRMSSD, avgPulse] 
 		
 		for(var i = 0; i < 30; i++) {
 			// Start 30 days ago and work forwards
- 			var ii = ((today + 1 + i) % 30) * 5;
+ 			var ii = ((today + 1 + i) % 30) * DATA_SET_SIZE;
 			if(epoch < $._mApp.results[ii]) {
-				var index1 = i * 6 + 3;
-	 			var hrv1 = scale($._mApp.results[ii + 1]);
-	 			var pulse1 = scale($._mApp.results[ii + 2]);
-	 			var avgHrv1 = scale($._mApp.results[ii + 3]);
-	 			var avgPulse1 = scale($._mApp.results[ii + 4]);
+				var x1 = i * 6 + 3; // 3,9....177 width of chart = 180
+	 			var mRMSSD1 = scale($._mApp.results[ii + 1]);
+	 			var mLnRMSSD1 = scale($._mApp.results[ii + 2]);
+	 			var avgPulse1 = scale($._mApp.results[ii + 3]);
 	 			drawDots++;
 
 	 			for(var iii = i + 1; iii < 30; iii++) {
-					var iiii = ((today + 1 + iii) % 30) * 5;
+					var iiii = ((today + 1 + iii) % 30) * DATA_SET_SIZE;
 		 			if(epoch < $._mApp.results[iiii]) {
-			 			var index2 = iii * 6 + 3;
-			 			var hrv2 = scale($._mApp.results[iiii + 1]);
-			 			var pulse2 = scale($._mApp.results[iiii + 2]);
-			 			var avgHrv2 = scale($._mApp.results[iiii + 3]);
-			 			var avgPulse2 = scale($._mApp.results[iiii + 4]);
+			 			var x2 = iii * 6 + 3; // 9, 15,... 177
+			 			var mRMSSD2 = scale($._mApp.results[iiii + 1]);
+			 			var mLnRMSSD2 = scale($._mApp.results[iiii + 2]);
+			 			var avgPulse2 = scale($._mApp.results[iiii + 3]);
 
 						dc.setPenWidth(2);
-						MapSetColour(dc, DK_RED, $._mApp.bgColSet);
-						dc.drawLine(leftX + index1, floorY - avgPulse1, leftX + index2, floorY - avgPulse2);
+						MapSetColour(dc, $._mApp.avgPulseColSet, $._mApp.bgColSet);
+						dc.drawLine(leftX + x1, floorY - avgPulse1, leftX + x2, floorY - avgPulse2);
 
-						MapSetColour(dc, DK_BLUE, $._mApp.bgColSet);
-						dc.drawLine(leftX + index1, floorY - avgHrv1, leftX + index2, floorY - avgHrv2);
+						MapSetColour(dc, $._mApp.RMSSDColSet, $._mApp.bgColSet);
+						dc.drawLine(leftX + x1, floorY - mRMSSD1, leftX + x2, floorY - mRMSSD2);
 
 						dc.setPenWidth(3);
-						MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-						dc.drawLine(leftX + index1, floorY - pulse1, leftX + index2, floorY - pulse2);
-
-						MapSetColour(dc, BLUE, $._mApp.bgColSet);
-						dc.drawLine(leftX + index1, floorY - hrv1, leftX + index2, floorY - hrv2);
+						MapSetColour(dc,$._mApp.LnRMSSDColSet, $._mApp.bgColSet);
+						dc.drawLine(leftX + x1, floorY - mLnRMSSD1, leftX + x2, floorY - mLnRMSSD1);
 
 						// Change the value of i. So that it starts back at this point. Break loop
 						i = iii - 1;
@@ -173,11 +173,15 @@ class HistoryView extends Ui.View {
 				}
 				// If only one reading then draw dots. There are no averages
 				if(1 == drawDots) {
-					MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-					dc.fillCircle(leftX + index1, floorY - pulse1, 2);
+					MapSetColour(dc, $._mApp.avgPulseColSet, $._mApp.bgColSet);
+					dc.fillCircle(leftX + x1, floorY - avgPulse1, 2);
 
-					MapSetColour(dc, BLUE, $._mApp.bgColSet);
-					dc.fillCircle(leftX + index1, floorY - hrv1, 2);
+					MapSetColour(dc,  $._mApp.RMSSDColSet, $._mApp.bgColSet);
+					dc.fillCircle(leftX + x1, floorY - mRMSSD1, 2);
+					
+					MapSetColour(dc,  $._mApp.LnRMSSDColSet, $._mApp.bgColSet);
+					dc.fillCircle(leftX + x1, floorY - mLnRMSSD1, 2);					
+					
 				}
 			}
 		}
@@ -185,17 +189,14 @@ class HistoryView extends Ui.View {
 		// Draw the labels
 		dc.setPenWidth(1);
 
-		MapSetColour(dc, DK_RED, $._mApp.bgColSet);
+		MapSetColour(dc, $._mApp.avgPulseColSet, $._mApp.bgColSet);
 		dc.drawText(ctrX, mLabelOffsetFloor, font, " AVG PULSE", 6);
 
-		MapSetColour(dc, ORANGE, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetCeil, font, " PULSE", 6);
+		MapSetColour(dc, $._mApp.LnRMSSDColSet, $._mApp.bgColSet);
+		dc.drawText(ctrX, mLabelOffsetFloor, font, "Ln(rMSSD) ", 4);
 
-		MapSetColour(dc, DK_BLUE, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetFloor, font, "AVG HRV ", 4);
-
-		MapSetColour(dc, BLUE, $._mApp.bgColSet);
-		dc.drawText(ctrX, mLabelOffsetCeil, font, "HRV ", 4);
+		MapSetColour(dc, $._mApp.RMSSDColSet, $._mApp.bgColSet);
+		dc.drawText(ctrX, mLabelOffsetCeil, font, "rMSSD ", 4);
 
 		// TEST CODE
 		var str = System.getSystemStats().usedMemory.toString();

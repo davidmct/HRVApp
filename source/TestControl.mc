@@ -307,6 +307,7 @@ class TestController {
 
 	// this isn't used at the moment
     function autoFinish() {
+    	Sys.println("autoFinish()");
     	endTest();
     	saveTest();
     	alert(TONE_SUCCESS);
@@ -352,48 +353,29 @@ class TestController {
 		var index = ((testDay / 86400) % 30) * 5;
 		
 		Sys.println("utcStart, testday, epoch, index = "+utcStart+","+testDay+","+epoch+","+index);
-		
-		var sumHrv = 0;
-		var sumPulse = 0;
-		var count = 0;
-
-		// REMOVE FOR PUBLISH
-		//index = ((timeNow() / 3600) % 30) * 5;
-		// REMOVE FOR PUBLISH
-		//index = ((timeNow() / 60) % 30) * 5;
 
 		$._mApp.results[index + 0] = utcStart;
-		$._mApp.results[index + 1] = $._mApp.mSampleProc.mLnRMSSD;
-		$._mApp.results[index + 2] = $._mApp.mSampleProc.avgPulse;
-
-		// Calculate averages
-		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-			var ii = i * DATA_SET_SIZE;
-			if(epoch <= $._mApp.results[ii]) {
-				sumHrv += $._mApp.results[ii + 1];
-				sumPulse += $._mApp.results[ii + 2];
-				count++;
-			}
-		}
-		$._mApp.results[index + 3] = sumHrv / count;
-		$._mApp.results[index + 4] = sumPulse / count;
+		$._mApp.results[index + 1] = $._mApp.mSampleProc.mRMSSD;
+		$._mApp.results[index + 2] = $._mApp.mSampleProc.mLnRMSSD;
+		$._mApp.results[index + 3] = $._mApp.mSampleProc.avgPulse;
 
 		// Print values to file in csv format with ISO 8601 date & time
 		var date = Calendar.info(startMoment, 0);
-    	Sys.println(format("$1$-$2$-$3$T$4$:$5$:$6$,$7$,$8$,$9$,$10$",[
+    	Sys.println(format("$1$-$2$-$3$T$4$:$5$:$6$,$7$,$8$,$9$",[
     		date.year,
     		date.month,
     		date.day,
     		date.hour,
     		date.min.format("%02d"),
     		date.sec.format("%02d"),
+    		$._mApp.mSampleProc.mRMSSD,
     		$._mApp.mSampleProc.mLnRMSSD,
-    		$._mApp.mSampleProc.avgPulse,
-    		sumHrv / count,
-    		sumPulse / count]));
+    		$._mApp.mSampleProc.avgPulse]) );
     	
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 
+    	
+    	// FIT FILE SESSION RESULTS HERE
     }
     
 	// called by startTest() to initial test timers etc

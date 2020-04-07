@@ -6,9 +6,11 @@ using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
+// STORAGE came in with CIQ 2.4 - could cut donw code by removing all pre CIQ2.4 code
+
 // Results memory locations. (X) <> (X + 29)
 const NUM_RESULT_ENTRIES = 30; // last 30 days
-const DATA_SET_SIZE = 5; // each containing this number of entries
+const DATA_SET_SIZE = 4; // each containing this number of entries
 // for properties method of storage, arranged as arrays of results per time period
 const RESULTS = "RESULTS";
 
@@ -53,9 +55,8 @@ class HRVStorageHandler {
 			$._mApp.Properties.setValue("bgColSet", 3);
 			$._mApp.Properties.setValue("lblColSet", 10);
 			$._mApp.Properties.setValue("txtColSet", 13);
-			$._mApp.Properties.setValue("hrvColSet", 10);
-			$._mApp.Properties.setValue("avgHrvColSet", 12);
-			$._mApp.Properties.setValue("pulseColSet", 13);
+			$._mApp.Properties.setValue("RMSSDColSet", 10);
+			$._mApp.Properties.setValue("LnRMSSDColSet", 12);
 			$._mApp.Properties.setValue("avgPulseColSet", 6);		
 		} else {
 			$._mApp.setProperty("pAuxHRAntID", 0);
@@ -71,9 +72,8 @@ class HRVStorageHandler {
 			$._mApp.setProperty("bgColSet", 3);
 			$._mApp.setProperty("lblColSet", 10);
 			$._mApp.setProperty("txtColSet", 13);
-			$._mApp.setProperty("hrvColSet", 10);
-			$._mApp.setProperty("avgHrvColSet", 12);
-			$._mApp.setProperty("pulseColSet", 13);
+			$._mApp.setProperty("RMSSDColSet", 10);
+			$._mApp.setProperty("LnRMSSDColSet", 12);
 			$._mApp.setProperty("avgPulseColSet", 6);		
 		}
 	
@@ -96,6 +96,38 @@ class HRVStorageHandler {
 			_CallSavePropStorage();
 		} else {
 			_CallSavePropProperty();
+		}
+	}
+	
+	function saveIntervalsToStore() {
+		Sys.println("saveIntervalsToStore() called");
+		
+		if (Toybox.Application has :Storage) {
+			Storage.setValue("IntervalStoreData", $._mApp.mIntervalSampleBuffer);	
+			Storage.setValue("IntervalStoreMin", $._mApp.mSampleProc.minIntervalFound);	
+			Storage.setValue("IntervalStoreMax", $._mApp.mSampleProc.maxIntervalFound);	
+			Storage.setValue("IntervalStoreIndex", $._mApp.mSampleProc.getNumberOfSamples());				
+		} else {
+			$._mApp.setProperty("IntervalStoreData", $._mApp.mIntervalSampleBuffer);	
+			$._mApp.setProperty("IntervalStoreMin", $._mApp.mSampleProc.minIntervalFound);	
+			$._mApp.setProperty("IntervalStoreMax", $._mApp.mSampleProc.maxIntervalFound);	
+			$._mApp.setProperty("IntervalStoreIndex", $._mApp.mSampleProc.getNumberOfSamples());			
+		}	
+	}
+	
+	function loadIntervalsFromStore() {
+		Sys.println("loadIntervalsFromStore() called");
+		
+		if (Toybox.Application has :Storage) {	
+			$._mApp.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
+			$._mApp.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
+			$._mApp.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
+			$._mApp.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
+		} else {
+			$._mApp.mIntervalSampleBuffer = $._mApp.getProperty("IntervalStoreData");	
+			$._mApp.mSampleProc.minIntervalFound = $._mApp.getProperty("IntervalStoreMin");	
+			$._mApp.mSampleProc.maxIntervalFound = $._mApp.getProperty("IntervalStoreMax");	
+			$._mApp.mSampleProc.setNumberOfSamples( $._mApp.getProperty("IntervalStoreIndex"));			
 		}
 	}
 	
@@ -126,9 +158,8 @@ class HRVStorageHandler {
 			$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
 			$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
 			$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
-			$._mApp.hrvColSet = $._mApp.getProperty("hrvColSet").toNumber();
-			$._mApp.avgHrvColSet = $._mApp.getProperty("avgHrvColSet").toNumber();
-			$._mApp.pulseColSet = $._mApp.getProperty("pulseColSet").toNumber();
+			$._mApp.RMSSDColSet = $._mApp.getProperty("RMSSDColSet").toNumber();
+			$._mApp.LnRMSSDColSet = $._mApp.getProperty("LnRMSSDColSet").toNumber();
 			$._mApp.avgPulseColSet = $._mApp.getProperty("avgPulseColSet").toNumber();
 	
 		//}
@@ -162,9 +193,8 @@ class HRVStorageHandler {
 			$._mApp.bgColSet = $._mApp.Properties.getValue("bgColSet").toNumber();
 			$._mApp.lblColSet = $._mApp.Properties.getValue("lblColSet").toNumber();
 			$._mApp.txtColSet = $._mApp.Properties.getValue("txtColSet").toNumber();
-			$._mApp.hrvColSet = $._mApp.Properties.getValue("hrvColSet").toNumber();
-			$._mApp.avgHrvColSet = $._mApp.Properties.getValue("avgHrvColSet").toNumber();
-			$._mApp.pulseColSet = $._mApp.Properties.getValue("pulseColSet").toNumber();
+			$._mApp.RMSSDColSet = $._mApp.Properties.getValue("RMSSDColSet").toNumber();
+			$._mApp.LnRMSSDColSet = $._mApp.Properties.getValue("avgRMSSDColSet").toNumber();
 			$._mApp.avgPulseColSet = $._mApp.Properties.getValue("avgPulseColSet").toNumber();	
 		//}	
 	}
@@ -186,9 +216,8 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("bgColSet", $._mApp.bgColSet);
 		$._mApp.Properties.setValue("lblColSet", $._mApp.lblColSet);
 		$._mApp.Properties.setValue("txtColSet", $._mApp.txtColSet);
-		$._mApp.Properties.setValue("hrvColSet", $._mApp.hrvColSet);
-		$._mApp.Properties.setValue("avgHrvColSet", $._mApp.avgHrvColSet);
-		$._mApp.Properties.setValue("pulseColSet", $._mApp.pulseColSet);
+		$._mApp.Properties.setValue("RMSSDColSet", $._mApp.RMSSDColSet);
+		$._mApp.Properties.setValue("avgRMSSDColSet", $._mApp.LnRMSSDColSet);
 		$._mApp.Properties.setValue("avgPulseColSet", $._mApp.avgPulseColSet);	
 		
 	}
@@ -209,9 +238,8 @@ class HRVStorageHandler {
 		$._mApp.setProperty("bgColSet", $._mApp.bgColSet);
 		$._mApp.setProperty("lblColSet", $._mApp.lblColSet);
 		$._mApp.setProperty("txtColSet", $._mApp.txtColSet);
-		$._mApp.setProperty("hrvColSet", $._mApp.hrvColSet);
-		$._mApp.setProperty("avgHrvColSet", $._mApp.avgHrvColSet);
-		$._mApp.setProperty("pulseColSet", $._mApp.pulseColSet);
+		$._mApp.setProperty("RMSSDColSet", $._mApp.RMSSDColSet);
+		$._mApp.setProperty("LnRMSSDColSet", $._mApp.LnRMSSDColSet);
 		$._mApp.setProperty("avgPulseColSet", $._mApp.avgPulseColSet);	
 
 	}
@@ -242,7 +270,6 @@ class HRVStorageHandler {
 					$._mApp.results[ii + 1] = result[1];
 					$._mApp.results[ii + 2] = result[2];
 					$._mApp.results[ii + 3] = result[3];
-					$._mApp.results[ii + 4] = result[4];
 				}
 			}
 		}
@@ -261,8 +288,7 @@ class HRVStorageHandler {
 						$._mApp.results[ii + 0],
 						$._mApp.results[ii + 1],
 						$._mApp.results[ii + 2],
-						$._mApp.results[ii + 3],
-						$._mApp.results[ii + 4]]);
+						$._mApp.results[ii + 3]]);
 				}
 			}
 		}

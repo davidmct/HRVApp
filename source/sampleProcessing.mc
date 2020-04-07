@@ -137,6 +137,10 @@ class SampleProcessing {
 		return mSampleIndex;
 	}
 	
+	function setNumberOfSamples(index) {
+		mSampleIndex = index;
+	}
+	
 	function getCurrentEntry() {
 		var index;
 		index = getNumberOfSamples();

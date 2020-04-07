@@ -105,9 +105,8 @@ class HRVApp extends App.AppBase {
 	var bgColSet;
 	var lblColSet;
     var txtColSet;
-	var hrvColSet;
-	var avgHrvColSet;
-	var pulseColSet;
+	var RMSSDColSet;
+	var LnRMSSDColSet;
 	var avgPulseColSet;
 	
 	var mMenuTitleSize;

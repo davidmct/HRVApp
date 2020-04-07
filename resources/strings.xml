@@ -42,10 +42,10 @@
 	<string id="lblColSetPrompt">Select colour</string>
 	<string id="txtColSetTitle" >Text colour</string>
 	<string id="txtColSetPrompt">Select colour</string>
-	<string id="hrvColSetTitle" >HRV colour</string>
-	<string id="hrvColSetPrompt">Select colour</string>
-	<string id="avgHrvColSetTitle">Average HR colour</string> 
-	<string id="avgHrvColSetPrompt">Select colour</string>
+	<string id="RMSSDColSetTitle" >HRV colour</string>
+	<string id="RMSSDColSetPrompt">Select colour</string>
+	<string id="avgRMSSDColSetTitle">Average HR colour</string> 
+	<string id="avgRMSSDColSetPrompt">Select colour</string>
 	<string id="pulseColSetTitle">Pulse colour</string>
 	<string id="pulseColSetPrompt">Select colour</string>
 	<string id="avgPulseColSetTitle">Average pulse colour</string> 
