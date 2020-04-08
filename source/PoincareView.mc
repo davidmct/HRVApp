@@ -148,7 +148,7 @@ class PoincareView extends Ui.View {
 		var max = $._mApp.mSampleProc.maxIntervalFound;
 		var min = $._mApp.mSampleProc.minIntervalFound;
 		
-		//Sys.println("Poincare: max, min "+max+" , "+min);
+		Sys.println("Poincare: max, min "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
@@ -200,8 +200,12 @@ class PoincareView extends Ui.View {
 		// Draw the data
 		var drawDots = 0;
 		
-		// set colour of rectangles
-		MapSetColour(dc, WHITE, $._mApp.bgColSet);
+		// set colour of rectangles. can't see white on white :-)
+		if ($._mApp.bgColSet == BLACK) {
+			MapSetColour(dc, WHITE, $._mApp.bgColSet);
+		} else {
+			MapSetColour(dc, BLACK, $._mApp.bgColSet);	
+		}
 		
 		// reduce entries by 1 as points to next free slot
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
@@ -237,6 +241,10 @@ class PoincareView extends Ui.View {
 			// work out x and y from numbers and scales
 			var x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
 			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			
+			if ( y <= 0) {
+				Sys.println("whoops y below floor: y, floorY, floor "+y+","+floorY+","+floor);
+			}
 			// avoid floating point numbers
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			// 2x2 rectangle too small on real screen

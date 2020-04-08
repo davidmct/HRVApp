@@ -99,6 +99,14 @@ class HistoryView extends Ui.View {
 		//	$._mApp.results[i+2] = (LOG_SCALE * (Math.ln($._mApp.results[i+1])+0.5)).toNumber();
 		//	$._mApp.results[i+3] = 60 + i % 10;
 		//}
+		
+		// TEST CODE DUMP RESULTS AS getting wierd type
+		var dump = "";
+		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
+			dump += $._mApp.results[i].toString() + ",";
+		}
+		Sys.println("DUMP of results : "+dump);
+		
 
 		// Find result limits
 		// change this to step i to each time stamp then look at next three samples
@@ -107,7 +115,7 @@ class HistoryView extends Ui.View {
 			if(epoch <= $._mApp.results[i]) {
 				// Get range of all three results ... may not be correlated range for each set
 				for( var y = 1; y <= 3; y++) {
-					var value = $._mApp.results[i+y];
+					var value = $._mApp.results[i+y].toNumber();
 					if(min > value) {
 						min = value;
 					}

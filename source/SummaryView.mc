@@ -73,13 +73,13 @@ class SummaryView extends Ui.View {
 		updateLayoutField("pNN50", null, mLabelColour);	
 		updateLayoutField("NN20", null, mLabelColour);
 		updateLayoutField("pNN20", null, mLabelColour);	
-		updateLayoutField("SDANN", null, mLabelColour);		
+		updateLayoutField("SDNN", null, mLabelColour);		
 					
 		updateLayoutField( "rMSSD_Value", $._mApp.mSampleProc.mRMSSD.format("%d"), mValueColour);
 		updateLayoutField( "Ln_HRV_Value", $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);		
 		updateLayoutField( "avgPulse_Value", $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
 		updateLayoutField( "SDSD_Value", $._mApp.mSampleProc.mSDSD.format("%d"), mValueColour);
-		updateLayoutField( "SDANN_Value", $._mApp.mSampleProc.mSDANN.format("%d"), mValueColour);
+		updateLayoutField( "SDNN_Value", $._mApp.mSampleProc.mSDNN.format("%d"), mValueColour);
 		updateLayoutField( "NN50_Value", $._mApp.mSampleProc.mNN50.format("%d"), mValueColour);		
 		updateLayoutField( "pNN50_Value", $._mApp.mSampleProc.mpNN50.format("%d"), mValueColour);
 		updateLayoutField( "NN20_Value", $._mApp.mSampleProc.mNN20.format("%d"), mValueColour);		

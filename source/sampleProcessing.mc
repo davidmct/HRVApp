@@ -14,6 +14,7 @@ using Toybox.Math;
 //	SDNN is therefore a measure of changes in heart rate due to cycles longer than 5 minutes. 
 //	SDNN reflects all the cyclic components responsible for variability in the period of recording, therefore it 
 //	represents total variability.
+// SDNN can be measured over shorter time intervals but assumes abnormal beats have been removed. RR measure = NN with abnormal peaks removed
 //RMSSD ("root mean square of successive differences"), the square root of the mean of the squares of the successive 
 //	differences between adjacent NNs.
 //SDSD ("standard deviation of successive differences"), the standard deviation of the successive differences between adjacent NNs.[36]
@@ -41,7 +42,7 @@ using Toybox.Math;
 //Given the results of these running summations, the values N, s1, s2 can be used at any time to compute the 
 //current value of the running standard deviation:
 
-//sigma = sqrt (N*s(2}-s(1)^2})/N
+//sigma = sqrt (N*s(2)-s(1)^2)/N
 //Where N, as mentioned above, is the size of the set of values (or can also be regarded as s0).
 
 //Similarly for sample standard deviation,
@@ -49,7 +50,7 @@ using Toybox.Math;
 //s= sqrt ((N*s(2)-s(1)^2) / (N*(N-1)) ).
 //In a computer implementation, as the three s(j) sums become large, we need to consider round-off error, 
 //arithmetic overflow, and arithmetic underflow. The method below calculates the running sums method with
-// reduced rounding errors.[16] This is a "one pass" algorithm for calculating variance of n samples without the 
+// reduced rounding errors. This is a "one pass" algorithm for calculating variance of n samples without the 
 //need to store prior data during the calculation. Applying this method to a time series will result in 
 //successive values of standard deviation corresponding to n data points as n grows larger with each new sample, 
 //rather than a constant-width sliding window calculation.
@@ -83,13 +84,16 @@ class SampleProcessing {
 	hidden var devSqSum;
 	hidden var pulseSum;
 	
+	hidden var mSDNN_param = [0, 0, 0, 0, 0];
+	hidden var mSDSD_param = [0, 0, 0, 0, 0];
+	
 	var dataCount;
 	var avgPulse;
 	var minIntervalFound;
 	var maxIntervalFound;
 	var mRMSSD;
 	var mLnRMSSD;
-	var mSDANN;
+	var mSDNN;
 	var mSDSD; 
 	var mNN50;
 	var mpNN50; 
@@ -124,12 +128,14 @@ class SampleProcessing {
 		avgPulse = 0;
 		mRMSSD = 0;
 		mLnRMSSD = 0;	
-		mSDANN = 0;
+		mSDNN = 0;
 		mSDSD = 0; 
 		mNN50 = 0;
 		mpNN50 = 0; 
 		mNN20 = 0;
 		mpNN20 = 0;
+		mSDNN_param = [0, 0, 0, 0, 0];
+		mSDSD_param = [0, 0, 0, 0, 0];
 	}
 	
 	function getNumberOfSamples() {
@@ -220,6 +226,42 @@ class SampleProcessing {
 	function getSample(index) {
 		return $._mApp.mIntervalSampleBuffer[index];
 	}
+
+	// passed an array [sample, A_k, A_k1, Q_k, Q_k1]
+	function calcSD(x) {	
+		var sd = 0.0;
+		var absSample = x[0].abs(); 
+		// A(0)=0
+		// A(k)=A(k-1)+ (x(k)-A(k-1))/k
+		//where A is the mean value.
+		// Q(0)=0
+		// Q(k)=Q(k-1)+ (k-1)/k*(x(k)-A(k-1))^2 = Q(k-1) + (x(k)-A(k-1))*(x(k)-A(k))
+		// Q(1)=0 since k-1=0 or x(1) = A(1)
+		
+		// Sample variance:
+		//	s(n)^2 = Q(n)/(n-1)		
+		// k = dataCount
+		
+		x[1] = x[2] + (absSample - x[2]) / dataCount;
+		x[3] = x[4] + (absSample - x[2]) * (absSample - x[1]);
+		// A_k = A_k1 + (absSample - A_k1) / dataCount;
+		// Q_k = Q_k1 + (absSample - A_k1) * (absSample - A_k);
+		
+		if (dataCount <= 1 ) {
+			sd = 0.0;
+		} else {
+			//sd =  Math.sqrt( Q_k) / (dataCount - 1));
+			sd =  Math.sqrt( x[3] / (dataCount - 1));
+		}
+		
+		// shift 
+		//A_k1 = A_k;
+		//Q_k1 = Q_k;
+		x[2] = x[1];
+		x[4] = x[3];
+		
+		return sd.toNumber();		
+	}
 	
 	// update the per sample stats
 	function updateRunningStats(previousIntMs, intMs, livePulse) {
@@ -236,13 +278,15 @@ class SampleProcessing {
 		if(1 < dataCount) {
 			//Sys.println("S");
 			
-			// HRV is actually RMSSD
+			// HRV is actually RMSSD. Ue (N-1)
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
 			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber();
 			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
-			mSDANN = 0;
-			mSDSD = 0; 
+			mSDNN_param[0] = intMs;
+			mSDNN = calcSD(mSDNN_param);
+			mSDSD_param[0] = devMs;
+			mSDSD = calcSD(mSDSD_param); 
 			mNN50 = 0;
 			mpNN50 = 0; 
 			mNN20 = 0;
