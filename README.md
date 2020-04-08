@@ -1,2 +1,2 @@
 # HRVApp
-HRVApp update and redesign
+HRV analysis application

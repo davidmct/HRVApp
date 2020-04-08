@@ -16,18 +16,17 @@ class HistoryView extends Ui.View {
 	hidden var ceilY;
 	hidden var floorY;
 	
-	hidden var floorVar;
-	hidden var scaleVar;
+	hidden var floor;
+	hidden var ceil;
+	hidden var scaleY;
 
 	function initialize() { View.initialize();}
 	
 	hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
 	    var drawable = findDrawableById(fieldId);
 	    if (drawable != null) {
-	        drawable.setColor(fieldColour);
-	        if (fieldValue != null) {
-	        	drawable.setText(fieldValue);
-	        }
+	    	if (fieldColour != null) { drawable.setColor(fieldColour);}
+	        if (fieldValue != null) {  drawable.setText(fieldValue); }
 	    }
     }
 	
@@ -63,7 +62,7 @@ class HistoryView extends Ui.View {
     }
 
     function scale(num) {
-		return (((num - floorVar) * scaleVar) + 0.5).toNumber();
+		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 
     //! Update the view
@@ -88,10 +87,18 @@ class HistoryView extends Ui.View {
 		updateLayoutField("avgPulseLbl", null,  mapColour($._mApp.avgPulseColSet));
 		
 		
-		//		$._mApp.results[index + 0] = utcStart;
-		//$._mApp.results[index + 1] = $._mApp.mSampleProc.mRMSSD;
-		//$._mApp.results[index + 2] = $._mApp.mSampleProc.mLnRMSSD;
-		//$._mApp.results[index + 3] = $._mApp.mSampleProc.avgPulse;
+		//results[0] = utcStart;
+		//results[1] = mRMSSD;
+		//results[2] = mLnRMSSD;
+		//results[3] = avgPulse;
+		
+		// some dummay test data!
+		//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
+		//	$._mApp.results[i+0] = epoch +(86400 * i) + 10;	// add a day each time
+		//	$._mApp.results[i+1] = 30 + (i * 3) % 10;
+		//	$._mApp.results[i+2] = (LOG_SCALE * (Math.ln($._mApp.results[i+1])+0.5)).toNumber();
+		//	$._mApp.results[i+3] = 60 + i % 10;
+		//}
 
 		// Find result limits
 		// change this to step i to each time stamp then look at next three samples
@@ -99,7 +106,7 @@ class HistoryView extends Ui.View {
 			// Only process if newer than epoch
 			if(epoch <= $._mApp.results[i]) {
 				// Get range of all three results ... may not be correlated range for each set
-				for(var y = 1; y <= 3; y++) {
+				for( var y = 1; y <= 3; y++) {
 					var value = $._mApp.results[i+y];
 					if(min > value) {
 						min = value;
@@ -119,69 +126,39 @@ class HistoryView extends Ui.View {
 		}
 
 		// Create the range in blocks of 5
-		var ceil = (max + 5) - (max % 5);
-		var floor = min - (min % 5);
+		ceil = (max + 5) - (max % 5);
+		floor = min - (min % 5);
 		
-		var test = (ceil - floor) % 15;
+		// now expand to multiple of 10 as height = 120 
+		var test = (ceil - floor) % 10;
 		if (test == 5) { 
 			floor -= 5;
-		} else if (test == 10) {
+		} else if (test == 0) {
 			ceil += 5;
 			floor -= 5;
 		}
 		var range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale
-		var scaleY = chartHeight / range.toFloat();
-
-		floorVar = floor;
-		scaleVar = scaleY;
-
-		var font = Gfx.FONT_XTINY; //0
-		var just = Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER; //5
-		var ctrX = dc.getWidth() / 2;
-		var ctrY = dc.getHeight() / 2;
-		// define box about centre
-		var leftX = ctrX - 90;
-		var rightX = ctrX + 90;
-		// 45 *2 is height of chart
-		var ceilY = ctrY - chartHeight/2;
-		var floorY = ctrY + chartHeight/2;
-		var mLabelOffsetCeil = ceilY - 15;
-		var mLabelOffsetFloor = floorY + 20;		
-		var textX = leftX - 20; // was +
-		var gap = (ceil - floor) / 3;
-
+		scaleY = chartHeight / range.toFloat();
 		
-		// Draw the numbers
-		MapSetColour(dc, DK_GRAY, $._mApp.bgColSet);
-		for(var i = 1; i < 6; i += 2) {
-
-			var y = ceilY + (((i * gap) * scaleY) / 2);
-			var num = ceil - ((i * gap) / 2.0);
+		// Draw the numbers on Y axis	
+		var gap = (ceil-floor);	
+		for (var i=0; i<7; i++) {
+			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
+			var str;
 			if(num != num.toNumber()) {
-				// may need to stagger on smaller screens
-				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
-				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%0.1f")]), just);				
+				str = format(" $1$ ",[num.format("%0.1f")] );				
 			}
 			else {
-				//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
-				dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
-			}
-			Sys.println("Num, textX, y "+i+","+textX+","+y);
-		}
-
-		for(var i = 0; i < 7; i += 2) {
-			var y = ceilY + (((i * gap) * scaleY) / 2);
-			var str = format(" $1$ ",[(ceil - ((i * gap)/2)).format("%d")]);
-			dc.drawText(textX, y, font, str, just);
-			Sys.println("textX, y "+textX+","+y);
+				str = format(" $1$ ",[num.format("%d")] );
+			}				
+			updateLayoutField("yLabel"+i, str, null);
+			
 		}
 
 		// Draw the data
 		var drawDots = 0;
-		
-		// results = [ utcStart; mRMSSD, mLnRMSSD, avgPulse] 
 		
 		for(var i = 0; i < 30; i++) {
 			// Start 30 days ago and work forwards
@@ -212,8 +189,8 @@ class HistoryView extends Ui.View {
 						MapSetColour(dc,$._mApp.LnRMSSDColSet, $._mApp.bgColSet);
 						dc.drawLine(leftX + x1, floorY - mLnRMSSD1, leftX + x2, floorY - mLnRMSSD1);
 						
-						Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);
-						Sys.println("x2, mRMSSD2, mLnRMSSD2 "+x2+","+mRMSSD2+","+mLnRMSSD2);
+						//Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);
+						//Sys.println("x2, mRMSSD2, mLnRMSSD2 "+x2+","+mRMSSD2+","+mLnRMSSD2);
 						// Change the value of i. So that it starts back at this point. Break loop
 						i = iii - 1;
 						iii = 30;
@@ -231,7 +208,7 @@ class HistoryView extends Ui.View {
 					MapSetColour(dc,  $._mApp.LnRMSSDColSet, $._mApp.bgColSet);
 					dc.fillCircle(leftX + x1, floorY - mLnRMSSD1, 2);	
 					
-					Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);					
+					//Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);					
 				}
 			}
 		}

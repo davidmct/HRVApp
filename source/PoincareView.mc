@@ -177,9 +177,10 @@ class PoincareView extends Ui.View {
 		
 		// calc numbers on axis and update label
 		var mid = floor + (ceil - floor) / 2;
-		updateLayoutField("TopValY", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
+		// as display area is tight on Y axis ONLY draw mid value
+		//updateLayoutField("TopValY", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
 		updateLayoutField("MidValY", format(" $1$ ",[mid.format("%d")]), mLabelColour);
-		updateLayoutField("LowerValY", format(" $1$ ",[floor.format("%d")]), mLabelColour);
+		//updateLayoutField("LowerValY", format(" $1$ ",[floor.format("%d")]), mLabelColour);
 		updateLayoutField("TopValX", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
 		updateLayoutField("MidValX", format(" $1$ ",[mid.format("%d")]), mLabelColour);
 		updateLayoutField("LowerValX", format(" $1$ ",[floor.format("%d")]), mLabelColour);			
