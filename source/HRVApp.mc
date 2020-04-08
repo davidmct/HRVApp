@@ -16,17 +16,19 @@ using Toybox.Sensor;
 // Things still to fix
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
-//5. Check history works - need stored data or test data
-//6. Add poincare view - done but need to check update rate
+//6. Add ability to display historic Poincare view
 //8. sample processing check skipped or double beats
 //9. how to make trial version and possible payment
-//10. Need to change sensor handling when Porperty changes (or say only on restart)
+//10. Test sensor switching more
 //12. Add fit session and record saving
 //13. When using optical should call it PRV not HRV
-//14. Change history view to layout? Change saved parameters and structure
-//15. reduce number of colour sets used
 //16. Make sure background colour set works
-//17. Add icon to testView title
+//17. Check download and setting online properties works
+// Optimisations:
+// - check no string assignment in loops. Use Lang.format()
+// - remove unwanted test messages
+// - any more local vars rather than global
+// - reduce dictionaries 
 
 var mDebugging = false;
 var mDebuggingANT = false;
@@ -292,11 +294,12 @@ class HRVApp extends App.AppBase {
 		//}
 		
 		// should propably use getSample(index) if using circular buffer
+		var separator = ",";
 		for (i=0; i < mNumBlocks; i++) {
 			base = i*BLOCK_SIZE;
 			var j;
 			for (j=0; j< BLOCK_SIZE; j++) {
-				mString += mIntervalSampleBuffer[base+j].toString()+",";			
+				mString += mIntervalSampleBuffer[base+j].toString()+separator;			
 			}
 			Sys.println(mString);
 			mString = "";		
@@ -305,7 +308,7 @@ class HRVApp extends App.AppBase {
 		// Write tail end of buffer
 		base = BLOCK_SIZE * mNumBlocks;
 		for (i=0; i < mRemainder; i++) {	
-			mString += mIntervalSampleBuffer[base+i].toString()+",";				
+			mString += mIntervalSampleBuffer[base+i].toString()+separator;				
 		}	
 		Sys.println(mString);
 	}
