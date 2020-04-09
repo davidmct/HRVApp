@@ -6,6 +6,7 @@ using Toybox.System as Sys;
 
 
 // Show time in test and current RMSSD and interval
+// also max/min difference between RR intervals
 
 class CurrentValueView extends Ui.View {
 
@@ -68,6 +69,10 @@ class CurrentValueView extends Ui.View {
 		updateLayoutField( "CurrentrMSSD_val", $._mApp.mSampleProc.mRMSSD.format("%d"), mValueColour);
 		updateLayoutField( "CurrentInterval_val", $._mApp.mSampleProc.getCurrentEntry().format("%d"), mValueColour);
 
+		updateLayoutField("Delta_txt", null, mLabelColour);	
+        updateLayoutField("DeltaMin_val", $._mApp.mSampleProc.minDiffFound.format("%d"), mValueColour);
+        updateLayoutField("DeltaMax_val", $._mApp.mSampleProc.maxDiffFound.format("%d"), mValueColour);
+        
 		// Testing only. Draw used memory
 		//var str = System.getSystemStats().usedMemory.toString();
 		//dc.setColor(WHITE, BLACK);

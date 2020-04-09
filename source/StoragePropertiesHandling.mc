@@ -102,7 +102,7 @@ class HRVStorageHandler {
 	
 	function saveStatsToStore() {
 		Sys.println("saveStatsToStore() called");	
-		var stats = new [9];
+		var stats = new [11];
 		stats[0] = $._mApp.mSampleProc.avgPulse;
 		stats[1] = $._mApp.mSampleProc.mRMSSD;
 		stats[2] = $._mApp.mSampleProc.mLnRMSSD;
@@ -112,6 +112,8 @@ class HRVStorageHandler {
 		stats[6] = $._mApp.mSampleProc.mpNN50; 
 		stats[7] = $._mApp.mSampleProc.mNN20;
 		stats[8] = $._mApp.mSampleProc.mpNN20;
+		stats[9] = $._mApp.mSampleProc.minDiffFound;
+		stats[10] = $._mApp.mSampleProc.maxDiffFound;
 		
 		if (Toybox.Application has :Storage) {
 			Storage.setValue("runstats", stats);				
@@ -122,14 +124,13 @@ class HRVStorageHandler {
 	
 	function loadStatsFromStore() {
 		Sys.println("loadStatsFromStore() called");	
-		var stats = new [9];
+		var stats = new [11];
 		
 		try {
 			if (Toybox.Application has :Storage) {	
 				stats = Storage.getValue("runstats");		
 			} else {
-				stats = $._mApp.getProperty("runstats");	
-		
+				stats = $._mApp.getProperty("runstats");			
 			}
 		} catch (ex) {
 			// storage error - most likely not written
@@ -145,7 +146,9 @@ class HRVStorageHandler {
 			$._mApp.mSampleProc.mNN50 = stats[5];
 			$._mApp.mSampleProc.mpNN50 = stats[6]; 
 			$._mApp.mSampleProc.mNN20 = stats[7];
-			$._mApp.mSampleProc.mpNN20 = stats[8];				
+			$._mApp.mSampleProc.mpNN20 = stats[8];	
+			$._mApp.mSampleProc.minDiffFound = stats[9];
+			$._mApp.mSampleProc.maxDiffFound = stats[10];			
 			return true;
 		}	
 	

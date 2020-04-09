@@ -92,6 +92,8 @@ class SampleProcessing {
 	var avgPulse;
 	var minIntervalFound;
 	var maxIntervalFound;
+	var minDiffFound;
+	var maxDiffFound;
 	var mRMSSD;
 	var mLnRMSSD;
 	var mSDNN;
@@ -122,6 +124,8 @@ class SampleProcessing {
 	
 	function resetHRVData() {
 		resetSampleBuffer();
+		minDiffFound = 2000;
+		maxDiffFound = 0;
 		devMs = 0;
 		devSqSum = 0;
 		pulseSum = 0;
@@ -277,6 +281,11 @@ class SampleProcessing {
 
 		// don't need to take abs value as only being squared!
 		devMs = (intMs - previousIntMs);
+
+		// now see how wide the difference is between consectutive intervals
+		var diff = devMs.abs();
+		if (diff > maxDiffFound) { maxDiffFound = diff;}
+		if (diff < minDiffFound) { minDiffFound = diff;}
 		
 		devSqSum += devMs * devMs;
 		pulseSum += livePulse;

@@ -22,6 +22,7 @@ using Toybox.Sensor;
 //10. Test sensor switching more
 //12. Add fit session and record saving
 //13. When using optical should call it PRV not HRV
+// 20. Add min/max differences in Current View
 //17. Check download and setting online properties works
 //18. Poincare view sometimes has y=0 and hence rectangle is drawn below axis
 // Optimisations:

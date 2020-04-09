@@ -11,6 +11,22 @@ using Toybox.FitContributor as Fit;
 const AUX_HR_FIELD_ID    = 0;
 const DELTA_HR_FIELD_ID  = 1;
 
+
+// Want to save all stats plus min/max as session summary
+//	var avgPulse;
+//	var minIntervalFound;
+//	var maxIntervalFound;
+//	var mRMSSD;
+//	var mLnRMSSD;
+//	var mSDNN;
+//	var mSDSD; 
+//	var mNN50;
+//	var mpNN50; 
+//	var mNN20;
+//	var mpNN20;
+//		stats[9] = $._mApp.mSampleProc.minDiffFound;
+//		stats[10] = $._mApp.mSampleProc.maxDiffFound;
+
 class AuxHRFitContributor {
 
     hidden var mTimerRunning = false;
