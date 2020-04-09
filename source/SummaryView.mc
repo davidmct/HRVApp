@@ -78,8 +78,11 @@ class SummaryView extends Ui.View {
 		updateLayoutField( "rMSSD_Value", $._mApp.mSampleProc.mRMSSD.format("%d"), mValueColour);
 		updateLayoutField( "Ln_HRV_Value", $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);		
 		updateLayoutField( "avgPulse_Value", $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
-		updateLayoutField( "SDSD_Value", $._mApp.mSampleProc.mSDSD.format("%d"), mValueColour);
-		updateLayoutField( "SDNN_Value", $._mApp.mSampleProc.mSDNN.format("%d"), mValueColour);
+		// next two are floats
+		var trunc = ($._mApp.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+		updateLayoutField( "SDSD_Value", trunc.format("%.1f"), mValueColour);
+		trunc = ($._mApp.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+		updateLayoutField( "SDNN_Value",trunc.format("%.1f"), mValueColour);
 		updateLayoutField( "NN50_Value", $._mApp.mSampleProc.mNN50.format("%d"), mValueColour);		
 		updateLayoutField( "pNN50_Value", $._mApp.mSampleProc.mpNN50.format("%d"), mValueColour);
 		updateLayoutField( "NN20_Value", $._mApp.mSampleProc.mNN20.format("%d"), mValueColour);		

@@ -129,8 +129,8 @@ class HistoryView extends Ui.View {
 
 		// If no results then set min & max to create a nice graph scale
 		if(0 == dataCount){
-			min = -5;
-			max = 5;
+			min = 0;
+			max = 20;
 		}
 
 		// Create the range in blocks of 5
@@ -155,12 +155,13 @@ class HistoryView extends Ui.View {
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			var str;
-			if(num != num.toNumber()) {
-				str = format(" $1$ ",[num.format("%0.1f")] );				
-			}
-			else {
+			//if(num != num.toNumber()) {
+			//	str = format(" $1$ ",[num.format("%0.1f")] );				
+			//}
+			//else {
+				// just use whole numbers
 				str = format(" $1$ ",[num.format("%d")] );
-			}				
+			//}				
 			updateLayoutField("yLabel"+i, str, null);
 			
 		}

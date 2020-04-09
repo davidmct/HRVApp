@@ -25,7 +25,7 @@ using Toybox.Sensor;
 //16. Make sure background colour set works
 //17. Check download and setting online properties works
 //18. Poincare view sometimes has y=0 and hence rectangle is drawn below axis
-//19. remove floating point axis and just round numbers up
+//19. remove floating point axis and just round numbers up on history page
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()
 // - remove unwanted test messages

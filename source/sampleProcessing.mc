@@ -1,6 +1,7 @@
 using Toybox.Application as App;
 using Toybox.System as Sys;
 using Toybox.Math;
+using Toybox.Lang as Lang;
 
 
 // add here functions to post process HR data once we have it!
@@ -84,8 +85,8 @@ class SampleProcessing {
 	hidden var devSqSum;
 	hidden var pulseSum;
 	
-	hidden var mSDNN_param = [0, 0, 0, 0, 0];
-	hidden var mSDSD_param = [0, 0, 0, 0, 0];
+	hidden var mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
+	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
 	var dataCount;
 	var avgPulse;
@@ -134,8 +135,8 @@ class SampleProcessing {
 		mpNN50 = 0; 
 		mNN20 = 0;
 		mpNN20 = 0;
-		mSDNN_param = [0, 0, 0, 0, 0];
-		mSDSD_param = [0, 0, 0, 0, 0];
+		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
+		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	}
 	
 	function getNumberOfSamples() {
@@ -227,7 +228,9 @@ class SampleProcessing {
 		return $._mApp.mIntervalSampleBuffer[index];
 	}
 
-	// passed an array [sample, A_k, A_k1, Q_k, Q_k1]
+	// passed an array [sample, A_k, A_k1, Q_k, Q_k1] 
+	//					[0, 	1, 	   2,   3,    4]
+	// must start at dataCount = 1 otherwise large offset in calc!
 	function calcSD(x) {	
 		var sd = 0.0;
 		var absSample = x[0].abs(); 
@@ -254,13 +257,18 @@ class SampleProcessing {
 			sd =  Math.sqrt( x[3] / (dataCount - 1));
 		}
 		
+		//var str = Lang.format("calcSD sd, A(k), Q(k), dataCount : $1$, $2$, $3$, $4$",
+		//	[sd.format("%0.2f"), x[1].format("%0.2f"), x[3].format("%0.2f"), dataCount.format("%d")]);
+		//Sys.println(str);
+		
 		// shift 
 		//A_k1 = A_k;
 		//Q_k1 = Q_k;
 		x[2] = x[1];
 		x[4] = x[3];
 		
-		return sd.toNumber();		
+		// 
+		return sd;		
 	}
 	
 	// update the per sample stats
@@ -274,25 +282,24 @@ class SampleProcessing {
 		devSqSum += devMs * devMs;
 		pulseSum += livePulse;
 		dataCount++;
-	
-		if(1 < dataCount) {
-			//Sys.println("S");
-			
-			// HRV is actually RMSSD. Ue (N-1)
+		
+		// avoid divide by 0
+		if(dataCount > 1) {			
+			// HRV is actually RMSSD. Use (N-1)
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
 			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber();
-			avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
-			mSDNN_param[0] = intMs;
-			mSDNN = calcSD(mSDNN_param);
-			mSDSD_param[0] = devMs;
-			mSDSD = calcSD(mSDSD_param); 
-			mNN50 = 0;
-			mpNN50 = 0; 
-			mNN20 = 0;
-			mpNN20 = 0;
-		}		
-		// May need to change stats source from Ant to this module
+		}
+		avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
+		
+		mSDNN_param[0] = intMs;
+		mSDNN = calcSD(mSDNN_param);
+		mSDSD_param[0] = devMs;
+		mSDSD = calcSD(mSDSD_param); 
+		mNN50 = 0;
+		mpNN50 = 0; 
+		mNN20 = 0;
+		mpNN20 = 0;		
 	}
 
 }
