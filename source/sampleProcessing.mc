@@ -127,14 +127,14 @@ class SampleProcessing {
 		pulseSum = 0;
 		dataCount = 0;	
 		avgPulse = 0;
-		mRMSSD = 0;
-		mLnRMSSD = 0;	
-		mSDNN = 0;
-		mSDSD = 0; 
-		mNN50 = 0;
-		mpNN50 = 0; 
-		mNN20 = 0;
-		mpNN20 = 0;
+		mRMSSD = 0.0;
+		mLnRMSSD = 0.0;	
+		mSDNN = 0.0;
+		mSDSD = 0.0; 
+		mNN50 = 0.0;
+		mpNN50 = 0.0; 
+		mNN20 = 0.0;
+		mpNN20 = 0.0;
 		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	}
@@ -267,7 +267,6 @@ class SampleProcessing {
 		x[2] = x[1];
 		x[4] = x[3];
 		
-		// 
 		return sd;		
 	}
 	
@@ -296,10 +295,15 @@ class SampleProcessing {
 		mSDNN = calcSD(mSDNN_param);
 		mSDSD_param[0] = devMs;
 		mSDSD = calcSD(mSDSD_param); 
-		mNN50 = 0;
-		mpNN50 = 0; 
-		mNN20 = 0;
-		mpNN20 = 0;		
+		// difference more than 50ms
+		if (devMs.abs() > 50 ) { mNN50 += 1;}
+		// percentage scaled to 100 
+		mpNN50 = (mNN50 / dataCount)*100; 
+		// difference more than 20ms 
+		if (devMs.abs() > 20 ) { mNN20 += 1;}
+		mpNN20 = (mNN20 / dataCount)*100; 	
+		
+		//Sys.println("mNN50, mpNN50, mNN20, mpNN20: "+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
 	}
 
 }
