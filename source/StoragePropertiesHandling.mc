@@ -38,6 +38,7 @@ class HRVStorageHandler {
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
 
 	// This should be factory default settings and should write values back to store
+	// ideally these should align with properties defined in XML
 	function resetSettings() {
 	
 		if (Toybox.Application has :Storage) {
@@ -54,7 +55,7 @@ class HRVStorageHandler {
 			$._mApp.Properties.setValue("ManualTimeSet", 300);
 			$._mApp.Properties.setValue("bgColSet", 3);
 			$._mApp.Properties.setValue("lblColSet", 10);
-			$._mApp.Properties.setValue("txtColSet", 13);
+			$._mApp.Properties.setValue("txtColSet", 9);
 			$._mApp.Properties.setValue("RMSSDColSet", 10);
 			$._mApp.Properties.setValue("LnRMSSDColSet", 12);
 			$._mApp.Properties.setValue("avgPulseColSet", 6);		
@@ -118,16 +119,25 @@ class HRVStorageHandler {
 	function loadIntervalsFromStore() {
 		Sys.println("loadIntervalsFromStore() called");
 		
-		if (Toybox.Application has :Storage) {	
-			$._mApp.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
-			$._mApp.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
-			$._mApp.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
-			$._mApp.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
-		} else {
-			$._mApp.mIntervalSampleBuffer = $._mApp.getProperty("IntervalStoreData");	
-			$._mApp.mSampleProc.minIntervalFound = $._mApp.getProperty("IntervalStoreMin");	
-			$._mApp.mSampleProc.maxIntervalFound = $._mApp.getProperty("IntervalStoreMax");	
-			$._mApp.mSampleProc.setNumberOfSamples( $._mApp.getProperty("IntervalStoreIndex"));			
+		try {
+			if (Toybox.Application has :Storage) {	
+				$._mApp.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
+				$._mApp.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
+				$._mApp.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
+				$._mApp.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
+			} else {
+				$._mApp.mIntervalSampleBuffer = $._mApp.getProperty("IntervalStoreData");	
+				$._mApp.mSampleProc.minIntervalFound = $._mApp.getProperty("IntervalStoreMin");	
+				$._mApp.mSampleProc.maxIntervalFound = $._mApp.getProperty("IntervalStoreMax");	
+				$._mApp.mSampleProc.setNumberOfSamples( $._mApp.getProperty("IntervalStoreIndex"));			
+			}
+		} catch (ex) {
+			// storage error - most likely not written
+			Sys.println("StoragePropertiesHandling: ERROR loadIntervalsFromStore");
+			return false;
+		}
+		finally {
+			return true;
 		}
 	}
 	
@@ -254,13 +264,19 @@ class HRVStorageHandler {
 	}
 	
 	function retrieveResults() {
+		var mCheck;
 		// currently references a results array in HRVApp
 		if (Toybox.Application has :Storage) {
-			var mCheck = Storage.getValue("resultsArray");
-			if (mCheck == null) {new $._mApp.myException("retrieveResults: no results array");}
-			else {
-				$._mApp.results = mCheck;
-			} 
+			try {
+				mCheck = Storage.getValue("resultsArray");
+			}
+			catch (ex) {
+				Sys.println("ERROR: retrieveResults: no results array");
+				return false;
+			}				
+			
+			if (mCheck != null) { $._mApp.results = mCheck; } 
+			return true;			
 		} else {		
 			for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 				var result = $._mApp.getProperty(RESULTS + i);
@@ -273,6 +289,7 @@ class HRVStorageHandler {
 				}
 			}
 		}
+		return true;
 	}
 	
 	function storeResults() {

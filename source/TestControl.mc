@@ -126,7 +126,7 @@ class TestController {
 		
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
-		var setSensorStr = ($._mApp.mSensorTypeExt ? "External" : "Known");
+		var setSensorStr = ($._mApp.mSensorTypeExt ? "external" : "registered");
 		
 		// Timer information for view
 		timerTime = 0; // = utcStop - utcStart;
