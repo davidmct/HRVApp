@@ -303,7 +303,7 @@ class SampleProcessing {
 		if (devMs.abs() > 20 ) { mNN20 += 1;}
 		mpNN20 = (mNN20 / dataCount)*100; 	
 		
-		//Sys.println("mNN50, mpNN50, mNN20, mpNN20: "+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
+		Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
 	}
 
 }

@@ -162,7 +162,7 @@ class PoincareView extends Ui.View {
 			floor -= 5;
 		}
 
-		Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
+		//Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
 				
 		//var range = ceil - floor;
 		var scaleY = chartHeight / (ceil - floor).toFloat();
@@ -170,7 +170,7 @@ class PoincareView extends Ui.View {
 		// New main plot loop assumes this!!
 		var scaleX = scaleY;
 		
-		Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
+		//Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
 
 		// Prepare the screen
 		//MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
@@ -242,9 +242,10 @@ class PoincareView extends Ui.View {
 			var x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
 			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
 			
-			if ( y <= 0) {
-				Sys.println("whoops y below floor: y, floorY, floor "+y+","+floorY+","+floor);
-			}
+			// Ranging issue as rectangles drawn downwards and hence go over axis
+			//if ( y <= 0) {
+			//	Sys.println("whoops y below floor: y, floorY, floor "+y+","+floorY+","+floor);
+			//}
 			// avoid floating point numbers
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			// 2x2 rectangle too small on real screen
@@ -257,10 +258,8 @@ class PoincareView extends Ui.View {
 		
 		// perfromance check only on real devices
 		var currentTime = Sys.getTimer();
-		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms");
 		var str = System.getSystemStats().usedMemory.toString();
-		Sys.println("Poincare memory use "+str);
-		
+		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms"+" using mem: "+str);		
    		return true;
     }
 }

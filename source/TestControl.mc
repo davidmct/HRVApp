@@ -374,6 +374,8 @@ class TestController {
     	
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 
+    	// save intervals as well so we can reload and display
+    	$._mApp.mStorage.saveIntervalsToStore();
     	
     	// FIT FILE SESSION RESULTS HERE
     }
