@@ -160,7 +160,7 @@ class TestController {
 					mTestMessage = setSensorStr+" sensor ready";
 					mTestState = TS_READY; 
 				} else {
-					mTestMessage = "Waiting for "+setSensorStr+" HR data";
+					mTestMessage = "Waiting for "+setSensorStr+" HR source";
 				}
 				if (caller == :enterPressed) {
 					// we might be lucky and HR is ready at the same time as sensor is ready

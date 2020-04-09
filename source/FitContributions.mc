@@ -15,8 +15,6 @@ class AuxHRFitContributor {
 
     hidden var mTimerRunning = false;
 
-    // OHR is recorded already in the FIT file so just need Aux and Difference
-    // Difference could come by post processing but for fun added in
     // FIT Contributions variables
     hidden var mAuxHRField = null;
     hidden var mDeltaHRField  = null;

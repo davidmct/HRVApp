@@ -1,4 +1,13 @@
 <properties>
+	<!-- set to true if trail mode being used -->
+	<property id="pTrailMode" type="boolean">false</property>
+	<property id="pTrialStarted" type="boolean">false</property>
+	<!-- set to true if authenticated to use -->
+	<property id="pAuthorised" type="boolean">false</property>
+	<!-- number of days for trial -->
+	<property id="pTrailPeriod" type="number">30</property>
+		<!-- date trial started -->
+	<property id="pTrialStartDate" type="number">0</property>
 	<property id="pAuxHRAntID" type="number">0</property>
 	<property id="firstLoadEver" type ="boolean">false</property>
 	<property id="timestampSet" type="number">1447234278</property>

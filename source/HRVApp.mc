@@ -16,8 +16,8 @@ using Toybox.Sensor;
 // Things still to fix
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
-//6. Add ability to display historic Poincare view
 //8. sample processing check skipped or double beats
+//19. Add load of stats to mainmenudelegate with poincare
 //9. how to make trial version and possible payment
 //10. Test sensor switching more
 //12. Add fit session and record saving
@@ -29,6 +29,20 @@ using Toybox.Sensor;
 // - remove unwanted test messages
 // - any more local vars rather than global
 // - reduce dictionaries 
+
+// add authentication stuff for trial
+//	<property id="pTrailMode" type="boolean">false</property>
+//	<property id="pTrialStarted" type="boolean">false</property>
+//	<!-- set to true if authenticated to use -->
+//	<property id="pAuthorised" type="boolean">false</property>
+//	<!-- number of days for trial -->
+//	<property id="pTrailPeriod" type="number">30</property>
+//		<!-- date trial started -->
+//	<property id="pTrialStartDate" type="number">0</property>
+// AppBase.isTrial()
+// getTrailDaysRemaining() needs overriding. days remaining or null if trials not supported or 0 to disable app
+// can override AppBase.allowTrialMessages() to return false if you don't want user reminders
+// end point (of URL) requirements seems not to be published!!
 
 var mDebugging = false;
 var mDebuggingANT = false;

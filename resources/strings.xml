@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.3.3</string>
+	<string id="AppVersion">0.3.4</string>
 	<string id="pAuxHRAntIDTitle">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledTitle">FIT File Write</string> 
