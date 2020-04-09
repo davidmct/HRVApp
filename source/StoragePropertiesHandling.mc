@@ -100,6 +100,57 @@ class HRVStorageHandler {
 		}
 	}
 	
+	function saveStatsToStore() {
+		Sys.println("saveStatsToStore() called");	
+		var stats = new [9];
+		stats[0] = $._mApp.mSampleProc.avgPulse;
+		stats[1] = $._mApp.mSampleProc.mRMSSD;
+		stats[2] = $._mApp.mSampleProc.mLnRMSSD;
+		stats[3] = $._mApp.mSampleProc.mSDNN;
+		stats[4] = $._mApp.mSampleProc.mSDSD; 
+		stats[5] = $._mApp.mSampleProc.mNN50;
+		stats[6] = $._mApp.mSampleProc.mpNN50; 
+		stats[7] = $._mApp.mSampleProc.mNN20;
+		stats[8] = $._mApp.mSampleProc.mpNN20;
+		
+		if (Toybox.Application has :Storage) {
+			Storage.setValue("runstats", stats);				
+		} else {
+			$._mApp.setProperty("runstats", stats);			
+		}			
+	}
+	
+	function loadStatsFromStore() {
+		Sys.println("loadStatsFromStore() called");	
+		var stats = new [9];
+		
+		try {
+			if (Toybox.Application has :Storage) {	
+				stats = Storage.getValue("runstats");		
+			} else {
+				stats = $._mApp.getProperty("runstats");	
+		
+			}
+		} catch (ex) {
+			// storage error - most likely not written
+			Sys.println("StoragePropertiesHandling: ERROR loadStatsFromStore");
+			return false;
+		}
+		finally {
+			$._mApp.mSampleProc.avgPulse = stats[0];
+			$._mApp.mSampleProc.mRMSSD = stats[1];
+			$._mApp.mSampleProc.mLnRMSSD = stats[2];
+			$._mApp.mSampleProc.mSDNN = stats[3];
+			$._mApp.mSampleProc.mSDSD = stats[4]; 
+			$._mApp.mSampleProc.mNN50 = stats[5];
+			$._mApp.mSampleProc.mpNN50 = stats[6]; 
+			$._mApp.mSampleProc.mNN20 = stats[7];
+			$._mApp.mSampleProc.mpNN20 = stats[8];				
+			return true;
+		}	
+	
+	}
+	
 	function saveIntervalsToStore() {
 		Sys.println("saveIntervalsToStore() called");
 		

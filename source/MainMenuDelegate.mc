@@ -40,6 +40,24 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
+        else if ( id.equals("load") ) {
+        	// you can't do this whilst testing! Otherwise screws data
+        	if ( $._mApp.mTestControl.mTestState >= TS_TESTING) {
+        		$._mApp.mTestControl.alert(TONE_ERROR);
+        		return;
+        	} else {
+	        	Sys.println("MainMenuDelegate: loading old intervals and switching to Poincare");
+	        	var success = $._mApp.mStorage.loadIntervalsFromStore();
+	        	if (success) {	        	
+			  		if( $._mApp.viewNum != POINCARE_VIEW) {
+						Ui.switchToView($._mApp.getView(POINCARE_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+					}
+				} else { // failed to load data
+	        		$._mApp.mTestControl.alert(TONE_ERROR);
+	        		return;				
+				}				
+			}          
+        }        
         else if( id.equals("settings") ) {
         	// create long sub-menus
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});

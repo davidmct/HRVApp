@@ -43,13 +43,14 @@ enum {
 	SENSOR_SEARCH = 1, // true
 	
 	// define test states
-	TS_INIT,
-	TS_WAITING,
-	TS_READY,
-	TS_TESTING,
-	TS_ABORT,
-	TS_CLOSE,
-	TS_PAUSE
+	// Ordered so we know in TESTING or further states
+	TS_INIT = 1,
+	TS_WAITING = 2,
+	TS_READY = 3,
+	TS_TESTING = 4,
+	TS_ABORT = 5,
+	TS_CLOSE = 6,
+	TS_PAUSE =7
 }	
 
 class TestController {
@@ -376,7 +377,8 @@ class TestController {
     	$._mApp.mStorage.storeResults(); 
     	// save intervals as well so we can reload and display
     	$._mApp.mStorage.saveIntervalsToStore();
-    	
+    	$._mApp.mStorage.saveStatsToStore();    
+    		
     	// FIT FILE SESSION RESULTS HERE
     }
     
