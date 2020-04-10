@@ -24,6 +24,7 @@ using Toybox.Sensor;
 //13. When using optical should call it PRV not HRV
 // 20. Add min/max differences in Current View
 //17. Check download and setting online properties works
+//21. Change nore layouts to % and see if works on 260/240 displays
 //18. Poincare view sometimes has y=0 and hence rectangle is drawn below axis
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()
