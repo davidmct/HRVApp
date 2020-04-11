@@ -101,11 +101,13 @@ class HistoryView extends Ui.View {
 		//}
 		
 		// TEST CODE DUMP RESULTS AS getting wierd type
-		var dump = "";
-		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-			dump += $._mApp.results[i].toString() + ",";
+		if (mDebuggingResults) {
+			var dump = "";
+			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
+				dump += $._mApp.results[i].toString() + ",";
+			}
+			Sys.println("History view DUMP of results : "+dump);
 		}
-		Sys.println("DUMP of results : "+dump);
 		
 
 		// Find result limits

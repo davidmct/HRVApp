@@ -123,7 +123,7 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
-		Sys.println("TestControl: StateMachine() entered");
+		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered");}
 		
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
@@ -274,7 +274,7 @@ class TestController {
 		//if (mFunc == null) {Sys.println("TestControl: Statemachine: mFunc NULL "); }
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
-    		Sys.println("TestControl: Statemachine: Testview update - "+mTestMessage);
+    		if (mDebugging == true) {Sys.println("TestControl: Statemachine: Testview update - "+mTestMessage);}
     	}
     	
     	// update Current  View data  
@@ -383,7 +383,6 @@ class TestController {
     }
     
 	// called by startTest() to initial test timers etc
-	// need to remove STATE updates
     function start() {
 		if (mDebugging == true) {Sys.println("START() ENTERED");}
 		// Set up test type and timer up or down.

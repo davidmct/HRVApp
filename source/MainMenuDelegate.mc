@@ -75,7 +75,12 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
 	        // get app version
 	        var mAppVer = $._mApp.versionSet;
+	        var mySettings = Sys.getDeviceSettings();
+	        var mID = mySettings.uniqueIdentifier;
+	        if (mID == null) {mID = "";}
+	        Sys.println("Device indentifier = "+mID);
 	        menu.addItem(new Ui.MenuItem(mAppVer, null, "test", null));
+	        menu.addItem(new Ui.MenuItem(mID, null, "deviceID", null));
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_LEFT );
         }
     }

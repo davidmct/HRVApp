@@ -45,10 +45,24 @@ using Toybox.Sensor;
 // getTrailDaysRemaining() needs overriding. days remaining or null if trials not supported or 0 to disable app
 // can override AppBase.allowTrialMessages() to return false if you don't want user reminders
 // end point (of URL) requirements seems not to be published!!
+//var mySettings = System.getDeviceSettings();
+//var clockMode = mySettings.is24Hour;
+//var phone = mySettings.phoneConnected;
+//var version = mySettings.monkeyVersion;
+//var versionString = Lang.format("$1$.$2$.$3$", version);
+//A unique alphanumeric device identifier.
+//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
+//Any use of this value for tracking user information must be in compliance with international privacy law.
+//var id = mySettings.uniqueIdentifier;
+//if (id != null) {
+//    System.println(id); //e.g. ac915d426451c88e8ea691fa412f9af9c21b4d12
+//}
 
 var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
+// dump results array on every call to view history
+var mDebuggingResults = true;
 
 // access App variables and classes
 var _mApp;
