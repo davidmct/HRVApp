@@ -87,6 +87,7 @@ class TestController {
 		mSensorReady = false;
 		mHRmsgTxt = "";	
 	}
+
 	
 	// function to call to update Summary view
 	function setObserver(func) {

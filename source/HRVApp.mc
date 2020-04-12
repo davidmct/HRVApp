@@ -155,6 +155,7 @@ class HRVApp extends App.AppBase {
     var mTestControl;
     var mIntervalSampleBuffer; // buffer in app space for intervals
     var mSampleProc; // instance of sample processor
+    var mFitControl;
     
     // ensure second update
     hidden var _uiTimer;
@@ -191,7 +192,8 @@ class HRVApp extends App.AppBase {
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		
 		//Menu title size
-		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();			
+		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
+						
     	AppBase.initialize();
     }
 
