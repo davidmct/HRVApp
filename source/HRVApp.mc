@@ -234,6 +234,10 @@ class HRVApp extends App.AppBase {
 		mStorage.retrieveResults();
 		// initialise for testing
 		mTestControl.resetTest();
+		
+		// strictly speaking no need to create FIT contributor unless we want to write
+		// however we then lose all the functions
+		mFitControl = new HRVFitContributor();
 
     	// Init view variables
 		viewNum = 0;
@@ -248,6 +252,10 @@ class HRVApp extends App.AppBase {
     function updateScreen() {
     	// drive teststate transitions outside UI
     	mTestControl.StateMachine(:UpdateUI);
+    	
+    	// Update FIT data
+    	mFitControl.compute();
+    	
     	// update views
         Ui.requestUpdate();
     }

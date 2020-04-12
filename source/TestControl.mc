@@ -292,6 +292,11 @@ class TestController {
 	// function onHide() {getModel().setObserver(null);}
 	
 	function startTest() {
+		// set up FIT to write data if enabled
+		$._mApp.mFitControl.createSession();
+		// now start recording
+		$._mApp.mFitControl.startFITrec(); 
+		
     	alert(TONE_START);
     	start();
     }
@@ -302,7 +307,10 @@ class TestController {
     }
 
     function finishTest() {
+    	// called when not enough data 
     	Sys.println("finishTest()");
+    	$._mApp.mFitControl.discardTest();
+    	$._mApp.mFitControl.closeFITrec();
     	endTest();
     	alert(TONE_SUCCESS);
     }
@@ -337,8 +345,10 @@ class TestController {
     }
     
     function discardTest() {
-    	// called from HRVBahaviourDelegate
+    	// called from HRVBehaviourDelegate
     	resetTest(); // may not be necessary as handled by state machine
+    	$._mApp.mFitControl.discardTest();
+    	$._mApp.mFitControl.closeFITrec();
     }
     
     function saveTest() {
@@ -381,6 +391,8 @@ class TestController {
     	$._mApp.mStorage.saveStatsToStore();    
     		
     	// FIT FILE SESSION RESULTS HERE
+    	$._mApp.mFitControl.saveFITrec();
+    	$._mApp.mFitControl.closeFITrec();
     }
     
 	// called by startTest() to initial test timers etc

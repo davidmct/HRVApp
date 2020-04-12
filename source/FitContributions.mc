@@ -154,21 +154,23 @@ class HRVFitContributor {
 				}
 			} // has
 			if (mSession != null) { createFitFields();}
+			Sys.println("createSession successful");
 			return mSession;
 		} //write enabled
 		return null;
 	}
 	
 	function startFITrec() {
-		if (mSession != null) {mSession.start();}
+		if (mSession != null) {Sys.println("startFITrec"); mSession.start();}
 	}
 	
 	function discardFITrec() {
-		if (mSession != null) {mSession.discard();}
+		if (mSession != null) {Sys.println("discardFITrec"); mSession.discard();}
 	}
 	
 	function saveFITrec() {
 		if (mSession == null) { return;}
+		Sys.println("saveFITrec");
 		
 		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
 		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
@@ -188,7 +190,7 @@ class HRVFitContributor {
 		mSession.save();		
 	}
 	
-	function closeFITrec () {mSession = null;}
+	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
     
 	// save data in FIT
     function compute() {
