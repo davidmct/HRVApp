@@ -63,7 +63,7 @@ class TestController {
 	var mSensorReady;
 	
 	var utcStart;
-	var utcStop;	
+	//var utcStop;	
 	var utcNow; 
 	var startMoment;
 	var mManualTestStopTime;
@@ -80,7 +80,7 @@ class TestController {
 		startMoment = 0;
     	timerTime = 0;
     	utcStart = 0;
-		utcStop = 0;
+		//utcStop = 0;
 		utcNow = 0;		
 		startMoment = 0;
 		mManualTestStopTime = 0;
@@ -326,7 +326,7 @@ class TestController {
     function endTest() {
     	Sys.println("endTest()");
     	testTimer.stop();
-		utcStop = timeNow();
+		//utcStop = timeNow();
     }
     
     function alert(type)
@@ -340,8 +340,9 @@ class TestController {
     	// don't call this as useful to see old data before starting a new test
     	//$._mApp.mSensor.mHRData.initForTest();
     	testTimer.stop();	
-		utcStart = 0;
-		utcStop = 0;
+    	// reseting utcStart here overwrites when we about test but have enough samples
+		//utcStart = 0;
+		//utcStop = 0;
     }
     
     function discardTest() {

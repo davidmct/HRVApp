@@ -114,9 +114,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
 			} else {
-				Ui.popView(Ui.SLIDE_RIGHT);
-				// suspect onStop is called anyway
-				//$._mApp.onStop(null);
+				// in TEST_VIEW. If we are exiting a test then go back to TEST VIEW
+				if ($._mApp.mTestControl.mTestState >= TS_TESTING) {
+					Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+					return true;
+				} else {
+					// we are not testing so must be real exit of app
+					Ui.popView(Ui.SLIDE_RIGHT);
+				}
 			}			
 		}
 		else {
