@@ -362,7 +362,7 @@ class TestController {
 		// 29 days ago...
 		var epoch = testDay - (86400 * 29);
 		// (testDay modulo 30) * 5 ...
-		var index = ((testDay / 86400) % 30) * 5;
+		var index = ((testDay / 86400) % 30) * DATA_SET_SIZE;
 		
 		Sys.println("utcStart, testday, epoch, index = "+utcStart+","+testDay+","+epoch+","+index);
 
@@ -426,6 +426,8 @@ class TestController {
 		startMoment = Time.now();
 		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
+		
+		Sys.println("Test started at : "+utcStart);
     } 
     
     function timerEnded() {

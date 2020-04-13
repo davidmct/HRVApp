@@ -6,7 +6,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 
-// STORAGE came in with CIQ 2.4 - could cut donw code by removing all pre CIQ2.4 code
+// STORAGE came in with CIQ 2.4 - could cut down code by removing all pre CIQ2.4 code
 
 // Results memory locations. (X) <> (X + 29)
 const NUM_RESULT_ENTRIES = 30; // last 30 days
