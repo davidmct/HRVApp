@@ -135,9 +135,9 @@ class SampleProcessing {
 		mLnRMSSD = 0.0;	
 		mSDNN = 0.0;
 		mSDSD = 0.0; 
-		mNN50 = 0.0;
+		mNN50 = 0;
 		mpNN50 = 0.0; 
-		mNN20 = 0.0;
+		mNN20 = 0;
 		mpNN20 = 0.0;
 		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];

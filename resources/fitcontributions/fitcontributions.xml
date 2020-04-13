@@ -1,24 +1,58 @@
 <resources>
   <fitContributions>
-    <fitField id="0"
-      displayInChart="true"
-      displayInActivityLaps="false"
-      displayInActivitySummary="false"
-      sortOrder="0"
-      precision="0"
-      chartTitle="@Strings.lCurrentHeartRateChartTitle"
-      dataLabel="@Strings.lAuxHeartRate"
-      unitLabel="@Strings.lHeartRateUnits"
-      fillColor="#f25b0a" />
-    <fitField id="1"
-      displayInChart="true"
-      displayInActivityLaps="false"
-      displayInActivitySummary="false"
-      sortOrder="1"
-      precision="0"
-      chartTitle="@Strings.lDeltaHeartRateChartTitle"
-      dataLabel="@Strings.lDeltaHeartRate"
-      unitLabel="@Strings.lHeartRateUnits"
-      fillColor="#f65b3a" />
+    <fitField id="13" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="0" precision="0" chartTitle="@Strings.lAvgPulseChartTitle" 
+      dataLabel="@Strings.lHeartRate" unitLabel="@Strings.lHeartRateUnits"  fillColor="#f25b0a" />
+    <fitField id="14" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="1" precision="1" chartTitle="@Strings.lRMSSDChartTitle" 
+      dataLabel="@Strings.lRMSSD" unitLabel="@Strings.lMsUnits" fillColor="#f65b3a" />
+    <fitField id="15" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="2" precision="1" chartTitle="@Strings.lLnRMSSDChartTitle" 
+      dataLabel="@Strings.lLnRMSSD" unitLabel="@Strings.lMsUnits" fillColor="#f65b3a" />      
+    <fitField id="16" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="3" precision="1" chartTitle="@Strings.lSDNNChartTitle" 
+      dataLabel="@Strings.lSDNN" unitLabel="@Strings.lMsUnits" fillColor="#f65b3a" />      
+    <fitField id="17" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="4" precision="1" chartTitle="@Strings.lSDSDChartTitle" 
+      dataLabel="@Strings.lSDSD" unitLabel="@Strings.lMsUnits" fillColor="#f65b3a" />         
+    <fitField id="18" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="5" precision="0" chartTitle="@Strings.lNN50ChartTitle" 
+      dataLabel="@Strings.lNN50" unitLabel="@Strings.lNoUnits" fillColor="#f65b3a" />   
+    <fitField id="19" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="6" precision="1" chartTitle="@Strings.lpNN50ChartTitle" 
+      dataLabel="@Strings.lpNN50" unitLabel="@Strings.lPercentUnits" fillColor="#f65b3a" />   
+    <fitField id="20" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="7" precision="0" chartTitle="@Strings.lNN20ChartTitle" 
+      dataLabel="@Strings.lNN20" unitLabel="@Strings.lNoUnits" fillColor="#f65b3a" />   
+    <fitField id="21" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+      sortOrder="8" precision="1" chartTitle="@Strings.lpNN20ChartTitle" 
+      dataLabel="@Strings.lpNN20" unitLabel="@Strings.lPercentUnits" fillColor="#f65b3a" />       
+    <fitField id="0" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="9" precision="0" dataLabel="@Strings.lHeartRate" unitLabel="@Strings.lHeartRateUnits" />
+    <fitField id="1" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="10" precision="0" dataLabel="@Strings.lMinInterval" unitLabel="@Strings.lMsUnits" />      
+    <fitField id="2" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="11" precision="0" dataLabel="@Strings.lMaxInterval" unitLabel="@Strings.lMsUnits" />          
+    <fitField id="3" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="12" precision="1" dataLabel="@Strings.lRMSSD" unitLabel="@Strings.lMsUnits" />
+    <fitField id="4" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="13" precision="1" dataLabel="@Strings.lLnRMSSD" unitLabel="@Strings.lMsUnits" />      
+    <fitField id="5" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="14" precision="1" dataLabel="@Strings.lSDNN" unitLabel="@Strings.lMsUnits" />      
+    <fitField id="6" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="15" precision="1" dataLabel="@Strings.lSDSD" unitLabel="@Strings.lMsUnits"/>         
+    <fitField id="7" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="16" precision="0" dataLabel="@Strings.lNN50" unitLabel="@Strings.lNoUnits" />   
+    <fitField id="8" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="17" precision="1" dataLabel="@Strings.lpNN50" unitLabel="@Strings.lPercentUnits" />   
+    <fitField id="9" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="18" precision="0" dataLabel="@Strings.lNN20" unitLabel="@Strings.lNoUnits" />   
+    <fitField id="10" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="19" precision="1" dataLabel="@Strings.lpNN20" unitLabel="@Strings.lPercentUnits"  />        
+    <fitField id="11" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="20" precision="0" dataLabel="@Strings.lMinDiff" unitLabel="@Strings.lMsUnits" />  
+    <fitField id="12" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
+      sortOrder="21" precision="0" dataLabel="@Strings.lMaxDiff" unitLabel="@Strings.lMsUnits" />                         
   </fitContributions>
 </resources>
+
