@@ -88,9 +88,9 @@ class HRVFitContributor {
        	mSessionmLnRMSSD_Field = mSession.createField("LnRMSSD", LN_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmSDNN_Field = mSession.createField("SDNN", SDNN_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmSDSD_Field = mSession.createField("SDSD", SDSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" }); 
-       	mSessionmNN50_Field = mSession.createField("NN50", NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"" });
+       	mSessionmNN50_Field = mSession.createField("NN50", NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"none" });
        	mSessionmpNN50_Field = mSession.createField("pNN50", P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
-       	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"" });
+       	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"none" });
        	mSessionmpNN20_Field = mSession.createField("pNN20", P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
 
        	mRecordAvgPulse_Field = mSession.createField("AvgPulse", R_AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
@@ -98,9 +98,9 @@ class HRVFitContributor {
        	mRecordmLnRMSSD_Field = mSession.createField("LnRMSSD", R_LN_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
        	mRecordmSDNN_Field = mSession.createField("SDNN", R_SDNN_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
        	mRecordmSDSD_Field = mSession.createField("SDSD", R_SDSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" }); 
-       	mRecordmNN50_Field = mSession.createField("NN50", R_NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"" });
+       	mRecordmNN50_Field = mSession.createField("NN50", R_NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"none" });
        	mRecordmpNN50_Field = mSession.createField("pNN50", R_P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
-       	mRecordmNN20_Field = mSession.createField("NN20", R_NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"" });
+       	mRecordmNN20_Field = mSession.createField("NN20", R_NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"none" });
 		mRecordmpNN20_Field = mSession.createField("pNN20", R_P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
 		 
 		mSessionMinIntervalFound_Field.setData(0);
@@ -172,20 +172,22 @@ class HRVFitContributor {
 		if (mSession == null) { return;}
 		Sys.println("saveFITrec");
 		
-		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
-		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
-		mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
-		mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
+		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound.toNumber());
+		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound.toNumber());
+		mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound.toNumber());
+		mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound.toNumber());
 		
-		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
+		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse.toNumber());
 		mSessionmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
 		mSessionmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
 		mSessionmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
 		mSessionmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
-		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50);
+		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50.toNumber());
 		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
-		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20);
+		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20.toNumber());
 		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);			
+
+		Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);
 		
 		mSession.save();		
 	}
@@ -197,18 +199,20 @@ class HRVFitContributor {
 		if (mSession == null ) {return;}
 		// update records every call
 		
-		Sys.println("Updating FIT records");
+		//Sys.println("Updating FIT records");
 				
 		mRecordAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
 		mRecordmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
 		mRecordmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
 		mRecordmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
 		mRecordmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
+		
+		//Sys.println("FIT record: "+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);
+
 		mRecordmNN50_Field.setData($._mApp.mSampleProc.mNN50);
 		mRecordmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
 		mRecordmNN20_Field.setData($._mApp.mSampleProc.mNN20);
-		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);		
-				
+		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);				
     }
 
     function setTimerRunning() {
