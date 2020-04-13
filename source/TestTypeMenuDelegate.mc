@@ -45,6 +45,16 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);  
             $._mApp.mSensor.fSwitchSensor( oldSensor);  
         }
+        else if( mId == :Write)  {
+            $._mApp.mFitWriteEnabled = true;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:NoWrite)).setSelected(false);  
+        }
+        else if( mId == :NoWrite)  {
+            $._mApp.mFitWriteEnabled = false;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Write)).setSelected(false);  
+        }
         
         // this should turn item blue...
         Sys.println("calling request update in TestTypeMenuDelegate");       

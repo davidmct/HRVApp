@@ -96,6 +96,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         // add items
         menu.addItem(new Ui.MenuItem("Test type", null, "test", null));
         menu.addItem(new Ui.MenuItem("Source", null, "source", null));  
+        menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
         menu.addItem(new Ui.MenuItem("Load RR", null, "load", null));        
         menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
         menu.addItem(new Ui.MenuItem("About", null, "about", null));

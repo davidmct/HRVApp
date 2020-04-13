@@ -40,6 +40,20 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         }
+        else if( id.equals("fitOutput")) {
+			// want to set FIT file creation
+  			var mFitWrite = $._mApp.mFitWriteEnabled;		
+		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
+		    	{
+		        :focusItemHeight=>45,
+		        :foreground=>new Rez.Drawables.MenuForeground_id(),
+		        :title=>new DrawableMenuTitle("Fit write"),
+		        :footer=>new DrawableMenuFooter()
+		    	});
+		    customMenu.addItem(new CustomItem(:Write, "Write", mFitWrite == true) );
+		    customMenu.addItem(new CustomItem(:NoWrite, "No Write", mFitWrite == false) );				
+     		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
+        }       
         else if ( id.equals("load") ) {
         	// you can't do this whilst testing! Otherwise screws data
         	if ( $._mApp.mTestControl.mTestState >= TS_TESTING) {
@@ -63,7 +77,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
 	        menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
 	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
-	        menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
+	        //menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
 	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
 	        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));
 	        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));
