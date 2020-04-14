@@ -165,12 +165,15 @@ class HRVFitContributor {
 	}
 	
 	function discardFITrec() {
-		if (mSession != null) {Sys.println("discardFITrec"); mSession.discard();}
+		if (mSession != null) {Sys.println("discardFITrec"); mSession.stop(); mSession.discard();}
 	}
 	
 	function saveFITrec() {
 		if (mSession == null) { return;}
 		Sys.println("saveFITrec");
+		
+		// need stop before writing summary fields
+		mSession.stop();
 		
 		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound.toNumber());
 		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound.toNumber());
