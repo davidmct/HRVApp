@@ -60,11 +60,11 @@ class PoincareView extends Ui.View {
 	
 	function onLayout(dc) {
 		mPoincareLayout = Rez.Layouts.PoincareViewLayout(dc);
-		Sys.println("PoincareView: onLayout() called ");
+		//Sys.println("PoincareView: onLayout() called ");
 		if ( mPoincareLayout != null ) {
 			setLayout(mPoincareLayout);
 		} else {
-			Sys.println("layout null");
+			Sys.println("Poincare layout null");
 		}
 		
 		mShowCount = 0;
@@ -148,7 +148,7 @@ class PoincareView extends Ui.View {
 		var max = $._mApp.mSampleProc.maxIntervalFound;
 		var min = $._mApp.mSampleProc.minIntervalFound;
 		
-		Sys.println("Poincare: max, min "+max+" , "+min);
+		//Sys.println("Poincare: max, min "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
@@ -185,18 +185,6 @@ class PoincareView extends Ui.View {
 		updateLayoutField("MidValX", format(" $1$ ",[mid.format("%d")]), mLabelColour);
 		updateLayoutField("LowerValX", format(" $1$ ",[floor.format("%d")]), mLabelColour);			
 			
-		//var num = ceil - ((i * gap) / 2.0);
-		//if(num != num.toNumber()) {
-			// may need to stagger on smaller screens
-			//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%0.1f")]), just);
-		//	dc.drawText(textX, y, font, format(" $1$ ",[num.format("%0.1f")]), just);				
-		//	}
-		//	else {
-		//		//dc.drawText(textX + 35, y, font, format(" $1$ ",[num.format("%d")]), just);
-		//		dc.drawText(textX, y, font, format(" $1$ ",[num.format("%d")]), just);
-		//	}
-		//}
-
 		// Draw the data
 		var drawDots = 0;
 		
@@ -264,6 +252,7 @@ class PoincareView extends Ui.View {
     }
 }
 
+// old code for asymmetric scales
 
 		//var mBufferptr = 0; // does setting up a variable and equal array copy whole array???
 		

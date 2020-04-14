@@ -16,7 +16,7 @@ class SummaryView extends Ui.View {
 		if ( mSummaryLayout != null ) {
 			setLayout (mSummaryLayout);
 		} else {
-			Sys.println("layout null");
+			Sys.println("Summary View layout null");
 		}
 	}
 		
@@ -90,9 +90,9 @@ class SummaryView extends Ui.View {
 		updateLayoutField( "SDNN_Value", str, mValueColour);
 		
 		updateLayoutField( "NN50_Value", $._mApp.mSampleProc.mNN50.format("%d"), mValueColour);		
-		updateLayoutField( "pNN50_Value", $._mApp.mSampleProc.mpNN50.format("%d"), mValueColour);
+		updateLayoutField( "pNN50_Value", $._mApp.mSampleProc.mpNN50.format("%.0f"), mValueColour);
 		updateLayoutField( "NN20_Value", $._mApp.mSampleProc.mNN20.format("%d"), mValueColour);		
-		updateLayoutField( "pNN20_Value", $._mApp.mSampleProc.mpNN20.format("%d"), mValueColour);		
+		updateLayoutField( "pNN20_Value", $._mApp.mSampleProc.mpNN20.format("%.0f"), mValueColour);		
 			
    		View.onUpdate(dc);
    		//return true;

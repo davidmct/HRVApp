@@ -137,11 +137,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function setSave(value) {
 		//Sys.println("setSave() called with "+value);
 		if (value == 1) { 
-			Sys.println("saveTest() called");
+			//Sys.println("saveTest() called");
             $._mApp.mTestControl.saveTest();
         }
         else {
-        	Sys.println("discardTest() called");
+        	//Sys.println("discardTest() called");
         	$._mApp.mTestControl.discardTest();
         }		
     }

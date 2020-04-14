@@ -32,11 +32,11 @@ class HistoryView extends Ui.View {
 	
 	function onLayout(dc) {
 		mHistoryLayout = Rez.Layouts.HistoryViewLayout(dc);
-		Sys.println("HistoryView: onLayout() called ");
+		//Sys.println("HistoryView: onLayout() called ");
 		if ( mHistoryLayout != null ) {
 			setLayout(mHistoryLayout);
 		} else {
-			Sys.println("layout null");
+			Sys.println("History layout null");
 		}
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWith = a.toNumber();
@@ -100,16 +100,15 @@ class HistoryView extends Ui.View {
 		//	$._mApp.results[i+3] = 60 + i % 10;
 		//}
 		
-		// TEST CODE DUMP RESULTS AS getting wierd type
-		if (mDebuggingResults) {
-			var dump = "";
-			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-				dump += $._mApp.results[i].toString() + ",";
-			}
-			Sys.println("History view DUMP of results : "+dump);
-		}
+		// TEST CODE DUMP RESULTS AS getting weird type
+		//if (mDebuggingResults) {
+		//	var dump = "";
+		//	for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
+		//		dump += $._mApp.results[i].toString() + ",";
+		//	}
+		//	Sys.println("History view DUMP of results : "+dump);
+		//}
 		
-
 		// Find result limits
 		// change this to step i to each time stamp then look at next three samples
 		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {

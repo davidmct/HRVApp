@@ -57,7 +57,7 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
         }
         
         // this should turn item blue...
-        Sys.println("calling request update in TestTypeMenuDelegate");       
+        //Sys.println("calling request update in TestTypeMenuDelegate");       
         requestUpdate();
     }
     

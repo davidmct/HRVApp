@@ -24,7 +24,7 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
             	var mColName = mKeys[i].toString();
             	var mColValue = $.mColourNumbersString.get(mColName);
             	if (mColValue != TRANSPARENT) {
-            		Sys.println("Label menu item colour: " + mColName);
+            		//Sys.println("Label menu item colour: " + mColName);
 	        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
 	        	}
         	}
@@ -38,7 +38,7 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
             	var mColName = mKeys[i].toString();
             	var mColValue = $.mColourNumbersString.get(mColName);
             	if (mColValue != TRANSPARENT) {
-            	    Sys.println("Label menu item colour: " + mColName);
+            	    //Sys.println("Label menu item colour: " + mColName);
 	        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
 	        	}
         	}

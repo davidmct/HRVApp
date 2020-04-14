@@ -12,7 +12,7 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
     
      	if( id.equals("duration")) {    
      		// Picker set to initial value and max
-     		Sys.println("TimerMenuDelegate: timerTimeSet value : " + $._mApp.timerTimeSet);
+     		//Sys.println("TimerMenuDelegate: timerTimeSet value : " + $._mApp.timerTimeSet);
      		Ui.pushView(new NumberPicker($._mApp.timerTimeSet, 5959, 1), new SecondsPickerDelegate(self.method(:setTimerTime)), Ui.SLIDE_IMMEDIATE);
        	}
     }

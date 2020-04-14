@@ -168,8 +168,8 @@ class SampleProcessing {
 			
 			if (livePulse == 0) {
 				// could happen on first loop - avoids divide by 0
-				// If we still have an intervale could create BPM from that...
-				Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
+				// If we still have an interval could create BPM from that...
+				//Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
 				return;
 			}
 			
@@ -312,14 +312,13 @@ class SampleProcessing {
 		if (devMs.abs() > 20 ) { mNN20 += 1;}
 		
 		// percentage scaled to 100 
-		var dfp = dataCount.toFloat();
-		
+		var dfp = dataCount.toFloat();		
 		// fake data
 		//if (dataCount > 10) {mNN50 = 8;}
 		//if (dataCount > 10) {mNN20 = 2;}		
 		
-		mpNN50 = (mNN50.toFloat() / dfp)*100.0; 
-		mpNN20 = (mNN20.toFloat() / dfp)*100.0; 	
+		mpNN50 = (mNN50.toFloat() * 100.0) / dfp; 
+		mpNN20 = (mNN20.toFloat() * 100.0) / dfp; 	
 		
 		//Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
 	}

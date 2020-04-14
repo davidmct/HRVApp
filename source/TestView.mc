@@ -51,11 +51,11 @@ class TestView extends Ui.View {
     
     function onLayout(dc) {
 		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
-		if (mDebugging == true) {Sys.println("TestView: onLayout() called ");}
+		//if (mDebugging == true) {Sys.println("TestView: onLayout() called ");}
 		if ( mTestViewLayout != null ) {
 			setLayout (mTestViewLayout);
 		} else {
-			Sys.println("layout null");
+			Sys.println("Test View layout null");
 		}
 	
 		mLabelColour = mapColour( $._mApp.lblColSet);
@@ -92,7 +92,7 @@ class TestView extends Ui.View {
     function onShow() {
     	// have colours changed?
     	if (($._mApp.lblColSet != oldLblCol) || ($._mApp.txtColSet != oldValCol)) {
-    		Sys.println("Updating colours in onShow() TestView()");
+    		//Sys.println("Updating colours in onShow() TestView()");
     		oldLblCol = $._mApp.lblColSet;
     		oldValCol = $._mApp.txtColSet;    	
 	    	// update colours if they have changed
@@ -165,7 +165,7 @@ class TestView extends Ui.View {
    		
    		View.onUpdate(dc);
    		
-   		if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
+   		//if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
    		//return true;		
     }
 

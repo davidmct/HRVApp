@@ -216,7 +216,7 @@ class AntHandler extends Ant.GenericChannel {
 			//Sys.println("transmissionType= " + msg.transmissionType);
 			//Sys.println("getPayload = " + msg.getPayload());
 			//Sys.println("messageId = " + msg.messageId);	
-			Sys.println("A - "+mMessageCount);
+			//Sys.println("A - "+mMessageCount);
 			mMessageCount++;
 		}
 		
@@ -232,11 +232,11 @@ class AntHandler extends Ant.GenericChannel {
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 	
-			if (mDebuggingANT == true) {
-				Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
-				Sys.println("beatEvent is :" + beatEvent);
-				Sys.println("beatCount is :" + beatCount);
-			}
+			//if (mDebuggingANT == true) {
+			//	Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
+			//	Sys.println("beatEvent is :" + beatEvent);
+			//	Sys.println("beatCount is :" + beatCount);
+			//}
 						
 			newHRSampleProcessing(beatCount, beatEvent);
         }
@@ -290,7 +290,7 @@ class AntHandler extends Ant.GenericChannel {
     }
     
 	function newHRSampleProcessing(beatCount, beatEvent) {
-		if (mDebuggingANT) {Sys.println("HR-SP");}
+		//if (mDebuggingANT) {Sys.println("HR-SP");}
 	
 		// check we have a pulse and another beat recorded 
 		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {

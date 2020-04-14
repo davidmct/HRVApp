@@ -22,7 +22,7 @@ class CurrentValueView extends Ui.View {
 		if ( mCurrentLayout != null ) {
 			setLayout (mCurrentLayout);
 		} else {
-			Sys.println("layout null");
+			Sys.println("Current View layout null");
 		}
 	}
 		

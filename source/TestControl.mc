@@ -91,7 +91,7 @@ class TestController {
 	
 	// function to call to update Summary view
 	function setObserver(func) {
-		Sys.println("Testcontrol: setObserver() called with "+func);
+		//Sys.println("Testcontrol: setObserver() called with "+func);
 		mFunc = func;
 	}
 	
@@ -106,7 +106,7 @@ class TestController {
 		mHRmsgTxt = params[0];
 		mSensorReady = params[1];	
 		stateInit = params[2];
-		Sys.println("TestControl: onNotify : "+params);
+		//Sys.println("TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
 			Sys.println("TestControl: statemachine forced INIT");

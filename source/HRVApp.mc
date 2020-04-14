@@ -62,7 +62,7 @@ var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
-var mDebuggingResults = true;
+var mDebuggingResults = false;
 
 // access App variables and classes
 var _mApp;
@@ -297,7 +297,7 @@ class HRVApp extends App.AppBase {
     	lastViewNum = viewNum;
 		viewNum = newViewNum;
 		
-		Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
+		//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
 		if(SUMMARY_VIEW == viewNum) {
 			return new SummaryView();
@@ -318,7 +318,7 @@ class HRVApp extends App.AppBase {
 	
 	function DumpIntervals() {
 		// to reduce write time group up the data
-		Sys.println("Dummping intervals");
+		Sys.println("Dumping intervals");
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
