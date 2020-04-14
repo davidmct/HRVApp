@@ -153,7 +153,8 @@ class HRVFitContributor {
 					} catch(e) { System.println(e.getErrorMessage()); }
 				}
 			} // has
-			if (mSession != null) { createFitFields();}
+			// may need to create fields after starting session!!
+			//if (mSession != null) { createFitFields();}
 			Sys.println("createSession successful");
 			return mSession;
 		} //write enabled
@@ -161,7 +162,7 @@ class HRVFitContributor {
 	}
 	
 	function startFITrec() {
-		if (mSession != null) {Sys.println("startFITrec"); mSession.start();}
+		if (mSession != null) {Sys.println("startFITrec"); mSession.start(); createFitFields();}
 	}
 	
 	function discardFITrec() {
@@ -175,33 +176,32 @@ class HRVFitContributor {
 		// need stop before writing summary fields
 		mSession.stop();
 		
-		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound.toNumber());
-		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound.toNumber());
-		mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound.toNumber());
-		mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound.toNumber());
-		
-		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse.toNumber());
-		mSessionmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
-		mSessionmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
-		mSessionmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
-		mSessionmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
-		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50.toNumber());
-		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
-		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20.toNumber());
-		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);			
-
-		//Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);
+		updateSessionStats();
 		
 		mSession.save();		
 	}
 	
-	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
-    
-	// save data in FIT
-    function compute() {
-		if (mSession == null ) {return;}
-		// update records every call
+	function updateSessionStats() {
+	
+		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
+		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
+		mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
+		mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
 		
+		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
+		mSessionmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
+		mSessionmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
+		mSessionmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
+		mSessionmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
+		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50);
+		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
+		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20);
+		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);			
+
+		//Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);		
+	}
+	
+	function updateRecordStats() {
 		//Sys.println("Updating FIT records");
 				
 		mRecordAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
@@ -215,7 +215,19 @@ class HRVFitContributor {
 		mRecordmNN50_Field.setData($._mApp.mSampleProc.mNN50);
 		mRecordmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
 		mRecordmNN20_Field.setData($._mApp.mSampleProc.mNN20);
-		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);				
+		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
+		
+	}
+	
+	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
+    
+	// save data in FIT
+    function compute() {
+		if ((mSession == null) || ($._mApp.mTestControl.mTestState != TS_TESTING) ) {return;}
+		// update records every call if testing
+		updateRecordStats();
+		// programmers guide says to update these as well!
+		updateSessionStats();			
     }
 
     function setTimerRunning() {
