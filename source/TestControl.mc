@@ -348,7 +348,7 @@ class TestController {
     function discardTest() {
     	// called from HRVBehaviourDelegate
     	resetTest(); // may not be necessary as handled by state machine
-    	$._mApp.mFitControl.discardTest();
+    	$._mApp.mFitControl.discardFITrec();
     	$._mApp.mFitControl.closeFITrec();
     }
     

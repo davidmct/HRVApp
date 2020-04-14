@@ -304,14 +304,22 @@ class SampleProcessing {
 		mSDNN = calcSD(mSDNN_param);
 		mSDSD_param[0] = devMs;
 		mSDSD = calcSD(mSDSD_param); 
+		
 		// difference more than 50ms
 		// some sources say over 2 min periods, others over an hour
 		if (devMs.abs() > 50 ) { mNN50 += 1;}
-		// percentage scaled to 100 
-		mpNN50 = (mNN50 / dataCount)*100; 
 		// difference more than 20ms 
 		if (devMs.abs() > 20 ) { mNN20 += 1;}
-		mpNN20 = (mNN20 / dataCount)*100; 	
+		
+		// percentage scaled to 100 
+		var dfp = dataCount.toFloat();
+		
+		// fake data
+		//if (dataCount > 10) {mNN50 = 8;}
+		//if (dataCount > 10) {mNN20 = 2;}		
+		
+		mpNN50 = (mNN50.toFloat() / dfp)*100.0; 
+		mpNN20 = (mNN20.toFloat() / dfp)*100.0; 	
 		
 		//Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
 	}
