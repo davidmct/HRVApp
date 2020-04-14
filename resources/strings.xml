@@ -30,7 +30,7 @@
 	<string id="lPercentUnits">%</string>
 	<string id="lMsUnits">ms</string>  
 	<string id="lHeartRateUnits">bpm</string> 
-	<string id="lNoUnits">none</string>  		
+	<string id="lNoUnits">occurences</string>  		
 	<string id="pSensorSelectTitle">Use unregistered HRM?</string> 
 	<string id="pSensorSelectPrompt">True for unregistered/disabled strap</string>
 	<string id="soundSetTitle">Sound?</string>

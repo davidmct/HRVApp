@@ -78,19 +78,20 @@ class HRVFitContributor {
     
     function createFitFields() {
  
- 	   	mSessionMinIntervalFound_Field = mSession.createField("MinInterval", MIN_INTERVAL_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionMaxIntervalFound_Field = mSession.createField("MaxInterval", MAX_INTERVAL_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionMinDiffFound_Field = mSession.createField("MinDiffII", MIN_DIFF_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionMaxDiffFound_Field = mSession.createField("MaxDiffII", MAX_DIFF_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+ 		// Monkey graph can't seem to display UINT16 in summary charts!!!
+ 	   	mSessionMinIntervalFound_Field = mSession.createField("MinInterval", MIN_INTERVAL_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSessionMaxIntervalFound_Field = mSession.createField("MaxInterval", MAX_INTERVAL_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSessionMinDiffFound_Field = mSession.createField("MinDiffII", MIN_DIFF_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSessionMaxDiffFound_Field = mSession.createField("MaxDiffII", MAX_DIFF_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
 
-       	mSessionAvgPulse_Field = mSession.createField("AvgPulse", AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });
+       	mSessionAvgPulse_Field = mSession.createField("AvgPulse", AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });
        	mSessionmRMSSD_Field = mSession.createField("RMSSD", RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmLnRMSSD_Field = mSession.createField("LnRMSSD", LN_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmSDNN_Field = mSession.createField("SDNN", SDNN_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmSDSD_Field = mSession.createField("SDSD", SDSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" }); 
-       	mSessionmNN50_Field = mSession.createField("NN50", NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"times" });
+       	mSessionmNN50_Field = mSession.createField("NN50", NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"occurences" });
        	mSessionmpNN50_Field = mSession.createField("pNN50", P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
-       	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"none" });
+       	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"occurences" });
        	mSessionmpNN20_Field = mSession.createField("pNN20", P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
 
        	mRecordAvgPulse_Field = mSession.createField("AvgPulse", R_AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
@@ -98,9 +99,9 @@ class HRVFitContributor {
        	mRecordmLnRMSSD_Field = mSession.createField("LnRMSSD", R_LN_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
        	mRecordmSDNN_Field = mSession.createField("SDNN", R_SDNN_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
        	mRecordmSDSD_Field = mSession.createField("SDSD", R_SDSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" }); 
-       	mRecordmNN50_Field = mSession.createField("NN50", R_NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"times" });
+       	mRecordmNN50_Field = mSession.createField("NN50", R_NN50_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"occurences" });
        	mRecordmpNN50_Field = mSession.createField("pNN50", R_P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
-       	mRecordmNN20_Field = mSession.createField("NN20", R_NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"none" });
+       	mRecordmNN20_Field = mSession.createField("NN20", R_NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"occurences" });
 		mRecordmpNN20_Field = mSession.createField("pNN20", R_P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
 		 
 		mSessionMinIntervalFound_Field.setData(0);
@@ -227,7 +228,7 @@ class HRVFitContributor {
 		// update records every call if testing
 		updateRecordStats();
 		// programmers guide says to update these as well!
-		updateSessionStats();			
+		//updateSessionStats();			
     }
 
     function setTimerRunning() {
