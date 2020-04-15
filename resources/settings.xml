@@ -1,4 +1,10 @@
 <settings>
+	<setting propertyKey="@Properties.pDeviceID" title="@Strings.pDeviceIDTitle" prompt="@Strings.pDeviceIDPrompt">
+		<settingConfig type="alphaNumeric"  />
+	</setting>	
+		<setting propertyKey="@Properties.pAuthID" title="@Strings.pAuthIDTitle" prompt="@Strings.pAuthIDPrompt">
+		<settingConfig type="alphaNumeric"  />
+	</setting>		
 	<setting propertyKey="@Properties.pAuxHRAntID" title="@Strings.pAuxHRAntIDTitle" prompt="@Strings.pAuxHRAntIDPrompt">
 		<settingConfig type="numeric"  />
 	</setting>	
@@ -19,8 +25,7 @@
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.ManualTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
-	</setting>		
-		
+	</setting>				
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>

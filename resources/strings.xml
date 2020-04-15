@@ -1,6 +1,10 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
 	<string id="AppVersion">0.3.5</string>
+	<string id="pDeviceIDTitle">Device ID</string> 
+	<string id="pDeviceIDPrompt">Set by APP</string>
+	<string id="pAuthIDTitle">Licence String</string> 
+	<string id="pAuthIDPrompt">Enter string sent to you</string>	
 	<string id="pAuxHRAntIDTitle">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDPrompt">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledTitle">FIT File Write</string> 

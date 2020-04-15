@@ -97,12 +97,13 @@ class HRVApp extends App.AppBase {
 	// true if external unknown strap ie not enabled in watch
 	var mSensorTypeExt;
 	
-	// Trial mode variables - no idea if this works!!
+	// Trial mode variables!!
 	hidden var mTrialMode;
 	hidden var mTrialStarted;
 	hidden var mAuthorised;
 	hidden var mTrailPeriod;
 	hidden var mTrialStartDate; 
+	hidden var mAuthID;
 
 	// Settings variables
     var timestampSet;
@@ -174,6 +175,10 @@ class HRVApp extends App.AppBase {
 			mAuthorised = $._mApp.Properties.getValue("pAuthorised");
 			mTrailPeriod = $._mApp.Properties.getValue("pTrailPeriod");
 			mTrialStartDate = $._mApp.Properties.getValue("pTrialStartDate");
+			
+			$._mApp.Properties.setValue("pDeviceID", mDeviceID);
+			// code to authenticate device with given DeviceID
+			mAuthID = $._mApp.Properties.getValue("pAuthID");
 				
 		} else {
 			mAntID = $._mApp.getProperty("pAuxHRAntID");
@@ -187,8 +192,16 @@ class HRVApp extends App.AppBase {
 			mAuthorised = $._mApp.getProperty("pAuthorised");
 			mTrailPeriod = $._mApp.getProperty("pTrailPeriod");
 			mTrialStartDate = $._mApp.getProperty("pTrialStartDate");
+			
+			$._mApp.Properties.setProperty("pDeviceID", mDeviceID);
+			mAuthID = $._mApp.getProperty("pAuthID");
 		}
 		
+		Sys.println("HRVApp: ANT ID set to : " + mAntID);
+		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
+		Sys.println("Is app in trial mode? "+AppBase.isTrial());
+		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
+				
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
 						
@@ -209,12 +222,7 @@ class HRVApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-    		
-		Sys.println("HRVApp: ANT ID set to : " + mAntID);
-		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
-		Sys.println("Is app in trial mode? "+AppBase.isTrial());
-		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
-    
+    		    
     	if (mDebugging) { Sys.println("HRVApp: getInitialView() called"); }   	
     	viewNum = 0;
 		lastViewNum = 0;
