@@ -17,12 +17,9 @@ using Toybox.Sensor;
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //8. sample processing check skipped or double beats
-//19. Add load of stats to mainmenudelegate with poincare
 //9. how to make trial version and possible payment
 //10. Test sensor switching more
-//12. Add fit session and record saving
 //13. When using optical should call it PRV not HRV
-// 20. Add min/max differences in Current View
 //17. Check download and setting online properties works
 //21. Change nore layouts to % and see if works on 260/240 displays
 //18. Poincare view sometimes has y=0 and hence rectangle is drawn below axis
@@ -32,31 +29,8 @@ using Toybox.Sensor;
 // - any more local vars rather than global
 // - reduce dictionaries 
 
-// add authentication stuff for trial
-//	<property id="pTrailMode" type="boolean">false</property>
-//	<property id="pTrialStarted" type="boolean">false</property>
-//	<!-- set to true if authenticated to use -->
-//	<property id="pAuthorised" type="boolean">false</property>
-//	<!-- number of days for trial -->
-//	<property id="pTrailPeriod" type="number">30</property>
-//		<!-- date trial started -->
-//	<property id="pTrialStartDate" type="number">0</property>
-// AppBase.isTrial()
-// getTrailDaysRemaining() needs overriding. days remaining or null if trials not supported or 0 to disable app
-// can override AppBase.allowTrialMessages() to return false if you don't want user reminders
-// end point (of URL) requirements seems not to be published!!
-//var mySettings = System.getDeviceSettings();
-//var clockMode = mySettings.is24Hour;
-//var phone = mySettings.phoneConnected;
-//var version = mySettings.monkeyVersion;
-//var versionString = Lang.format("$1$.$2$.$3$", version);
-//A unique alphanumeric device identifier.
-//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
-//Any use of this value for tracking user information must be in compliance with international privacy law.
-//var id = mySettings.uniqueIdentifier;
-//if (id != null) {
-//    System.println(id); //e.g. ac915d426451c88e8ea691fa412f9af9c21b4d12
-//}
+// Trial end point (of URL) requirements seems not to be published!!
+
 
 var mDebugging = false;
 var mDebuggingANT = false;
@@ -122,6 +96,13 @@ class HRVApp extends App.AppBase {
 	var mAntID;
 	// true if external unknown strap ie not enabled in watch
 	var mSensorTypeExt;
+	
+	// Trial mode variables - no idea if this works!!
+	hidden var mTrialMode;
+	hidden var mTrialStarted;
+	hidden var mAuthorised;
+	hidden var mTrailPeriod;
+	hidden var mTrialStartDate; 
 
 	// Settings variables
     var timestampSet;
@@ -142,6 +123,7 @@ class HRVApp extends App.AppBase {
 	var avgPulseColSet;
 	
 	var mMenuTitleSize;
+	var mDeviceID;
 
 	// Results array variable
 	var results;
@@ -173,32 +155,66 @@ class HRVApp extends App.AppBase {
         mTestControl = new TestController();
         mSampleProc = new SampleProcessing();
         mStorage.readProperties();  
-        
-        //mFitContributor = new AuxHRFitContributor(self);
+               
+		//A unique alphanumeric device identifier.
+		//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
+		//Any use of this value for tracking user information must be in compliance with international privacy law.
+		var mySettings = Sys.getDeviceSettings();
+        mDeviceID = mySettings.uniqueIdentifier;
              
 		if (Toybox.Application has :Storage) {
 			mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
 			mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
-			mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");		
+			mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
+			
+			// load trial variables
+			mTrialMode = $._mApp.Properties.getValue("pTrialMode");
+			mTrialStarted = $._mApp.Properties.getValue("pTrialStarted");
+			mAuthorised = $._mApp.Properties.getValue("pAuthorised");
+			mTrailPeriod = $._mApp.Properties.getValue("pTrailPeriod");
+			mTrialStartDate = $._mApp.Properties.getValue("pTrialStartDate");
+				
 		} else {
 			mAntID = $._mApp.getProperty("pAuxHRAntID");
 			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
 			mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
+			
+			// load trial variables
+			mTrialMode = $._mApp.getProperty("pTrialMode");
+			mTrialStarted = $._mApp.getProperty("pTrialStarted");
+			mAuthorised = $._mApp.getProperty("pAuthorised");
+			mTrailPeriod = $._mApp.getProperty("pTrailPeriod");
+			mTrialStartDate = $._mApp.getProperty("pTrialStartDate");
 		}
-		
-		Sys.println("HRVApp: ANT ID set to : " + mAntID);
-		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
 						
     	AppBase.initialize();
     }
+    
+    function getTrialDaysRemaining() {
+    	// days remaining or null if trials not supported or 0 to disable app
+    	Sys.println("getTrailDaysRemaining() called");
+    	return 30;
+    }
+ 
+ 	function allowTrialMessage() {
+ 		// return false if you want no reminders
+ 		Sys.println("allowTrialMessage() called");
+ 		return true;
+ 	}
 
     //! Return the initial view of your application here
     function getInitialView() {
+    		
+		Sys.println("HRVApp: ANT ID set to : " + mAntID);
+		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
+		Sys.println("Is app in trial mode? "+AppBase.isTrial());
+		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
+    
     	if (mDebugging) { Sys.println("HRVApp: getInitialView() called"); }   	
     	viewNum = 0;
 		lastViewNum = 0;
