@@ -18,7 +18,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
-		        :foreground=>new Rez.Drawables.MenuForeground_id(),
+		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
 		        :title=>new DrawableMenuTitle("Test"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
@@ -32,7 +32,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
-		        :foreground=>new Rez.Drawables.MenuForeground_id(),
+		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
 		        :title=>new DrawableMenuTitle("Source"),
 		        :footer=>new DrawableMenuFooter()
 		    	});
@@ -46,7 +46,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
-		        :foreground=>new Rez.Drawables.MenuForeground_id(),
+		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
 		        :title=>new DrawableMenuTitle("Fit write"),
 		        :footer=>new DrawableMenuFooter()
 		    	});

@@ -17,6 +17,7 @@ using Toybox.Sensor;
 //2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //8. sample processing check skipped or double beats
+//8b. Look at frequency domain processing
 //9. how to make trial version and possible payment
 //10. Test sensor switching more
 //13. When using optical should call it PRV not HRV
