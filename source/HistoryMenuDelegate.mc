@@ -3,7 +3,7 @@ using Toybox.System as Sys;
 using Toybox.Application as App;
 using Toybox.Graphics;
 
-class MainMenuDelegate extends Ui.Menu2InputDelegate {
+class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
 	
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -54,11 +54,11 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         } 
         else if( id.equals("historySelection")) {      
-            var checkMenu = new WatchUi.CheckboxMenu({:title=>"Checkboxes"});
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 1", "Left Check", "left", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 2", "Right Check", "right", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT}));
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 3", "Check", "default", true, null));
-          	Ui.pushView(checkMenu, new HistoryMenuDelegate(), WatchUi.SLIDE_UP );      
+            //var checkMenu = new WatchUi.CheckboxMenu({:title=>"Checkboxes"});
+            //checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 1", "Left Check", "left", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
+            //checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 2", "Right Check", "right", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT}));
+            //checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 3", "Check", "default", true, null));
+            //Ui.pushView(checkMenu, new Menu2SampleSubMenuDelegate(), WatchUi.SLIDE_UP );      
         }
         else if ( id.equals("load") ) {
         	// you can't do this whilst testing! Otherwise screws data

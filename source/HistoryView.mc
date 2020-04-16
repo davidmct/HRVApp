@@ -86,20 +86,6 @@ class HistoryView extends Ui.View {
 		updateLayoutField("LnRMSSDLbl", null,  mapColour($._mApp.LnRMSSDColSet));
 		updateLayoutField("avgPulseLbl", null,  mapColour($._mApp.avgPulseColSet));
 		
-		
-		//results[0] = utcStart;
-		//results[1] = mRMSSD;
-		//results[2] = mLnRMSSD;
-		//results[3] = avgPulse;
-		
-		// some dummay test data!
-		//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
-		//	$._mApp.results[i+0] = epoch +(86400 * i) + 10;	// add a day each time
-		//	$._mApp.results[i+1] = 30 + (i * 3) % 10;
-		//	$._mApp.results[i+2] = (LOG_SCALE * (Math.ln($._mApp.results[i+1])+0.5)).toNumber();
-		//	$._mApp.results[i+3] = 60 + i % 10;
-		//}
-		
 		// TEST CODE DUMP RESULTS AS getting weird type
 		//if (mDebuggingResults) {
 		//	var dump = "";
