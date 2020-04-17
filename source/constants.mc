@@ -58,6 +58,17 @@ var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRA
 	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
 	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
 
+// HISTORY VIEW SELECTOR
+
+// for menu on selecting history view items
+var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX, 
+						"minII" => MIN_II_INDEX, "maxII" => MIN_II_INDEX,
+						"minDiff" => MIN_DIFF_INDEX, "maxDiff" => MIN_DIFF_INDEX,
+						"rMSSD" => RMSSD_INDEX, "LnrMSSD" => LNRMSSD_INDEX, 
+						"SDNN" => SDNN_INDEX, "SDSD" => SDSD_INDEX, 
+						"NN50" => NN50_INDEX, "pNN50" => PNN50_INDEX, 
+						"NN20" => NN20_INDEX, "pNN20" => PNN20_INDEX, 						
+					};						
 
 // SAMPLE PROCESSING
 

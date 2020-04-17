@@ -3,19 +3,6 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
-var mHistorySelectFlags;
-
-// for menu on selecting history view items
-var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX, 
-						"minII" => MIN_II_INDEX, "maxII" => MIN_II_INDEX,
-						"minDiff" => MIN_DIFF_INDEX, "maxDiff" => MIN_DIFF_INDEX,
-						"rMSSD" => RMSSD_INDEX, "LnrMSSD" => LNRMSSD_INDEX, 
-						"SDNN" => SDNN_INDEX, "SDSD" => SDSD_INDEX, 
-						"NN50" => NN50_INDEX, "pNN50" => PNN50_INDEX, 
-						"NN20" => NN20_INDEX, "pNN20" => PNN20_INDEX, 						
-					};						
-
-
 // Show the previous test results over time
 class HistoryView extends Ui.View {
 	
@@ -32,6 +19,10 @@ class HistoryView extends Ui.View {
 	hidden var floor;
 	hidden var ceil;
 	hidden var scaleY;
+	
+	hidden var numResultsToDisplay = 0;
+	hidden var labelList = new [MAX_DISPLAY_VAR];
+	hidden var resultsIndex = new [MAX_DISPLAY_VAR];
 
 	function initialize() { View.initialize();}
 	
@@ -78,6 +69,34 @@ class HistoryView extends Ui.View {
 		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 
+	// return labels into dictionary of results offsets
+	function findResultLabels(keys) {		
+		// init array
+		for ( var i=0; i < labelList.size(); i++) { labelList[i] = null;}
+		
+		// scan through flags looking for true and then get label
+		// find first N out of set
+		var j = 0; // number found
+		for(var search = 0; search < $.mHistorySelect.size(); search++) {
+			var possible = keys[search].toString();
+			var bitPosition = $.mHistorySelect.get(possible);
+			
+			// now check if corresponding bit position-1 is set 
+			if ($._mApp.mHistorySelectFlags & (1 << (bitPosition-1))) {
+				// found set bit, capture index in to dictionary
+				labelList[j] = possible;
+				resultsIndex[j] = bitPosition;
+				numResultsToDisplay++;
+				j++;
+				if (j >= MAX_DISPLAY_VAR) {
+					// break loop
+					search = $.mHistorySelect.size();
+				}
+			} // end flag found
+		} // end search
+		return;
+	}
+
     //! Update the view
     function onUpdate(dc) {
 
@@ -87,6 +106,7 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+		numResultsToDisplay = 0;
 		
 		// draw the layout. remove if trying manual draw of layout elements
     	View.onUpdate(dc);
@@ -95,9 +115,27 @@ class HistoryView extends Ui.View {
 		var mValueColour = mapColour( $._mApp.txtColSet);
 
 		updateLayoutField("HistoryTitle", null, mLabelColour);
-		updateLayoutField("rMSSDLbl", null,  mapColour($._mApp.RMSSDColSet));
-		updateLayoutField("LnRMSSDLbl", null,  mapColour($._mApp.LnRMSSDColSet));
-		updateLayoutField("avgPulseLbl", null,  mapColour($._mApp.avgPulseColSet));
+		
+		if ($._mApp.mHistorySelectFlags == 0) {
+			// no data fields set to dsiplay so go home
+			return;
+		}
+		
+		// now find labels and index for data		
+		var mKeys = $.mHistorySelect.keys(); // keys to dictionary
+		numResultsToDisplay = 0;
+		
+		// index into dictionary of results offsets (need +1 to make results index)
+		findResultLabels(mKeys);
+		
+		// CHECK OUTCOME
+		Sys.println("HistoryView(): numResults, labelList, resultsIndex :"
+			+numResultsToDisplay+","+labelList+","+resultsIndex);
+            	
+        // need to fix up all these colours!! in layout etc
+		updateLayoutField("Labelx1", labelList[0],  mapColour($._mApp.RMSSDColSet));
+		updateLayoutField("Labelx2", labelList[1],  mapColour($._mApp.LnRMSSDColSet));
+		updateLayoutField("Labelx3", labelList[2],  mapColour($._mApp.avgPulseColSet));
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
 		//if (mDebuggingResults) {

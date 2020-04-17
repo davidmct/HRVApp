@@ -23,19 +23,19 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         	Sys.println("History menu delegate. selected "+id+" index "+index);
     		
     		// set bit for this value	
- 			$.mHistorySelectFlags |= (1 << (index-1));
+ 			$._mApp.mHistorySelectFlags |= (1 << (index-1));
         	// then check if limit reached and reset
         	if (checkToMany()) {
         		// need to set disabled and clear flag
         		//Sys.println("HistoryMenuDelegate: too many toggles selected");
         		item.setEnabled(false);
-        		$.mHistorySelectFlags &= ~(1 << (index-1));  
+        		$._mApp.mHistorySelectFlags &= ~(1 << (index-1));  
         		$._mApp.mTestControl.alert(TONE_ERROR);     	
         	} 
  		}
  		else {
  			// deselected case
- 			$.mHistorySelectFlags &= ~(1 << (index-1)); 
+ 			$._mApp.mHistorySelectFlags &= ~(1 << (index-1)); 
  		} // end deselected case
  		
  		//Sys.println("History menu delegate. mHistorySelectFlags = "+$.mHistorySelectFlags.format("%x"));
@@ -47,7 +47,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
     	var count = 0;
     	for (var i = 0; i < 14 ; i++) {
     		// if non-zero then set
-    		if ( $.mHistorySelectFlags & (1 << i) ) {  
+    		if ( $._mApp.mHistorySelectFlags & (1 << i) ) {  
     			count++; 
     			//Sys.println("count "+count);
     		}  	

@@ -54,7 +54,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         } 
         else if( id.equals("historySelection")) {      
-            var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("History")});
+            var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Select 3")});
             var mKeys = $.mHistorySelect.keys();
             var options = {:enabled=>"selected", :disabled=>"deselected"};
             var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};
@@ -67,7 +67,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
             	// can't control order unless use individual lines and no dictionary
             	// get value for current key
             	var index = $.mHistorySelect.get(mHistoryName);
-            	var selectState = ($.mHistorySelectFlags & (1 << (index-1))) ? true : false;
+            	var selectState = ($._mApp.mHistorySelectFlags & (1 << (index-1))) ? true : false;
             	//Sys.println("SelectState = "+selectState);
 	        	toggleMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, mHistoryName, selectState, align));	        	
         	}

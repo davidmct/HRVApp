@@ -93,6 +93,7 @@ class HRVApp extends App.AppBase {
 
 	// Results array variable
 	var results;
+	var mHistorySelectFlags;
 
 	// View trackers
 	var viewNum;
@@ -171,7 +172,11 @@ class HRVApp extends App.AppBase {
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
 		
 		// no history selected. binary flags as bits
-		mHistorySelectFlags = 0;
+		// set default selection
+		// Note array 0 entry is time stamp
+		mHistorySelectFlags = (1 << (AVG_PULSE_INDEX-1));
+		mHistorySelectFlags |= (1 << (RMSSD_INDEX-1));
+		mHistorySelectFlags |= (1 << (LNRMSSD_INDEX-1));		
 						
     	AppBase.initialize();
     }
