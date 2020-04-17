@@ -19,6 +19,8 @@ const PNN50_INDEX = 11;
 const NN20_INDEX = 12;
 const PNN20_INDEX = 13;
 
+const MAX_DISPLAY_VAR = 3;
+
 var mHistorySelectFlags;
 
 // for menu on selecting history view items

@@ -16,33 +16,45 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         // id is dictionary entry, value is results index
         var index = $.mHistorySelect.get(id);
         
-        // problem is that this is a toggle essentially so could select or deselect
-        
-        // on deselect then we clear flag 
-        // on select we need to do a count of the number selected
-        // .. using flag is latest
-        // .. using status of all items requires access to other menu items
-        
-        // assume code sets this when item clicked
+        // problem is that this is a toggle essentially so could select or deselect    
+        // assume code sets this as required when item clicked
         if (item.isEnabled()) {
         	// check not exceeded 3 values
-        	Sys.println("History menu delegate. selected "+$.mHistorySelect[id].toString());
-        	var checkToMany = false;
-        	
-        	if (checkToMany) {
+        	Sys.println("History menu delegate. selected "+id+" index "+index);
+    		
+    		// set bit for this value	
+ 			$.mHistorySelectFlags |= (1 << (index-1));
+        	// then check if limit reached and reset
+        	if (checkToMany()) {
         		// need to set disabled and clear flag
-        	
-        	} else {        	
-        		// set bit for this value		
- 				$.mHistorySelectFlags |= (1 << (index-1));
- 			}
+        		//Sys.println("HistoryMenuDelegate: too many toggles selected");
+        		item.setEnabled(false);
+        		$.mHistorySelectFlags &= ~(1 << (index-1));  
+        		$._mApp.mTestControl.alert(TONE_ERROR);     	
+        	} 
  		}
  		else {
- 			// deslected case
- 		
+ 			// deselected case
+ 			$.mHistorySelectFlags &= ~(1 << (index-1)); 
  		} // end deselected case
-
- 
+ 		
+ 		//Sys.println("History menu delegate. mHistorySelectFlags = "+$.mHistorySelectFlags.format("%x"));
+    }
+    
+    function checkToMany() {
+    	// count number of bits set
+    	// should be DATA_SET_SIZE
+    	var count = 0;
+    	for (var i = 0; i < 14 ; i++) {
+    		// if non-zero then set
+    		if ( $.mHistorySelectFlags & (1 << i) ) {  
+    			count++; 
+    			//Sys.println("count "+count);
+    		}  	
+    	}
+    	//Sys.println("History menu delegate. Selected so far :"+count);
+    	var exceeded = (count > MAX_DISPLAY_VAR) ? true : false;
+    	return exceeded;
     }
     
     function onBack() {
