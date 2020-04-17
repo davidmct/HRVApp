@@ -74,10 +74,6 @@ using Toybox.Lang as Lang;
 
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
-const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
-const MAX_TIME = 10; // minutes
-const LOG_SCALE = 50; // scales ln(RMSSD)
-
 class SampleProcessing {
 
 	// these need to be moved from ANThandler and references changed

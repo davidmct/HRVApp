@@ -22,36 +22,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 using Toybox.Attention;
-using Toybox.System as Sys;
-
-
-enum {
-	// Tones
-	TONE_KEY = 0,
-	TONE_START = 1,
-	TONE_STOP = 2,
-	TONE_RESET = 9,
-	TONE_FAILURE = 14,
-	TONE_SUCCESS = 15,
-	TONE_ERROR = 18,
-
-	//Test types
-	TYPE_MANUAL = 0,  //runs as long as useer wants up to max time
-	TYPE_TIMER = 1,   // to 5 mins and can be changed down or to max-time
-	
-	SENSOR_INTERNAL = 0, // false
-	SENSOR_SEARCH = 1, // true
-	
-	// define test states
-	// Ordered so we know in TESTING or further states
-	TS_INIT = 1,
-	TS_WAITING = 2,
-	TS_READY = 3,
-	TS_TESTING = 4,
-	TS_ABORT = 5,
-	TS_CLOSE = 6,
-	TS_PAUSE =7
-}	
+using Toybox.System as Sys;	
 
 class TestController {
 

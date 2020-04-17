@@ -3,24 +3,6 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
-// define history indexes and mapping strings
-const TIME_STAMP_INDEX = 0;
-const AVG_PULSE_INDEX = 1;
-const MIN_II_INDEX = 2;
-const MAX_II_INDEX = 3;
-const MIN_DIFF_INDEX = 4;
-const MAX_DIFF_INDEX = 5;
-const RMSSD_INDEX = 6;
-const LNRMSSD_INDEX = 7;
-const SDNN_INDEX = 8;
-const SDSD_INDEX = 9; 
-const NN50_INDEX = 10;
-const PNN50_INDEX = 11; 
-const NN20_INDEX = 12;
-const PNN20_INDEX = 13;
-
-const MAX_DISPLAY_VAR = 3;
-
 var mHistorySelectFlags;
 
 // for menu on selecting history view items

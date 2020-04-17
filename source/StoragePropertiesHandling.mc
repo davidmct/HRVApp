@@ -9,13 +9,13 @@ using Toybox.Timer;
 // STORAGE came in with CIQ 2.4 - could cut down code by removing all pre CIQ2.4 code
 
 // Results memory locations. (X) <> (X + 29)
-const NUM_RESULT_ENTRIES = 30; // last 30 days
-const DATA_SET_SIZE = 4; // each containing this number of entries
+//const NUM_RESULT_ENTRIES = 30; // last 30 days
+//const DATA_SET_SIZE = 4; // each containing this number of entries
 // for properties method of storage, arranged as arrays of results per time period
-const RESULTS = "RESULTS";
+//const RESULTS = "RESULTS";
 
 // Samples needed for stats min
-const MIN_SAMPLES = 20;
+//const MIN_SAMPLES = 20;
 
 class HRVStorageHandler {
 
