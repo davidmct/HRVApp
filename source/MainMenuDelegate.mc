@@ -54,11 +54,24 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_LEFT );    		
         } 
         else if( id.equals("historySelection")) {      
-            var checkMenu = new WatchUi.CheckboxMenu({:title=>"Checkboxes"});
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 1", "Left Check", "left", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_LEFT}));
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 2", "Right Check", "right", false, {:alignment=>WatchUi.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT}));
-            checkMenu.addItem(new WatchUi.CheckboxMenuItem("Item 3", "Check", "default", true, null));
-          	Ui.pushView(checkMenu, new HistoryMenuDelegate(), WatchUi.SLIDE_UP );      
+            var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("History")});
+            var mKeys = $.mHistorySelect.keys();
+            var options = {:enabled=>"selected", :disabled=>"deselected"};
+            var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};
+            
+            // TEST
+            //$.mHistorySelectFlags = 3;
+            
+            for (var i = 0; i < $.mHistorySelect.size() ; i++) {
+            	var mHistoryName = mKeys[i].toString();
+            	// can't control order unless use individual lines and no dictionary
+            	// get value for current key
+            	var index = $.mHistorySelect.get(mHistoryName);
+            	var selectState = ($.mHistorySelectFlags & (1 << (index-1))) ? true : false;
+            	//Sys.println("SelectState = "+selectState);
+	        	toggleMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, mHistoryName, selectState, align));	        	
+        	}
+           	Ui.pushView(toggleMenu, new HistoryMenuDelegate(), Ui.SLIDE_LEFT );      
         }
         else if ( id.equals("load") ) {
         	// you can't do this whilst testing! Otherwise screws data

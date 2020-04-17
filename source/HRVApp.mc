@@ -205,6 +205,9 @@ class HRVApp extends App.AppBase {
 				
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
+		
+		// no history selected. binary flags as bits
+		mHistorySelectFlags = 0;
 						
     	AppBase.initialize();
     }

@@ -3,6 +3,35 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
+// define history indexes and mapping strings
+const TIME_STAMP_INDEX = 0;
+const AVG_PULSE_INDEX = 1;
+const MIN_II_INDEX = 2;
+const MAX_II_INDEX = 3;
+const MIN_DIFF_INDEX = 4;
+const MAX_DIFF_INDEX = 5;
+const RMSSD_INDEX = 6;
+const LNRMSSD_INDEX = 7;
+const SDNN_INDEX = 8;
+const SDSD_INDEX = 9; 
+const NN50_INDEX = 10;
+const PNN50_INDEX = 11; 
+const NN20_INDEX = 12;
+const PNN20_INDEX = 13;
+
+var mHistorySelectFlags;
+
+// for menu on selecting history view items
+var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX, 
+						"minII" => MIN_II_INDEX, "maxII" => MIN_II_INDEX,
+						"minDiff" => MIN_DIFF_INDEX, "maxDiff" => MIN_DIFF_INDEX,
+						"rMSSD" => RMSSD_INDEX, "LnrMSSD" => LNRMSSD_INDEX, 
+						"SDNN" => SDNN_INDEX, "SDSD" => SDSD_INDEX, 
+						"NN50" => NN50_INDEX, "pNN50" => PNN50_INDEX, 
+						"NN20" => NN20_INDEX, "pNN20" => PNN20_INDEX, 						
+					};						
+
+
 // Show the previous test results over time
 class HistoryView extends Ui.View {
 	
