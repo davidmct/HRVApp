@@ -102,8 +102,10 @@ class HistoryView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-		var today = ($._mApp.timeToday() / 86400) % 30;	// Todays index
-		var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
+		var today = ($._mApp.timeToday() / 86400) % NUM_RESULT_ENTRIES;	// Todays index
+		//var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
+		// 29 days ago is entry ahead of today in buffer
+		var epochIndex = (today + 86400 ) % NUM_RESULT_ENTRIES;
 
 		var dataCount = 0;
 		var max = 0;
@@ -152,13 +154,22 @@ class HistoryView extends Ui.View {
 		// Find result limits
 		// change this to step i to each time stamp then look at next three samples
 		
+		// epochIndex is one ahead of today so if non-zero time then should be valid entry
+		// ASSUME THAT HISTORY IS LAST 30 samples on different days NOT that they have to be contiguous days!!!
+		
 		// only do min/max on variables of interest
-		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
-			// Only process if newer than epoch			
-			if(epoch <= $._mApp.results[i]) {
-				// Get range of all three results ... may not be correlated range for each set
-				for( var y = 1; y <= 3; y++) {
-					var value = $._mApp.results[i+y].toNumber();
+		//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
+		var day = epochIndex; // start at furthest past
+		var index = day * DATA_SET_SIZE;
+		do {
+			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
+				// get values and check max/min
+				var j = resultsIndex[0];
+				var cnt = 0;
+				if (j != null) {
+					var value = $._mApp.results[index+j].toNumber();
+					cnt++;
+					// do min max
 					if(min > value) {
 						min = value;
 					}
@@ -166,9 +177,19 @@ class HistoryView extends Ui.View {
 						max = value;
 					}
 				}
-				dataCount++;
-			}
-		}
+				j = resultsIndex[1];
+				
+				
+				
+					
+				// hope one of the three isn't null!
+				if (cnt > 0) { dataCount++;}
+			}	
+			
+			index += DATA_SET_SIZE;
+			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
+		} 
+		while ( day != today);
 
 		// If no results then set min & max to create a nice graph scale
 		if(0 == dataCount){
