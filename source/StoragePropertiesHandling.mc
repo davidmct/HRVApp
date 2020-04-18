@@ -56,9 +56,9 @@ class HRVStorageHandler {
 			$._mApp.Properties.setValue("bgColSet", 3);
 			$._mApp.Properties.setValue("lblColSet", 10);
 			$._mApp.Properties.setValue("txtColSet", 9);
-			$._mApp.Properties.setValue("RMSSDColSet", 10);
-			$._mApp.Properties.setValue("LnRMSSDColSet", 12);
-			$._mApp.Properties.setValue("avgPulseColSet", 6);		
+			$._mApp.Properties.setValue("Label1ColSet", 10);
+			$._mApp.Properties.setValue("Label3ColSet", 12);
+			$._mApp.Properties.setValue("Label2ColSet", 6);		
 		} else {
 			$._mApp.setProperty("pAuxHRAntID", 0);
 			$._mApp.setProperty("firstLoadEver", true);
@@ -73,9 +73,9 @@ class HRVStorageHandler {
 			$._mApp.setProperty("bgColSet", 3);
 			$._mApp.setProperty("lblColSet", 10);
 			$._mApp.setProperty("txtColSet", 13);
-			$._mApp.setProperty("RMSSDColSet", 10);
-			$._mApp.setProperty("LnRMSSDColSet", 12);
-			$._mApp.setProperty("avgPulseColSet", 6);		
+			$._mApp.setProperty("Label1ColSet", 10);
+			$._mApp.setProperty("Label3ColSet", 12);
+			$._mApp.setProperty("Label2ColSet", 6);		
 		}
 	
 		// now load up variables
@@ -222,9 +222,9 @@ class HRVStorageHandler {
 			$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
 			$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
 			$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
-			$._mApp.RMSSDColSet = $._mApp.getProperty("RMSSDColSet").toNumber();
-			$._mApp.LnRMSSDColSet = $._mApp.getProperty("LnRMSSDColSet").toNumber();
-			$._mApp.avgPulseColSet = $._mApp.getProperty("avgPulseColSet").toNumber();
+			$._mApp.Label1ColSet = $._mApp.getProperty("Label1ColSet").toNumber();
+			$._mApp.Label3ColSet = $._mApp.getProperty("Label3ColSet").toNumber();
+			$._mApp.Label2ColSet = $._mApp.getProperty("Label2ColSet").toNumber();
 	
 		//}
 	}
@@ -257,9 +257,9 @@ class HRVStorageHandler {
 			$._mApp.bgColSet = $._mApp.Properties.getValue("bgColSet").toNumber();
 			$._mApp.lblColSet = $._mApp.Properties.getValue("lblColSet").toNumber();
 			$._mApp.txtColSet = $._mApp.Properties.getValue("txtColSet").toNumber();
-			$._mApp.RMSSDColSet = $._mApp.Properties.getValue("RMSSDColSet").toNumber();
-			$._mApp.LnRMSSDColSet = $._mApp.Properties.getValue("LnRMSSDColSet").toNumber();
-			$._mApp.avgPulseColSet = $._mApp.Properties.getValue("avgPulseColSet").toNumber();	
+			$._mApp.Label1ColSet = $._mApp.Properties.getValue("Label1ColSet").toNumber();
+			$._mApp.Label3ColSet = $._mApp.Properties.getValue("Label3ColSet").toNumber();
+			$._mApp.Label2ColSet = $._mApp.Properties.getValue("Label2ColSet").toNumber();	
 		//}	
 	}
 	
@@ -280,9 +280,9 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("bgColSet", $._mApp.bgColSet);
 		$._mApp.Properties.setValue("lblColSet", $._mApp.lblColSet);
 		$._mApp.Properties.setValue("txtColSet", $._mApp.txtColSet);
-		$._mApp.Properties.setValue("RMSSDColSet", $._mApp.RMSSDColSet);
-		$._mApp.Properties.setValue("LnRMSSDColSet", $._mApp.LnRMSSDColSet);
-		$._mApp.Properties.setValue("avgPulseColSet", $._mApp.avgPulseColSet);	
+		$._mApp.Properties.setValue("Label1ColSet", $._mApp.Label1ColSet);
+		$._mApp.Properties.setValue("Label3ColSet", $._mApp.Label3ColSet);
+		$._mApp.Properties.setValue("Label2ColSet", $._mApp.Label2ColSet);	
 		
 	}
 	
@@ -302,9 +302,9 @@ class HRVStorageHandler {
 		$._mApp.setProperty("bgColSet", $._mApp.bgColSet);
 		$._mApp.setProperty("lblColSet", $._mApp.lblColSet);
 		$._mApp.setProperty("txtColSet", $._mApp.txtColSet);
-		$._mApp.setProperty("RMSSDColSet", $._mApp.RMSSDColSet);
-		$._mApp.setProperty("LnRMSSDColSet", $._mApp.LnRMSSDColSet);
-		$._mApp.setProperty("avgPulseColSet", $._mApp.avgPulseColSet);	
+		$._mApp.setProperty("Label1ColSet", $._mApp.Label1ColSet);
+		$._mApp.setProperty("Label3ColSet", $._mApp.Label3ColSet);
+		$._mApp.setProperty("Label2ColSet", $._mApp.Label2ColSet);	
 
 	}
 

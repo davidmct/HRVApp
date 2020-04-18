@@ -80,7 +80,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.RMSSDColSet" title="@Strings.RMSSDColSetTitle" prompt="@Strings.RMSSDColSetPrompt">
+	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.Label1ColSetTitle" prompt="@Strings.Label1ColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -98,7 +98,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.LnRMSSDColSet" title="@Strings.LnRMSSDColSetTitle" prompt="@Strings.LnRMSSDColSetPrompt">
+	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.Label3ColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -116,7 +116,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.avgPulseColSet" title="@Strings.avgPulseColSetTitle" prompt="@Strings.avgPulseColSetPrompt">
+	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.Label2ColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>

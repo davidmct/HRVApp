@@ -66,12 +66,12 @@
 	<string id="lblColSetPrompt">Select colour</string>
 	<string id="txtColSetTitle" >Text colour</string>
 	<string id="txtColSetPrompt">Select colour</string>
-	<string id="RMSSDColSetTitle" >rMSSD colour</string>
-	<string id="RMSSDColSetPrompt">Select colour</string>
-	<string id="LnRMSSDColSetTitle">Ln(rMSSD) colour</string> 
-	<string id="LnRMSSDColSetPrompt">Select colour</string>
-	<string id="avgPulseColSetTitle">Average pulse colour</string> 
-	<string id="avgPulseColSetPrompt">Select colour</string>
+	<string id="Label1ColSetTitle" >History label 1 colour</string>
+	<string id="Label1ColSetPrompt">Select colour</string>
+	<string id="Label3ColSetTitle">History label 3 colour</string> 
+	<string id="Label3ColSetPrompt">Select colour</string>
+	<string id="Label2ColSetTitle">History label 2 colour</string> 
+	<string id="Label2ColSetPrompt">Select colour</string>
 	<!-- Number Picker -->
     <string id="numberPickerTitle">mm:ss</string>
 </resources>

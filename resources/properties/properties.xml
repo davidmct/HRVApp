@@ -24,7 +24,7 @@
 	<property id="bgColSet" type="number">3</property>
 	<property id="lblColSet" type="number">10</property>
 	<property id="txtColSet" type="number">9</property>
-	<property id="RMSSDColSet" type="number">10</property>
-	<property id="LnRMSSDColSet" type="number">12</property>
-	<property id="avgPulseColSet" type="number">6</property>
+	<property id="Label1ColSet" type="number">10</property>
+	<property id="Label3ColSet" type="number">12</property>
+	<property id="Label2ColSet" type="number">6</property>
 </properties>

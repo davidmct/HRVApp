@@ -84,9 +84,9 @@ class HRVApp extends App.AppBase {
 	var bgColSet;
 	var lblColSet;
     var txtColSet;
-	var RMSSDColSet;
-	var LnRMSSDColSet;
-	var avgPulseColSet;
+	var Label1ColSet;
+	var Label3ColSet;
+	var Label2ColSet;
 	
 	var mMenuTitleSize;
 	var mDeviceID;
@@ -190,7 +190,7 @@ class HRVApp extends App.AppBase {
  	function allowTrialMessage() {
  		// return false if you want no reminders
  		Sys.println("allowTrialMessage() called");
- 		return true;
+ 		return false;
  	}
 
     //! Return the initial view of your application here
