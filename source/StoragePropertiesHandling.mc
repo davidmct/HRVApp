@@ -311,6 +311,7 @@ class HRVStorageHandler {
 	function resetResults() {
 		// should only be called from settings - also called onStart()
 		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		Sys.println("resetResults() array created: size wanted, size "+(NUM_RESULT_ENTRIES * DATA_SET_SIZE)+","+$._mApp.results.size());
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
 			$._mApp.results[i] = 0;
@@ -340,6 +341,16 @@ class HRVStorageHandler {
 					$._mApp.results[ii + 1] = result[1];
 					$._mApp.results[ii + 2] = result[2];
 					$._mApp.results[ii + 3] = result[3];
+					$._mApp.results[ii + 4] = result[4];
+					$._mApp.results[ii + 5] = result[5];
+					$._mApp.results[ii + 6] = result[6];
+					$._mApp.results[ii + 7] = result[7];
+					$._mApp.results[ii + 8] = result[8];
+					$._mApp.results[ii + 9] = result[9];
+					$._mApp.results[ii + 10] = result[10];
+					$._mApp.results[ii + 11] = result[11];
+					$._mApp.results[ii + 12] = result[12];
+					$._mApp.results[ii + 13] = result[13];
 				}
 			}
 		}
@@ -359,7 +370,18 @@ class HRVStorageHandler {
 						$._mApp.results[ii + 0],
 						$._mApp.results[ii + 1],
 						$._mApp.results[ii + 2],
-						$._mApp.results[ii + 3]]);
+						$._mApp.results[ii + 3],
+						$._mApp.results[ii + 4],
+						$._mApp.results[ii + 5],
+						$._mApp.results[ii + 6],
+						$._mApp.results[ii + 7],
+						$._mApp.results[ii + 8],
+						$._mApp.results[ii + 9],
+						$._mApp.results[ii + 10],
+						$._mApp.results[ii + 11],						
+						$._mApp.results[ii + 12],
+						$._mApp.results[ii + 13]						
+						]);
 				}
 			}
 		}

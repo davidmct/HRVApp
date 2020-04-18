@@ -154,7 +154,7 @@ class HistoryView extends Ui.View {
 		
 		// only do min/max on variables of interest
 		for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
-			// Only process if newer than epoch
+			// Only process if newer than epoch			
 			if(epoch <= $._mApp.results[i]) {
 				// Get range of all three results ... may not be correlated range for each set
 				for( var y = 1; y <= 3; y++) {

@@ -80,12 +80,33 @@ const LOG_SCALE = 50; // scales ln(RMSSD)
 
 // Results memory locations. (X) <> (X + 29)
 const NUM_RESULT_ENTRIES = 30; // last 30 days
-const DATA_SET_SIZE = 4; // each containing this number of entries
+const DATA_SET_SIZE = 14; // each containing this number of entries
 // for properties method of storage, arranged as arrays of results per time period
 const RESULTS = "RESULTS";
 
 // Samples needed for stats min
 const MIN_SAMPLES = 20;
+
+// HISTORY VIEW
+
+// define history indexes and mapping strings
+const TIME_STAMP_INDEX = 0;
+const AVG_PULSE_INDEX = 1;
+const MIN_II_INDEX = 2;
+const MAX_II_INDEX = 3;
+const MIN_DIFF_INDEX = 4;
+const MAX_DIFF_INDEX = 5;
+const RMSSD_INDEX = 6;
+const LNRMSSD_INDEX = 7;
+const SDNN_INDEX = 8;
+const SDSD_INDEX = 9; 
+const NN50_INDEX = 10;
+const PNN50_INDEX = 11; 
+const NN20_INDEX = 12;
+const PNN20_INDEX = 13;
+
+const MAX_DISPLAY_VAR = 3;
+
 
 // TEST CONTROL
 
@@ -117,23 +138,4 @@ enum {
 	TS_PAUSE =7
 }
 
-// HISTORY VIEW
-
-// define history indexes and mapping strings
-const TIME_STAMP_INDEX = 0;
-const AVG_PULSE_INDEX = 1;
-const MIN_II_INDEX = 2;
-const MAX_II_INDEX = 3;
-const MIN_DIFF_INDEX = 4;
-const MAX_DIFF_INDEX = 5;
-const RMSSD_INDEX = 6;
-const LNRMSSD_INDEX = 7;
-const SDNN_INDEX = 8;
-const SDSD_INDEX = 9; 
-const NN50_INDEX = 10;
-const PNN50_INDEX = 11; 
-const NN20_INDEX = 12;
-const PNN20_INDEX = 13;
-
-const MAX_DISPLAY_VAR = 3;
 

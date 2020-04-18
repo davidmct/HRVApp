@@ -336,11 +336,22 @@ class TestController {
 		
 		Sys.println("utcStart, testday, index = "+utcStart+","+testDay+","+index);
 
-		$._mApp.results[index + 0] = utcStart;
-		$._mApp.results[index + 1] = $._mApp.mSampleProc.mRMSSD;
-		$._mApp.results[index + 2] = $._mApp.mSampleProc.mLnRMSSD;
-		$._mApp.results[index + 3] = $._mApp.mSampleProc.avgPulse;
-    	
+		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
+		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
+		$._mApp.results[index + MIN_II_INDEX] = $._mApp.mSampleProc.minIntervalFound;
+		$._mApp.results[index + MAX_II_INDEX] = $._mApp.mSampleProc.maxIntervalFound;		
+		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.minDiffFound;
+		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.maxDiffFound;				
+		$._mApp.results[index + RMSSD_INDEX] = $._mApp.mSampleProc.mRMSSD;
+		$._mApp.results[index + LNRMSSD_INDEX] = $._mApp.mSampleProc.mLnRMSSD;
+
+		$._mApp.results[index + SDNN_INDEX] = $._mApp.mSampleProc.mSDNN;
+		$._mApp.results[index + SDSD_INDEX] = $._mApp.mSampleProc.mSDSD; 
+		$._mApp.results[index + NN50_INDEX] = $._mApp.mSampleProc.mNN50;
+		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
+		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
+		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
+   	
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 
     	// save intervals as well so we can reload and display
