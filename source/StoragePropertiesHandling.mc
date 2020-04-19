@@ -309,13 +309,14 @@ class HRVStorageHandler {
 	}
 
 	function resetResults() {
-		// should only be called from settings - also called onStart()
+		// should only be called from settings - also called onStart() but followed by load
 		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		Sys.println("resetResults() array created: size wanted, size "+(NUM_RESULT_ENTRIES * DATA_SET_SIZE)+","+$._mApp.results.size());
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
 			$._mApp.results[i] = 0;
 		}
+		$._mApp.resultsIndex = 0;
 	}
 	
 	function retrieveResults() {
@@ -324,15 +325,21 @@ class HRVStorageHandler {
 		if (Toybox.Application has :Storage) {
 			try {
 				mCheck = Storage.getValue("resultsArray");
+				$._mApp.resultsIndex = Storage.getValue("resultIndex");
 			}
 			catch (ex) {
 				Sys.println("ERROR: retrieveResults: no results array");
+				$._mApp.resultsIndex = 0;
 				return false;
 			}				
 			
 			if (mCheck != null) { $._mApp.results = mCheck; } 
 			return true;			
-		} else {		
+		} else {
+			var tmp = $._mApp.getProperty("resultIndex");
+			if (tmp == null) { tmp = 0;}
+			$._mApp.resultsIndex = tmp;
+			
 			for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 				var result = $._mApp.getProperty(RESULTS + i);
 				var ii = i * DATA_SET_SIZE;
@@ -361,7 +368,9 @@ class HRVStorageHandler {
 	    // Save results to memory
 	    if (Toybox.Application has :Storage) {
 			Storage.setValue("resultsArray", $._mApp.results);
-		} else {	
+			Storage.setValue("resultIndex", $._mApp.resultsIndex);
+		} else {
+			$._mApp.setProperty("resultIndex", $._mApp.resultsIndex);
 	    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 				var ii = i * DATA_SET_SIZE;
 				var result = $._mApp.getProperty(RESULTS + i);

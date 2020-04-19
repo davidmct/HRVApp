@@ -19,6 +19,7 @@ class HistoryView extends Ui.View {
 	hidden var floor;
 	hidden var ceil;
 	hidden var scaleY;
+	hidden var xStep;
 	
 	hidden var numResultsToDisplay = 0;
 	hidden var labelList = new [MAX_DISPLAY_VAR];
@@ -60,6 +61,8 @@ class HistoryView extends Ui.View {
 		ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
+		xStep = (cGridWith / NUM_RESULT_ENTRIES).toNumber();
+		
 		return true;
 	}
 		
@@ -68,13 +71,14 @@ class HistoryView extends Ui.View {
     }
 
     function scale(num) {
+    	if (num == null) { return null;}
 		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 
 	// return labels into dictionary of results offsets
 	function findResultLabels(keys) {		
 		// init array
-		for ( var i=0; i < labelList.size(); i++) { labelList[i] = null;}
+		for ( var i=0; i < labelList.size(); i++) { labelList[i] = "";}
 		
 		// scan through flags looking for true and then get label
 		// find first N out of set
@@ -102,11 +106,15 @@ class HistoryView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 
-		var today = ($._mApp.timeToday() / 86400) % NUM_RESULT_ENTRIES;	// Todays index
+		//var today = ($._mApp.timeToday() / 86400) % NUM_RESULT_ENTRIES;	// Todays index
 		//var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
 		// 29 days ago is entry ahead of today in buffer
-		var epochIndex = (today + 86400 ) % NUM_RESULT_ENTRIES;
-
+		//var epochIndex = (today + 1 ) % NUM_RESULT_ENTRIES;
+		
+		// get pointer to next empty slot in results array .. should be oldest data
+		var indexDay = $._mApp.resultsIndex;
+		var today = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		 
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
@@ -159,28 +167,26 @@ class HistoryView extends Ui.View {
 		
 		// only do min/max on variables of interest
 		//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
-		var day = epochIndex; // start at furthest past
+		var day = indexDay; // start at furthest past
 		var index = day * DATA_SET_SIZE;
 		do {
 			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
 				// get values and check max/min
-				var j = resultsIndex[0];
 				var cnt = 0;
-				if (j != null) {
-					var value = $._mApp.results[index+j].toNumber();
-					cnt++;
-					// do min max
-					if(min > value) {
-						min = value;
-					}
-					if(max < value) {
-						max = value;
-					}
-				}
-				j = resultsIndex[1];
-				
-				
-				
+				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
+					var j = resultsIndex[i];					
+					if (j != null) {
+						var value = $._mApp.results[index+j].toNumber();
+						cnt++;
+						// do min max
+						if(min > value) {
+							min = value;
+						}
+						if(max < value) {
+							max = value;
+						}
+					} // j != null
+				} // for each display value
 					
 				// hope one of the three isn't null!
 				if (cnt > 0) { dataCount++;}
@@ -194,7 +200,7 @@ class HistoryView extends Ui.View {
 		// If no results then set min & max to create a nice graph scale
 		if(0 == dataCount){
 			min = 0;
-			max = 20;
+			max = 30;
 		}
 
 		// Create the range in blocks of 5
@@ -204,11 +210,12 @@ class HistoryView extends Ui.View {
 		// now expand to multiple of 10 as height = 120 
 		var test = (ceil - floor) % 10;
 		if (test == 5) { 
-			floor -= 5;
-		} else if (test == 0) {
 			ceil += 5;
-			floor -= 5;
-		}
+		} 
+		//else if (test == 0) {
+		//	ceil += 5;
+		//	floor -= 5;
+		//}
 		var range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale
@@ -218,74 +225,84 @@ class HistoryView extends Ui.View {
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
-			var str;
-			//if(num != num.toNumber()) {
-			//	str = format(" $1$ ",[num.format("%0.1f")] );				
-			//}
-			//else {
-				// just use whole numbers
-				str = format(" $1$ ",[num.format("%d")] );
-			//}				
+			// just use whole numbers
+			var str = format(" $1$ ",[num.format("%d")] );				
 			updateLayoutField("yLabel"+i, str, null);
 			
 		}
 
-		// Draw the data
-		var drawDots = 0;
-		
-		for(var i = 0; i < 30; i++) {
-			// Start 30 days ago and work forwards
- 			var ii = ((today + 1 + i) % 30) * DATA_SET_SIZE;
-			if(epoch < $._mApp.results[ii]) {
-				var x1 = i * 6 + 3; // 3,9....177 width of chart = 180
-	 			var mLabel1Val1 = scale($._mApp.results[ii + 1]);
-	 			var mLabel2Val1 = scale($._mApp.results[ii + 2]);
-	 			var mLabel3Val1 = scale($._mApp.results[ii + 3]);
-	 			drawDots++;
-
-	 			for(var iii = i + 1; iii < 30; iii++) {
-					var iiii = ((today + 1 + iii) % 30) * DATA_SET_SIZE;
-		 			if(epoch < $._mApp.results[iiii]) {
-			 			var x2 = iii * 6 + 3; // 9, 15,... 177
-			 			var mLabel1Val2 = scale($._mApp.results[iiii + 1]);
-			 			var mLabel2Val2 = scale($._mApp.results[iiii + 2]);
-			 			var mLabel3Val2 = scale($._mApp.results[iiii + 3]);
-
-						dc.setPenWidth(2);
-						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-						dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);
-
-						MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
-						dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);
-
-						dc.setPenWidth(3);
-						MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
-						dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);
-						
-						//Sys.println("LeftX, x1, floorY, mLabel1Val1, mLabel2Val1 "+leftX+","+x1+","+floorY+","+mLabel1Val1+","+mLabel2Val1);
-						//Sys.println("x2, mLabel1Val2, mLabel2Val2 "+x2+","+mLabel1Val2+","+mLabel2Val2);
-						// Change the value of i. So that it starts back at this point. Break loop
-						i = iii - 1;
-						iii = 30;
-						drawDots++;
-					}
-				}
-				// If only one reading then draw dots. There are no averages
-				if(1 == drawDots) {
-					MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-					dc.fillCircle(leftX + x1, floorY - mLabel2Val1, 2);
-
+		// draw the data 
+		dc.setPenWidth(2);		
+		day = indexDay; // start at furthest past
+		index = day * DATA_SET_SIZE;
+		var firstData = new [MAX_DISPLAY_VAR];
+		var pointNumber = 0;
+		do {
+			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
+				// load values
+				for (var i=0; i < numResultsToDisplay; i++) {
+					var j = resultsIndex[i];	
+					// shouldn't need null test as have number of valid entries and already checked not zero			
+					if (j != null) {
+						firstData[i] = $._mApp.results[index+j].toNumber();
+					} // j != null
+				} // for each display value
+				var x1 = pointNumber * xStep + 3; // 3,9....177 width of chart = 180
+				// scale can return null which need to check on draw
+	 			var mLabel1Val1 = scale(firstData[0]);
+	 			var mLabel2Val1 = scale(firstData[1]);
+	 			var mLabel3Val1 = scale(firstData[2]);				
+					
+				pointNumber++;
+				
+				// now we should have a continuous set of points having found a non-zero entry
+				// or have only one entry
+				if (day == today) { // gone round buffer and not found any other data so one point
 					MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
-					dc.fillCircle(leftX + x1, floorY - mLabel1Val1, 2);
-					
+					if (resultsIndex[0] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel1Val1, 2);}
+					MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+					if (resultsIndex[1] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel2Val1, 2);}					
 					MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
-					dc.fillCircle(leftX + x1, floorY - mLabel3Val1, 2);	
+					if (resultsIndex[2] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel3Val1, 2);}								
+				} else {
+					// must be another data point
+					var x2 = pointNumber * xStep + 3;
+					pointNumber++;
 					
-					//Sys.println("LeftX, x1, floorY, mRMSSD1, mLnRMSSD1 "+leftX+","+x1+","+floorY+","+mRMSSD1+","+mLnRMSSD1);					
-				}
-			}
-		}
+					// look one day ahead
+					var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
+					
+					if ($._mApp.results[index] != 0) { // we have an entry that has been created	
+						// load values
+						for (var i=0; i < numResultsToDisplay; i++) {
+							var j = resultsIndex[i];	
+							// shouldn't need null test as have number of valid entries and already checked not zero			
+							if (j != null) {
+								firstData[i] = $._mApp.results[index+j].toNumber();
+							} // j != null
+						} // for each display value
 
+						// scale can return null which need to check on draw
+			 			var mLabel1Val2 = scale(firstData[0]);
+			 			var mLabel2Val2 = scale(firstData[1]);
+			 			var mLabel3Val2 = scale(firstData[2]);				
+	
+						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+						if (resultsIndex[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
+						MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
+						if (resultsIndex[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+						MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
+						if (resultsIndex[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+					} // another none null entry
+				} // only one data entry	
+			} // found entry	
+			
+			// update pointers
+			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
+			index = day * DATA_SET_SIZE;
+		} 
+		while ( day != indexDay);
+		
 		// TEST CODE
 		var str = System.getSystemStats().usedMemory.toString();
 		Sys.println("Testview memory use "+str);

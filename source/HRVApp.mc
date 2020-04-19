@@ -94,6 +94,8 @@ class HRVApp extends App.AppBase {
 	// Results array variable
 	var results;
 	var mHistorySelectFlags;
+	// write pointer into results array
+	var resultsIndex;
 
 	// View trackers
 	var viewNum;
@@ -225,7 +227,7 @@ class HRVApp extends App.AppBase {
     	}
 
 		// Retrieve saved results from memory
-		// clear buffer - means only one set per day
+		// create and clear buffer - only one set per day
 		mStorage.resetResults();
 		//restore previous results from properties/store		
 		mStorage.retrieveResults();

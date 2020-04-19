@@ -33,6 +33,8 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     function setResetResults(value) {
 		if (value == 1) { 
             $._mApp.mStorage.resetResults();
+            // and push to memory
+            $._mApp.mStorage.storeResults();
         }	
     }
     

@@ -332,9 +332,14 @@ class TestController {
     	// should change to use time functions available
 		var testDay = utcStart - (utcStart % 86400);
 		// (testDay modulo 30) * 5 ...
-		var index = ((testDay / 86400) % 30) * DATA_SET_SIZE;
+		//var index = ((testDay / 86400) % 30) * DATA_SET_SIZE;
 		
-		Sys.println("utcStart, testday, index = "+utcStart+","+testDay+","+index);
+		// next slot in cycle, can overwrite multiple times in a day and keep last ones
+		var index = $._mApp.resultsIndex * DATA_SET_SIZE;
+		var currentSavedutc = $._mApp.results[index + TIME_STAMP_INDEX];
+		var savedDay = currentSavedutc - (currentSavedutc % 86400);
+				
+		Sys.println("utcStart, index, saved day = "+utcStart+","+index+","+savedDay);
 
 		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
 		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
@@ -352,6 +357,12 @@ class TestController {
 		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
 		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
    	
+   		if (testDay != savedDay) {
+   			// increment write pointer to circular buffer
+   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   		}
+   		
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 
     	// save intervals as well so we can reload and display
