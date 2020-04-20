@@ -240,12 +240,43 @@ class HistoryView extends Ui.View {
 			updateLayoutField("yLabel"+i, str, null);
 			
 		}
-
+		
+		var firstData = new [MAX_DISPLAY_VAR];
+		
+		// if only one data point we must be at start of time and zero entry!
+		if (dataCount == 1) {
+			// load values
+			for (var i=0; i < numResultsToDisplay; i++) {
+				var j = resultsIndexList[i];	
+				// shouldn't need null test as have number of valid entries and already checked not zero			
+				if (j != null) {
+					firstData[i] = $._mApp.results[j].toNumber();
+				} // j != null
+			} // for each display value
+			// scale can return null which need to check on draw
+ 			var mLabel1Val1 = scale(firstData[0]);
+ 			var mLabel2Val1 = scale(firstData[1]);
+ 			var mLabel3Val1 = scale(firstData[2]);				
+			
+			Sys.println("HistoryView() single data point");
+			
+			// now we should have a continuous set of points having found a non-zero entry
+			Sys.println("draw one point only");
+			MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
+			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
+			MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
+			MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
+			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}								
+		
+			return;
+		}
+				
 		// draw the data 
-		dc.setPenWidth(2);		
+		dc.setPenWidth(2);	
+					
 		day = indexDay; // start at furthest past
 		index = day * DATA_SET_SIZE;
-		var firstData = new [MAX_DISPLAY_VAR];
 		var pointNumber = 0;
 		do {
 			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
@@ -266,53 +297,43 @@ class HistoryView extends Ui.View {
 				Sys.println("firstData and points, index, day, today :"+firstData+", #"+pointNumber+","+index+","+day+","+today);
 				
 				// now we should have a continuous set of points having found a non-zero entry
-				// or have only one entry
-				if ((day == today) && (dataCount == 1) ) { // gone round buffer and not found any other data so one point
-					Sys.println("draw one point only");
-					MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
-					if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel1Val1, 2);}
-					MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-					if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel2Val1, 2);}					
-					MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
-					if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel3Val1, 2);}								
-				} else {
-					// must be another data point
-					var x2 = (pointNumber+1) * xStep + 3;
-					
-					// look one day ahead
-					var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
-					
-					if ($._mApp.results[secondIndex] != 0) { // we have an entry that has been created	
-						// load values
-						for (var i=0; i < numResultsToDisplay; i++) {
-							var j = resultsIndexList[i];	
-							// shouldn't need null test as have number of valid entries and already checked not zero			
-							if (j != null) {
-								firstData[i] = $._mApp.results[secondIndex+j].toNumber();
-							} // j != null
-						} // for each display value
+				// must be another data point
+				var x2 = (pointNumber+1) * xStep + 3;
+				
+				// look one day ahead
+				var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
+				
+				// we have more than one entry so OK to not test for no data
+				//if ($._mApp.results[secondIndex] != 0) { // we have an entry that has been created	
+				// load values
+				for (var i=0; i < numResultsToDisplay; i++) {
+					var j = resultsIndexList[i];	
+					// shouldn't need null test as have number of valid entries and already checked not zero			
+					if (j != null) {
+						firstData[i] = $._mApp.results[secondIndex+j].toNumber();
+					} // j != null
+				} // for each display value
 
-						// scale can return null which need to check on draw
-			 			var mLabel1Val2 = scale(firstData[0]);
-			 			var mLabel2Val2 = scale(firstData[1]);
-			 			var mLabel3Val2 = scale(firstData[2]);	
-			 			
-			 			Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
-	
-						MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
-						if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
-						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-						if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
-						MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
-						if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
-					} // another none null entry
-				} // only one data entry	
+				// scale can return null which need to check on draw
+	 			var mLabel1Val2 = scale(firstData[0]);
+	 			var mLabel2Val2 = scale(firstData[1]);
+	 			var mLabel3Val2 = scale(firstData[2]);	
+	 			
+	 			Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
+
+				MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
+				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+				MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
+				MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
+				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+
+				pointNumber++;	
 			} // found entry	
 			
 			// update pointers
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
 			index = (day * DATA_SET_SIZE) % $._mApp.results.size();
-			pointNumber++;
 		} 
 		while ( day != today);
 		
