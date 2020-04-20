@@ -29,11 +29,11 @@
     <layout id = "TestViewLayout">
        	<drawable id="PoincareBack_id" class="CustomBackground" />
         <label id="ViewTitle" text="HRV" x="61%" y="12%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-	    <bitmap id="HRV_ICON" x="32%" y="4%" filename="../../resources/images/hrv-icon-40.png" dithering="none" >
-	       <!-- <palette disableTransparency="true">
+	    <bitmap id="HRV_ICON" x="32%" y="4%" filename="../../resources/images/hrv-icon-40x40_BW.png" dithering="none" >
+	       <palette disableTransparency="true">
 	           <color>000000</color>
 	           <color>FFFFFF</color>
-	       </palette> -->
+	       </palette>
 	    </bitmap>
         <label id="ViewHRV_Lbl" text="Ln(HRV)" x="75%" y="66%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
         <label id="ViewHRV_Val" text="value" x="75%" y="78%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />

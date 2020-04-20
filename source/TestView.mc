@@ -160,13 +160,17 @@ class TestView extends Ui.View {
 		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
 		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
 		updateLayoutField(mViewPulseValID, $._mApp.mSensor.mHRData.livePulse.format("%d"), mValueColour);		
-		//updateLayoutField(mViewPulseValID, $._mApp.mSampleProc.avgPulse.format("%d"), mValueColour);
 		updateLayoutField(mViewTimerValID, timer, mValueColour);
    		
    		View.onUpdate(dc);
    		
    		//if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
-   		//return true;		
+   		//return true;	
+   		// TEST CODE		
+		Sys.println("Testview memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);	
     }
 
     //! Called when this View is removed from the screen. Save the

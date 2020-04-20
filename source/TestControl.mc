@@ -338,16 +338,24 @@ class TestController {
 		var previousIndex = previousEntry * DATA_SET_SIZE;
 		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
 		
-		var previousSavedutc = $._mApp.results[previousIndex + TIME_STAMP_INDEX];		
-		var currentSavedutc = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		var x = $._mApp.results[previousIndex + TIME_STAMP_INDEX];
+		// convery to day units
+		var previousSavedutc = 	x - (x % 86400);
+		x = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		var currentSavedutc = x - (x % 86400);
 		var index;
 		
 		if (testDayutc == previousSavedutc) {
+			// overwrite current days entry
 			index = previousIndex;
 		}
 		else {
-			index = currentIndex;
-		}
+			index = currentIndex;			
+			// written a new entry so move pointer
+   			// increment write pointer to circular buffer
+   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   		}
 			
 		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
@@ -366,13 +374,6 @@ class TestController {
 		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
 		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
 		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
-   	
-   		// written a new entry so move pointer
-   		if (index == currentIndex) {
-   			// increment write pointer to circular buffer
-   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
-   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
-   		}
    		
     	// better write results to memory!!
     	$._mApp.mStorage.storeResults(); 

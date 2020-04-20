@@ -329,7 +329,7 @@ class HRVAnalysis extends App.AppBase {
 		if (mNumEntries <= 0) { return;}
 		
 		//if (mDebugging == true) {
-			Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
+		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
 		//}
 		
 		// should propably use getSample(index) if using circular buffer
