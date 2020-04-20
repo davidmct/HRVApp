@@ -111,7 +111,7 @@ class HistoryView extends Ui.View {
 		// 29 days ago is entry ahead of today in buffer
 		//var epochIndex = (today + 1 ) % NUM_RESULT_ENTRIES;
 		
-		// get pointer to next empty slot in results array .. should be oldest data
+		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
 		var today = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
 		 
@@ -127,6 +127,9 @@ class HistoryView extends Ui.View {
 		var mValueColour = mapColour( $._mApp.txtColSet);
 
 		updateLayoutField("HistoryTitle", null, mLabelColour);
+		
+		Sys.println("HistoryView: indexDay, today, HistoryFlags, resultsIndex :"+
+			indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
 		
 		if ($._mApp.mHistorySelectFlags == 0) {
 			// no data fields set to dsiplay so go home
@@ -151,13 +154,13 @@ class HistoryView extends Ui.View {
 		updateLayoutField("Labelx3", labelList[2],  mapColour($._mApp.Label3ColSet));
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
-		//if (mDebuggingResults) {
-		//	var dump = "";
-		//	for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-		//		dump += $._mApp.results[i].toString() + ",";
-		//	}
-		//	Sys.println("History view DUMP of results : "+dump);
-		//}
+		if (mDebuggingResults) {
+			var dump = "";
+			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
+				dump += $._mApp.results[i].toString() + ",";
+			}
+			Sys.println("History view DUMP of results : "+dump);
+		}
 		
 		// Find result limits
 		// change this to step i to each time stamp then look at next three samples
@@ -178,6 +181,7 @@ class HistoryView extends Ui.View {
 					if (j != null) {
 						var value = $._mApp.results[index+j].toNumber();
 						cnt++;
+						Sys.println("value : "+value);
 						// do min max
 						if(min > value) {
 							min = value;
@@ -192,10 +196,12 @@ class HistoryView extends Ui.View {
 				if (cnt > 0) { dataCount++;}
 			}	
 			
-			index += DATA_SET_SIZE;
+			index = (index + DATA_SET_SIZE) % $._mApp.results.size();
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
 		} 
 		while ( day != today);
+		
+		Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
 
 		// If no results then set min & max to create a nice graph scale
 		if(0 == dataCount){
@@ -255,6 +261,8 @@ class HistoryView extends Ui.View {
 					
 				pointNumber++;
 				
+				Sys.println("firstData and points, index, day, today :"+firstData+","+pointNumber+","+index+","+day+","+today);
+				
 				// now we should have a continuous set of points having found a non-zero entry
 				// or have only one entry
 				if (day == today) { // gone round buffer and not found any other data so one point
@@ -272,20 +280,22 @@ class HistoryView extends Ui.View {
 					// look one day ahead
 					var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
 					
-					if ($._mApp.results[index] != 0) { // we have an entry that has been created	
+					if ($._mApp.results[secondIndex] != 0) { // we have an entry that has been created	
 						// load values
 						for (var i=0; i < numResultsToDisplay; i++) {
 							var j = resultsIndex[i];	
 							// shouldn't need null test as have number of valid entries and already checked not zero			
 							if (j != null) {
-								firstData[i] = $._mApp.results[index+j].toNumber();
+								firstData[i] = $._mApp.results[secondIndex+j].toNumber();
 							} // j != null
 						} // for each display value
 
 						// scale can return null which need to check on draw
 			 			var mLabel1Val2 = scale(firstData[0]);
 			 			var mLabel2Val2 = scale(firstData[1]);
-			 			var mLabel3Val2 = scale(firstData[2]);				
+			 			var mLabel3Val2 = scale(firstData[2]);	
+			 			
+			 			Sys.println("#2 firstData and points, secondIndex :"+firstData+","+pointNumber+","+secondIndex);			
 	
 						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
 						if (resultsIndex[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}

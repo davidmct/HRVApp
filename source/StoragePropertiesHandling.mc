@@ -311,11 +311,12 @@ class HRVStorageHandler {
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
 		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
-		Sys.println("resetResults() array created: size wanted, size "+(NUM_RESULT_ENTRIES * DATA_SET_SIZE)+","+$._mApp.results.size());
+		Sys.println("resetResults() array created");
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
 			$._mApp.results[i] = 0;
 		}
+		// this will be overridden if we load results
 		$._mApp.resultsIndex = 0;
 	}
 	
@@ -334,6 +335,8 @@ class HRVStorageHandler {
 			}				
 			
 			if (mCheck != null) { $._mApp.results = mCheck; } 
+			// have a null if not saved 1st time
+			if ($._mApp.resultsIndex == null) {$._mApp.resultsIndex = 0;}
 			return true;			
 		} else {
 			var tmp = $._mApp.getProperty("resultIndex");
@@ -361,6 +364,7 @@ class HRVStorageHandler {
 				}
 			}
 		}
+		Sys.println("restrieveResults() finished");
 		return true;
 	}
 	

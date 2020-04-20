@@ -37,7 +37,7 @@ var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
-var mDebuggingResults = false;
+var mDebuggingResults = true;
 
 // access App variables and classes
 var _mApp;
@@ -52,7 +52,7 @@ class myException extends Lang.Exception {
     }
 }
 
-class HRVApp extends App.AppBase {
+class HRVAnalysis extends App.AppBase {
 
     // The device type
 	var device;

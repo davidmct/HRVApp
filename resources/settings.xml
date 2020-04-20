@@ -98,24 +98,6 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.Label3ColSetPrompt">
-		<settingConfig type="list" >
-			<listEntry value="0">@Strings.WHITE</listEntry>
-			<listEntry value="1">@Strings.LT_GRAY</listEntry>
-			<listEntry value="2">@Strings.DK_GRAY</listEntry>
-			<listEntry value="3">@Strings.BLACK</listEntry>
-			<listEntry value="4">@Strings.RED</listEntry>
-			<listEntry value="5">@Strings.DK_RED</listEntry>
-			<listEntry value="6">@Strings.ORANGE</listEntry>
-			<listEntry value="7">@Strings.YELLOW</listEntry>
-			<listEntry value="8">@Strings.GREEN</listEntry>
-			<listEntry value="9">@Strings.DK_GREEN</listEntry>
-			<listEntry value="10">@Strings.BLUE</listEntry>
-			<listEntry value="11">@Strings.DK_BLUE</listEntry>
-			<listEntry value="12">@Strings.PURPLE</listEntry>
-			<listEntry value="13">@Strings.PINK</listEntry>	
-		</settingConfig>					
-	</setting>
 	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.Label2ColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
@@ -133,5 +115,23 @@
 			<listEntry value="12">@Strings.PURPLE</listEntry>
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>				
+	</setting>
+	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.Label3ColSetPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.WHITE</listEntry>
+			<listEntry value="1">@Strings.LT_GRAY</listEntry>
+			<listEntry value="2">@Strings.DK_GRAY</listEntry>
+			<listEntry value="3">@Strings.BLACK</listEntry>
+			<listEntry value="4">@Strings.RED</listEntry>
+			<listEntry value="5">@Strings.DK_RED</listEntry>
+			<listEntry value="6">@Strings.ORANGE</listEntry>
+			<listEntry value="7">@Strings.YELLOW</listEntry>
+			<listEntry value="8">@Strings.GREEN</listEntry>
+			<listEntry value="9">@Strings.DK_GREEN</listEntry>
+			<listEntry value="10">@Strings.BLUE</listEntry>
+			<listEntry value="11">@Strings.DK_BLUE</listEntry>
+			<listEntry value="12">@Strings.PURPLE</listEntry>
+			<listEntry value="13">@Strings.PINK</listEntry>	
+		</settingConfig>					
 	</setting>
 </settings>
