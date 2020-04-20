@@ -23,7 +23,7 @@ class HistoryView extends Ui.View {
 	
 	hidden var numResultsToDisplay = 0;
 	hidden var labelList = new [MAX_DISPLAY_VAR];
-	hidden var resultsIndex = new [MAX_DISPLAY_VAR];
+	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
 
 	function initialize() { View.initialize();}
 	
@@ -71,7 +71,7 @@ class HistoryView extends Ui.View {
     }
 
     function scale(num) {
-    	if (num == null) { return null;}
+    	if (num == null) { return 0;}
 		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 
@@ -91,7 +91,7 @@ class HistoryView extends Ui.View {
 			if ($._mApp.mHistorySelectFlags & (1 << (bitPosition-1))) {
 				// found set bit, capture index in to dictionary
 				labelList[j] = possible;
-				resultsIndex[j] = bitPosition;
+				resultsIndexList[j] = bitPosition;
 				numResultsToDisplay++;
 				j++;
 				if (j >= MAX_DISPLAY_VAR) {
@@ -105,11 +105,6 @@ class HistoryView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-
-		//var today = ($._mApp.timeToday() / 86400) % NUM_RESULT_ENTRIES;	// Todays index
-		//var epoch = $._mApp.timeToday() - (86400 * 29);	// Index 29 days ago
-		// 29 days ago is entry ahead of today in buffer
-		//var epochIndex = (today + 1 ) % NUM_RESULT_ENTRIES;
 		
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
@@ -128,7 +123,7 @@ class HistoryView extends Ui.View {
 
 		updateLayoutField("HistoryTitle", null, mLabelColour);
 		
-		Sys.println("HistoryView: indexDay, today, HistoryFlags, resultsIndex :"+
+		Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
 			indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
 		
 		if ($._mApp.mHistorySelectFlags == 0) {
@@ -144,14 +139,27 @@ class HistoryView extends Ui.View {
 		findResultLabels(mKeys);
 		
 		// CHECK OUTCOME
-		Sys.println("HistoryView(): numResults, labelList, resultsIndex :"
-			+numResultsToDisplay+","+labelList+","+resultsIndex);
+		Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
+			+numResultsToDisplay+","+labelList+","+resultsIndexList);
             	
-        // need to fix up all these colours!! in layout etc
         // hard to tie menu on selection order to this list
 		updateLayoutField("Labelx1", labelList[0],  mapColour($._mApp.Label1ColSet));
 		updateLayoutField("Labelx2", labelList[1],  mapColour($._mApp.Label2ColSet));
 		updateLayoutField("Labelx3", labelList[2],  mapColour($._mApp.Label3ColSet));
+		
+		// TEST CODE..
+		// set results up to end point...
+		//for (var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE ; i++) { $._mApp.results[i] = 0;}
+		//for (var i = 0; i < NUM_RESULT_ENTRIES; i++) { 
+			// force index day
+		//	$._mApp.resultsIndex = 0;
+		//	indexDay = $._mApp.resultsIndex;
+		//	today = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+			
+		//	var loc = i * DATA_SET_SIZE;
+		//	$._mApp.results[loc] = i+1; // set none zero time
+		//	$._mApp.results[loc + AVG_PULSE_INDEX] = i; // ramp up values		
+		//}
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
 		if (mDebuggingResults) {
@@ -163,13 +171,8 @@ class HistoryView extends Ui.View {
 		}
 		
 		// Find result limits
-		// change this to step i to each time stamp then look at next three samples
-		
-		// epochIndex is one ahead of today so if non-zero time then should be valid entry
-		// ASSUME THAT HISTORY IS LAST 30 samples on different days NOT that they have to be contiguous days!!!
-		
+		// ASSUME THAT HISTORY IS LAST 30 samples on different days NOT that they have to be contiguous days!!!		
 		// only do min/max on variables of interest
-		//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i += DATA_SET_SIZE) {
 		var day = indexDay; // start at furthest past
 		var index = day * DATA_SET_SIZE;
 		do {
@@ -177,11 +180,11 @@ class HistoryView extends Ui.View {
 				// get values and check max/min
 				var cnt = 0;
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndex[i];					
+					var j = resultsIndexList[i];					
 					if (j != null) {
 						var value = $._mApp.results[index+j].toNumber();
 						cnt++;
-						Sys.println("value : "+value);
+						//Sys.println("value : "+value);
 						// do min max
 						if(min > value) {
 							min = value;
@@ -199,7 +202,8 @@ class HistoryView extends Ui.View {
 			index = (index + DATA_SET_SIZE) % $._mApp.results.size();
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
 		} 
-		while ( day != today);
+		// iterate until back to start
+		while ( day != indexDay);
 		
 		Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
 
@@ -247,7 +251,7 @@ class HistoryView extends Ui.View {
 			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < numResultsToDisplay; i++) {
-					var j = resultsIndex[i];	
+					var j = resultsIndexList[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
 						firstData[i] = $._mApp.results[index+j].toNumber();
@@ -258,24 +262,22 @@ class HistoryView extends Ui.View {
 	 			var mLabel1Val1 = scale(firstData[0]);
 	 			var mLabel2Val1 = scale(firstData[1]);
 	 			var mLabel3Val1 = scale(firstData[2]);				
-					
-				pointNumber++;
 				
-				Sys.println("firstData and points, index, day, today :"+firstData+","+pointNumber+","+index+","+day+","+today);
+				Sys.println("firstData and points, index, day, today :"+firstData+", #"+pointNumber+","+index+","+day+","+today);
 				
 				// now we should have a continuous set of points having found a non-zero entry
 				// or have only one entry
-				if (day == today) { // gone round buffer and not found any other data so one point
+				if ((day == today) && (dataCount == 1) ) { // gone round buffer and not found any other data so one point
+					Sys.println("draw one point only");
 					MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
-					if (resultsIndex[0] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel1Val1, 2);}
+					if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel1Val1, 2);}
 					MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-					if (resultsIndex[1] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel2Val1, 2);}					
+					if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel2Val1, 2);}					
 					MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
-					if (resultsIndex[2] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel3Val1, 2);}								
+					if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + x1, floorY - mLabel3Val1, 2);}								
 				} else {
 					// must be another data point
-					var x2 = pointNumber * xStep + 3;
-					pointNumber++;
+					var x2 = (pointNumber+1) * xStep + 3;
 					
 					// look one day ahead
 					var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
@@ -283,7 +285,7 @@ class HistoryView extends Ui.View {
 					if ($._mApp.results[secondIndex] != 0) { // we have an entry that has been created	
 						// load values
 						for (var i=0; i < numResultsToDisplay; i++) {
-							var j = resultsIndex[i];	
+							var j = resultsIndexList[i];	
 							// shouldn't need null test as have number of valid entries and already checked not zero			
 							if (j != null) {
 								firstData[i] = $._mApp.results[secondIndex+j].toNumber();
@@ -295,23 +297,24 @@ class HistoryView extends Ui.View {
 			 			var mLabel2Val2 = scale(firstData[1]);
 			 			var mLabel3Val2 = scale(firstData[2]);	
 			 			
-			 			Sys.println("#2 firstData and points, secondIndex :"+firstData+","+pointNumber+","+secondIndex);			
+			 			Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
 	
-						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
-						if (resultsIndex[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 						MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
-						if (resultsIndex[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+						if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+						MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+						if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 						MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
-						if (resultsIndex[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+						if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 					} // another none null entry
 				} // only one data entry	
 			} // found entry	
 			
 			// update pointers
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
-			index = day * DATA_SET_SIZE;
+			index = (day * DATA_SET_SIZE) % $._mApp.results.size();
+			pointNumber++;
 		} 
-		while ( day != indexDay);
+		while ( day != today);
 		
 		// TEST CODE
 		var str = System.getSystemStats().usedMemory.toString();
