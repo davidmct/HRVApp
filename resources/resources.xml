@@ -1,5 +1,5 @@
 <resources>
-    <bitmap id="LauncherIcon" filename="images/hrv-icon-40.png" />
+    <bitmap id="LauncherIcon" filename="images/hrv-icon-40x40_BW.png" />
     <bitmap id="nextArrow" filename="images/next_arrow.png" />
     <bitmap id="previousArrow" filename="images/previous_arrow.png" />
     <bitmap id="brush" filename="images/brush.png" dithering="none" />

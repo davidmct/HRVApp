@@ -21,9 +21,9 @@
 		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="300" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>	
-	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.ManualTimeSetPrompt">
+	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>				
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
@@ -80,7 +80,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.Label1ColSetTitle" prompt="@Strings.Label1ColSetPrompt">
+	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.Label1ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -98,7 +98,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.Label2ColSetPrompt">
+	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -116,7 +116,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>				
 	</setting>
-	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.Label3ColSetPrompt">
+	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
