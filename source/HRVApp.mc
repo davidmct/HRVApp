@@ -37,7 +37,7 @@ var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
-var mDebuggingResults = true;
+var mDebuggingResults = false;
 
 // access App variables and classes
 var _mApp;

@@ -330,16 +330,26 @@ class TestController {
     	// make whole number of days (still seconds since UNIX epoch)
     	// This ignores possiblity of 32 bit integar of time wrapping on testday and epoch
     	// should change to use time functions available
-		var testDay = utcStart - (utcStart % 86400);
-		// (testDay modulo 30) * 5 ...
-		//var index = ((testDay / 86400) % 30) * DATA_SET_SIZE;
+		var testDayutc = utcStart - (utcStart % 86400);
 		
 		// next slot in cycle, can overwrite multiple times in a day and keep last ones
-		var index = $._mApp.resultsIndex * DATA_SET_SIZE;
-		var currentSavedutc = $._mApp.results[index + TIME_STAMP_INDEX];
-		var savedDay = currentSavedutc - (currentSavedutc % 86400);
-				
-		Sys.println("utcStart, index, saved day = "+utcStart+","+index+","+savedDay);
+		// Check whether we are creating another set of results on the same day by inspecting previous entry
+		var previousEntry = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		var previousIndex = previousEntry * DATA_SET_SIZE;
+		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
+		
+		var previousSavedutc = $._mApp.results[previousIndex + TIME_STAMP_INDEX];		
+		var currentSavedutc = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		var index;
+		
+		if (testDayutc == previousSavedutc) {
+			index = previousIndex;
+		}
+		else {
+			index = currentIndex;
+		}
+			
+		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
 		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
 		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
@@ -357,7 +367,8 @@ class TestController {
 		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
 		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
    	
-   		if (testDay != savedDay) {
+   		// written a new entry so move pointer
+   		if (index == currentIndex) {
    			// increment write pointer to circular buffer
    			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
    			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);

@@ -123,8 +123,8 @@ class HistoryView extends Ui.View {
 
 		updateLayoutField("HistoryTitle", null, mLabelColour);
 		
-		Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
-			indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
+		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
+		//	indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
 		
 		if ($._mApp.mHistorySelectFlags == 0) {
 			// no data fields set to dsiplay so go home
@@ -139,8 +139,8 @@ class HistoryView extends Ui.View {
 		findResultLabels(mKeys);
 		
 		// CHECK OUTCOME
-		Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
-			+numResultsToDisplay+","+labelList+","+resultsIndexList);
+		//Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
+		//	+numResultsToDisplay+","+labelList+","+resultsIndexList);
             	
         // hard to tie menu on selection order to this list
 		updateLayoutField("Labelx1", labelList[0],  mapColour($._mApp.Label1ColSet));
@@ -205,7 +205,7 @@ class HistoryView extends Ui.View {
 		// iterate until back to start
 		while ( day != indexDay);
 		
-		Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
+		//Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
 
 		// If no results then set min & max to create a nice graph scale
 		if(0 == dataCount){
@@ -258,10 +258,9 @@ class HistoryView extends Ui.View {
  			var mLabel2Val1 = scale(firstData[1]);
  			var mLabel3Val1 = scale(firstData[2]);				
 			
-			Sys.println("HistoryView() single data point");
+			//Sys.println("HistoryView() single data point");
 			
 			// now we should have a continuous set of points having found a non-zero entry
-			Sys.println("draw one point only");
 			MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
 			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
 			MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
@@ -294,7 +293,7 @@ class HistoryView extends Ui.View {
 	 			var mLabel2Val1 = scale(firstData[1]);
 	 			var mLabel3Val1 = scale(firstData[2]);				
 				
-				Sys.println("firstData and points, index, day, today :"+firstData+", #"+pointNumber+","+index+","+day+","+today);
+				//Sys.println("firstData and points, index, day, today :"+firstData+", #"+pointNumber+","+index+","+day+","+today);
 				
 				// now we should have a continuous set of points having found a non-zero entry
 				// must be another data point
@@ -319,7 +318,7 @@ class HistoryView extends Ui.View {
 	 			var mLabel2Val2 = scale(firstData[1]);
 	 			var mLabel3Val2 = scale(firstData[2]);	
 	 			
-	 			Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
+	 			//Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
 
 				MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
 				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
