@@ -14,10 +14,10 @@
 	<property id="firstLoadEver" type ="boolean">false</property>
 	<property id="timestampSet" type="number">1447234278</property>
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
-	<property id="pSensorSelect" type="boolean">true</property>
+	<property id="pSensorSelect" type="boolean">false</property>
 	<property id="soundSet" type="boolean">true</property>
 	<property id="vibeSet" type="boolean">false</property>
-	<property id="testTypeSet" type="number">0</property>
+	<property id="testTypeSet" type="number">1</property>
 	<property id="timerTimeSet" type="number">300</property>
 	<property id="MaxTimerTimeSet" type="number">600</property>
 	<property id="ManualTimeSet" type="number">300</property>

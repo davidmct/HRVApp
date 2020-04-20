@@ -1,0 +1,7 @@
+<resources>    
+    <string id="Device">4</string>
+    <string id="MenuTitleSize">2</string>
+    <string id="PoincareGridWidth">160</string>
+    <string id="HistoryGridWidth">140</string>
+    <string id="HistoryGridHeight">100</string>
+</resources>

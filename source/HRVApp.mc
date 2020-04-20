@@ -18,11 +18,11 @@ using Toybox.Sensor;
 //3. check initialisation of storage and properties on first run to avoid null on read
 //8. sample processing check skipped or double beats
 //8b. Look at frequency domain processing
-//9. how to make trial version and possible payment
+//9. Do timer on trial mode and disable for now?
 //10. Test sensor switching more
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
-//21. Change nore layouts to % and see if works on 260/240 displays
+//21. Setup 260/240 displays
 //18. Poincare view sometimes has y=0 and hence rectangle is drawn below axis
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()

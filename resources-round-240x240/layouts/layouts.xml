@@ -1,0 +1,121 @@
+<layouts>
+    <!-- Summary view layout for round-280x280 -->
+    <layout id="SummaryViewLayout">
+        <drawable id="PoincareBack_id" class="CustomBackground" />
+    	<!-- Labels columns of 4 needed -->
+    	<!-- see if we can or together justifications -->
+    	<label id="ViewTitle" text="Summary" x="center" y="13%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="rMSSD" text="rMSSD" x="27%" y="32%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="Ln_HRV" text="Ln(HRV)" x="52%" y="32%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="avgPulse" text="avgBPM" x="77%" y="32%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="SDSD" text="SDSD" x="27%" y="50%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="NN50" text="NN50" x="52%" y="50%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="pNN50" text="pNN50" x="77%" y="50%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="NN20" text="NN20" x="27%" y="68%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="pNN20" text="pNN20" x="52%" y="68%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />   
+        <label id="SDNN" text="SDNN" x="77%" y="68%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />   
+        <!-- values - use strings as more fonts -->
+        <label id="rMSSD_Value" x="27%" y="39%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="Ln_HRV_Value" x="52%" y="39%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="avgPulse_Value" x="77%" y="39%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="SDSD_Value" x="27%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN50_Value" x="52%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN50_Value" x="77%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="NN20_Value" x="27%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="pNN20_Value" x="52%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="SDNN_Value" x="77%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+		<drawable id="SummaryLayoutLines_id" />
+    </layout>
+    <layout id = "TestViewLayout">
+       	<drawable id="PoincareBack_id" class="CustomBackground" />
+        <label id="ViewTitle" text="HRV" x="61%" y="12%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+	    <bitmap id="HRV_ICON" x="32%" y="4%" filename="../../resources/images/hrv-icon-40.png" dithering="none" >
+	       <!-- <palette disableTransparency="true">
+	           <color>000000</color>
+	           <color>FFFFFF</color>
+	       </palette> -->
+	    </bitmap>
+        <label id="ViewHRV_Lbl" text="Ln(HRV)" x="75%" y="66%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewHRV_Val" text="value" x="75%" y="78%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+
+        <label id="ViewStrapStatus" text="no source" x="32%" y="53%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewPulseLbl" text="BPM" x="64%" y="53%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewPulseVal" text="xx" x="82%" y="53%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+ 
+        <label id="ViewTimerLbl" text="TIMER" x="27%" y="66%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_TINY" />
+        <label id="ViewTimerVal" text="value" x="27%" y="78%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+     	<text-area id="bodyText" 
+	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
+	        text=" " 
+	        x="10%" y="18%" width="80%" height="31%">
+	        <!-- The fonts will be tried in order. This allows scaling the font size
+	             as the text grows -->        
+	        <fonts>
+	            <font>Gfx.FONT_MEDIUM</font>
+	            <font>Gfx.FONT_SMALL</font>            
+	            <font>Gfx.FONT_TINY</font>
+	            <font>Gfx.FONT_XTINY</font>
+	        </fonts>
+    	</text-area>  
+ 		<drawable id="TestViewLayoutLines_id" />     
+    </layout>
+    <layout id="PoincareViewLayout">
+    	<drawable id="PoincareBack_id" class="CustomBackground" />
+        <!-- Key assumption is chart height - 180 (hard coded in view) -->
+        <!-- width of chart area is +-90 from center as is height-->
+        <label id="PoincareTitle" text="Poincare" x="50%" y="11%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="IntervalLbl" text="RR ms" x="50%" y="93%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="TopValY" text="" x="11%" y="82%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="MidValY" text="" x="11%" y="50%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="LowerValY" text="" x="11%" y="18%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="TopValX" text="" x="75%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="MidValX" text="" x="50%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="LowerValX" text="" x="29%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+     	<drawable id="PoincareLayoutLines_id" />
+    </layout>
+    <layout id="CurrentViewLayout">
+       	<drawable id="PoincareBack_id" class="CustomBackground" />
+        <label id="CurrentViewTitle" text="Current" x="50%" y="12%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+    	<text-area id="CurrentViewString" 
+	        color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"
+	        text="0:00 out of 0:00" 
+	        x="10%" y="18%" width="80%" height="30%">
+	        <!-- The fonts will be tried in order. This allows scaling the font size
+	             as the text grows -->        
+	        <fonts>
+	            <font>Gfx.FONT_MEDIUM</font>
+	            <font>Gfx.FONT_SMALL</font>            
+	            <font>Gfx.FONT_TINY</font>
+	            <font>Gfx.FONT_XTINY</font>
+	        </fonts>
+    	</text-area>  
+         <label id="CurrentrMSSD_txt" text="rMSSD" x="28%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+         <label id="CurrentInterval_txt" text="Interval" x="72%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+         <label id="CurrentrMSSD_val" text="" x="28%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+         <label id="CurrentInterval_val" text="" x="72%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+
+         <label id="Delta_txt" text="Min/Max RR delta" x="50%" y="65%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+         <label id="DeltaMin_val" text="" x="28%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+         <label id="DeltaMax_val" text="" x="72%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+
+    </layout>  
+    <layout id="HistoryViewLayout">
+    	<drawable id="PoincareBack_id" class="CustomBackground" />
+        <!-- Key assumption is chart height - 120 (hard coded in strings) -->
+        <!-- width of chart area is +-90 from center-->
+        <label id="HistoryTitle" text="History" x="50%" y="11%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+        <label id="Labelx1" text=" " x="36%" y="79%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="Labelx2" text=" " x="64%" y="79%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="Labelx3" text=" " x="50%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel0" text="x" x="11%" y="29%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel1" text="x" x="11%" y="36%" color="Gfx.COLOR_DK_GRAY"  justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel2" text="x" x="11%" y="43%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel3" text="x" x="11%" y="50%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel4" text="x" x="11%" y="57%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel5" text="x" x="11%" y="64%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="yLabel6" text="x" x="11%" y="71%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+        <label id="xAxisLabel" text="newer->" x="70%" y="23%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
+
+     	<drawable id="HistoryLayoutLines_id" />
+    </layout>     
+</layouts>

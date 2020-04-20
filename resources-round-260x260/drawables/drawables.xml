@@ -1,0 +1,47 @@
+<drawables>
+<!-- 
+    <drawable-list id="MenuForeground_id" background="Gfx.COLOR_TRANSPARENT">
+        <shape type="polygon" points="[[140,9],[127,16],[113,16]]" color="Gfx.COLOR_WHITE" />
+        <shape type="polygon" points="[[140,10],[125,15],[115,15]]" color="Gfx.COLOR_BLACK" />
+        <shape type="polygon" points="[[140,231],[127,224],[113,224]]" color="Gfx.COLOR_WHITE" />
+        <shape type="polygon" points="[[140,230],[125,225],[115,225]]" color="Gfx.COLOR_BLACK" />
+    </drawable-list>
+ -->
+    <drawable-list id="SummaryLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+    	<shape type="rectangle" x="14%" y="27%" width="75%" height="2" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="14%" y="46%" width="75%" height="2" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="14%" y="63%" width="75%" height="2" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="14%" y="80%" width="75%" height="2" color="Gfx.COLOR_RED" /> 
+		<!-- vertical lines -->		
+		<shape type="rectangle" x="14%" y="27%" width="2" height="54%" color="Gfx.COLOR_RED" /> 		
+		<shape type="rectangle" x="40%" y="27%" width="2" height="54%" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="64%" y="27%" width="2" height="54%" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="89%" y="27%" width="2" height="54%" color="Gfx.COLOR_RED" /> 											
+    </drawable-list>
+    <drawable-list id="TestViewLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+    	<shape type="rectangle" x="0%" y="47%" width="100%" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="0%" y="61%" width="100%" height="1" color="Gfx.COLOR_RED" /> 		
+    </drawable-list>
+    <drawable-list id="PoincareLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+       	<!-- width of chart area is +-90 from center and 180 high -->
+    	<shape type="rectangle" x="18%" y="18%" width="64%" height="2" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="18%" y="82%" width="64%" height="2" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="18%" y="18%" width="2" height="64%" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="82%" y="18%" width="2" height="64%" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="18%" y="50%" width="64%" height="2" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="50%" y="18%" width="2" height="64%" color="Gfx.COLOR_RED" /> 				
+    </drawable-list>
+    <drawable-list id="HistoryLayoutLines_id" background="Gfx.COLOR_TRANSPARENT">
+       	<!-- width of chart area is +-90 from center and 120 high -->
+    	<shape type="rectangle" x="18%" y="28%" width="64%" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="18%" y="36%" width="64%" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="18%" y="43%" width="64%" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="18%" y="50%" width="64%" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="18%" y="57%" width="64%" height="1" color="Gfx.COLOR_RED" />
+		<shape type="rectangle" x="18%" y="64%" width="64%" height="1" color="Gfx.COLOR_RED" /> 
+		<shape type="rectangle" x="18%" y="71%" width="64%" height="1" color="Gfx.COLOR_RED" /> 					
+    </drawable-list>
+    <!-- <drawable-list id="PoincareBack_id" background="Gfx.COLOR_TRANSPARENT">
+		<shape type="rectangle" x="0" y="0" width="fill" height="fill" color="Gfx.COLOR_BLACK" />
+	</drawable-list> -->
+</drawables>
