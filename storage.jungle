@@ -1,0 +1,2 @@
+# Exclude the property based storage code for pre CIQ 2.4 devices
+round.excludeAnnotations = preCIQ24

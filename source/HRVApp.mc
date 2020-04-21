@@ -114,6 +114,44 @@ class HRVAnalysis extends App.AppBase {
     
     // Block size for dump to debug of intervals
     const BLOCK_SIZE = 40;
+
+(:storageMethod)    
+    function initializeWithStorage() {
+		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
+		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
+		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
+		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
+		
+		// load trial variables
+		mTrialMode = $._mApp.Properties.getValue("pTrialMode");
+		mTrialStarted = $._mApp.Properties.getValue("pTrialStarted");
+		mAuthorised = $._mApp.Properties.getValue("pAuthorised");
+		mTrailPeriod = $._mApp.Properties.getValue("pTrailPeriod");
+		mTrialStartDate = $._mApp.Properties.getValue("pTrialStartDate");
+		
+		$._mApp.Properties.setValue("pDeviceID", mDeviceID);
+		// code to authenticate device with given DeviceID
+		mAuthID = $._mApp.Properties.getValue("pAuthID");       
+    }
+ 
+ (:preCIQ24)   
+    function initializeNoStorage() {
+ 		mAntID = $._mApp.getProperty("pAuxHRAntID");
+		versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+		mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
+		mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
+		
+		// load trial variables
+		mTrialMode = $._mApp.getProperty("pTrialMode");
+		mTrialStarted = $._mApp.getProperty("pTrialStarted");
+		mAuthorised = $._mApp.getProperty("pAuthorised");
+		mTrailPeriod = $._mApp.getProperty("pTrailPeriod");
+		mTrialStartDate = $._mApp.getProperty("pTrialStartDate");
+		
+		$._mApp.Properties.setProperty("pDeviceID", mDeviceID);
+		mAuthID = $._mApp.getProperty("pAuthID");   
+    
+    }
     
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
@@ -132,37 +170,9 @@ class HRVAnalysis extends App.AppBase {
         mDeviceID = mySettings.uniqueIdentifier;
              
 		if (Toybox.Application has :Storage) {
-			mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
-			versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
-			mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
-			mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
-			
-			// load trial variables
-			mTrialMode = $._mApp.Properties.getValue("pTrialMode");
-			mTrialStarted = $._mApp.Properties.getValue("pTrialStarted");
-			mAuthorised = $._mApp.Properties.getValue("pAuthorised");
-			mTrailPeriod = $._mApp.Properties.getValue("pTrailPeriod");
-			mTrialStartDate = $._mApp.Properties.getValue("pTrialStartDate");
-			
-			$._mApp.Properties.setValue("pDeviceID", mDeviceID);
-			// code to authenticate device with given DeviceID
-			mAuthID = $._mApp.Properties.getValue("pAuthID");
-				
+			initializeWithStorage();				
 		} else {
-			mAntID = $._mApp.getProperty("pAuxHRAntID");
-			versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
-			mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
-			
-			// load trial variables
-			mTrialMode = $._mApp.getProperty("pTrialMode");
-			mTrialStarted = $._mApp.getProperty("pTrialStarted");
-			mAuthorised = $._mApp.getProperty("pAuthorised");
-			mTrailPeriod = $._mApp.getProperty("pTrailPeriod");
-			mTrialStartDate = $._mApp.getProperty("pTrialStartDate");
-			
-			$._mApp.Properties.setProperty("pDeviceID", mDeviceID);
-			mAuthID = $._mApp.getProperty("pAuthID");
+			initializeNoStorage();
 		}
 		
 		Sys.println("HRVApp: ANT ID set to : " + mAntID);

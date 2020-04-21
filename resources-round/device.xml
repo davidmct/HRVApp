@@ -1,0 +1,8 @@
+<resources> 
+	<!--  280x280 device -->   
+    <string id="Device">4</string>
+    <string id="MenuTitleSize">2</string>
+    <string id="PoincareGridWidth">180</string>
+    <string id="HistoryGridWidth">180</string>
+    <string id="HistoryGridHeight">120</string>
+</resources>

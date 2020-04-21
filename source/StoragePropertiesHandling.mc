@@ -37,47 +37,57 @@ class HRVStorageHandler {
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
 
+(:storageMethod)
+	function fresetPropertiesStorage() {
+		// use Storage.get/setValue("", value) for storage or properties not used in settings			
+		$._mApp.Properties.setValue("pAuxHRAntID", 0);
+		Storage.setValue("firstLoadEver", true);
+		$._mApp.Properties.setValue("pFitWriteEnabled", false);
+		$._mApp.Properties.setValue("pSensorSelect", true);
+		$._mApp.Properties.setValue("soundSet", true);
+		$._mApp.Properties.setValue("vibeSet", false);
+		$._mApp.Properties.setValue("testTypeSet", 0);
+		$._mApp.Properties.setValue("timerTimeSet", 300);
+		$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
+		$._mApp.Properties.setValue("ManualTimeSet", 300);
+		$._mApp.Properties.setValue("bgColSet", 3);
+		$._mApp.Properties.setValue("lblColSet", 10);
+		$._mApp.Properties.setValue("txtColSet", 9);
+		$._mApp.Properties.setValue("Label1ColSet", 10);
+		$._mApp.Properties.setValue("Label3ColSet", 12);
+		$._mApp.Properties.setValue("Label2ColSet", 6);			
+	}
+
+(:preCIQ24)	
+	function fresetPropertiesPreCIQ24() {		
+		$._mApp.setProperty("pAuxHRAntID", 0);
+		$._mApp.setProperty("firstLoadEver", true);
+		$._mApp.setProperty("pFitWriteEnabled", false);
+		$._mApp.setProperty("pSensorSelect", true);
+		$._mApp.setProperty("soundSet", true);
+		$._mApp.setProperty("vibeSet", false);
+		$._mApp.setProperty("testTypeSet", 0);
+		$._mApp.setProperty("timerTimeSet", 300);
+		$._mApp.setProperty("MaxTimerTimeSet", 300);
+		$._mApp.setProperty("ManualTimeSet", 300);
+		$._mApp.setProperty("bgColSet", 3);
+		$._mApp.setProperty("lblColSet", 10);
+		$._mApp.setProperty("txtColSet", 13);
+		$._mApp.setProperty("Label1ColSet", 10);
+		$._mApp.setProperty("Label3ColSet", 12);
+		$._mApp.setProperty("Label2ColSet", 6);		
+	
+	}
+	
 	// This should be factory default settings and should write values back to store
 	// ideally these should align with properties defined in XML
 	function resetSettings() {
 	
-		if (Toybox.Application has :Storage) {
-			// use Storage.get/setValue("", value) for storage or properties not used in settings			
-			$._mApp.Properties.setValue("pAuxHRAntID", 0);
-			Storage.setValue("firstLoadEver", true);
-			$._mApp.Properties.setValue("pFitWriteEnabled", false);
-			$._mApp.Properties.setValue("pSensorSelect", true);
-			$._mApp.Properties.setValue("soundSet", true);
-			$._mApp.Properties.setValue("vibeSet", false);
-			$._mApp.Properties.setValue("testTypeSet", 0);
-			$._mApp.Properties.setValue("timerTimeSet", 300);
-			$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
-			$._mApp.Properties.setValue("ManualTimeSet", 300);
-			$._mApp.Properties.setValue("bgColSet", 3);
-			$._mApp.Properties.setValue("lblColSet", 10);
-			$._mApp.Properties.setValue("txtColSet", 9);
-			$._mApp.Properties.setValue("Label1ColSet", 10);
-			$._mApp.Properties.setValue("Label3ColSet", 12);
-			$._mApp.Properties.setValue("Label2ColSet", 6);		
-		} else {
-			$._mApp.setProperty("pAuxHRAntID", 0);
-			$._mApp.setProperty("firstLoadEver", true);
-			$._mApp.setProperty("pFitWriteEnabled", false);
-			$._mApp.setProperty("pSensorSelect", true);
-			$._mApp.setProperty("soundSet", true);
-			$._mApp.setProperty("vibeSet", false);
-			$._mApp.setProperty("testTypeSet", 0);
-			$._mApp.setProperty("timerTimeSet", 300);
-			$._mApp.setProperty("MaxTimerTimeSet", 300);
-			$._mApp.setProperty("ManualTimeSet", 300);
-			$._mApp.setProperty("bgColSet", 3);
-			$._mApp.setProperty("lblColSet", 10);
-			$._mApp.setProperty("txtColSet", 13);
-			$._mApp.setProperty("Label1ColSet", 10);
-			$._mApp.setProperty("Label3ColSet", 12);
-			$._mApp.setProperty("Label2ColSet", 6);		
-		}
-	
+		if (Toybox.Application has :Storage) {		
+			fresetPropertiesStorage();				
+		} else {		
+			fresetPropertiesPreCIQ24();	
+		}	
 		// now load up variables
 		readProperties();
 	}
@@ -194,41 +204,31 @@ class HRVStorageHandler {
 			return true;
 		}
 	}
-	
+
+(:preCIQ24)	
 	function _CallReadPropProperty() {	
-		// On very first use of app don't read in properties!
-		//var value;
-		
-		// FORCE NOT OVER WRITE
-		//value = $._mApp.getProperty("firstLoadEver");
-		//if (mDebugging == true) {value = null;}
-			
-		//if (value == null) {
-		//	$._mApp.setProperty("firstLoadEver", true);
-		//} else {
-			// assumes all these values exist
-			$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
-			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
-			$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
-			$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
-			$._mApp.soundSet = $._mApp.getProperty("soundSet");
-			$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
-			$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
-			$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
-			$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
-			$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
-			// ColSet are index into colour map
-			$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
-			$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
-			$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
-			$._mApp.Label1ColSet = $._mApp.getProperty("Label1ColSet").toNumber();
-			$._mApp.Label3ColSet = $._mApp.getProperty("Label3ColSet").toNumber();
-			$._mApp.Label2ColSet = $._mApp.getProperty("Label2ColSet").toNumber();
-	
-		//}
+		// assumes all these values exist
+		$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
+		$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+		$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
+		$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
+		$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
+		$._mApp.soundSet = $._mApp.getProperty("soundSet");
+		$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
+		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
+		$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
+		$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
+		$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
+		// ColSet are index into colour map
+		$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
+		$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
+		$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
+		$._mApp.Label1ColSet = $._mApp.getProperty("Label1ColSet").toNumber();
+		$._mApp.Label3ColSet = $._mApp.getProperty("Label3ColSet").toNumber();
+		$._mApp.Label2ColSet = $._mApp.getProperty("Label2ColSet").toNumber();
 	}
-	
+
+(:storageMethod)	
 	function _CallReadPropStorage() {
 		//Property.getValue(name as string);
 		// On very first use of app don't read in properties!
@@ -262,7 +262,8 @@ class HRVStorageHandler {
 			$._mApp.Label2ColSet = $._mApp.Properties.getValue("Label2ColSet").toNumber();	
 		//}	
 	}
-	
+
+(:storageMethod)	
 	function _CallSavePropStorage() {
 		Storage.setValue("timestampSet", $._mApp.timestampSet);
 		$._mApp.Properties.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
@@ -285,7 +286,8 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("Label2ColSet", $._mApp.Label2ColSet);	
 		
 	}
-	
+
+(:preCIQ24)	
 	function _CallSavePropProperty() {
 		$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
 		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
@@ -319,6 +321,34 @@ class HRVStorageHandler {
 		// this will be overridden if we load results
 		$._mApp.resultsIndex = 0;
 	}
+
+(:preCIQ24)
+	function retrieveResultsProp() {
+		var tmp = $._mApp.getProperty("resultIndex");
+		if (tmp == null) { tmp = 0;}
+		$._mApp.resultsIndex = tmp;
+		
+		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+			var result = $._mApp.getProperty(RESULTS + i);
+			var ii = i * DATA_SET_SIZE;
+			if(null != result) {
+				$._mApp.results[ii + 0] = result[0];
+				$._mApp.results[ii + 1] = result[1];
+				$._mApp.results[ii + 2] = result[2];
+				$._mApp.results[ii + 3] = result[3];
+				$._mApp.results[ii + 4] = result[4];
+				$._mApp.results[ii + 5] = result[5];
+				$._mApp.results[ii + 6] = result[6];
+				$._mApp.results[ii + 7] = result[7];
+				$._mApp.results[ii + 8] = result[8];
+				$._mApp.results[ii + 9] = result[9];
+				$._mApp.results[ii + 10] = result[10];
+				$._mApp.results[ii + 11] = result[11];
+				$._mApp.results[ii + 12] = result[12];
+				$._mApp.results[ii + 13] = result[13];
+			}
+		}	
+	}
 	
 	function retrieveResults() {
 		var mCheck;
@@ -339,64 +369,46 @@ class HRVStorageHandler {
 			if ($._mApp.resultsIndex == null) {$._mApp.resultsIndex = 0;}
 			return true;			
 		} else {
-			var tmp = $._mApp.getProperty("resultIndex");
-			if (tmp == null) { tmp = 0;}
-			$._mApp.resultsIndex = tmp;
-			
-			for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-				var result = $._mApp.getProperty(RESULTS + i);
-				var ii = i * DATA_SET_SIZE;
-				if(null != result) {
-					$._mApp.results[ii + 0] = result[0];
-					$._mApp.results[ii + 1] = result[1];
-					$._mApp.results[ii + 2] = result[2];
-					$._mApp.results[ii + 3] = result[3];
-					$._mApp.results[ii + 4] = result[4];
-					$._mApp.results[ii + 5] = result[5];
-					$._mApp.results[ii + 6] = result[6];
-					$._mApp.results[ii + 7] = result[7];
-					$._mApp.results[ii + 8] = result[8];
-					$._mApp.results[ii + 9] = result[9];
-					$._mApp.results[ii + 10] = result[10];
-					$._mApp.results[ii + 11] = result[11];
-					$._mApp.results[ii + 12] = result[12];
-					$._mApp.results[ii + 13] = result[13];
-				}
-			}
+			retrieveResultsProp();	
 		}
 		Sys.println("restrieveResults() finished");
 		return true;
 	}
-	
+
+(:preCIQ24)
+	function storeResultsProp() {
+		$._mApp.setProperty("resultIndex", $._mApp.resultsIndex);
+    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+			var ii = i * DATA_SET_SIZE;
+			var result = $._mApp.getProperty(RESULTS + i);
+			if(null == result || $._mApp.results[ii] != result[0]) {
+				$._mApp.setProperty(RESULTS + i, [
+					$._mApp.results[ii + 0],
+					$._mApp.results[ii + 1],
+					$._mApp.results[ii + 2],
+					$._mApp.results[ii + 3],
+					$._mApp.results[ii + 4],
+					$._mApp.results[ii + 5],
+					$._mApp.results[ii + 6],
+					$._mApp.results[ii + 7],
+					$._mApp.results[ii + 8],
+					$._mApp.results[ii + 9],
+					$._mApp.results[ii + 10],
+					$._mApp.results[ii + 11],						
+					$._mApp.results[ii + 12],
+					$._mApp.results[ii + 13]						
+					]);
+			}
+		}	
+	}
+		
 	function storeResults() {
 	    // Save results to memory
 	    if (Toybox.Application has :Storage) {
 			Storage.setValue("resultsArray", $._mApp.results);
 			Storage.setValue("resultIndex", $._mApp.resultsIndex);
 		} else {
-			$._mApp.setProperty("resultIndex", $._mApp.resultsIndex);
-	    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-				var ii = i * DATA_SET_SIZE;
-				var result = $._mApp.getProperty(RESULTS + i);
-				if(null == result || $._mApp.results[ii] != result[0]) {
-					$._mApp.setProperty(RESULTS + i, [
-						$._mApp.results[ii + 0],
-						$._mApp.results[ii + 1],
-						$._mApp.results[ii + 2],
-						$._mApp.results[ii + 3],
-						$._mApp.results[ii + 4],
-						$._mApp.results[ii + 5],
-						$._mApp.results[ii + 6],
-						$._mApp.results[ii + 7],
-						$._mApp.results[ii + 8],
-						$._mApp.results[ii + 9],
-						$._mApp.results[ii + 10],
-						$._mApp.results[ii + 11],						
-						$._mApp.results[ii + 12],
-						$._mApp.results[ii + 13]						
-						]);
-				}
-			}
+			storeResultsProp();
 		}
 	}
 	
