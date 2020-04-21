@@ -38,33 +38,6 @@ function timerFormat(time) {
 	}
 }
 
-function clockFormat(time) 	{
-	var hour = (time / 3600) % 24;
-	var min = (time / 60) % 60;
-	var sec = time % 60;
-	var meridiem = "";
-	if(Sys.getDeviceSettings().is24Hour) {
-		if(0 == time) {
-			hour = 24;
-		}
-		else {
-			hour = hour % 24;
-		}
-		return Lang.format("$1$$2$",[hour.format("%02d"),min.format("%02d")]);
-	}
-	else {
-		if(12 > hour) {
-			meridiem = "AM";
-		}
-		else {
-			meridiem = "PM";
-		}
-		hour = 1 + (hour + 11) % 12;
-		return Lang.format("$1$:$2$:$3$ $4$",[hour.format("%01d"),
-			min.format("%02d"),sec.format("%02d"),meridiem]);
-	}
-}
-
 
 function timeNow() {
 	return (Time.now().value() + Sys.getClockTime().timeZoneOffset);

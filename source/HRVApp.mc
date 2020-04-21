@@ -2,9 +2,7 @@ using Toybox.Application as App;
 using Toybox.Application.Storage as Store;
 using Toybox.Application.Properties as Property;
 using Toybox.WatchUi as Ui;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
-using Toybox.Attention;
 using Toybox.System as Sys;
 using Toybox.Sensor;
 

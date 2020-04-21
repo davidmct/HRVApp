@@ -16,10 +16,7 @@
 // https://forums.garmin.com/developer/connect-iq/f/discussion/4396/how-can-i-update-watch-app-ui-in-realtime-when-receiving-messages-from-android-app
 
 using Toybox.Application as App;
-using Toybox.Application.Storage as Store;
-using Toybox.Application.Properties as Property;
 using Toybox.WatchUi as Ui;
-using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 using Toybox.Attention;
 using Toybox.System as Sys;	

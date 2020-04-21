@@ -3,8 +3,6 @@ using Toybox.Application.Properties as Property;
 using Toybox.Application as App;
 using Toybox.Application.Storage as Storage;
 using Toybox.WatchUi as Ui;
-using Toybox.Time.Gregorian as Calendar;
-using Toybox.Timer;
 
 // STORAGE came in with CIQ 2.4 - could cut down code by removing all pre CIQ2.4 code
 

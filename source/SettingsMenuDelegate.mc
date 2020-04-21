@@ -1,6 +1,5 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
-using Toybox.Time;
 using Toybox.System as Sys;
 
 class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
