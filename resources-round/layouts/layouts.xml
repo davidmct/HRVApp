@@ -91,11 +91,11 @@
     	</text-area>  
          <label id="CurrentrMSSD_txt" text="rMSSD" x="28%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
          <label id="CurrentInterval_txt" text="Interval" x="72%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-         <label id="CurrentrMSSD_val" text="" x="28%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
-         <label id="CurrentInterval_val" text="" x="72%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+         <label id="CurrentrMSSD_val" text="" x="28%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+         <label id="CurrentInterval_val" text="" x="72%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
          <label id="Delta_txt" text="Min/Max RR delta" x="50%" y="65%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-         <label id="DeltaMin_val" text="" x="28%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
-         <label id="DeltaMax_val" text="" x="72%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_NUMBER_MILD" />
+         <label id="DeltaMin_val" text="" x="28%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
+         <label id="DeltaMax_val" text="" x="72%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
     </layout>  
     <layout id="HistoryViewLayout">
     	<drawable id="PoincareBack_id" class="CustomBackground" />
