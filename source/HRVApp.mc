@@ -36,6 +36,7 @@ var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
 var mDebuggingResults = false;
+var viewStackCount = 0;
 
 // access App variables and classes
 var _mApp;
@@ -230,10 +231,6 @@ class HRVAnalysis extends App.AppBase {
 	    	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
 
-    	if(VIVOACTIVE == device) {
-    	 	soundSet = false;
-    	}
-
 		// Retrieve saved results from memory
 		// create and clear buffer - only one set per day
 		mStorage.resetResults();
@@ -247,8 +244,8 @@ class HRVAnalysis extends App.AppBase {
 		mFitControl = new HRVFitContributor();
 
     	// Init view variables
-		viewNum = 0;
-		lastViewNum = 0;
+		viewNum = TEST_VIEW;
+		lastViewNum = TEST_VIEW;
 
 		// Init timers
 		_uiTimer = new Timer.Timer();

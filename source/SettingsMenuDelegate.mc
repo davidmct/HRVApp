@@ -12,38 +12,38 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
      	if ( id.equals("timer")) {
      		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
-	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_LEFT );
+	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
 //        else if ( id.equals("fitOutput"))  {
 //            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write")});
 //	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 //	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
-// 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_LEFT );  
+// 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_IMMEDIATE );  
 //        }
         else if ( id.equals("colour"))   {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
 	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
 	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
 	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	        
-	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_LEFT );
+	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
         else if ( id.equals("sound"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_LEFT );     
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_IMMEDIATE );     
         }
         else if ( id.equals("vibration"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Vibration")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_LEFT );  
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_IMMEDIATE );  
         }
         else if (id.equals("reset")) {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Results", null, "results", null));
 	        menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
-	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_LEFT );
+	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
     }
 
@@ -60,11 +60,11 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 //    }   
     
     function onBack() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }   
     
     function onWrap(key) {

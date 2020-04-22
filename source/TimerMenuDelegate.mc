@@ -17,4 +17,12 @@ class TimerMenuDelegate extends Ui.Menu2InputDelegate {
        	}
     }
     function setTimerTime(value) { $._mApp.timerTimeSet = value;}
+    
+    function onBack() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }   
 }

@@ -12,15 +12,15 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
  			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_LEFT ); 
-			//Ui.pushView(new Ui.Confirmation("Reset settings?"), new SettingsDelegate(), Ui.SLIDE_LEFT);
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_IMMEDIATE ); 
+			//Ui.pushView(new Ui.Confirmation("Reset settings?"), new SettingsDelegate(), Ui.SLIDE_IMMEDIATE);
         }
         else if (id.equals("results")) {
          	var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_LEFT );
-			//Ui.pushView(new Ui.Confirmation("Clear results?"), new ResultsDelegate(), Ui.SLIDE_LEFT);
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_IMMEDIATE );
+			//Ui.pushView(new Ui.Confirmation("Clear results?"), new ResultsDelegate(), Ui.SLIDE_IMMEDIATE);
         }
     }
     
@@ -39,11 +39,11 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function onBack() {
-        Ui.popView(Ui.SLIDE_DOWN);
+        Ui.popView(Ui.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
-        Ui.popView(Ui.SLIDE_DOWN);
+        Ui.popView(Ui.SLIDE_IMMEDIATE);
     } 
     
 }

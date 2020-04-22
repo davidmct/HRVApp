@@ -73,7 +73,7 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 // SAMPLE PROCESSING
 
 const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
-const MAX_TIME = 10; // minutes
+const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)
 
 // STORAGE PROPERTIES

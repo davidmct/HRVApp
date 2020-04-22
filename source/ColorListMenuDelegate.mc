@@ -19,15 +19,15 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
         } else {
         	Sys.println("ColourListMenuDelegate: colour picked = " + value);
         	mFunc.invoke( value);   
-        	Ui.popView(WatchUi.SLIDE_DOWN);     
+        	Ui.popView(WatchUi.SLIDE_IMMEDIATE);     
         }
     }
     
     function onBack() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
 }

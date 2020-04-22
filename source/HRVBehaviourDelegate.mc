@@ -20,18 +20,18 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     }
  
     function onDone() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(Ui.SLIDE_IMMEDIATE);
     }  
 	
 	function onNextPage() {
 		// down or swipe UP
-		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_LEFT));
+		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
     function onPreviousPage() {
 		// Up or swipe down
-		Ui.switchToView($._mApp.subView(), new HRVBehaviourDelegate(), slide(Ui.SLIDE_RIGHT));
+		Ui.switchToView($._mApp.subView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
@@ -55,25 +55,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		return true;
 	}
 
-    function slide(direction) {
-
-    	//if((Ui.SLIDE_LEFT == direction || Ui.SLIDE_UP == direction) && GRAPH_VIEW == $._mApp.viewNum) {
-    	if(Ui.SLIDE_LEFT == direction && HISTORY_VIEW == $._mApp.viewNum) {
-    		return Ui.SLIDE_IMMEDIATE;
-		}
-    	//else if((Ui.SLIDE_RIGHT == direction || Ui.SLIDE_DOWN == direction) && GRAPH_VIEW == $._mApp.viewNum) {
-    	else if(Ui.SLIDE_RIGHT == direction && HISTORY_VIEW == $._mApp.viewNum) {
-    		return Ui.SLIDE_IMMEDIATE;
-    	}
-    	else {
-    		return direction;
-    	}
-    }
-
     function onEnter() {
 		if($._mApp.viewNum != TEST_VIEW) {
 			//Sys.println("HRVBehaviour onEnter() - switch to test view");
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 			return true;
 		}
 		else {
@@ -83,7 +68,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
-	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
+	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 				return true;
 			}
 		}
@@ -104,7 +89,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         menu.addItem(new Ui.MenuItem("Load Intervals", null, "load", null));        
         menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
         menu.addItem(new Ui.MenuItem("About", null, "about", null));
-        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_LEFT );
+        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
 		return true;
     }
 
@@ -112,24 +97,23 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		if(TEST_VIEW == $._mApp.viewNum) {
 			var res = $._mApp.mTestControl.StateMachine(:escapePressed);
 			if (res == true) {		
-				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
-	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_LEFT );  
+	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 			} else {
 				// in TEST_VIEW. If we are exiting a test then go back to TEST VIEW
 				if ($._mApp.mTestControl.mTestState >= TS_TESTING) {
-					Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+					Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 					return true;
 				} else {
 					// we are not testing so must be real exit of app
-					Ui.popView(Ui.SLIDE_RIGHT);
+					Ui.popView(Ui.SLIDE_IMMEDIATE);
 				}
 			}			
 		}
 		else {
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_RIGHT);
+			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		}
 		return true;
 	}

@@ -113,7 +113,7 @@ class TestView extends Ui.View {
     		// stop app?????
     		//CHECK - causes two calls as one in HRV delegate
 			//$._mApp.onStop( null );
-			popView(SLIDE_RIGHT);
+			popView(SLIDE_IMMEDIATE);
 		}
     }
    

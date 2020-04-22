@@ -67,11 +67,11 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function onBack() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
 
     function setLabel(value) { $._mApp.lblColSet = value;  }

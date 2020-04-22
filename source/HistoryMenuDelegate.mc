@@ -58,11 +58,11 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function onBack() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
-        Ui.popView(WatchUi.SLIDE_DOWN);
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }   
     
     function onWrap(key) {
