@@ -153,15 +153,13 @@ class PoincareView extends Ui.View {
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
 		var floor = min - (min % 5);
+		if (floor < 0 ) { floor = 0;}
 		
-		var test = (ceil - floor) % 15;
+		var test = (ceil - floor) % 10;
 		if (test == 5) { 
-			floor -= 5;
-		} else if (test == 10) {
 			ceil += 5;
-			floor -= 5;
-		}
-
+		} 
+		
 		//Sys.println("Poincare: Ceil, floor "+ceil+" , "+floor);
 				
 		//var range = ceil - floor;

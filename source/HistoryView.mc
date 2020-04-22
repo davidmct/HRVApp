@@ -7,7 +7,7 @@ using Toybox.System as Sys;
 class HistoryView extends Ui.View {
 	
 	hidden var mHistoryLayout;
-	hidden var cGridWith;
+	hidden var cGridWidth;
 	hidden var chartHeight;
     hidden var ctrX;
 	hidden var ctrY;
@@ -15,11 +15,9 @@ class HistoryView extends Ui.View {
 	hidden var rightX;
 	hidden var ceilY;
 	hidden var floorY;
-	
-	hidden var floor;
-	hidden var ceil;
 	hidden var scaleY;
 	hidden var xStep;
+	hidden var floor;
 	
 	hidden var numResultsToDisplay = 0;
 	hidden var labelList = new [MAX_DISPLAY_VAR];
@@ -46,7 +44,7 @@ class HistoryView extends Ui.View {
 			Sys.println("History layout null");
 		}
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
-		cGridWith = a.toNumber();
+		cGridWidth = a.toNumber();
 		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
 		chartHeight = a.toNumber();
 		
@@ -55,13 +53,13 @@ class HistoryView extends Ui.View {
     	ctrX = dc.getWidth() / 2;
 		ctrY = dc.getHeight() / 2;
 		// define box about centre
-		leftX = ctrX - cGridWith/2;
-		rightX = ctrX + cGridWith/2;
+		leftX = ctrX - cGridWidth/2;
+		rightX = ctrX + cGridWidth/2;
 		// 45 *2 is height of chart
 		ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
-		xStep = (cGridWith / NUM_RESULT_ENTRIES).toNumber();
+		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
 		
 		return true;
 	}
@@ -113,7 +111,6 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
-		numResultsToDisplay = 0;
 		
 		// draw the layout. remove if trying manual draw of layout elements
     	View.onUpdate(dc);
@@ -214,18 +211,16 @@ class HistoryView extends Ui.View {
 		}
 
 		// Create the range in blocks of 5
-		ceil = (max + 5) - (max % 5);
+		var ceil = (max + 5) - (max % 5);
 		floor = min - (min % 5);
+		if (floor < 0 ) { floor = 0;}
 		
-		// now expand to multiple of 10 as height = 120 
+		// now expand to multiple of 10 as height also multiple of 10. 
+		// Ensure floor doesn't go negative  
 		var test = (ceil - floor) % 10;
 		if (test == 5) { 
 			ceil += 5;
 		} 
-		//else if (test == 0) {
-		//	ceil += 5;
-		//	floor -= 5;
-		//}
 		var range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale

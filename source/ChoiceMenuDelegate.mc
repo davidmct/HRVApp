@@ -18,5 +18,13 @@ class ChoiceMenu2Delegate extends Ui.Menu2InputDelegate {
         }
     }
     
+    function onBack() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }  
+    
     function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }
 }

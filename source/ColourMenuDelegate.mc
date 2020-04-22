@@ -65,6 +65,14 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     	}   	
     	//Sys.println("Colours: back, text "+$._mApp.bgColSet+" "+$._mApp.txtColSet);
     }
+    
+    function onBack() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }  
 
     function setLabel(value) { $._mApp.lblColSet = value;  }
     function setText(value) { $._mApp.txtColSet = value; }

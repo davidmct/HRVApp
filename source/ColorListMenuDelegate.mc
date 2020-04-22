@@ -22,4 +22,12 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
         	Ui.popView(WatchUi.SLIDE_DOWN);     
         }
     }
+    
+    function onBack() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }  
 }

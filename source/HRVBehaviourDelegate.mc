@@ -18,6 +18,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     	// same as escape
     	return onEscape();
     }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_DOWN);
+    }  
 	
 	function onNextPage() {
 		// down or swipe UP
@@ -76,7 +80,6 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			// in test view so means stop or start test
 			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
 			if (res == true) {
-				//Ui.pushView(new Ui.Confirmation("Save result?"), new SaveDelegate(), Ui.SLIDE_LEFT);
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));

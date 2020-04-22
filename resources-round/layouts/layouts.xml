@@ -47,7 +47,7 @@
      	<text-area id="bodyText" 
 	        color="Gfx.COLOR_BLACK" justification="Gfx.TEXT_JUSTIFY_CENTER"
 	        text=" " 
-	        x="10%" y="18%" width="80%" height="31%">
+	        x="10%" y="20%" width="80%" height="30%">
 	        <!-- The fonts will be tried in order. This allows scaling the font size
 	             as the text grows -->        
 	        <fonts>
