@@ -251,6 +251,11 @@ class PoincareView extends Ui.View {
 			);	
    		return true;
     }
+    
+    function onHide() {
+    
+    
+    }
 }
 
 // old code for asymmetric scales

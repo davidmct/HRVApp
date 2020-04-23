@@ -1,5 +1,4 @@
 <drawables>
-    <drawable-list id="SummaryLayoutLines_id" background="Gfx.COLOR_TRANSPARENT"/>
     <drawable-list id="TestViewLayoutLines_id" background="Gfx.COLOR_TRANSPARENT"/>
    	<drawable-list id="PoincareLayoutLines_id" background="Gfx.COLOR_TRANSPARENT"/>
    	<drawable-list id="PoincareBack_id" background="Gfx.COLOR_TRANSPARENT"/>

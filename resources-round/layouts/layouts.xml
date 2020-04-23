@@ -46,31 +46,7 @@
         <label id="LowerValX" text="" x="29%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
      	<drawable id="PoincareLayoutLines_id" />
     </layout>
-    <layout id="CurrentViewLayout">
-       	<drawable id="PoincareBack_id" class="CustomBackground" />
-        <label id="CurrentViewTitle" text="Current" x="50%" y="12%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-    	<text-area id="CurrentViewString" 
-	        color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER"
-	        text="0:00 out of 0:00" 
-	        x="10%" y="18%" width="80%" height="30%">
-	        <!-- The fonts will be tried in order. This allows scaling the font size
-	             as the text grows -->        
-	        <fonts>
-	            <font>Gfx.FONT_MEDIUM</font>
-	            <font>Gfx.FONT_SMALL</font>            
-	            <font>Gfx.FONT_TINY</font>
-	            <font>Gfx.FONT_XTINY</font>
-	        </fonts>
-    	</text-area>  
-         <label id="CurrentrMSSD_txt" text="rMSSD" x="28%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-         <label id="CurrentInterval_txt" text="Interval" x="72%" y="47%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-         <label id="CurrentrMSSD_val" text="" x="28%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-         <label id="CurrentInterval_val" text="" x="72%" y="57%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-         <label id="Delta_txt" text="Min/Max RR delta" x="50%" y="65%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-         <label id="DeltaMin_val" text="" x="28%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-         <label id="DeltaMax_val" text="" x="72%" y="75%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-    </layout>  
-    <layout id="HistoryViewLayout">
+	<layout id="HistoryViewLayout">
     	<drawable id="PoincareBack_id" class="CustomBackground" />
         <!-- Key assumption is chart height - 120 (hard coded in strings) -->
         <!-- width of chart area is +-90 from center-->

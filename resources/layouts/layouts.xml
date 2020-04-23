@@ -1,7 +1,4 @@
 <layouts>
-    <!-- Summary view undefined -->
-    <layout id="SummaryViewLayout">
-    </layout>
     <layout id="TestViewLayout">
     </layout>
     <layout id="PoincareViewLayout">
