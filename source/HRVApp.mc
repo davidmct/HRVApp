@@ -36,7 +36,6 @@ var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
 var mDebuggingResults = false;
-var viewStackCount = 0;
 
 // access App variables and classes
 var _mApp;
@@ -60,6 +59,13 @@ class HRVAnalysis extends App.AppBase {
 	var mAntID;
 	// true if external unknown strap ie not enabled in watch
 	var mSensorTypeExt;
+	
+	// try only one creation of a view - consumes more memory as multiple views saved
+	//hidden var mPoincare_view;
+	//hidden var mSummaryView;
+	//hidden var mHistoryView;
+	//hidden var mCurrentView;
+	//hidden var mTestView;
 	
 	// Trial mode variables!!
 	hidden var mTrialMode;
@@ -249,7 +255,15 @@ class HRVAnalysis extends App.AppBase {
 
 		// Init timers
 		_uiTimer = new Timer.Timer();
-		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);		
+		_uiTimer.start(method(:updateScreen), UI_UPDATE_PERIOD_MS, true);	
+		
+		// create views .. rather than every time view is called
+		// only issue might be initialisation each time
+		//mPoincare_view = new PoincareView();	
+		//mSummaryView = new SummaryView();
+		//mHistoryView = new HistoryView();
+		//mCurrentView = new CurrentValueView();
+		//mTestView = new TestView();
     }
     
     //! A wrapper function to allow the timer to request a screen update

@@ -78,6 +78,11 @@ class CurrentValueView extends Ui.View {
 		//dc.setColor(WHITE, BLACK);
 		//dc.drawText(dc.getWidth() / 2, 0, font, str, Gfx.TEXT_JUSTIFY_CENTER);
 		
+		Sys.println("Current view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);	
+		
 		View.onUpdate(dc);
    		return true;
     }

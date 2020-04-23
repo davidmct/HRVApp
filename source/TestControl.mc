@@ -114,7 +114,7 @@ class TestController {
 		
 		switch (mTestState) {
 			case TS_INIT:
-				Sys.println("TS_INIT");
+				//Sys.println("TS_INIT");
 				// We may need to reinitialise sensors if swapped here
 				mTestMessage = "Initialising...";
 				resetTest();
@@ -123,7 +123,7 @@ class TestController {
 				$._mApp.mSensor.setObserver(self.method(:onNotify));
 			break;
 			case TS_WAITING:
-				Sys.println("TS_WAITING");
+				//Sys.println("TS_WAITING");
 				// we are waiting for the HR strap to be ready
 				if ( mSensorReady ) { 
 					mTestMessage = setSensorStr+" sensor ready";
@@ -147,7 +147,7 @@ class TestController {
 				else if(TYPE_MANUAL == testType) {
 					mTestMessage= "Manual test ready. Press Enter";
 				}
-				Sys.println("TS_READY: message: "+mTestMessage);
+				//Sys.println("TS_READY: message: "+mTestMessage);
 				
 				if (caller == :enterPressed) {
 					// now we can setup test ready to go
@@ -164,7 +164,7 @@ class TestController {
 				}				
 			break;
 			case TS_TESTING:
-				Sys.println("TS_TESTING");
+				//Sys.println("TS_TESTING");
 				// now we are in the mist of testing
 				mTestMessage = "Breathe regularly and stay still";
 				

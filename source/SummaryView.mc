@@ -13,23 +13,42 @@ class SummaryView extends Ui.View {
 	hidden var mTitleLabels = ["Stats #1", "Stats #2"];
 	
 	// coordinates of first and second set of labels as %
-	hidden var mLabelSet = [ [35,23], [65, 23], [35, 43], [65, 43], [35, 65], [35, 75] ];
-
+	// split to 1D array to save memory
+	hidden var mLabelSetX = [ 35, 65, 35, 65, 35, 35 ];
+	hidden var mLabelSetY = [ 23, 23, 43, 43, 65, 75 ];
+	
 	// coordinates of  value cordinates as %
-	hidden var mLabelValueLoc = [ [35, 32], [65, 32], [35, 53], [65, 53], [35, 75], [65,75] ];
+	hidden var mLabelValueLocX = [ 35, 65, 35, 65, 35, 65 ];
+	hidden var mLabelValueLocY = [ 32, 32, 53, 53, 75, 75 ];
+		
 	// label values
 	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "" ];
 	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "", "" ];
 
 	// x%, y%, width/height
-	hidden var mRectHoriz = [ [19, 19, 64], [19, 39, 64], [19, 61, 64], [19, 82, 64]];
-	hidden var mRectVert = [ [19, 19, 64], [50, 19, 64], [82, 19, 64] ];
+	hidden var mRectHorizWH = 64;
+	hidden var mRectHorizX = 19;
+	hidden var mRectHorizY = [ 19, 39, 61, 82 ];
+
+	hidden var mRectVertWH = 64;
+	hidden var mRectVertY = 19;	
+	hidden var mRectVertX = [ 19, 50, 82 ];
 	
+	// scaled variables
 	hidden var mTitleLocS = [0,0];	
-	hidden var mLabelSetS = [ [0,0], [0,0], [0,0], [0,0], [0,0], [0,0] ];
-	hidden var mLabelValueLocS = [ [0,0], [0,0], [0,0], [0,0], [0,0], [0,0] ];
-	hidden var mRectHorizS = [ [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0] ];
-	hidden var mRectVertS = [ [0, 0, 0], [0, 0, 0], [0, 0, 0] ];
+	hidden var mLabelSetXS = [ 0, 0, 0, 0, 0, 0 ];
+	hidden var mLabelSetYS = [ 0, 0, 0, 0, 0, 0 ];
+	
+	hidden var mLabelValueLocXS = [ 0, 0, 0, 0, 0, 0 ];
+	hidden var mLabelValueLocYS = [ 0, 0, 0, 0, 0, 0 ];
+	
+	hidden var mRectHorizWHS = 0;
+	hidden var mRectHorizXS = 0;
+	hidden var mRectHorizYS = [ 0, 0, 0, 0 ];
+
+	hidden var mRectVertWHS = 0;
+	hidden var mRectVertYS = 0;	
+	hidden var mRectVertXS = [ 0, 0, 0 ];
 	
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_TINY;
@@ -61,29 +80,28 @@ class SummaryView extends Ui.View {
 		// convert % to numbers based on screen size
 		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
 		
-		Sys.println("mLabel1SetS.size() "+mLabelSetS.size());
-		
-		for( var i=0; i < mLabelSetS.size(); i++) {
-			mLabelSetS[i][0] = (mLabelSet[i][0] * mScaleX)/100;	
-			mLabelSetS[i][1] = (mLabelSet[i][1] * mScaleY)/100;
+		for( var i=0; i < mLabelSetXS.size(); i++) {
+			mLabelSetXS[i] = (mLabelSetX[i] * mScaleX)/100;	
+			mLabelSetYS[i] = (mLabelSetY[i] * mScaleY)/100;
 		}
 				
-		for( var i=0; i < mLabelValueLocS.size(); i++) {
-			mLabelValueLocS[i][0] = (mLabelValueLoc[i][0] * mScaleX)/100;	
-			mLabelValueLocS[i][1] = (mLabelValueLoc[i][1] * mScaleY)/100;
+		for( var i=0; i < mLabelValueLocXS.size(); i++) {
+			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
+			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
 		}	
 								
-		for( var i=0; i < mRectHorizS.size(); i++) {
-			mRectHorizS[i][0] = (mRectHoriz[i][0] * mScaleX)/100;	
-			mRectHorizS[i][1] = (mRectHoriz[i][1] * mScaleY)/100;
-			mRectHorizS[i][2] = (mRectHoriz[i][2] * mScaleX)/100;			
-		}
+		for( var i=0; i < mRectHorizYS.size(); i++) {
+			mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
+		}	
+		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
+		mRectHorizXS = (mRectHorizX * mScaleX)/100;
 		
-		for( var i=0; i < mRectVertS.size(); i++) {
-			mRectVertS[i][0] = (mRectVert[i][0] * mScaleX)/100;	
-			mRectVertS[i][1] = (mRectVert[i][1] * mScaleY)/100;
-			mRectVertS[i][2] = (mRectVert[i][2] * mScaleY)/100;			
-		}		
+		for( var i=0; i < mRectVertX.size(); i++) {
+			mRectVertXS[i] = (mRectVertX[i] * mScaleX)/100;		
+		}	
+		mRectVertWHS = (mRectVertWH * mScaleX)/100;
+		mRectVertYS = (mRectVertY * mScaleX)/100;	
+
 	}
 		
     //! Restore the state of the app and prepare the view to be shown
@@ -95,8 +113,7 @@ class SummaryView extends Ui.View {
 	
 		//return true;
     }
-   
-   
+      
     //! Update the view
     function onUpdate(dc) { 
     	//Sys.println("SummaryView: onUpdate() called");
@@ -109,55 +126,60 @@ class SummaryView extends Ui.View {
 		
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+
+		for (var i=0; i < mRectHorizYS.size(); i++) {
+			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
+		}
+		for (var i=0; i < mRectVertXS.size(); i++) {
+			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
+		}
 		
-		for (var i=0; i < mRectHorizS.size(); i++) {
-			dc.drawRectangle(mRectHorizS[i][0], mRectHorizS[i][1], mRectHorizS[i][2], 2);
-		}
-		for (var i=0; i < mRectVert.size(); i++) {
-			dc.drawRectangle(mRectVertS[i][0], mRectVertS[i][1], 2, mRectVertS[i][2]);
-		}
-				
 		if (viewToShow == 0 || viewToShow == 1) {
 			// draw 1st set of labels and values
 			// x, y, font, text, just
 			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
-			for (var i=0; i < mLabelSet.size(); i++) {
-				dc.drawText( mLabelSetS[i][0], mLabelSetS[i][1], mLabelFont, mLabel1Labels[i], mJust);			
+			for (var i=0; i < mLabelSetX.size(); i++) {
+				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel1Labels[i], mJust);			
 			}
 			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mLabelValueLocS[0][0], mLabelValueLocS[0][1], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%d"), mJust);
-			dc.drawText( mLabelValueLocS[1][0], mLabelValueLocS[1][1], mValueFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
-			dc.drawText( mLabelValueLocS[2][0], mLabelValueLocS[2][1], mValueFont, $._mApp.mSampleProc.avgPulse.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.avgPulse.format("%d"), mJust);
 			
 			// next two are floats
 			var trunc = ($._mApp.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			var str = "";
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}
-			dc.drawText( mLabelValueLocS[3][0], mLabelValueLocS[3][1], mValueFont, str, mJust);			
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, str, mJust);			
 			
 			trunc = ($._mApp.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
-			dc.drawText( mLabelValueLocS[4][0], mLabelValueLocS[4][1], mValueFont, str, mJust);										
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, str, mJust);										
 		} else {
 			// draw second set of labels and values
 			// x, y, font, text, just
 			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[1], mJust);
-			for (var i=0; i < mLabelSet.size(); i++) {
-				dc.drawText( mLabelSetS[i][0], mLabelSetS[i][1], mLabelFont, mLabel2Labels[i], mJust);			
+			for (var i=0; i < mLabelSetXS.size(); i++) {
+				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel2Labels[i], mJust);			
 			}
 			
 			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mLabelValueLocS[0][0], mLabelValueLocS[0][1], mValueFont, $._mApp.mSampleProc.mNN50.format("%d"), mJust);
-			dc.drawText( mLabelValueLocS[1][0], mLabelValueLocS[1][1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
-			dc.drawText( mLabelValueLocS[2][0], mLabelValueLocS[2][1], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
-			dc.drawText( mLabelValueLocS[3][0], mLabelValueLocS[3][1], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);				
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mNN50.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);				
 		}
 		
 		// change every 4 seconds
     	viewToShow = (viewToShow + 1) % 4;
     	Sys.println("viewToShow : "+viewToShow);
+    	
+    	Sys.println("Summary view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);	
 			
    		//View.onUpdate(dc);
    		//return true;
@@ -167,5 +189,22 @@ class SummaryView extends Ui.View {
     //! state of this View here. This includes freeing resources from
     //! memory.
     function onHide() {
+    	// free up all the arrays
+		 mTitleLabels = null;
+		 mLabelSetX = null;
+		 mLabelSetY = null;	
+		 mLabelValueLocX = null;
+		 mLabelValueLocY = null;
+		 mLabel1Labels = null;
+		 mLabel2Labels = null;
+		 mRectHorizY = null;
+		 mRectVertX = null;	
+		 mTitleLocS = null;	
+		 mLabelSetXS = null;
+		 mLabelSetYS = null;	
+		 mLabelValueLocXS = null;
+		 mLabelValueLocYS = null;
+		 mRectHorizYS = null;
+		 mRectVertXS = null;   
     }
 }

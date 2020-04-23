@@ -75,8 +75,9 @@ class HistoryView extends Ui.View {
 
 	// return labels into dictionary of results offsets
 	function findResultLabels(keys) {		
-		// init array
+		// init arrays
 		for ( var i=0; i < labelList.size(); i++) { labelList[i] = "";}
+		for ( var i=0; i < resultsIndexList.size(); i++) { resultsIndexList[i] = null;}
 		
 		// scan through flags looking for true and then get label
 		// find first N out of set
@@ -261,7 +262,13 @@ class HistoryView extends Ui.View {
 			MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
 			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
 			MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
-			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}								
+			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
+			
+			// TEST CODE		
+			Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);							
 		
 			return;
 		}

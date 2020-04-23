@@ -34,7 +34,7 @@
     </layout>
     <layout id="PoincareViewLayout">
     	<drawable id="PoincareBack_id" class="CustomBackground" />
-        <!-- Key assumption is chart height - 180 (hard coded in view) -->
+        <!-- Key assumption is chart height - 180 (hard coded in devices.xml) -->
         <!-- width of chart area is +-90 from center as is height-->
         <label id="PoincareTitle" text="Poincare" x="50%" y="11%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
         <label id="IntervalLbl" text="RR ms" x="50%" y="93%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
