@@ -121,7 +121,7 @@ class SummaryView extends Ui.View {
 		var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
 		
-		dc.setColor( mapColour($._mApp.bgColSet), mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
 		dc.clear();
 		
 		// draw lines

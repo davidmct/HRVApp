@@ -1,0 +1,8 @@
+<resources>
+	<bitmap id="mHrvIcon" filename="images/hrv-icon-40x40_BW.png" dithering="none">
+	   <palette disableTransparency="false">
+	       <color>000000</color>
+	       <color>FFFFFF</color>
+	   </palette>
+   </bitmap>
+</resources>

@@ -93,7 +93,7 @@ class CurrentValueView extends Ui.View {
 		var mValueColour = mapColour( $._mApp.txtColSet);		
 		var mMessage = "";
 		
-		dc.setColor( mapColour($._mApp.bgColSet), mapColour($._mApp.bgColSet));
+		dc.setColor(Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
 		dc.clear();
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
@@ -109,7 +109,7 @@ class CurrentValueView extends Ui.View {
             :locY=>mMesssgeLocS[1],
             :width=>mMesssgeLocS[2],
             :height=>mMesssgeLocS[3],
-            :justification=>mJust
+            :justification=>Gfx.TEXT_JUSTIFY_CENTER
         });
         //myTextArea.setText(mMessage);
         myTextArea.draw(dc);	

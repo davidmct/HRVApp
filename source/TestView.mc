@@ -1,40 +1,67 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
-using Toybox.System as Sys;
+using Toybox.System as Sys;  
 
-// need to update this to use justification in layout!
 
 class TestView extends Ui.View {
-
-	hidden var mTestViewLayout;
-	var mLabelColour;
-	var oldLblCol;
-	var mValueColour;
-	var oldValCol;
 	
-	var msgTxt;
+	var msgTxt = "";
 	var timer = timerFormat(0);	
+	hidden var mBitMap;
+	hidden var mBitMapLoc = [32,4];
+
+	hidden var mTitleLoc = [61, 12]; // %
+	hidden var mTitleLocS = [0,0];	
+	hidden var mTitleLabels = ["HRV"];
 	
-	// layout ID cache
-	var mViewTitleID;
-	var mViewResultLblID;
-	var mViewPulseLblID;
-	var mViewTimerLblID;
+	// x, y, width, height
+	hidden var mMessageLoc = [10, 20, 80, 30]; // %
+	hidden var mMesssgeLocS = [0, 0, 0, 0];	
 	
-	var mViewStrapTxtID;	
-	var mViewPulseTxtID;	
-				
-	var mViewMsgTxtID;
-	var mViewResultTxtID;
-	var mViewPulseValID;
-	var mViewTimerValID;		
+	// coordinates of first and second set of labels as %
+	// split to 1D array to save memory
+	hidden var mLabelSetX = [ 32, 76, 64, 27];
+	hidden var mLabelSetY = [ 53, 66, 53, 66];
 	
-    function initialize() {
-    	View.initialize();
-    	oldLblCol = 20;
-    	oldValCol = 20;
-    }
+	// coordinates of  value cordinates as %
+	// strapStatus - no label!, Ln, BPM, Timer
+	hidden var mLabelValueLocX = [ 32, 75, 82, 27];
+	hidden var mLabelValueLocY = [ 53, 78, 53, 78];
+		
+	// label values
+	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER" ];
+	
+		// x%, y%, width/height
+	hidden var mRectHorizWH = 100;
+	hidden var mRectHorizX = 0;
+	hidden var mRectHorizY = [ 47, 61];
+
+	
+	// scaled variables
+	hidden var mLabelSetXS = [ 0, 0, 0, 0];
+	hidden var mLabelSetYS = [ 0, 0, 0, 0];
+	
+	hidden var mLabelValueLocXS = [ 0, 0, 0, 0];
+	hidden var mLabelValueLocYS = [ 0, 0, 0, 0];
+	
+	hidden var mRectHorizWHS = 0;
+	hidden var mRectHorizXS = 0;
+	hidden var mRectHorizYS = [ 0, 0 ];
+		
+	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mValueFont = Gfx.FONT_MEDIUM;
+	hidden var mTitleFont = Gfx.FONT_MEDIUM;
+	hidden var mStrapFont = Gfx.FONT_TINY;
+	hidden var mTimerFont = Gfx.FONT_NUMBER_MILD; // for L(HRV) as well
+	hidden var mRectColour = Gfx.COLOR_RED;
+	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
+	
+	hidden var mScaleY;
+	hidden var mScaleX;
+		
+	
+    function initialize() { View.initialize(); }
     
 	// function onShow() { getModel().setObserver(self.method(:onNotify));}
 	// function onHide() {getModel().setObserver(null);}
@@ -50,64 +77,48 @@ class TestView extends Ui.View {
 	}	
     
     function onLayout(dc) {
-		mTestViewLayout = Rez.Layouts.TestViewLayout(dc);
-		//if (mDebugging == true) {Sys.println("TestView: onLayout() called ");}
-		if ( mTestViewLayout != null ) {
-			setLayout (mTestViewLayout);
-		} else {
-			Sys.println("Test View layout null");
+		
+		mScaleY = dc.getHeight();
+		mScaleX = dc.getWidth();
+		
+		// convert % to numbers based on screen size
+		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+		
+		mMesssgeLocS[0] = (mMessageLoc[0] *mScaleX)/100;
+		mMesssgeLocS[2] = (mMessageLoc[2] *mScaleX)/100;
+		mMesssgeLocS[1] = (mMessageLoc[1] *mScaleY)/100;
+		mMesssgeLocS[3] = (mMessageLoc[3] *mScaleY)/100;	
+		
+		for( var i=0; i < mLabelSetXS.size(); i++) {
+			mLabelSetXS[i] = (mLabelSetX[i] * mScaleX)/100;	
+			mLabelSetYS[i] = (mLabelSetY[i] * mScaleY)/100;
 		}
+				
+		for( var i=0; i < mLabelValueLocXS.size(); i++) {
+			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
+			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
+		}	
+								
+		for( var i=0; i < mRectHorizYS.size(); i++) {
+			mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
+		}	
+		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
+		mRectHorizXS = (mRectHorizX * mScaleX)/100;
 	
-		mLabelColour = mapColour( $._mApp.lblColSet);
-		mValueColour = mapColour( $._mApp.txtColSet);
-		oldLblCol = $._mApp.lblColSet;
-		oldValCol = $._mApp.txtColSet;
-
-		//if (mDebugging == true) {Sys.println("TestView: onLayout(): starting field update");}
+		$._mApp.mTestControl.setObserver(self.method(:onNotify));	
 		
-		// title		
-		mViewTitleID = getLayoutFieldIDandInit("ViewTitle", null, mLabelColour);
-		
-		// HRV label and value
-		mViewResultLblID = getLayoutFieldIDandInit("ViewHRV_Lbl", null, mLabelColour);
-		mViewResultTxtID = getLayoutFieldIDandInit("ViewHRV_Val", "0", mValueColour);
-				
-		// Pulse lable and value
-		mViewPulseLblID = getLayoutFieldIDandInit("ViewPulseLbl", null, mLabelColour);
-		mViewPulseValID = getLayoutFieldIDandInit("ViewPulseVal",  "0", mValueColour);
-				
-		// Time placement
-		mViewTimerLblID = getLayoutFieldIDandInit("ViewTimerLbl", null, mLabelColour);
-		mViewTimerValID = getLayoutFieldIDandInit("ViewTimerVal", timer, mValueColour);	
-		
-		// Status of strap
-		mViewStrapTxtID = getLayoutFieldIDandInit("ViewStrapStatus", null, mapColour(RED));	
-					
-		mViewMsgTxtID = getLayoutFieldIDandInit("bodyText", null, mValueColour);
-		
-		$._mApp.mTestControl.setObserver(self.method(:onNotify));			
+		var mLocX = (mBitMapLoc[0] * mScaleX)/100;
+		var mLocY = (mBitMapLoc[1] * mScaleY)/100;		
+		mBitMap = new Ui.Bitmap({
+            :rezId=>Rez.Drawables.mHrvIcon,
+            :locX=>mLocX,
+            :locY=>mLocY           
+        });
+	
 	}
         
     //! Restore the state of the app and prepare the view to be shown
-    function onShow() {
-    	// have colours changed?
-    	if (($._mApp.lblColSet != oldLblCol) || ($._mApp.txtColSet != oldValCol)) {
-    		//Sys.println("Updating colours in onShow() TestView()");
-    		oldLblCol = $._mApp.lblColSet;
-    		oldValCol = $._mApp.txtColSet;    	
-	    	// update colours if they have changed
-	        mLabelColour = mapColour( $._mApp.lblColSet);
-			mValueColour = mapColour( $._mApp.txtColSet);
-			mViewTitleID.setColor( mLabelColour);
-			mViewResultLblID.setColor( mLabelColour);
-			mViewPulseLblID.setColor( mLabelColour);
-			mViewTimerLblID.setColor( mLabelColour);					
-			mViewMsgTxtID.setColor( mValueColour);
-			mViewResultTxtID.setColor( mValueColour);
-			mViewPulseValID.setColor( mValueColour);
-			mViewTimerValID.setColor( mValueColour);	
-		}
-				
+    function onShow() {  				
     	// might need to go in test controller
     	if($._mApp.mTestControl.mTestState == TS_CLOSE) {
     		// stop app?????
@@ -117,27 +128,6 @@ class TestView extends Ui.View {
 		}
     }
    
-   // could be common function as in ResultsView 
-
-   hidden function getLayoutFieldIDandInit(fieldId, fieldValue, fieldColour) {
-        var drawable = findDrawableById(fieldId);
-        if (drawable != null) {
-            drawable.setColor(fieldColour);
-            if (fieldValue != null) {
-            	drawable.setText(fieldValue);
-            }
-        }
-        return drawable;
-   }
-   hidden function updateLayoutField(drawable, fieldValue, fieldColour) {
-        if (drawable != null) {
-            drawable.setColor(fieldColour);
-            if (fieldValue != null) {
-            	drawable.setText(fieldValue);
-            }
-        }
-    }
-
     //! Update the view
     function onUpdate(dc) {
 		if(mDebugging) {
@@ -145,24 +135,57 @@ class TestView extends Ui.View {
 			//Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
 			//Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
 		}
-		    	
-    	// All of the test logic above should be else where and call an update function here
-    	// function onShow() { getModel().setObserver(self.method(:onNotify));}
-    	// function onHide() {getModel().setObserver(null);}
-    	// function onNotify(symbol, object, params) {
-    	// test :symbol_x
-    	// }
-    	// can call onNotify with onNotify(:State_x, self, array);
-    	
-    	//Sys.println("onUpdate: update fields " +$._mApp.mSampleProc.mLnRMSSD+" "+$._mApp.mSampleProc.avgPulse);
-    	
-	 	updateLayoutField(mViewStrapTxtID, $._mApp.mSensor.mHRData.mHRMStatus, mapColour($._mApp.mSensor.mHRData.mHRMStatusCol));						
-		updateLayoutField(mViewMsgTxtID, msgTxt, mValueColour);
-		updateLayoutField(mViewResultTxtID, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mValueColour);
-		updateLayoutField(mViewPulseValID, $._mApp.mSensor.mHRData.livePulse.format("%d"), mValueColour);		
-		updateLayoutField(mViewTimerValID, timer, mValueColour);
-   		
-   		View.onUpdate(dc);
+				    
+		var mLabelColour = mapColour( $._mApp.lblColSet);
+		var mValueColour = mapColour( $._mApp.txtColSet);
+		
+		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($._mApp.bgColSet));
+
+		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.clear();
+		
+		// draw lines
+		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+
+		for (var i=0; i < mRectHorizYS.size(); i++) {
+			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
+		}
+
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		mBitMap.draw(dc);
+		
+		var myTextArea = new Ui.TextArea({
+            :text=>msgTxt,
+            :color=>mValueColour,
+            :backgroundColor=>mapColour($._mApp.bgColSet),
+            :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+            :locX=>mMesssgeLocS[0],
+            :locY=>mMesssgeLocS[1],
+            :width=>mMesssgeLocS[2],
+            :height=>mMesssgeLocS[3],
+            :justification=>Gfx.TEXT_JUSTIFY_CENTER
+        });
+        //myTextArea.setColor(mValueColour);
+        myTextArea.draw(dc);	
+		
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		// Specical case in [0] of HRM status
+		for (var i=1; i < mLabelSetX.size(); i++) {
+			dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabels[i], mJust);			
+		}
+		
+		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, $._mApp.mSensor.mHRData.mHRMStatus, mJust);
+		
+		// now show values
+		
+		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
+		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSensor.mHRData.livePulse.format("%d"), mJust);
+		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mTimerFont, timer, mJust);
+		   		
+   		//View.onUpdate(dc);
    		
    		//if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
    		//return true;	
@@ -178,6 +201,21 @@ class TestView extends Ui.View {
     function onHide() {
     	// don't want to send null as state machine still running
     	//$._mApp.mTestControl.setObserver(null);
+    	    	// free up all the arrays
+		 mTitleLabels = null;
+		 mLabelSetX = null;
+		 mLabelSetY = null;	
+		 mLabelValueLocX = null;
+		 mLabelValueLocY = null;
+		 mLabels = null;
+		 mRectHorizY = null;
+		 mTitleLocS = null;	
+		 mLabelSetXS = null;
+		 mLabelSetYS = null;	
+		 mLabelValueLocXS = null;
+		 mLabelValueLocYS = null;
+		 mRectHorizYS = null;
+		 mBitMap = null; 
     }
 
 }

@@ -51,14 +51,14 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     	
     	if(value == 1) {
     		$._mApp.bgColSet = WHITE;
-    		//Sys.println("WHITE background set");
+    		//Sys.println("WHITE background set "+WHITE);
     		if(WHITE == $._mApp.txtColSet) {
 	    		$._mApp.txtColSet = BLACK;
 	    	}
     	}
     	else {
     		$._mApp.bgColSet = BLACK;
-    		//Sys.println("BLACK background set");
+    		//Sys.println("BLACK background set "+BLACK);
     		if(BLACK == $._mApp.txtColSet) {
 	    		$._mApp.txtColSet = WHITE;
 	    	}
