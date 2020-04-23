@@ -14,8 +14,8 @@ class SummaryView extends Ui.View {
 	
 	// coordinates of first and second set of labels as %
 	// split to 1D array to save memory
-	hidden var mLabelSetX = [ 35, 65, 35, 65, 35, 35 ];
-	hidden var mLabelSetY = [ 23, 23, 43, 43, 65, 75 ];
+	hidden var mLabelSetX = [ 35, 65, 35, 65, 35, 65 ];
+	hidden var mLabelSetY = [ 24, 24, 44, 44, 66, 66 ];
 	
 	// coordinates of  value cordinates as %
 	hidden var mLabelValueLocX = [ 35, 65, 35, 65, 35, 65 ];

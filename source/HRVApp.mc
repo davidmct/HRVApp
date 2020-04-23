@@ -53,7 +53,7 @@ class myException extends Lang.Exception {
 class HRVAnalysis extends App.AppBase {
 
     // The device type
-	var device;
+	var mDeviceType;
 	var mApp;
 	var mSensor;
 	var mAntID;
@@ -222,7 +222,7 @@ class HRVAnalysis extends App.AppBase {
     //! onStart() is called on application start up
     function onStart(state) {
 		// Retrieve device type
-		device = Ui.loadResource(Rez.Strings.Device).toNumber();
+		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
 
    		// Start up HR sensor. Create the sensor object and open it
 	   	mSensor = new SensorHandler(mAntID, mSensorTypeExt);

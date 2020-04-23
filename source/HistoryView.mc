@@ -228,6 +228,7 @@ class HistoryView extends Ui.View {
 		scaleY = chartHeight / range.toFloat();
 		
 		// Draw the numbers on Y axis	
+		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0

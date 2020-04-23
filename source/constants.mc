@@ -5,13 +5,11 @@ using Toybox.System as Sys;
 // HRV APP MAIN
 
 enum {
-	// Device types
-	EPIX = 0,
-	FENIX = 1,
-	FORERUNNER = 2,
-	VIVOACTIVE = 3,
-	FENIX6 = 4,
-
+	// device types
+	RES_240x240 = 0,
+	RES_260x260 = 1,
+	RES_280x280 = 3,
+	
 	// Views
 	TEST_VIEW = 0,
 	SUMMARY_VIEW = 1,
@@ -63,7 +61,7 @@ var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRA
 // for menu on selecting history view items
 var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX, 
 						"minII" => MIN_II_INDEX, "maxII" => MIN_II_INDEX,
-						"minDiff" => MIN_DIFF_INDEX, "maxDiff" => MIN_DIFF_INDEX,
+						"minD" => MIN_DIFF_INDEX, "maxD" => MIN_DIFF_INDEX,
 						"rMSSD" => RMSSD_INDEX, "LnrMSSD" => LNRMSSD_INDEX, 
 						"SDNN" => SDNN_INDEX, "SDSD" => SDSD_INDEX, 
 						"NN50" => NN50_INDEX, "pNN50" => PNN50_INDEX, 

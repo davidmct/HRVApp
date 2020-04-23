@@ -21,15 +21,15 @@ class CurrentValueView extends Ui.View {
 	hidden var mMessageLoc = [10, 17, 80, 30]; // %
 	hidden var mMesssgeLocS = [0, 0, 0, 0];	
 	
-	// coordinates of first and second set of labels as %
+	// coordinates of labels as %
 	// split to 1D array to save memory
 	hidden var mLabelSetX = [ 28, 72, 50];
-	hidden var mLabelSetY = [ 47, 47, 65];
+	hidden var mLabelSetY = [ 47, 47, 68]; // 68 was 65
 	
 	// coordinates of  value cordinates as %
 	// rMSSD, INterval, DeltaMin, DeltaMax
 	hidden var mLabelValueLocX = [ 28, 72, 28, 72];
-	hidden var mLabelValueLocY = [ 57, 57, 75, 75];
+	hidden var mLabelValueLocY = [ 57, 57, 78, 78]; //78 was 75
 		
 	// label values
 	hidden var mLabels = [ "rMSSD", "Interval", "Min/Max RR delta" ];
