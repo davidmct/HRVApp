@@ -13,22 +13,4 @@
         <label id="LowerValX" text="" x="29%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
      	<drawable id="PoincareLayoutLines_id" />
     </layout>
-	<layout id="HistoryViewLayout">
-    	<drawable id="PoincareBack_id" class="CustomBackground" />
-        <!-- Key assumption is chart height - 120 (hard coded in strings) -->
-        <!-- width of chart area is +-90 from center-->
-        <label id="HistoryTitle" text="History" x="50%" y="11%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="Labelx1" text=" " x="30%" y="79%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="Labelx2" text=" " x="64%" y="79%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="Labelx3" text=" " x="50%" y="88%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel0" text="x" x="11%" y="29%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel1" text="x" x="11%" y="36%" color="Gfx.COLOR_DK_GRAY"  justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel2" text="x" x="11%" y="43%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel3" text="x" x="11%" y="50%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel4" text="x" x="11%" y="57%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel5" text="x" x="11%" y="64%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="yLabel6" text="x" x="11%" y="71%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="xAxisLabel" text="newer->" x="70%" y="23%" color="Gfx.COLOR_DK_GRAY" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-     	<drawable id="HistoryLayoutLines_id" />
-    </layout>     
 </layouts>

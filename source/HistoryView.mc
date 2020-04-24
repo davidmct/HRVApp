@@ -22,21 +22,43 @@ class HistoryView extends Ui.View {
 	hidden var numResultsToDisplay = 0;
 	hidden var labelList = new [MAX_DISPLAY_VAR];
 	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
+    
+    hidden var mTitleLoc = [50, 11]; // %
+	hidden var mTitleLocS = [0,0];	
+	hidden var mTitleLabels = ["History"];
+	
+	// coordinates of set of labels as %
+	// split to 1D array to save memory
+	// Labelx1,2,3, ylabel0...6, xAxisLabel
+	hidden var mLabelValueLocX = [ 30, 64, 50, 11, 11, 11, 11, 11, 11, 11, 70];
+	hidden var mLabelValueLocY = [ 79, 79, 88, 27, 36, 43, 50, 57, 64, 71, 23];
+		
+	// x%, y%, width/height. 
+	hidden var mRectHorizWH = 64;
+	hidden var mRectHorizX = 18;
+	hidden var mRectHorizY = [ 28, 36, 43, 50, 57, 64, 71 ];
+	
+	// scaled variables
+	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
+	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
 
+	
+	hidden var mRectHorizWHS = 0;
+	hidden var mRectHorizXS = 0;
+	hidden var mRectHorizYS = new [mRectHorizY.size() ];
+		
+	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mValueFont = Gfx.FONT_MEDIUM;
+	hidden var mTitleFont = Gfx.FONT_MEDIUM;
+	hidden var mRectColour = Gfx.COLOR_RED;
+	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
+	
+	hidden var mScaleY;
+	hidden var mScaleX;
+    
 	function initialize() { View.initialize();}
 	
-	hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
-	    var drawable = findDrawableById(fieldId);
-	    //Sys.println("drawable ? "+drawable);
-	    //Sys.println("updateLayoutField called: "+fieldId+","+fieldValue+","+fieldColour);
-	    if (drawable != null) {
-	    	if (fieldColour != null) { drawable.setColor(fieldColour);}
-	        if (fieldValue != null) {  drawable.setText(fieldValue); }
-	    }
-    }
-	
 	function onLayout(dc) {
-		mHistoryLayout = Rez.Layouts.HistoryViewLayout(dc);
 		//Sys.println("HistoryView: onLayout() called ");
 		if ( mHistoryLayout != null ) {
 			setLayout(mHistoryLayout);
@@ -61,6 +83,23 @@ class HistoryView extends Ui.View {
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
 		
+		mScaleY = dc.getHeight();
+		mScaleX = dc.getWidth();
+		
+		// convert % to numbers based on screen size
+		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+				
+		for( var i=0; i < mLabelValueLocXS.size(); i++) {
+			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
+			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
+		}	
+								
+		for( var i=0; i < mRectHorizYS.size(); i++) {
+			mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
+		}	
+		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
+		mRectHorizXS = (mRectHorizX * mScaleX)/100;
+			
 		return true;
 	}
 		
@@ -104,6 +143,9 @@ class HistoryView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
+    	
+    	var mLabelColour = mapColour( $._mApp.lblColSet);
+		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
@@ -114,13 +156,21 @@ class HistoryView extends Ui.View {
 		var min = 1000;
 		
 		// draw the layout. remove if trying manual draw of layout elements
-    	View.onUpdate(dc);
-    	
-    	var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
+    	//View.onUpdate(dc);
 
-		updateLayoutField("HistoryTitle", null, mLabelColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.clear();
 		
+		// draw lines
+		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+
+		for (var i=0; i < mRectHorizYS.size(); i++) {
+			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 1);
+		}
+
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+
 		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
 		//	indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
 		
@@ -140,10 +190,14 @@ class HistoryView extends Ui.View {
 		//Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
 		//	+numResultsToDisplay+","+labelList+","+resultsIndexList);
             	
-        // hard to tie menu on selection order to this list
-		updateLayoutField("Labelx1", labelList[0],  mapColour($._mApp.Label1ColSet));
-		updateLayoutField("Labelx2", labelList[1],  mapColour($._mApp.Label2ColSet));
-		updateLayoutField("Labelx3", labelList[2],  mapColour($._mApp.Label3ColSet));
+        // hard to tie menu on selection order to this list       
+        // draw the data being drawn labels
+        dc.setColor( mapColour($._mApp.Label1ColSet), Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, labelList[0], mJust);			
+        dc.setColor( mapColour($._mApp.Label2ColSet), Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, labelList[1], mJust);	
+		dc.setColor( mapColour($._mApp.Label3ColSet), Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, labelList[2], mJust);	
 		
 		// TEST CODE..
 		// set results up to end point...
@@ -214,7 +268,7 @@ class HistoryView extends Ui.View {
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
 		floor = min - (min % 5);
-		if (floor < 0 ) { floor = 0;}
+		//if (floor < 0 ) { floor = 0;}
 		
 		// now expand to multiple of 10 as height also multiple of 10. 
 		// Ensure floor doesn't go negative  
@@ -229,14 +283,21 @@ class HistoryView extends Ui.View {
 		
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
-			var str = format(" $1$ ",[num.format("%d")] );				
-			updateLayoutField("yLabel"+i, str, null);
-			
+			var str = format(" $1$ ",[num.format("%d")] );	
+			if (($._mApp.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
+				dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
+			} else { 		
+				dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, str, mJust);
+			}
 		}
+		
+		// draw final title
+		dc.drawText( mLabelValueLocXS[10], mLabelValueLocYS[10], mLabelFont, "newer->", mJust);	
 		
 		var firstData = new [MAX_DISPLAY_VAR];
 		

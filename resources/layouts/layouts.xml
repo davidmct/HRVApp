@@ -1,10 +1,4 @@
 <layouts>
-    <layout id="TestViewLayout">
-    </layout>
     <layout id="PoincareViewLayout">
     </layout>
-    <layout id="CurrentViewLayout">
-    </layout> 
-    <layout id="HistoryViewLayout"> 
-    </layout>  
 </layouts>

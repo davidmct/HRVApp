@@ -1,6 +1,6 @@
 <resources>    
     <!--  240x240 device -->  
-    <string id="Device">4</string>
+    <string id="Device">0</string>
     <string id="MenuTitleSize">2</string>
     <string id="PoincareGridWidth">160</string>
     <string id="HistoryGridWidth">140</string>
