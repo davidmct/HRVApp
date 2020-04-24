@@ -201,21 +201,7 @@ class TestView extends Ui.View {
     function onHide() {
     	// don't want to send null as state machine still running
     	//$._mApp.mTestControl.setObserver(null);
-    	    	// free up all the arrays
-		 mTitleLabels = null;
-		 mLabelSetX = null;
-		 mLabelSetY = null;	
-		 mLabelValueLocX = null;
-		 mLabelValueLocY = null;
-		 mLabels = null;
-		 mRectHorizY = null;
-		 mTitleLocS = null;	
-		 mLabelSetXS = null;
-		 mLabelSetYS = null;	
-		 mLabelValueLocXS = null;
-		 mLabelValueLocYS = null;
-		 mRectHorizYS = null;
-		 mBitMap = null; 
+    	// free up all the arrays - NO as maybe switches without a new ...
     }
 
 }

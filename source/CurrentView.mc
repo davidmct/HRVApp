@@ -139,22 +139,7 @@ class CurrentValueView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
-    
-	 	 myTextArea = null;
-		 mTitleLoc = null;
-		 mTitleLocS = null;	
-		 mTitleLabels = null;
-		 mMessageLoc = null;
-		 mMesssgeLocS = null;	
-		 mLabelSetX = null;
-		 mLabelSetY = null;
-		 mLabelValueLocX = null;
-		 mLabelValueLocY = null;
-		 mLabels = null;
-		 mLabelSetXS = null;
-		 mLabelSetYS = null;
-		 mLabelValueLocXS = null;
-		 mLabelValueLocYS = null;     
+
     }
 
 }

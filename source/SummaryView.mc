@@ -189,22 +189,5 @@ class SummaryView extends Ui.View {
     //! state of this View here. This includes freeing resources from
     //! memory.
     function onHide() {
-    	// free up all the arrays
-		 mTitleLabels = null;
-		 mLabelSetX = null;
-		 mLabelSetY = null;	
-		 mLabelValueLocX = null;
-		 mLabelValueLocY = null;
-		 mLabel1Labels = null;
-		 mLabel2Labels = null;
-		 mRectHorizY = null;
-		 mRectVertX = null;	
-		 mTitleLocS = null;	
-		 mLabelSetXS = null;
-		 mLabelSetYS = null;	
-		 mLabelValueLocXS = null;
-		 mLabelValueLocYS = null;
-		 mRectHorizYS = null;
-		 mRectVertXS = null;   
     }
 }
