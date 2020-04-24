@@ -294,11 +294,12 @@ class HistoryView extends Ui.View {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
 			var str = format(" $1$ ",[num.format("%d")] );	
-			if (($._mApp.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
-				dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
-			} else { 		
+			// using custom font so not needed
+			//if (($._mApp.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
+			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
+			//} else { 		
 				dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, str, mJust);
-			}
+			//}
 		}
 		
 		// draw final title
@@ -406,9 +407,9 @@ class HistoryView extends Ui.View {
 		while ( day != today);
 		
 		// TEST CODE		
-		Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);
+		//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);
     }
 }

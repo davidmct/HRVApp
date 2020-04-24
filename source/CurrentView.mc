@@ -19,7 +19,7 @@ class CurrentValueView extends Ui.View {
 	
 	// x, y, width, height
 	hidden var mMessageLoc = [10, 17, 80, 30]; // %
-	hidden var mMesssgeLocS = [0, 0, 0, 0];	
+	hidden var mMesssgeLocS = new [mMessageLoc.size()];	
 	
 	// coordinates of labels as %
 	// split to 1D array to save memory
@@ -35,11 +35,11 @@ class CurrentValueView extends Ui.View {
 	hidden var mLabels = [ "rMSSD", "Interval", "Min/Max RR delta" ];
 	
 	// scaled variables
-	hidden var mLabelSetXS = [ 0, 0, 0];
-	hidden var mLabelSetYS = [ 0, 0, 0];
+	hidden var mLabelSetXS = new [ mLabelSetX.size()];
+	hidden var mLabelSetYS = new [ mLabelSetY.size()];
 	
-	hidden var mLabelValueLocXS = [ 0, 0, 0, 0];
-	hidden var mLabelValueLocYS = [ 0, 0, 0, 0];
+	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size()];
+	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size()];
 		
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
@@ -127,10 +127,10 @@ class CurrentValueView extends Ui.View {
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
 		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);		
 		
-		Sys.println("Current view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	
+		//Sys.println("Current view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 		
 		//View.onUpdate(dc);
    		return true;

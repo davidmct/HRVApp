@@ -17,7 +17,7 @@ class TestView extends Ui.View {
 	
 	// x, y, width, height
 	hidden var mMessageLoc = [10, 20, 80, 30]; // %
-	hidden var mMesssgeLocS = [0, 0, 0, 0];	
+	hidden var mMesssgeLocS = new [mMessageLoc.size()];	
 	
 	// coordinates of first and second set of labels as %
 	// split to 1D array to save memory
@@ -39,15 +39,15 @@ class TestView extends Ui.View {
 
 	
 	// scaled variables
-	hidden var mLabelSetXS = [ 0, 0, 0, 0];
-	hidden var mLabelSetYS = [ 0, 0, 0, 0];
+	hidden var mLabelSetXS = new [ mLabelSetX.size()];
+	hidden var mLabelSetYS = new [ mLabelSetY.size()];
 	
-	hidden var mLabelValueLocXS = [ 0, 0, 0, 0];
-	hidden var mLabelValueLocYS = [ 0, 0, 0, 0];
+	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size()];
+	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size()];
 	
 	hidden var mRectHorizWHS = 0;
 	hidden var mRectHorizXS = 0;
-	hidden var mRectHorizYS = [ 0, 0 ];
+	hidden var mRectHorizYS = new [ mRectHorizY.size()];
 		
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
@@ -190,10 +190,10 @@ class TestView extends Ui.View {
    		//if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
    		//return true;	
    		// TEST CODE		
-		Sys.println("Testview memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	
+		//Sys.println("Testview memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
     }
 
     //! Called when this View is removed from the screen. Save the

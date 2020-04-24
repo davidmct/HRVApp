@@ -42,6 +42,8 @@ class PoincareView extends Ui.View {
 	const UPDATE_VIEW_SECONDS = 5;
 	hidden var mShowCount;
 	
+	hidden var customFont = null;
+		
 	hidden var mPoincareLayout;
 	hidden var cGridWith;
 	hidden var chartHeight;
@@ -105,6 +107,10 @@ class PoincareView extends Ui.View {
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
 		
+		if ($._mApp.mDeviceType == RES_240x240) {		
+			customFont = Ui.loadResource(Rez.Fonts.smallFont);
+		}
+		
 		// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
 		// impacts all layout numbers!
@@ -153,6 +159,10 @@ class PoincareView extends Ui.View {
     	
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
+		
+		if ($._mApp.mDeviceType == RES_240x240) {	
+			mLabelFont = customFont;
+		}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
 		dc.clear();
@@ -222,8 +232,6 @@ class PoincareView extends Ui.View {
 		// reduce entries by 1 as points to next free slot
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
 		
-		Sys.println("Poincare # dots :"+mNumberEntries);
-		
 		// need two entries before we start!
 		if ( mNumberEntries < 2) { return true;}
 		
@@ -270,11 +278,11 @@ class PoincareView extends Ui.View {
 		
 		// perfromance check only on real devices
 		var currentTime = Sys.getTimer();
-		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms");			
-		Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	
+		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms for "+mNumberEntries+" dots");			
+		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
    		return true;
     }
     

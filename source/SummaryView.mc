@@ -67,13 +67,7 @@ class SummaryView extends Ui.View {
 	}
 	
 	function onLayout(dc) {
-		//mSummaryLayout = Rez.Layouts.SummaryViewLayout(dc);
-		//Sys.println("SummaryView: onLayout() called ");
-		//if ( mSummaryLayout != null ) {
-		//	setLayout (mSummaryLayout);
-		//} else {
-		//	Sys.println("Summary View layout null");
-		//}
+
 		mScaleY = dc.getHeight();
 		mScaleX = dc.getWidth();
 		
@@ -174,12 +168,12 @@ class SummaryView extends Ui.View {
 		
 		// change every 4 seconds
     	viewToShow = (viewToShow + 1) % 4;
-    	Sys.println("viewToShow : "+viewToShow);
+    	//Sys.println("viewToShow : "+viewToShow);
     	
-    	Sys.println("Summary view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	
+    	//Sys.println("Summary view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 			
    		//View.onUpdate(dc);
    		//return true;
