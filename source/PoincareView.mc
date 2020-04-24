@@ -66,13 +66,13 @@ class PoincareView extends Ui.View {
 	hidden var mLabelInterval = "RR ms";
 		
 	// x%, y%, width/height. 
-	hidden var mRectHorizWH = 64;
-	hidden var mRectHorizX = 18;
-	hidden var mRectHorizY = [ 18, 50, 82];
+	hidden var mRectHorizWH = 65;//64
+	hidden var mRectHorizX = 17; // 18
+	hidden var mRectHorizY = [ 17, 50, 82];//[ 18, 50, 82]
 
-	hidden var mRectVertWH = 64;
-	hidden var mRectVertY = 18;
-	hidden var mRectVertX = [ 18, 50, 82 ];
+	hidden var mRectVertWH = 65; //64
+	hidden var mRectVertY = 17; //18
+	hidden var mRectVertX = [ 17, 50, 82 ];//[ 18, 50, 82]
 	
 	// scaled variables
 	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
@@ -264,7 +264,7 @@ class PoincareView extends Ui.View {
 			
 			// Ranging issue as rectangles drawn downwards and hence go over axis
 			//if ( y <= 0) {
-			//	Sys.println("whoops y below floor: y, floorY, floor "+y+","+floorY+","+floor);
+			//	Sys.println("whoops y below floor: SampleN1, y, floorY, floor "+sampleN1+", "+y+", "+floorY+", "+floor);
 			//}
 			// avoid floating point numbers
 			//var y = ((sampleN1 - floor) * intScale) >> 5;

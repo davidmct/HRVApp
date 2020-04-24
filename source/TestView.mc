@@ -73,7 +73,8 @@ class TestView extends Ui.View {
 	function onNotify(symbol, params) {
 		// [ msgTxt, timer]
 		msgTxt = params[0];
-		timer = params[1];	
+		timer = params[1]; //timerFormat( params[1]);	
+		//Sys.println("Timer from params[1] = "+timer);
 	}	
     
     function onLayout(dc) {

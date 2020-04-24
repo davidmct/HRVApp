@@ -6,13 +6,8 @@ using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
 
-// we should be saving results to storage NOT properties
-//Storage.setValue( tag, value) eg ("results_array", results); where results is an array
-
-// home page timer placement needs fixing if >1hr...
 
 // Things still to fix
-//2. Need to make sure any Delegate Pop's view when done
 //3. check initialisation of storage and properties on first run to avoid null on read
 //8. sample processing check skipped or double beats
 //8b. Look at frequency domain processing
@@ -74,6 +69,7 @@ class HRVAnalysis extends App.AppBase {
 	hidden var mTrailPeriod;
 	hidden var mTrialStartDate; 
 	hidden var mAuthID;
+	hidden var mTrialMessage;
 
 	// Settings variables
     var timestampSet;
@@ -158,6 +154,89 @@ class HRVAnalysis extends App.AppBase {
     
     }
     
+(:storageMethod)    
+    function saveTrialWithStorage() {		
+		// save trial variables
+		$._mApp.Properties.setValue("pTrialStarted", mTrialStarted);
+		$._mApp.Properties.setValue("pAuthorised", mAuthorised );
+		$._mApp.Properties.setValue("pTrialStartDate", mTrialStartDate);
+		      
+    }
+ 
+ (:preCIQ24)   
+    function saveTrialNoStorage() {
+		$._mApp.setProperty("pTrialStarted", mTrialStarted);
+		$._mApp.setProperty("pAuthorised", mAuthorised );
+		$._mApp.setProperty("pTrialStartDate", mTrialStartDate );   
+    }    
+ 
+ 	function checkAuth(AutorisationID, DeviceIdentification) {
+ 		return false; //true;
+ 	}
+ 	 
+    function UpdateTrialState() {
+ 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);  
+ 		Sys.println("UpdateTrialState() called");
+ 		mTrialMessage = true;
+ 		Sys.println("updateTrial State mAuthorised = "+mAuthorised); 		
+ 		if (checkAuth(mAuthID, mDeviceID) == true) {
+ 			mAuthorised = true;
+ 			mTrialMessage = false;
+ 		}
+ 		Sys.println("updateTrial State mAuthorised = "+mAuthorised);
+ 		if (mAuthorised) {
+ 			// good to go
+ 			mTrialMode = false;
+ 			mTrialStarted = false;
+ 			mTrialMessage = false;
+ 		} else if (!mTrialStarted && mTrialMode) {
+    		// initialise trial and save properties
+    		mTrialStartDate = Time.now() + System.getClockTime().timeZoneOffset;
+    		mTrialStarted = true;
+    	} else if ( mTrialStarted && mTrialMode ) {
+    		// started and in trial mode
+
+    	}
+    	
+  		// update properties store
+    	if (Toybox.Application has :Storage) {
+			saveTrialWithStorage();				
+		} else {
+			saveTrialNoStorage();
+		}
+    	Sys.println("exit updateTrial State mAuthorised = "+mAuthorised);
+    }
+    
+    function getTrialDaysRemaining() {
+    	// days remaining or null if trials not supported or 0 to disable app
+  		var daysToGo;  	
+     	if (mAuthorised) {
+ 			// good to go
+ 			Sys.println("getTrailDaysRemaining() called, returned : null");
+ 			return null;
+ 		} else if (!mTrialStarted && mTrialMode) {
+    		// initialise trial and save properties
+    		Sys.println("getTrailDaysRemaining() called, returned : 30");
+    		return 30;
+    	} else if ( mTrialStarted && mTrialMode ) {
+    		// started and in trial mode 	
+    		var timeDiff = Time.now() + System.getClockTime().timeZoneOffset - mTrialStartDate;    	
+    		daysToGo = 30 - timeDiff / 86400;
+	
+    		Sys.println("getTrailDaysRemaining() called, returned :"+daysToGo.toNumber());
+    		return daysToGo.toNumber();
+    	} else {
+    		return 30;
+    	}
+    }
+ 
+ 	function allowTrialMessage() {
+ 		// return false if you want no reminders
+ 		Sys.println("allowTrialMessage() called");
+ 		return mTrialMessage;
+ 	}
+    
+    
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
         
@@ -184,6 +263,8 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
+		
+		//UpdateTrialState();
 				
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
@@ -198,18 +279,6 @@ class HRVAnalysis extends App.AppBase {
     	AppBase.initialize();
     }
     
-    function getTrialDaysRemaining() {
-    	// days remaining or null if trials not supported or 0 to disable app
-    	Sys.println("getTrailDaysRemaining() called");
-    	return 30;
-    }
- 
- 	function allowTrialMessage() {
- 		// return false if you want no reminders
- 		Sys.println("allowTrialMessage() called");
- 		return false;
- 	}
-
     //! Return the initial view of your application here
     function getInitialView() {
     		    
@@ -294,8 +363,11 @@ class HRVAnalysis extends App.AppBase {
     
    	// App running and Garmin Mobile has changed settings
 	function onSettingsChanged() {
+		Sys.println("Settings changed on connect");
+		// DO NOTHING AT MOMENT - next restart will impact
 		// update any things depending on storage functions
 		mStorage.onSettingsChangedStore();	
+		
 		Ui.requestUpdate();
 	}
 
@@ -336,7 +408,6 @@ class HRVAnalysis extends App.AppBase {
 	
 	function DumpIntervals() {
 		// to reduce write time group up the data
-		Sys.println("Dumping intervals");
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
@@ -346,6 +417,7 @@ class HRVAnalysis extends App.AppBase {
 		var base;
 		
 		if (mNumEntries <= 0) { return;}
+		Sys.println("Dumping intervals");
 		
 		//if (mDebugging == true) {
 		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
