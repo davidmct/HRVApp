@@ -1,5 +1,5 @@
 <resources>
 	<fonts>
-		<font id="smallFont" filename="robo13B.fnt"  /> <!--//filter="0123456789ABCDEFGHIJKLMNOPQRTSUVWXYZ->" /> -->
+		<font id="smallFont" filename="robo18B.fnt"  /> <!--//filter="0123456789ABCDEFGHIJKLMNOPQRTSUVWXYZ->" /> -->
 	</fonts>
 </resources> 
