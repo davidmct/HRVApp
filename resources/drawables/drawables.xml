@@ -1,5 +1,2 @@
-<drawables>
-   	<drawable-list id="PoincareLayoutLines_id" background="Gfx.COLOR_TRANSPARENT"/>
-   	<drawable-list id="PoincareBack_id" background="Gfx.COLOR_TRANSPARENT"/>
-   	
+<drawables> 	
 </drawables>

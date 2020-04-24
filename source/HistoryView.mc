@@ -19,6 +19,8 @@ class HistoryView extends Ui.View {
 	hidden var xStep;
 	hidden var floor;
 	
+	hidden var customFont = null;
+	
 	hidden var numResultsToDisplay = 0;
 	hidden var labelList = new [MAX_DISPLAY_VAR];
 	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
@@ -59,16 +61,15 @@ class HistoryView extends Ui.View {
 	function initialize() { View.initialize();}
 	
 	function onLayout(dc) {
-		//Sys.println("HistoryView: onLayout() called ");
-		if ( mHistoryLayout != null ) {
-			setLayout(mHistoryLayout);
-		} else {
-			Sys.println("History layout null");
-		}
+
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
 		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
 		chartHeight = a.toNumber();
+		
+		if ($._mApp.mDeviceType == RES_240x240) {		
+			customFont = Ui.loadResource(Rez.Fonts.smallFont);
+		}
 		
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
@@ -154,6 +155,10 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+		
+		if ($._mApp.mDeviceType == RES_240x240) {	
+			mLabelFont = customFont;
+		}
 		
 		// draw the layout. remove if trying manual draw of layout elements
     	//View.onUpdate(dc);
