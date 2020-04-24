@@ -36,19 +36,19 @@ class SummaryView extends Ui.View {
 	
 	// scaled variables
 	hidden var mTitleLocS = [0,0];	
-	hidden var mLabelSetXS = [ 0, 0, 0, 0, 0, 0 ];
-	hidden var mLabelSetYS = [ 0, 0, 0, 0, 0, 0 ];
+	hidden var mLabelSetXS = new [ mLabelSetX.size() ];
+	hidden var mLabelSetYS = new [ mLabelSetY.size() ];
 	
-	hidden var mLabelValueLocXS = [ 0, 0, 0, 0, 0, 0 ];
-	hidden var mLabelValueLocYS = [ 0, 0, 0, 0, 0, 0 ];
+	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
+	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
 	
 	hidden var mRectHorizWHS = 0;
 	hidden var mRectHorizXS = 0;
-	hidden var mRectHorizYS = [ 0, 0, 0, 0 ];
+	hidden var mRectHorizYS = new [ mRectHorizY.size() ];
 
 	hidden var mRectVertWHS = 0;
 	hidden var mRectVertYS = 0;	
-	hidden var mRectVertXS = [ 0, 0, 0 ];
+	hidden var mRectVertXS = new [ mRectVertX.size() ];
 	
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_TINY;

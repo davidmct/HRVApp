@@ -51,6 +51,47 @@ class PoincareView extends Ui.View {
 	hidden var rightX;
 	hidden var ceilY;
 	hidden var floorY;
+    
+    hidden var mTitleLoc = [50, 11]; // %
+	hidden var mTitleLocS = [0,0];	
+	hidden var mTitleLabels = ["Poincare"];
+	
+	// coordinates of set of labels as %
+	// split to 1D array to save memory
+	// RR ms, TopValY, MidValY, LowerValY, TopValX, MidValX, LowerValX, 
+	hidden var mLabelValueLocX = [ 50, 11, 11, 11, 75, 50, 29];
+	hidden var mLabelValueLocY = [ 95, 82, 50, 18, 86, 86, 86];
+	hidden var mLabelInterval = "RR ms";
+		
+	// x%, y%, width/height. 
+	hidden var mRectHorizWH = 64;
+	hidden var mRectHorizX = 18;
+	hidden var mRectHorizY = [ 18, 50, 82];
+
+	hidden var mRectVertWH = 64;
+	hidden var mRectVertY = 18;
+	hidden var mRectVertX = [ 18, 50, 82 ];
+	
+	// scaled variables
+	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
+	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
+	
+	hidden var mRectHorizWHS = 0;
+	hidden var mRectHorizXS = 0;
+	hidden var mRectHorizYS = new [mRectHorizY.size() ];
+	
+	hidden var mRectVertWHS = 0;
+	hidden var mRectVertYS = 0;
+	hidden var mRectVertXS = new [mRectVertX.size() ];
+		
+	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mValueFont = Gfx.FONT_XTINY;
+	hidden var mTitleFont = Gfx.FONT_MEDIUM;
+	hidden var mRectColour = Gfx.COLOR_RED;
+	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
+	
+	hidden var mScaleY;
+	hidden var mScaleX;
 
 	function initialize() { View.initialize();}
 	
@@ -59,13 +100,6 @@ class PoincareView extends Ui.View {
     }
 	
 	function onLayout(dc) {
-		mPoincareLayout = Rez.Layouts.PoincareViewLayout(dc);
-		//Sys.println("PoincareView: onLayout() called ");
-		if ( mPoincareLayout != null ) {
-			setLayout(mPoincareLayout);
-		} else {
-			Sys.println("Poincare layout null");
-		}
 		
 		mShowCount = 0;
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
@@ -84,65 +118,58 @@ class PoincareView extends Ui.View {
 		ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
+		mScaleY = dc.getHeight();
+		mScaleX = dc.getWidth();
+		
+		// convert % to numbers based on screen size
+		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+				
+		for( var i=0; i < mLabelValueLocXS.size(); i++) {
+			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
+			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
+		}	
+								
+		for( var i=0; i < mRectHorizYS.size(); i++) {
+			mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
+		}	
+		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
+		mRectHorizXS = (mRectHorizX * mScaleX)/100;
+		
+		for( var i=0; i < mRectVertXS.size(); i++) {
+			mRectVertXS[i] = (mRectVertX[i] * mScaleY)/100;		
+		}	
+		mRectVertWHS = (mRectVertWH * mScaleX)/100;
+		mRectVertYS = (mRectVertY * mScaleX)/100;
+						
 		return true;
 	}
 	
-	hidden function updateLayoutField(fieldId, fieldValue, fieldColour) {
-        var drawable = findDrawableById(fieldId);
-        if (drawable != null) {
-            drawable.setColor(fieldColour);
-            if (fieldValue != null) {
-            	drawable.setText(fieldValue);
-            }
-        }
-    }
-
-    //function scale(num) {
-	//	return (((num - floorVar) * scaleVar) + 0.5).toNumber();
-	//}
-
     //! Update the view
     function onUpdate(dc) {
     	// performance check
     	var startTime = Sys.getTimer();
     	
-    	// if we need a local copy of data... this saves 8x time to access variables trading duplicate buffer
-    	// var intervals = [ $._mApp.mSampleProc.getNumberOfSamples()];
-    	// for(i=0; i < intervals.size(); i++) {
-    	//	intervals[i] = $._mApp.mIntervalSampleBuffer[i];
-    	// }
-    	// HOWEVER we should only need to add new data NOT all the old samplesBUT this would only work on variables maintained
-    	// between calls ie globals!! However some variables do seem to survice so ..
-    	// in init would need to create buffer and initial pointer
-    	// mLocalIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
-    	
-    	// shame simple assignment can't make access local ie
-    	//var intervals = $._mApp.mIntervalSampleBuffer;
-    	
     	mShowCount++;
-    	   	
-    	// draw the layout. remove if trying manual draw of layout elements
-    	View.onUpdate(dc);
-    	
-    	// This should draw layout but doesn't. fails on draw(dc)
-    	//for (var i = 0; i < mLayout.size(); ++i) {
-		//	mLayout.draw(dc);
-		//	Sys.println(i);
-		//}
-    	
-    	// we could update less frequently if necessary
-    	//var mRem = mShowCount % UPDATE_VIEW_SECONDS;
-		//if ( mRem != 0) {
-		//	var text = "Updating in "+(UPDATE_VIEW_SECONDS-mRem)+"secs";
-		//	dc.drawText(ctrX, ctrY, Gfx.FONT_MEDIUM, text, Gfx.TEXT_JUSTIFY_VCENTER|Gfx.TEXT_JUSTIFY_CENTER);	
-		//	return true;
-		//}
     	
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
+		
+		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.clear();
+		
+		// draw lines
+		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
 
-		updateLayoutField("PoincareTitle", null, mLabelColour);
-		updateLayoutField("IntervalLbl", null, mLabelColour);
+		for (var i=0; i < mRectHorizYS.size(); i++) {
+			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
+		}
+		for (var i=0; i < mRectVertXS.size(); i++) {
+			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
+		}
+		
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, "RR ms", mJust);
 		
     	// range saved in sampleprocessing already
 		var max = $._mApp.mSampleProc.maxIntervalFound;
@@ -169,19 +196,18 @@ class PoincareView extends Ui.View {
 		var scaleX = scaleY;
 		
 		//Sys.println("Poincare scale factors X Y :"+scaleX+" "+scaleY);
-
-		// Prepare the screen
-		//MapSetColour(dc, TRANSPARENT, $._mApp.bgColSet);
 		
 		// calc numbers on axis and update label
 		var mid = floor + (ceil - floor) / 2;
 		// as display area is tight on Y axis ONLY draw mid value
-		//updateLayoutField("TopValY", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
-		updateLayoutField("MidValY", format(" $1$ ",[mid.format("%d")]), mLabelColour);
-		//updateLayoutField("LowerValY", format(" $1$ ",[floor.format("%d")]), mLabelColour);
-		updateLayoutField("TopValX", format(" $1$ ",[ceil.format("%d")]), mLabelColour);
-		updateLayoutField("MidValX", format(" $1$ ",[mid.format("%d")]), mLabelColour);
-		updateLayoutField("LowerValX", format(" $1$ ",[floor.format("%d")]), mLabelColour);			
+		
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);			
+		//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
+		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
+		//dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);		
+		dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
+		dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
+		dc.drawText( mLabelValueLocXS[6], mLabelValueLocYS[6], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);
 			
 		// Draw the data
 		var drawDots = 0;

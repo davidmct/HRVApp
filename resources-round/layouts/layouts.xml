@@ -1,16 +1,3 @@
 <layouts>
-    <layout id="PoincareViewLayout">
-    	<drawable id="PoincareBack_id" class="CustomBackground" />
-        <!-- Key assumption is chart height - 180 (hard coded in devices.xml) -->
-        <!-- width of chart area is +-90 from center as is height-->
-        <label id="PoincareTitle" text="Poincare" x="50%" y="11%" color="Gfx.COLOR_WHITE" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_MEDIUM" />
-        <label id="IntervalLbl" text="RR ms" x="50%" y="95%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="TopValY" text="" x="11%" y="82%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="MidValY" text="" x="11%" y="50%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="LowerValY" text="" x="11%" y="18%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="TopValX" text="" x="75%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="MidValX" text="" x="50%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-        <label id="LowerValX" text="" x="29%" y="86%" justification="Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER" background="Gfx.COLOR_TRANSPARENT" font="Gfx.FONT_XTINY" />
-     	<drawable id="PoincareLayoutLines_id" />
-    </layout>
+
 </layouts>
