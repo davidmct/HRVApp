@@ -209,6 +209,8 @@ class HRVAnalysis extends App.AppBase {
     
     function getTrialDaysRemaining() {
     	// days remaining or null if trials not supported or 0 to disable app
+    	return null;
+    	
   		var daysToGo;  	
      	if (mAuthorised) {
  			// good to go
@@ -233,7 +235,7 @@ class HRVAnalysis extends App.AppBase {
  	function allowTrialMessage() {
  		// return false if you want no reminders
  		Sys.println("allowTrialMessage() called");
- 		return mTrialMessage;
+ 		return false; //mTrialMessage;
  	}
     
     

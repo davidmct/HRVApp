@@ -79,8 +79,9 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         		$._mApp.mTestControl.alert(TONE_ERROR);
         		return;
         	} else {
-	        	Sys.println("MainMenuDelegate: loading old intervals and switching to Poincare");
+	        	Sys.println("MainMenuDelegate: loading old intervals + stats and switching to Poincare");
 	        	var success = $._mApp.mStorage.loadIntervalsFromStore();
+	        	success = success && $._mApp.mStorage.loadStatsFromStore();
 	        	if (success) {	        	
 			  		if( $._mApp.viewNum != POINCARE_VIEW) {
 						Ui.switchToView($._mApp.getView(POINCARE_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
