@@ -233,8 +233,7 @@ class HRVAnalysis extends App.AppBase {
     		var mWhenNow = new Time.Moment(Time.now().value()); 
     		var timeDiff = mWhenNow.value() + System.getClockTime().timeZoneOffset - mTrialStartDate;  
     		// add on a day TEST CODE
-    		timeDiff += 86400;
-    		  	
+    		//timeDiff += 86400;  		  	
     		daysToGo = 30 - timeDiff / 86400;
 	
     		Sys.println("getTrailDaysRemaining() called, returned :"+daysToGo.toNumber());
