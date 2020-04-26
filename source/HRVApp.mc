@@ -5,6 +5,8 @@ using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
+using Toybox.Time;
+using Toybox.Time.Gregorian;
 
 
 // Things still to fix
@@ -167,20 +169,27 @@ class HRVAnalysis extends App.AppBase {
 		$._mApp.setProperty("pTrialStartDate", mTrialStartDate );   
     }    
  
- 	function checkAuth(AutorisationID, DeviceIdentification) {
- 		return false; //true;
+ 	function checkAuth(AuthorisationID, DeviceIdentification) {		
+ 		// Need an algo based on device ID that checks against Device Identification
+ 		// DeviceIndentication is a hex string
+ 		var numArray = new [ DeviceIdentification.length()];
+ 		numArray = DeviceIdentification.toUtf8Array();  // toCharArray 
+ 		Sys.println( "numArray = "+numArray);
+ 		
+ 		return true; // fake success
  	}
  	 
     function UpdateTrialState() {
  		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);  
  		Sys.println("UpdateTrialState() called");
  		mTrialMessage = true;
- 		Sys.println("updateTrial State mAuthorised = "+mAuthorised); 		
+ 		Sys.println("updateTrial State #1 mAuthorised = "+mAuthorised); 		
  		if (checkAuth(mAuthID, mDeviceID) == true) {
  			mAuthorised = true;
  			mTrialMessage = false;
  		}
- 		Sys.println("updateTrial State mAuthorised = "+mAuthorised);
+ 		Sys.println("updateTrial State #2 after check mAuthorised = "+mAuthorised);
+ 		
  		if (mAuthorised) {
  			// good to go
  			mTrialMode = false;
@@ -188,7 +197,9 @@ class HRVAnalysis extends App.AppBase {
  			mTrialMessage = false;
  		} else if (!mTrialStarted && mTrialMode) {
     		// initialise trial and save properties
-    		mTrialStartDate = Time.now() + System.getClockTime().timeZoneOffset;
+    		var mWhen = new Time.Moment(Time.now().value()); 
+    		mTrialStartDate = mWhen.value()+System.getClockTime().timeZoneOffset;
+    		Sys.println("Start date = "+mTrialStartDate ); 
     		mTrialStarted = true;
     	} else if ( mTrialStarted && mTrialMode ) {
     		// started and in trial mode
@@ -206,7 +217,7 @@ class HRVAnalysis extends App.AppBase {
     
     function getTrialDaysRemaining() {
     	// days remaining or null if trials not supported or 0 to disable app
-    	return null;
+    	//return null;
     	
   		var daysToGo;  	
      	if (mAuthorised) {
@@ -215,11 +226,15 @@ class HRVAnalysis extends App.AppBase {
  			return null;
  		} else if (!mTrialStarted && mTrialMode) {
     		// initialise trial and save properties
-    		Sys.println("getTrailDaysRemaining() called, returned : 30");
+    		Sys.println("getTrailDaysRemaining() called, returned default : 30");
     		return 30;
     	} else if ( mTrialStarted && mTrialMode ) {
     		// started and in trial mode 	
-    		var timeDiff = Time.now() + System.getClockTime().timeZoneOffset - mTrialStartDate;    	
+    		var mWhenNow = new Time.Moment(Time.now().value()); 
+    		var timeDiff = mWhenNow.value() + System.getClockTime().timeZoneOffset - mTrialStartDate;  
+    		// add on a day TEST CODE
+    		timeDiff += 86400;
+    		  	
     		daysToGo = 30 - timeDiff / 86400;
 	
     		Sys.println("getTrailDaysRemaining() called, returned :"+daysToGo.toNumber());
@@ -232,7 +247,7 @@ class HRVAnalysis extends App.AppBase {
  	function allowTrialMessage() {
  		// return false if you want no reminders
  		Sys.println("allowTrialMessage() called");
- 		return false; //mTrialMessage;
+ 		return mTrialMessage;
  	}
     
     
@@ -263,7 +278,7 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
 		
-		//UpdateTrialState();
+		UpdateTrialState();
 				
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
