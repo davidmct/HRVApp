@@ -128,7 +128,7 @@ class StatsView extends Ui.View {
 			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
 		}
 		
-		if (viewToShow == 0 || viewToShow == 1) {
+		if (viewToShow < 3 ) {
 			// draw 1st set of labels and values
 			// x, y, font, text, just
 			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
@@ -166,8 +166,8 @@ class StatsView extends Ui.View {
 			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);				
 		}
 		
-		// change every 4 seconds
-    	viewToShow = (viewToShow + 1) % 4;
+		// change every 6 seconds
+    	viewToShow = (viewToShow + 1) % 6;
     	//Sys.println("viewToShow : "+viewToShow);
     	
     	//Sys.println("Summary view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+

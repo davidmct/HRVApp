@@ -83,6 +83,11 @@ class SensorHandler {//extends Ant.GenericChannel {
     		} else { // internal strap or OHR
     			if (sensor != null) {sensor.stopIntSensor(); }  		
     		}
+    		
+    		// discard FIT session if active
+    		if (mFitControl != null) {
+    			$._mApp.mFitControl.discardFITrec();
+    		}
   	
 	    	// now we can change local sensor type
 	    	mSensorType =  $._mApp.mSensorTypeExt;

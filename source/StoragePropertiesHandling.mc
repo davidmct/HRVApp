@@ -146,18 +146,23 @@ class HRVStorageHandler {
 			return false;
 		}
 		finally {
-			$._mApp.mSampleProc.avgPulse = stats[0];
-			$._mApp.mSampleProc.mRMSSD = stats[1];
-			$._mApp.mSampleProc.mLnRMSSD = stats[2];
-			$._mApp.mSampleProc.mSDNN = stats[3];
-			$._mApp.mSampleProc.mSDSD = stats[4]; 
-			$._mApp.mSampleProc.mNN50 = stats[5];
-			$._mApp.mSampleProc.mpNN50 = stats[6]; 
-			$._mApp.mSampleProc.mNN20 = stats[7];
-			$._mApp.mSampleProc.mpNN20 = stats[8];	
-			$._mApp.mSampleProc.minDiffFound = stats[9];
-			$._mApp.mSampleProc.maxDiffFound = stats[10];			
-			return true;
+			if (stats == null) {
+				// not been written yet
+				return false;
+			} else {
+				$._mApp.mSampleProc.avgPulse = stats[0];
+				$._mApp.mSampleProc.mRMSSD = stats[1];
+				$._mApp.mSampleProc.mLnRMSSD = stats[2];
+				$._mApp.mSampleProc.mSDNN = stats[3];
+				$._mApp.mSampleProc.mSDSD = stats[4]; 
+				$._mApp.mSampleProc.mNN50 = stats[5];
+				$._mApp.mSampleProc.mpNN50 = stats[6]; 
+				$._mApp.mSampleProc.mNN20 = stats[7];
+				$._mApp.mSampleProc.mpNN20 = stats[8];	
+				$._mApp.mSampleProc.minDiffFound = stats[9];
+				$._mApp.mSampleProc.maxDiffFound = stats[10];			
+				return true;
+			}
 		}	
 	
 	}
@@ -199,7 +204,12 @@ class HRVStorageHandler {
 			return false;
 		}
 		finally {
-			return true;
+			// any null entries means we haven't written anything yet
+			if ($._mApp.mIntervalSampleBuffer == null) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 	}
 

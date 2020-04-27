@@ -133,7 +133,7 @@ class HRVFitContributor {
     
 	function createSession() {
 		// if FIT write is enabled we can initialise session
-		mSession = null;
+		//15:25 27/04/20 mSession = null;
 		if ($._mApp.mFitWriteEnabled) {
 			if (Toybox has :ActivityRecording) {    
 				if ((mSession != null) && mSession.isRecording()) {
@@ -167,7 +167,7 @@ class HRVFitContributor {
 	}
 	
 	function discardFITrec() {
-		if (mSession != null) {Sys.println("discardFITrec"); mSession.stop(); mSession.discard();}
+		if (mSession != null) {Sys.println("discardFITrec"); mSession.stop(); mSession.discard(); mSession = null;}
 	}
 	
 	function saveFITrec() {

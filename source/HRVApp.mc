@@ -259,6 +259,8 @@ class HRVAnalysis extends App.AppBase {
         mTestControl = new TestController();
         mSampleProc = new SampleProcessing();
         mStorage.readProperties();  
+        
+        mFitControl = null; // no FIT created yet
                
 		//A unique alphanumeric device identifier.
 		//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
