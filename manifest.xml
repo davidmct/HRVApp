@@ -34,8 +34,5 @@
         <iq:languages>
             <iq:language>eng</iq:language>
         </iq:languages>
-        <iq:trialMode enable="true">
-            <iq:unlockURL>http://my.unlock.url.com</iq:unlockURL>
-        </iq:trialMode>
     </iq:application>
 </iq:manifest>

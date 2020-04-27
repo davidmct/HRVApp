@@ -4,7 +4,7 @@ using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
 // display a summary of the current test data eg rMSSD
-class SummaryView extends Ui.View {
+class StatsView extends Ui.View {
 
 	hidden var viewToShow;
 	
@@ -110,7 +110,7 @@ class SummaryView extends Ui.View {
       
     //! Update the view
     function onUpdate(dc) { 
-    	//Sys.println("SummaryView: onUpdate() called");
+    	//Sys.println("StatsView: onUpdate() called");
 		
 		var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);

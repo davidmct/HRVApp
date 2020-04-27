@@ -7,7 +7,7 @@ using Toybox.Graphics as Gfx;
 // Sample processing changes
 // 1. Each batch update
 //		When a batch of samples has arrived we can calculate group stats (these combined at end of test)
-//		These are displayed on SummaryView
+//		These are displayed on StatsView
 //2. On each sample arriving...
 //		don't do anything if not testing
 //		If beatCount same as previous then ignore ie no pulse
@@ -123,7 +123,8 @@ class SensorHandler {//extends Ant.GenericChannel {
     		mFunc.invoke(:Update, [ "Setup sensor", false, false]);
     	}
     }
-    
+ 
+(:discard)   
     function openCh() { 
     	// Garmin advice is release, initialize, setConfig, open!!!!
     	if (mHRData.isChOpen == true)
@@ -134,6 +135,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     	mSearching = true;  
     	if (mSensorType) { 	
     		// only applies to ANT
+    		Sys.println("openCh() trying to open channel again");
 			mHRData.isChOpen = sensor.GenericChannel.open();
 		}
 		//if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
@@ -250,13 +252,21 @@ class AntHandler extends Ant.GenericChannel {
 	            var event = (payload[1] & 0xFF);	            
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
-	            		//if (mDebuggingANT) {Sys.println("ANT:EVENT: closed");}
-	            		$._mApp.mSensor.openCh();
-	            		// might have to call initialise again
+	            		Sys.println("ANT:EVENT: closed");
+	            		//$._mApp.mSensor.openCh();
+	            		// initialise again
+	            		initialize(mSavedAntID, mHRDataLnk);
+						mHRDataLnk.mHRMStatusCol = RED;
+    					mHRDataLnk.mHRMStatus = "Lost strap";
+	    				mHRDataLnk.livePulse = 0;
+						$._mApp.mSensor.mSearching = true;
+						// update Test controller data  
+    					if ($._mApp.mSensor.mFunc != null) {
+							// no message and not ready, no state change
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-initialising", false, false]);
+						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
-						//mHRDataLnk.isStrapRx = false;
-						//HRDataLnk.isPulseRx = false;
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
@@ -267,7 +277,7 @@ class AntHandler extends Ant.GenericChannel {
 							$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
 						}
 						// wait for another message?
-						//Sys.println( "RX_FAIL in AntHandler");
+						Sys.println( "RX_FAIL in AntHandler");
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");

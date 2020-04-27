@@ -299,8 +299,12 @@ class TestController {
     
     function alert(type)
 	{
-    	if($._mApp.soundSet) { Attention.playTone(type);  }
-    	if($._mApp.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
+		if( Attention has :playTone ) {
+    		if($._mApp.soundSet) { Attention.playTone(type);  }
+    	}
+    	if (Attention has :vibrate) {
+    		if($._mApp.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
+    	}
     }
 
     function resetTest() {

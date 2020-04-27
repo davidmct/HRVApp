@@ -56,7 +56,7 @@ class HRVAnalysis extends App.AppBase {
 	
 	// try only one creation of a view - consumes more memory as multiple views saved
 	//hidden var mPoincare_view;
-	//hidden var mSummaryView;
+	//hidden var mStatsView;
 	//hidden var mHistoryView;
 	//hidden var mCurrentView;
 	//hidden var mTestView;
@@ -226,7 +226,7 @@ class HRVAnalysis extends App.AppBase {
  			return null;
  		} else if (!mTrialStarted && mTrialMode) {
     		// initialise trial and save properties
-    		Sys.println("getTrailDaysRemaining() called, returned default : 30");
+    		Sys.println("getTrailDaysRemaining() called, returned default : 30"); 
     		return 30;
     	} else if ( mTrialStarted && mTrialMode ) {
     		// started and in trial mode 	
@@ -342,7 +342,7 @@ class HRVAnalysis extends App.AppBase {
 		// create views .. rather than every time view is called
 		// only issue might be initialisation each time
 		//mPoincare_view = new PoincareView();	
-		//mSummaryView = new SummaryView();
+		//mStatsView = new StatsView();
 		//mHistoryView = new HistoryView();
 		//mCurrentView = new CurrentValueView();
 		//mTestView = new TestView();
@@ -403,7 +403,7 @@ class HRVAnalysis extends App.AppBase {
 		//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
 		if(SUMMARY_VIEW == viewNum) {
-			return new SummaryView();
+			return new StatsView();
 		}
 		else if(HISTORY_VIEW == viewNum) {
 			return new HistoryView();
