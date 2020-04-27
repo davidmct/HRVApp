@@ -35,12 +35,14 @@ using Toybox.System as Sys;
 // top_right = (mRadius + width, mRadius - height);
 // bottom_left = (mRadius - width, mRadius + height);
 // bottom_right = (mRadius + width, mRadius + height);	
-
+	
 class PoincareView extends Ui.View {
 
 	// maybe updating every second is a little much
 	const UPDATE_VIEW_SECONDS = 5;
 	hidden var mShowCount;
+	hidden var startTimeP;
+	hidden var mProcessingTime;
 	
 	hidden var customFont = null;
 		
@@ -153,7 +155,7 @@ class PoincareView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
     	// performance check
-    	var startTime = Sys.getTimer();
+    	startTimeP = Sys.getTimer();
     	
     	mShowCount++;
     	
@@ -276,9 +278,10 @@ class PoincareView extends Ui.View {
 		
 		//Sys.println(debugPlot);
 		
-		// perfromance check only on real devices
-		var currentTime = Sys.getTimer();
-		Sys.println("Poincare executes in "+ (currentTime-startTime)+"ms for "+mNumberEntries+" dots");			
+		// performance check only on real devices
+		mProcessingTime = Sys.getTimer()-startTimeP;
+		//Sys.println("timers: "+Sys.getTimer()+", "+startTimeP);
+		//Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			
@@ -287,7 +290,13 @@ class PoincareView extends Ui.View {
     }
     
     function onHide() {
-    
+ 		// performance check only on real devices
+		//var currentTime = Sys.getTimer();
+		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
+		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	   
     
     }
 }

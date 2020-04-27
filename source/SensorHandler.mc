@@ -132,7 +132,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     		//GenericChannel.close();
     	}
     	mSearching = true;  
-    	if ($._mApp.mSensor.mSensorType) { 	
+    	if (mSensorType) { 	
     		// only applies to ANT
 			mHRData.isChOpen = sensor.GenericChannel.open();
 		}
@@ -172,9 +172,11 @@ class AntHandler extends Ant.GenericChannel {
 	hidden var deviceCfg;
 	hidden var mMessageCount=0;
 	hidden var mHRDataLnk;
+	hidden var mSavedAntID;
 	
     function initialize(mAntID, mHRData) {
     	mHRDataLnk = mHRData;
+    	mSavedAntID = mAntID;
     	 
         // Get the channel
         mChanAssign = new Ant.ChannelAssignment(
@@ -249,7 +251,8 @@ class AntHandler extends Ant.GenericChannel {
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
 	            		//if (mDebuggingANT) {Sys.println("ANT:EVENT: closed");}
-	            		openCh();
+	            		$._mApp.mSensor.openCh();
+	            		// might have to call initialise again
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
 						//mHRDataLnk.isStrapRx = false;
