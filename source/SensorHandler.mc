@@ -85,7 +85,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     		}
     		
     		// discard FIT session if active
-    		if (mFitControl != null) {
+    		if ($._mApp.mFitControl != null) {
     			$._mApp.mFitControl.discardFITrec();
     		}
   	

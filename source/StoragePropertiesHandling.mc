@@ -206,6 +206,11 @@ class HRVStorageHandler {
 		finally {
 			// any null entries means we haven't written anything yet
 			if ($._mApp.mIntervalSampleBuffer == null) {
+				// we have now written over the sample buffer
+				// reinitialise the sample buffer!!
+				// we should recreate the class but this runs risk of overflowing memory available during heap clear up
+				//$._mApp.mSampleProc = new SampleProcessing();
+				$._mApp.mSampleProc.initialize();			
 				return false;
 			} else {
 				return true;
