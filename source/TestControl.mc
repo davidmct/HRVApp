@@ -161,7 +161,8 @@ class TestController {
 					// KEEP OLD data until actually starting the test!
 					$._mApp.mSensor.mHRData.initForTest();
 					startTest();
-					mTestState = TS_TESTING; 			
+					mTestState = TS_TESTING; 	
+					Sys.println("TS_READY - enter pressed");		
 				} else if (caller == :escapePressed) {
 					// just pop the view by returning false
 					// go back to initialising or READY?
@@ -189,6 +190,7 @@ class TestController {
 						}
 						mTestState = TS_CLOSE; 	
 						mTestMessage = "Test time ended";
+					break;
 					case :enterPressed:
 					case :escapePressed:
 						// test stopped by user so saving is UI issue if enough
@@ -196,6 +198,7 @@ class TestController {
 						if (enoughSamples) {mResponse = true;}					
 						mTestState = TS_ABORT; 	
 						mTestMessage = "Test terminated";
+					break;
 					default:
 						if(TYPE_TIMER == testType) {
 							// reduce time left
@@ -337,7 +340,7 @@ class TestController {
     	//Sys.println("TestControl: resetTest() called");
     	// don't call this as useful to see old data before starting a new test
     	//$._mApp.mSensor.mHRData.initForTest();
-    	testTimer.stop();	
+    	testTimer.stop();
     	// reseting utcStart here overwrites when we about test but have enough samples
 		//utcStart = 0;
     }
@@ -348,7 +351,6 @@ class TestController {
     	resetTest(); // may not be necessary as handled by state machine
     	if ($._mApp.mFitControl != null) {
     		$._mApp.mFitControl.discardFITrec();
-    		//$._mApp.mFitControl.closeFITrec();
     	}
     }
     
@@ -412,7 +414,7 @@ class TestController {
     		
     	// FIT FILE SESSION RESULTS HERE
     	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null
-    	//$._mApp.mFitControl.closeFITrec();
+
     }
     
 	// called by startTest() to initial test timers etc
@@ -439,6 +441,7 @@ class TestController {
     	} else {
     		// kick off a timer for period of test
     		timerTime = $._mApp.timerTimeSet;
+    		//Sys.println("timerTime in timed test = "+timerTime);
 			testTimer.start(method(:timerEnded),timerTime*1000,false); // false
 		}
 
@@ -452,6 +455,7 @@ class TestController {
     
     function timerEnded() {
     	// either hit limit on manual or test time finsished on auto
+    	Sys.println("timerEnded()");
     	StateMachine(:timerExpired);
 	}
     		
