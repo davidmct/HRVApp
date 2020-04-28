@@ -174,7 +174,7 @@ class HRVAnalysis extends App.AppBase {
  		// DeviceIndentication is a hex string
  		var numArray = new [ DeviceIdentification.length()];
  		numArray = DeviceIdentification.toUtf8Array();  // toCharArray 
- 		Sys.println( "numArray = "+numArray);
+ 		//Sys.println( "numArray = "+numArray);
  		
  		return true; // fake success
  	}

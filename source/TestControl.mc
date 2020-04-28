@@ -121,7 +121,7 @@ class TestController {
 		
 		switch (mTestState) {
 			case TS_INIT:
-				//Sys.println("TS_INIT");
+				Sys.println("TS_INIT");
 				// We may need to reinitialise sensors if swapped here
 				mTestMessage = "Initialising...";
 				resetTest();
@@ -334,7 +334,7 @@ class TestController {
     }
 
     function resetTest() {
-    	Sys.println("TestControl: resetTest() called");
+    	//Sys.println("TestControl: resetTest() called");
     	// don't call this as useful to see old data before starting a new test
     	//$._mApp.mSensor.mHRData.initForTest();
     	testTimer.stop();	
@@ -344,6 +344,7 @@ class TestController {
     
     function discardTest() {
     	// called from HRVBehaviourDelegate
+    	Sys.println("discardTest() called");
     	resetTest(); // may not be necessary as handled by state machine
     	if ($._mApp.mFitControl != null) {
     		$._mApp.mFitControl.discardFITrec();
@@ -416,7 +417,7 @@ class TestController {
     
 	// called by startTest() to initial test timers etc
     function start() {
-		if (mDebugging == true) {Sys.println("START() ENTERED");}
+		Sys.println("start() ENTERED");
 		// Set up test type and timer up or down.
 		
 		resetTest();

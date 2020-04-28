@@ -74,15 +74,19 @@ class SensorHandler {//extends Ant.GenericChannel {
 	}
     
     function fSwitchSensor( oldSensor) {
-    	Sys.println("fSwitchSensor() potential sensor change");
+    	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
 
     	if (oldSensor != $._mApp.mSensorTypeExt) {
     		// firstly close down original sensor   		
        		if (oldSensor) { // ANT
+       			Sys.println("stopping ext ANT");
     			if (sensor != null) {sensor.stopExtSensor(); }
     		} else { // internal strap or OHR
+    			Sys.println("stopping Internal");
     			if (sensor != null) {sensor.stopIntSensor(); }  		
     		}
+    		
+    		sensor = null;
     		
     		// discard FIT session if active
     		if ($._mApp.mFitControl != null) {
@@ -90,7 +94,7 @@ class SensorHandler {//extends Ant.GenericChannel {
     		}
   	
 	    	// now we can change local sensor type
-	    	mSensorType =  $._mApp.mSensorTypeExt;
+	    	mSensorType = $._mApp.mSensorTypeExt;
 
 	    	// reset local variables
 	    	mHRData.initialize();
