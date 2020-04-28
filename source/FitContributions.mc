@@ -179,7 +179,9 @@ class HRVFitContributor {
 		
 		updateSessionStats();
 		
-		mSession.save();		
+		mSession.save();	
+		
+		mSession = null;	
 	}
 	
 	function updateSessionStats() {

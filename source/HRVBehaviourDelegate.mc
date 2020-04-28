@@ -64,12 +64,17 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		else {
 			// in test view so means stop or start test
 			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
+			// true if enough samples to save
 			if (res == true) {
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 				return true;
+			} else {
+				// we haven't enough samples to save so kill FIT
+				//Sys.println("discardTest() called");
+        		$._mApp.mTestControl.discardTest();			
 			}
 		}
 				
@@ -102,6 +107,10 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 			} else {
+				// we haven't enough samples to save so kill FIT
+				//Sys.println("discardTest() called");
+        		$._mApp.mTestControl.discardTest();	
+        		
 				// in TEST_VIEW. If we are exiting a test then go back to TEST VIEW
 				if ($._mApp.mTestControl.mTestState >= TS_TESTING) {
 					Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);

@@ -93,7 +93,14 @@ class TestController {
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
 		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered");}
-		
+
+		// requeest to restart		
+		if (caller == :RestartControl) { 
+			Sys.println("TestControl(): Restart issued"); 
+			mTestState = TS_INIT; 
+			discardTest();
+		}
+					
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
 		var setSensorStr = ($._mApp.mSensorTypeExt ? "external" : "registered");
@@ -257,9 +264,29 @@ class TestController {
 		return mResponse;
 	}
 	
+	function fCheckSwitchType( caller, value) {
+		if (caller == :FitType) {
+			if (value != $._mApp.mFitWriteEnabled) {
+				discardTest();
+				StateMachine(:RestartControl); 	
+			}	
+		}
+		else if (caller == :SensorType) {
+			// this also restarts state machine and discard FIT data
+			$._mApp.mSensor.fSwitchSensor( value);		
+		} else if (caller == :TestType) {	
+	 		if (value != $._mApp.testTypeSet) {             
+	        	StateMachine(:RestartControl); 
+	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
+	        }
+		}	
+	}  
+	
 	// function onHide() {getModel().setObserver(null);}
 	
 	function startTest() {
+		// make sure no old FIT open
+		discardTest();
 		// set up FIT to write data if enabled
 		$._mApp.mFitControl.createSession();
 		// now start recording
@@ -277,8 +304,8 @@ class TestController {
     function finishTest() {
     	// called when not enough data 
     	Sys.println("finishTest()");
-    	$._mApp.mFitControl.discardTest();
-    	$._mApp.mFitControl.closeFITrec();
+    	if ($._mApp.mFitControl != null) { $._mApp.mFitControl.discardTest(); }
+    	//$._mApp.mFitControl.closeFITrec();
     	endTest();
     	alert(TONE_SUCCESS);
     }
@@ -294,7 +321,6 @@ class TestController {
     function endTest() {
     	Sys.println("endTest()");
     	testTimer.stop();
-		//utcStop = timeNow();
     }
     
     function alert(type)
@@ -314,14 +340,15 @@ class TestController {
     	testTimer.stop();	
     	// reseting utcStart here overwrites when we about test but have enough samples
 		//utcStart = 0;
-		//utcStop = 0;
     }
     
     function discardTest() {
     	// called from HRVBehaviourDelegate
     	resetTest(); // may not be necessary as handled by state machine
-    	$._mApp.mFitControl.discardFITrec();
-    	$._mApp.mFitControl.closeFITrec();
+    	if ($._mApp.mFitControl != null) {
+    		$._mApp.mFitControl.discardFITrec();
+    		//$._mApp.mFitControl.closeFITrec();
+    	}
     }
     
     function saveTest() {
@@ -383,8 +410,8 @@ class TestController {
     	$._mApp.mStorage.saveStatsToStore();    
     		
     	// FIT FILE SESSION RESULTS HERE
-    	$._mApp.mFitControl.saveFITrec();
-    	$._mApp.mFitControl.closeFITrec();
+    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null
+    	//$._mApp.mFitControl.closeFITrec();
     }
     
 	// called by startTest() to initial test timers etc

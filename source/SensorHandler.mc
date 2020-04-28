@@ -102,7 +102,10 @@ class SensorHandler {//extends Ant.GenericChannel {
 			if (mFunc != null) {
 				mFunc.invoke(:Update, [ "Switching sensor", false, true]);
 			}
-
+			
+			// kill any running test
+			$._mApp.mTestControl.StateMachine(:RestartControl); 
+			
 			Sys.println("Sensor switched");
     	} else {
     		Sys.println("Sensor unchanged");
