@@ -119,10 +119,12 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     
     function onBack() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+        Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+        Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }   
     
     function onWrap(key) {

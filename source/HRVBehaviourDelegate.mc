@@ -65,19 +65,19 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			// in test view so means stop or start test
 			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
 			// true if enough samples to save but we have to be in testing state
-			if ($._mApp.mTestControl.mTestState == TS_TESTING) {
+			//if ($._mApp.mTestControl.mTestState == TS_TESTING) {
 				if (res == true) {
 					var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
 			        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 			        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
 		 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 					return true;
-				} else {
+				}// else {
 					// we haven't enough samples to save so kill FIT
 					//Sys.println("discardTest() called");
 	        		//$._mApp.mTestControl.discardTest();			
-				}
-			}
+				//}
+			//}
 		}
 				
  		//Sys.println("HRVBehaviour onEnter() - leaving");   	
@@ -102,30 +102,27 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
 	function onEscape() {
 		if(TEST_VIEW == $._mApp.viewNum) {
-			var res = $._mApp.mTestControl.StateMachine(:escapePressed);
-			if ($._mApp.mTestControl.mTestState >= TS_TESTING) {			
-				if (res == true) {		
-					var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
-			        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-			        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
-		 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
-				} else {
-					// we haven't enough samples to save so kill FIT
-					//Sys.println("discardTest() called");
-	        		//$._mApp.mTestControl.discardTest();	
-	        	}
-        	}	
-			// in TEST_VIEW. If we are exiting a test then go back to TEST VIEW
-			if ($._mApp.mTestControl.mTestState >= TS_TESTING) {
-				Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
-				return true;
-			} else {
-				// we are not testing so must be real exit of app
+			var res = $._mApp.mTestControl.StateMachine(:escapePressed);	
+			// true means we need to check to save	
+			if (res == true) {		
+				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
+		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
+			} 	
+		
+			// in TEST_VIEW. If we ended a test we fall back to test view otherwise Pop
+			if ($._mApp.mTestControl.mTestState < TS_TESTING) {
+				//Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 				Ui.popView(Ui.SLIDE_IMMEDIATE);
-			}			
-		}
-		else {
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+				return true;
+			} //else {
+				// we are not testing so must be real exit of app
+				//Ui.popView(Ui.SLIDE_IMMEDIATE);
+			//}
+		} else {
+			// move back to test view
+			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);				
 		}
 		return true;
 	}

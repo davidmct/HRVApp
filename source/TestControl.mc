@@ -207,7 +207,8 @@ class TestController {
 						else {
 							// manual timer counts up
 							timerTime = testTime;
-							if (testTime >= mManualTestStopTime) {
+							// manual timer finished and in manual test!
+							if ((testTime >= mManualTestStopTime) && (TYPE_MANUAL == testType)) {
 								mTestMessage = "Manual Test Finished";
 								// reached limit set by user
 								if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
@@ -300,6 +301,7 @@ class TestController {
     }
 
     function stopTest() {
+    	Sys.println("stopTest() called");
     	endTest();
 		alert(TONE_STOP);
     }

@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.3.73</string>
+	<string id="AppVersion">0.3.74</string>
 	<string id="pDeviceIDTitle">Device ID</string> 
 	<string id="pDeviceIDPrompt">Set by APP</string>
 	<string id="pAuthIDTitle">Licence String</string> 
@@ -14,9 +14,9 @@
 	<string id="lLnRMSSDChartTitle">Ln(RMSSD)</string>
 	<string id="lSDNNChartTitle">SDNN - II SD</string>
 	<string id="lSDSDChartTitle">SDSD - II difference SD</string>
-	<string id="lNN50ChartTitle">II delta exceeds 50ms</string>
+	<string id="lNN50ChartTitle">II delta > 50ms</string>
 	<string id="lpNN50ChartTitle">NN50 as % of samples</string>
-	<string id="lNN20ChartTitle">II delta exceeds 20ms</string>
+	<string id="lNN20ChartTitle">II delta > 20ms</string>
 	<string id="lpNN20ChartTitle">NN20 as % of samples</string>
 	<string id="lHeartRate">Average bpm</string>
 	<string id="lMinInterval">Minimum II</string>
