@@ -26,7 +26,7 @@ class TestView extends Ui.View {
 	
 	// coordinates of  value cordinates as %
 	// strapStatus - no label!, Ln, BPM, Timer
-	hidden var mLabelValueLocX = [ 32, 75, 82, 27];
+	hidden var mLabelValueLocX = [ 28, 75, 82, 27];
 	hidden var mLabelValueLocY = [ 53, 78, 53, 78];
 		
 	// label values
@@ -177,7 +177,10 @@ class TestView extends Ui.View {
 		}
 		
 		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, $._mApp.mSensor.mHRData.mHRMStatus, mJust);
+		var str;
+		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";
+		str = str+$._mApp.mSensor.mHRData.mHRMStatus;
+		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, str, mJust);
 		
 		// now show values
 		
