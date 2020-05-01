@@ -333,10 +333,10 @@ class HistoryView extends Ui.View {
 			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
 			
 			// TEST CODE		
-			Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);							
+			//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			//", "+System.getSystemStats().freeMemory.toString()+
+			//", "+System.getSystemStats().totalMemory.toString()			
+			//);							
 		
 			return;
 		}

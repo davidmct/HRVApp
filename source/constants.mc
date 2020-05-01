@@ -12,11 +12,12 @@ enum {
 	
 	// Views
 	TEST_VIEW = 0,
-	SUMMARY_VIEW = 1,
-	CURRENT_VIEW = 2,
-	POINCARE_VIEW = 3,
-	HISTORY_VIEW = 4,
-	NUM_VIEWS = 5
+	STATS1_VIEW = 1,
+	STATS2_VIEW = 2,
+	CURRENT_VIEW = 3,
+	POINCARE_VIEW = 4,
+	HISTORY_VIEW = 5,
+	NUM_VIEWS = 6
 }
 
 // Colors index. Arrays start at zero

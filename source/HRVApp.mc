@@ -404,16 +404,19 @@ class HRVAnalysis extends App.AppBase {
 		
 		//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
 
-		if(SUMMARY_VIEW == viewNum) {
-			return new StatsView();
+		if (STATS1_VIEW == viewNum) {
+			return new StatsView(1);
 		}
-		else if(HISTORY_VIEW == viewNum) {
+		else if (STATS2_VIEW == viewNum) {
+			return new StatsView(2);
+		}		
+		else if (HISTORY_VIEW == viewNum) {
 			return new HistoryView();
 		}
-		else if(CURRENT_VIEW == viewNum) {
+		else if (CURRENT_VIEW == viewNum) {
 			return new CurrentValueView();
 		}
-		else if(POINCARE_VIEW == viewNum) {
+		else if (POINCARE_VIEW == viewNum) {
 			return new PoincareView();
 		}	
 		else {

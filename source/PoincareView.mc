@@ -293,10 +293,10 @@ class PoincareView extends Ui.View {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
 		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
-		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-		//	", "+System.getSystemStats().freeMemory.toString()+
-		//	", "+System.getSystemStats().totalMemory.toString()			
-		//	);	   
+		Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);	   
     
     }
 }
