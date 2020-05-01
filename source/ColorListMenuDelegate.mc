@@ -17,7 +17,7 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
         	// opps
         	var mErr = new myException( "ColourListMenuDelegate: colour out of range");
         } else {
-        	Sys.println("ColourListMenuDelegate: colour picked = " + value);
+        	//Sys.println("ColourListMenuDelegate: colour picked = " + value);
         	mFunc.invoke( value);   
         	Ui.popView(WatchUi.SLIDE_IMMEDIATE);     
         }

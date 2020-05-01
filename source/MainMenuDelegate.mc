@@ -97,7 +97,6 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
 	        menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
 	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
-	        //menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
 	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
 	        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));
 	        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));
@@ -110,7 +109,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	       	var mAppVer = $._mApp.versionSet;
 	        var mID = $._mApp.mDeviceID;
 	        if (mID == null) {mID = "No device ID";}
-	        Sys.println("Device indentifier = "+mID);
+	        //Sys.println("Device indentifier = "+mID);
 	        menu.addItem(new Ui.MenuItem(mAppVer, null, "test", null));
 	        menu.addItem(new Ui.MenuItem(mID, null, "deviceID", null));
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_IMMEDIATE );

@@ -46,7 +46,7 @@ class PoincareView extends Ui.View {
 	
 	hidden var customFont = null;
 		
-	hidden var mPoincareLayout;
+	//hidden var mPoincareLayout;
 	hidden var cGridWith;
 	hidden var chartHeight;
     hidden var ctrX;
@@ -181,7 +181,7 @@ class PoincareView extends Ui.View {
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
-		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, "RR ms", mJust);
+		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, mLabelInterval, mJust);
 		
     	// range saved in sampleprocessing already
 		var max = $._mApp.mSampleProc.maxIntervalFound;
@@ -222,7 +222,6 @@ class PoincareView extends Ui.View {
 		dc.drawText( mLabelValueLocXS[6], mLabelValueLocYS[6], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);
 			
 		// Draw the data
-		var drawDots = 0;
 		
 		// set colour of rectangles. can't see white on white :-)
 		if ($._mApp.bgColSet == BLACK) {

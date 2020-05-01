@@ -6,7 +6,6 @@ using Toybox.System as Sys;
 // Show the previous test results over time
 class HistoryView extends Ui.View {
 	
-	hidden var mHistoryLayout;
 	hidden var cGridWidth;
 	hidden var chartHeight;
     hidden var ctrX;
@@ -288,6 +287,7 @@ class HistoryView extends Ui.View {
 		
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
+		// Built new font instead
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {

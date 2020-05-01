@@ -14,12 +14,6 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
-//        else if ( id.equals("fitOutput"))  {
-//            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Fit Write")});
-//	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-//	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
-// 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setFitWrite)), Ui.SLIDE_IMMEDIATE );  
-//        }
         else if ( id.equals("colour"))   {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
 	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
@@ -53,11 +47,7 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 
     function setVibe(value) {
 		if (value == 1) { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
-    }
- 
-//    function setFitWrite(value) {
-//		if (value == 1) { $._mApp.mFitWriteEnabled = true; } else { $._mApp.mFitWriteEnabled = false;}
-//    }   
+    } 
     
     function onBack() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);

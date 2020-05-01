@@ -122,9 +122,6 @@ class TestView extends Ui.View {
     function onShow() {  				
     	// might need to go in test controller
     	if($._mApp.mTestControl.mTestState == TS_CLOSE) {
-    		// stop app?????
-    		//CHECK - causes two calls as one in HRV delegate
-			//$._mApp.onStop( null );
 			popView(SLIDE_IMMEDIATE);
 		}
     }

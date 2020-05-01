@@ -13,14 +13,12 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_IMMEDIATE ); 
-			//Ui.pushView(new Ui.Confirmation("Reset settings?"), new SettingsDelegate(), Ui.SLIDE_IMMEDIATE);
         }
         else if (id.equals("results")) {
          	var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_IMMEDIATE );
-			//Ui.pushView(new Ui.Confirmation("Clear results?"), new ResultsDelegate(), Ui.SLIDE_IMMEDIATE);
         }
     }
     

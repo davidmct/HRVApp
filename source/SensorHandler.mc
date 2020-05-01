@@ -405,7 +405,7 @@ class InternalSensor {
 	
 	// call back for HR data
 	function onHeartRateData( sensorData) {
-		var mSize = 0; 
+		//var mSize = 0; 
 		var heartBeatIntervals = [];
 	
 		//Sys.println("sensorData "+sensorData);

@@ -111,7 +111,6 @@ class CurrentValueView extends Ui.View {
             :height=>mMesssgeLocS[3],
             :justification=>Gfx.TEXT_JUSTIFY_CENTER
         });
-        //myTextArea.setText(mMessage);
         myTextArea.draw(dc);	
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		        

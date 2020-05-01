@@ -13,7 +13,7 @@ using Toybox.Time.Gregorian;
 //3. check initialisation of storage and properties on first run to avoid null on read
 //8. sample processing check skipped or double beats
 //8b. Look at frequency domain processing
-//9. Do timer on trial mode and disable for now?
+//9. Trial mode currently disabled
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 // Optimisations:
@@ -21,9 +21,6 @@ using Toybox.Time.Gregorian;
 // - remove unwanted test messages
 // - any more local vars rather than global
 // - reduce dictionaries 
-
-// Trial end point (of URL) requirements seems not to be published!!
-
 
 var mDebugging = false;
 var mDebuggingANT = false;
@@ -48,7 +45,7 @@ class HRVAnalysis extends App.AppBase {
 
     // The device type
 	var mDeviceType;
-	var mApp;
+	//var mApp;
 	var mSensor;
 	var mAntID;
 	// true if external unknown strap ie not enabled in watch
@@ -197,6 +194,7 @@ class HRVAnalysis extends App.AppBase {
  			mTrialMessage = false;
  		} else if (!mTrialStarted && mTrialMode) {
     		// initialise trial and save properties
+    		// SHOULD use tineMow() common function...
     		var mWhen = new Time.Moment(Time.now().value()); 
     		mTrialStartDate = mWhen.value()+System.getClockTime().timeZoneOffset;
     		Sys.println("Start date = "+mTrialStartDate ); 

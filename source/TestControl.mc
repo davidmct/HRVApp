@@ -31,11 +31,9 @@ class TestController {
 	var mSensorReady;
 	
 	var utcStart;
-	//var utcStop;	
 	var utcNow; 
 	var startMoment;
 	var mManualTestStopTime;
-	//var stopMoment;
 	hidden var mFunc;
 	hidden var mFuncCurrent;
 	hidden var mHRmsgTxt;
@@ -48,7 +46,6 @@ class TestController {
 		startMoment = 0;
     	timerTime = 0;
     	utcStart = 0;
-		//utcStop = 0;
 		utcNow = 0;		
 		startMoment = 0;
 		mManualTestStopTime = 0;
@@ -94,7 +91,7 @@ class TestController {
 		// :UpdateUI
 		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered");}
 
-		// requeest to restart		
+		// request to restart		
 		if (caller == :RestartControl) { 
 			Sys.println("TestControl(): Restart issued"); 
 			mTestState = TS_INIT; 
@@ -106,7 +103,7 @@ class TestController {
 		var setSensorStr = ($._mApp.mSensorTypeExt ? "external" : "registered");
 		
 		// Timer information for view
-		timerTime = 0; // = utcStop - utcStart;
+		timerTime = 0; 
 		var testType = $._mApp.testTypeSet;
 		
 		// set default time display and adjust below
@@ -310,7 +307,6 @@ class TestController {
     	// called when not enough data 
     	Sys.println("finishTest()");
     	if ($._mApp.mFitControl != null) { $._mApp.mFitControl.discardTest(); }
-    	//$._mApp.mFitControl.closeFITrec();
     	endTest();
     	alert(TONE_SUCCESS);
     }
@@ -449,7 +445,6 @@ class TestController {
 
 		// Common start
 		startMoment = Time.now();
-		//utcStart = timeNow();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
 		
 		Sys.println("Test started at : "+utcStart);

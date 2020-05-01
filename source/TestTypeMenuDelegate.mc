@@ -29,16 +29,14 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             $._mApp.testTypeSet = TYPE_MANUAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);    
-            // if type has changed then force restart of state machine
-            //$._mApp.mTestControl.fSwitchTestType( oldTestType);    
+            // if type has changed then force restart of state machine  
             $._mApp.mTestControl.fCheckSwitchType( :TestType, oldTestType);            
         }
         else if( mId == :Timer)  {
         	var oldTestType = $._mApp.testTypeSet;
             $._mApp.testTypeSet = TYPE_TIMER;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);   
-            //$._mApp.mTestControl.fSwitchTestType( oldTestType);   
+            mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);     
             $._mApp.mTestControl.fCheckSwitchType( :TestType, oldTestType);   
         }
         else if( mId == :Internal)  {
@@ -46,7 +44,6 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             $._mApp.mSensorTypeExt = SENSOR_INTERNAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);
-            //$._mApp.mSensor.fSwitchSensor( oldSensor);  
             $._mApp.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
         }
         else if( mId == :Search)  {
@@ -54,15 +51,13 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             $._mApp.mSensorTypeExt = SENSOR_SEARCH;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);  
-            //$._mApp.mSensor.fSwitchSensor( oldSensor);  
             $._mApp.mTestControl.fCheckSwitchType( :SensorType, oldSensor);  
         }
         else if( mId == :Write)  {
         	var oldFitWrite = $._mApp.mFitWriteEnabled;
             $._mApp.mFitWriteEnabled = true;
             item.setSelected(true);
-            mSrcMenu.getItem(mSrcMenu.findItemById(:NoWrite)).setSelected(false); 
-            //$._mApp.mTestControl.fSwitchFitType( oldFitWrite);  
+            mSrcMenu.getItem(mSrcMenu.findItemById(:NoWrite)).setSelected(false);   
             $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
         }
         else if( mId == :NoWrite)  {

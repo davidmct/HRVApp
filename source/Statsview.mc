@@ -59,8 +59,6 @@ class StatsView extends Ui.View {
 	hidden var mScaleY;
 	hidden var mScaleX;
 
-	//var mSummaryLayout;
-
 	function initialize(viewNum) { 
 		viewToShow = viewNum;
 		View.initialize();
@@ -103,9 +101,6 @@ class StatsView extends Ui.View {
     //! the state of this View and prepare it to be shown. This include
     //! loading resources into memory.
     function onShow() {
-    	//Sys.println("ResultView: onShow() called ");   	
-	
-		//return true;
     }
       
     //! Update the view

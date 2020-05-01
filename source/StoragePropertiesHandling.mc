@@ -7,30 +7,17 @@ using Toybox.WatchUi as Ui;
 // STORAGE came in with CIQ 2.4 - could cut down code by removing all pre CIQ2.4 code
 
 // Results memory locations. (X) <> (X + 29)
-//const NUM_RESULT_ENTRIES = 30; // last 30 days
-//const DATA_SET_SIZE = 4; // each containing this number of entries
-// for properties method of storage, arranged as arrays of results per time period
-//const RESULTS = "RESULTS";
-
-// Samples needed for stats min
-//const MIN_SAMPLES = 20;
 
 class HRVStorageHandler {
 
-// if initial run then we should clear store
-// Storage.clearValues();
-// then save default set of properties
-
 	// setup storage functions	
     function initialize() {
-    	// create buffers here? use function so external can call parts
-    	
+    	// create buffers here? use function so external can call parts   	
     }
 
 	// message from Garmin that settings have been changed on mobile - called from main app
 	function onSettingsChangedStore() {
 		// should probably stop any test and reload settings
-
 	}
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()
