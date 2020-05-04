@@ -16,11 +16,30 @@ using Toybox.Time.Gregorian;
 //9. Trial mode currently disabled
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
+//v0.4.xx+ revisions post initial release
+//1. Look at all strings to resources (check saves memory) - aids language translation if needed (may not help)
+//2. Frequency based parameters - need to research
+//3. 
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()
-// - remove unwanted test messages
 // - any more local vars rather than global
 // - reduce dictionaries 
+// - -g option on compiler to see code generated
+// - use function if any code repeated
+// - don't use enums as fail on bit wise
+// - don't use classes when you can use static functions or inline code
+// - avoid try etc and replace with if/global var
+// - eliminate classes where possible
+// - build file for removing device specifics from code (maintenance a challenge)
+// - could have jungle file with screen size constants as literals
+// - reduce length of resource id's
+// - don't declare string resources you don't need
+// - precalculate values used a lot and load as needed
+// - use JSON data resources (resources file) which can store values, dictionaries, arrays etc and 
+//   load using var thing = Ui.loadResoruce(Rez.JsonData.xxx);
+//   <resources> jsonData id ="xxx"> what ever </jsonData>
+//   
+
 
 var mDebugging = false;
 var mDebuggingANT = false;
