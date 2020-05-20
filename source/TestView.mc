@@ -31,8 +31,8 @@ class TestView extends Ui.View {
 		
 	// label values
 	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER" ];
-	
-		// x%, y%, width/height
+
+	// x%, y%, width/height
 	hidden var mRectHorizWH = 100;
 	hidden var mRectHorizX = 0;
 	hidden var mRectHorizY = [ 47, 61];
@@ -169,9 +169,17 @@ class TestView extends Ui.View {
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		// Specical case in [0] of HRM status
-		for (var i=1; i < mLabelSetX.size(); i++) {
-			dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabels[i], mJust);			
-		}
+		// 0.4.00
+		//for (var i=1; i < mLabelSetX.size(); i++) {
+		//	dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabels[i], mJust);			
+		//}
+		
+		//0.4.01 - unroll loop as only two values at moment
+		dc.drawText( mLabelSetXS[1], mLabelSetYS[1], mLabelFont, mLabels[1], mJust);
+		dc.drawText( mLabelSetXS[3], mLabelSetYS[3], mLabelFont, mLabels[3], mJust);
+				
+		//0.4.01 - draw BPM in strapFont to make larger
+		dc.drawText( mLabelSetXS[2], mLabelSetYS[2], mStrapFont, mLabels[2], mJust);
 		
 		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
 		var str;
@@ -183,7 +191,17 @@ class TestView extends Ui.View {
 		
 		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
-		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSensor.mHRData.livePulse.format("%d"), mJust);
+		// 0.4.00 release for approval
+		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSensor.mHRData.livePulse.format("%d"), mJust);
+		// 0.4.01
+		var mPulse = $._mApp.mSensor.mHRData.livePulse;
+		var mPulseStr;
+		if ( mPulse == 0 || mPulse == null) {
+			mPulseStr = "--";
+		} else {
+			mPulseStr = mPulse.format("%d");
+		}
+		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, mPulseStr, mJust);
 		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mTimerFont, timer, mJust);
 		   		
    		//View.onUpdate(dc);
