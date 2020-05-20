@@ -183,7 +183,10 @@ class TestView extends Ui.View {
 		
 		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
 		var str;
-		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";
+		//0.4.00
+		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";		
+		//0.4.01
+		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "I_" : "E_";
 		str = str+$._mApp.mSensor.mHRData.mHRMStatus;
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, str, mJust);
 		
