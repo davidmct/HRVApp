@@ -153,17 +153,59 @@ class TestView extends Ui.View {
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		mBitMap.draw(dc);
 		
-		var myTextArea = new Ui.TextArea({
-            :text=>msgTxt,
-            :color=>mValueColour,
-            :backgroundColor=>mapColour($._mApp.bgColSet),
-            :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
-            :locX=>mMesssgeLocS[0],
-            :locY=>mMesssgeLocS[1],
-            :width=>mMesssgeLocS[2],
-            :height=>mMesssgeLocS[3],
-            :justification=>Gfx.TEXT_JUSTIFY_CENTER
-        });
+		// 0.4.2 - select which text area to use
+		var myTextArea;
+		if (Ui.WatchUi has :TextArea) {
+			Sys.println("UI has TextArea");
+			myTextArea = new Ui.TextArea({
+	            :text=>msgTxt,
+	            :color=>mValueColour,
+	            :backgroundColor=>mapColour($._mApp.bgColSet),
+	            :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+	            :locX=>mMesssgeLocS[0],
+	            :locY=>mMesssgeLocS[1],
+	            :width=>mMesssgeLocS[2],
+	            :height=>mMesssgeLocS[3],
+	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
+	        });					
+		} else {
+			Sys.println("UI does not have TextArea");
+			myTextArea = new Ui.Text({
+	            :text=>msgTxt,
+	            :color=>mValueColour,
+	            :backgroundColor=>mapColour($._mApp.bgColSet),
+	            :font=>Gfx.FONT_XTINY,
+	            :locX=>mMesssgeLocS[0],
+	            :locY=>mMesssgeLocS[1],
+	            :width=>mMesssgeLocS[2],
+	            :height=>mMesssgeLocS[3],
+	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
+	        });		
+	        
+	        // now we need to pick font		
+	        // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+
+	        if ($._mApp.mDeviceType == RES_240x240) {
+	        	myTextArea.setFont(Gfx.FONT_SMALL);
+	        } else if ( $._mApp.mDeviceType == RES_260x260 ) {
+	        	myTextArea.setFont(Gfx.FONT_SMALL);
+	        } else if ( $._mApp.mDeviceType == RES_280x280 ) {
+	        	myTextArea.setFont(Gfx.FONT_SMALL);
+	        }
+		}
+		
+		// v0.4.01
+		//var myTextArea = new Ui.TextArea({
+        //    :text=>msgTxt,
+        //    :color=>mValueColour,
+        //    :backgroundColor=>mapColour($._mApp.bgColSet),
+        //    :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+        //    :locX=>mMesssgeLocS[0],
+        //    :locY=>mMesssgeLocS[1],
+        //    :width=>mMesssgeLocS[2],
+        //    :height=>mMesssgeLocS[3],
+        //    :justification=>Gfx.TEXT_JUSTIFY_CENTER
+        //});
         //myTextArea.setColor(mValueColour);
         myTextArea.draw(dc);	
 		
