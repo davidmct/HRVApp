@@ -74,6 +74,9 @@ class SensorHandler {
 	}
 	
 	// post 0.4.01 release function to isolate sample processing and enable excludeAnnotations 
+	// now fixed as baseAnnotations needed setting to make exlude work
+	// can now use same function names
+(:discard)
 	function _callSampleProcessing(isTesting, livePulse, intMs, N ) {
 		if ( $._mApp.mSampleProc has :rawSampleProcessingUpdated ) {
 			$._mApp.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
@@ -354,7 +357,6 @@ class AntHandler extends Ant.GenericChannel {
 			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			
 			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
-			//$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		
 		} else {
 			// either no longer have a pulse or Count not changing
@@ -452,7 +454,6 @@ class InternalSensor {
 		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
-			//$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						

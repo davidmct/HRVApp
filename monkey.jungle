@@ -10,9 +10,12 @@ project.manifest = manifest.xml
 #fenix5x.resourcePath = $(resBase);resources-maps
 
 # we can have multi excludes in code as (:label1 :label2)
+# need to include base so decompile works
+base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;anotherTag
 
-round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
+# Only add specific exclusions here for types or device or specific devices!!
+#round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
 #round.excludeAnnotations = $(round.excludeAnnotations);oldSampleProcessing
-round.excludeAnnotations = $(round.excludeAnnotations);anotherTag
-round.excludeAnnotations = $(round.excludeAnnotations);preCIQ24
-round.excludeAnnotations = $(round.excludeAnnotations);discard
+#round.excludeAnnotations = $(round.excludeAnnotations);anotherTag
+#round.excludeAnnotations = $(round.excludeAnnotations);preCIQ24
+#round.excludeAnnotations = $(round.excludeAnnotations);discard
