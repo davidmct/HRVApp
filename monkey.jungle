@@ -1,1 +1,16 @@
 project.manifest = manifest.xml
+#srcBase=source
+#resBase=resources
+
+# time and frequency domain based processing
+#base.sourcePath=$(srcBase);source-timefrequency
+#base.resourcePath=$(resBase)
+
+#fenix5x.sourcePath = $(srcBase);source-maps
+#fenix5x.resourcePath = $(resBase);resources-maps
+
+#round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
+round.excludeAnnotations = $(round.excludeAnnotations);oldSampleProcessing
+round.excludeAnnotations = $(round.excludeAnnotations);anotherTag
+round.excludeAnnotations = $(round.excludeAnnotations);preCIQ24
+round.excludeAnnotations = $(round.excludeAnnotations);discard

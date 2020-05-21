@@ -19,7 +19,7 @@ using Toybox.Graphics as Gfx;
 // 		Add intMs to list in sampleProcess class .. addSample()
 //3. In sample processing we could work out delta and save this but more storage...
 
-class SensorHandler {//extends Ant.GenericChannel {
+class SensorHandler {
    
     var mHRData;
     var sensor; 
@@ -72,6 +72,15 @@ class SensorHandler {//extends Ant.GenericChannel {
 	function setObserver(func) {
 		mFunc = func;
 	}
+	
+	// post 0.4.01 release function to isolate sample processing and enable excludeAnnotations 
+	function _callSampleProcessing(isTesting, livePulse, intMs, N ) {
+		if ( $._mApp.mSampleProc has :rawSampleProcessingUpdated ) {
+			$._mApp.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
+		} else {
+			$._mApp.mSampleProc.rawSampleProcessing(isTesting, livePulse, intMs, N );
+    	}
+    }
     
     function fSwitchSensor( oldSensor) {
     	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
@@ -343,7 +352,10 @@ class AntHandler extends Ant.GenericChannel {
 			var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
 			var isTesting = false;
 			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
-			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+			
+			//$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+			$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+		
 		} else {
 			// either no longer have a pulse or Count not changing
 			mHRDataLnk.mNoPulseCount += 1;
@@ -440,7 +452,8 @@ class InternalSensor {
 		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
-			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			//$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						
 		//Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
