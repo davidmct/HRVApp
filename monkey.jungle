@@ -9,8 +9,10 @@ project.manifest = manifest.xml
 #fenix5x.sourcePath = $(srcBase);source-maps
 #fenix5x.resourcePath = $(resBase);resources-maps
 
-#round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
-round.excludeAnnotations = $(round.excludeAnnotations);oldSampleProcessing
+# we can have multi excludes in code as (:label1 :label2)
+
+round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
+#round.excludeAnnotations = $(round.excludeAnnotations);oldSampleProcessing
 round.excludeAnnotations = $(round.excludeAnnotations);anotherTag
 round.excludeAnnotations = $(round.excludeAnnotations);preCIQ24
 round.excludeAnnotations = $(round.excludeAnnotations);discard

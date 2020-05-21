@@ -158,14 +158,14 @@ class SampleProcessing {
 		}
 	}
 
-(:newSampleProcessing)
-	function rawSampleProcessingUpdated (isTesting, livePulse, intMs, beatsInGap ) {
+(:newSampleProcessing) 	
+function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		Sys.println("new sampling called");
 	
 	}
 
-(:oldSampleProcessing)
-	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
+(:oldSampleProcessing)	
+function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		// shouldn't capture data
 		if (!isTesting) {return;}
 		

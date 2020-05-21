@@ -353,8 +353,8 @@ class AntHandler extends Ant.GenericChannel {
 			var isTesting = false;
 			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			
-			//$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
-			$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+			//$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		
 		} else {
 			// either no longer have a pulse or Count not changing
@@ -452,8 +452,8 @@ class InternalSensor {
 		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
-			$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
-			//$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			//$._mApp.mSensor._callSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						
 		//Sys.println("Internal: live "+ mHRDataLnk.livePulse+" intervals "+heartBeatIntervals);
