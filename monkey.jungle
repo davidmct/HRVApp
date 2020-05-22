@@ -1,10 +1,12 @@
 project.manifest = manifest.xml
-#srcBase=source
-#resBase=resources
+# default directories for these..
+srcBase=source
+resBase=resources
 
-# time and frequency domain based processing
-#base.sourcePath=$(srcBase);source-timefrequency
-#base.resourcePath=$(resBase)
+# setup base as fenix6xpro
+# base.sourcePath=$(fenix6xpro.sourcePath) fails with base qualifier property cannot be evaluated.
+base.sourcePath=$(srcBase)
+base.resourcePath=$(resBase)
 
 #fenix5x.sourcePath = $(srcBase);source-maps
 #fenix5x.resourcePath = $(resBase);resources-maps
@@ -13,9 +15,19 @@ project.manifest = manifest.xml
 # need to include base so decompile works
 base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;anotherTag
 
+# can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!
 #round.excludeAnnotations = $(round.excludeAnnotations);newSampleProcessing
 #round.excludeAnnotations = $(round.excludeAnnotations);oldSampleProcessing
 #round.excludeAnnotations = $(round.excludeAnnotations);anotherTag
 #round.excludeAnnotations = $(round.excludeAnnotations);preCIQ24
 #round.excludeAnnotations = $(round.excludeAnnotations);discard
+
+# example code had 3 dirs called source, source-semiround and -vivoactive
+#
+# fix autobuild to a specific device
+#base.sourcePath=$(fr735xt.sourcePath)
+
+# define sourcePaths
+#vivoactive.sourcePath=source;source-vivoactive
+#fr735xt.sourcePath=source;source-semiround  
