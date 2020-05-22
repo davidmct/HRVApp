@@ -434,8 +434,11 @@ class HRVAnalysis extends App.AppBase {
 			return new CurrentValueView();
 		}
 		else if (POINCARE_VIEW == viewNum) {
-			return new PoincareView();
-		}	
+			return new PoincareView(1);
+		}
+		else if (POINCARE_VIEW2 == viewNum) {
+			return new PoincareView(2);
+		}			
 		else {
 			return new TestView();
 		}

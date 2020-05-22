@@ -16,8 +16,9 @@ enum {
 	STATS2_VIEW = 2,
 	CURRENT_VIEW = 3,
 	POINCARE_VIEW = 4,
-	HISTORY_VIEW = 5,
-	NUM_VIEWS = 6
+	POINCARE_VIEW2 = 5,
+	HISTORY_VIEW = 6,
+	NUM_VIEWS = 7
 }
 
 // Colors index. Arrays start at zero
@@ -70,7 +71,7 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 					};						
 
 // SAMPLE PROCESSING
-
+const MIN_BPM = 30;
 const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
 const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)

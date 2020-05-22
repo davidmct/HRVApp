@@ -35,7 +35,12 @@ using Toybox.System as Sys;
 // top_right = (mRadius + width, mRadius - height);
 // bottom_left = (mRadius - width, mRadius + height);
 // bottom_right = (mRadius + width, mRadius + height);	
-	
+
+// version 0.4.1
+// Added another view version that shows full range of plot for all values of interval
+// axis range is 30 BPM 2000ms to 220 BPM 273ms .. however should be resting so HRM should be max say 120 BPM or 500ms
+
+
 class PoincareView extends Ui.View {
 
 	// maybe updating every second is a little much
@@ -43,6 +48,8 @@ class PoincareView extends Ui.View {
 	hidden var mShowCount;
 	hidden var startTimeP;
 	hidden var mProcessingTime;
+	
+	hidden var viewToShow;
 	
 	hidden var customFont = null;
 		
@@ -58,7 +65,7 @@ class PoincareView extends Ui.View {
     
     hidden var mTitleLoc = [50, 11]; // %
 	hidden var mTitleLocS = [0,0];	
-	hidden var mTitleLabels = ["Poincare"];
+	hidden var mTitleLabels = ["Poincare", "Full range"];
 	
 	// coordinates of set of labels as %
 	// split to 1D array to save memory
@@ -97,7 +104,11 @@ class PoincareView extends Ui.View {
 	hidden var mScaleY;
 	hidden var mScaleX;
 
-	function initialize() { View.initialize();}
+	// >0.4.1 add alternate view 
+	function initialize(viewNum) { 
+		viewToShow = viewNum;
+		View.initialize();
+	}
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
@@ -180,12 +191,20 @@ class PoincareView extends Ui.View {
 		}
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[viewToShow-1], mJust);
+		// draw "RR ms"
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, mLabelInterval, mJust);
 		
     	// range saved in sampleprocessing already
-		var max = $._mApp.mSampleProc.maxIntervalFound;
-		var min = $._mApp.mSampleProc.minIntervalFound;
+    	var max;
+    	var min;
+    	if ( viewToShow == 1) {
+			max = $._mApp.mSampleProc.maxIntervalFound;
+			min = $._mApp.mSampleProc.minIntervalFound;
+		} else {
+			max = 2000; // 30 BPM in ms
+			min = 400; // 150 BPM
+		}
 		
 		//Sys.println("Poincare: max, min "+max+" , "+min);
 
