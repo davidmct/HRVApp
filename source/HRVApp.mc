@@ -10,7 +10,7 @@ using Toybox.Time.Gregorian;
 
 
 // Things still to fix
-//3. check initialisation of storage and properties on first run to avoid null on read
+// Check old textArea code has right font size in Current and test views
 //8. sample processing check skipped or double beats
 //8b. Look at frequency domain processing
 //9. Trial mode currently disabled

@@ -193,6 +193,7 @@ class TestView extends Ui.View {
 	        	myTextArea.setFont(Gfx.FONT_SMALL);
 	        }
 		}
+		Sys.println("FIX TEST VIEW TEXTAREA FONTS");
 		
 		// v0.4.01
 		//var myTextArea = new Ui.TextArea({
