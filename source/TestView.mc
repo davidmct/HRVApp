@@ -125,7 +125,9 @@ class TestView extends Ui.View {
 			popView(SLIDE_IMMEDIATE);
 		}
     }
-   
+
+
+       
     //! Update the view
     function onUpdate(dc) {
 		if(mDebugging) {
@@ -154,44 +156,17 @@ class TestView extends Ui.View {
 		mBitMap.draw(dc);
 		
 		// 0.4.2 - select which text area to use
-		var myTextArea;
-		if (Ui.WatchUi has :TextArea) {
+		var x = 0;
+		if  (x==1) { //(Ui.WatchUi has :TextArea) {
 			Sys.println("UI has TextArea");
-			myTextArea = new Ui.TextArea({
-	            :text=>msgTxt,
-	            :color=>mValueColour,
-	            :backgroundColor=>mapColour($._mApp.bgColSet),
-	            :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
-	            :locX=>mMesssgeLocS[0],
-	            :locY=>mMesssgeLocS[1],
-	            :width=>mMesssgeLocS[2],
-	            :height=>mMesssgeLocS[3],
-	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
-	        });					
-		} else {
-			Sys.println("UI does not have TextArea");
-			myTextArea = new Ui.Text({
-	            :text=>msgTxt,
-	            :color=>mValueColour,
-	            :backgroundColor=>mapColour($._mApp.bgColSet),
-	            :font=>Gfx.FONT_XTINY,
-	            :locX=>mMesssgeLocS[0],
-	            :locY=>mMesssgeLocS[1],
-	            :width=>mMesssgeLocS[2],
-	            :height=>mMesssgeLocS[3],
-	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
-	        });		
-	        
-	        // now we need to pick font		
-	        // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+			$.f_drawTextArea(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
+				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
-	        if ($._mApp.mDeviceType == RES_240x240) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        } else if ( $._mApp.mDeviceType == RES_260x260 ) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        } else if ( $._mApp.mDeviceType == RES_280x280 ) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        }
+		} else {
+			Sys.println("UI has Text not area");
+			$.f_drawText(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
+				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
+
 		}
 		Sys.println("FIX TEST VIEW TEXTAREA FONTS");
 		
@@ -207,8 +182,7 @@ class TestView extends Ui.View {
         //    :height=>mMesssgeLocS[3],
         //    :justification=>Gfx.TEXT_JUSTIFY_CENTER
         //});
-        //myTextArea.setColor(mValueColour);
-        myTextArea.draw(dc);	
+        //myTextArea.draw(dc);	
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		// Specical case in [0] of HRM status

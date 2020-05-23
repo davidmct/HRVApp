@@ -13,7 +13,8 @@ base.resourcePath=$(resBase)
 
 # we can have multi excludes in code as (:label1 :label2)
 # need to include base so decompile works
-base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;anotherTag
+#preCIQ24 storage handling excluded or #storageMethod for post 2.4 version
+base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!

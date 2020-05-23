@@ -8,7 +8,7 @@ enum {
 	// device types
 	RES_240x240 = 0,
 	RES_260x260 = 1,
-	RES_280x280 = 3,
+	RES_280x280 = 2,
 	
 	// Views
 	TEST_VIEW = 0,

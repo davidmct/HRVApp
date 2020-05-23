@@ -25,7 +25,79 @@ class CustomBackground extends Ui.Drawable {
 
     }
 }
+ 
+function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, height) {
 
+	var myTextArea;
+	var mFont = Gfx.FONT_MEDIUM;
+			
+    // now we need to pick font		
+    // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+
+	Sys.println("mDeviceType = "+$._mApp.mDeviceType);
+	Sys.println("width, height = "+width+", "+height);
+	
+    if ($._mApp.mDeviceType == RES_240x240) {
+    	mFont = Gfx.FONT_SMALL;
+    } else if ( $._mApp.mDeviceType == RES_260x260 ) {
+    	mFont = Gfx.FONT_SMALL;
+    } else if ( $._mApp.mDeviceType == RES_280x280 ) {
+    	mFont = Gfx.FONT_SMALL;
+    }
+    
+    // now have to split text over two lines
+    var textSize = new [2];
+    textSize = dc.getTextDimensions(msgTxt, mFont);
+    // look for spaces from end backwards and see if first part fits.
+    // if no spaces then just one string
+    // need to split height into two and draw two text area
+		
+	myTextArea = new Ui.Text({
+        :text=>"line 1", // msgTxt,
+        :color=>mValueColour,
+        :backgroundColor=>backColour,
+        :font=>mFont,
+        :locX=>LocX+width/2,
+        :locY=>LocY,
+        :width=>width,
+        :height=>height/2,
+        :justification=>Gfx.TEXT_JUSTIFY_CENTER //|Gfx.TEXT_JUSTIFY_VCENTER
+    });		    
+    myTextArea.draw(dc);
+    
+	myTextArea = new Ui.Text({
+        :text=>"line 2", //msgTxt,
+        :color=>mValueColour,
+        :backgroundColor=>backColour,
+        :font=>mFont,
+        :locX=>LocX+width/2,
+        :locY=>LocY+textSize[1]+5,
+        :width=>width,
+        :height=>height/2,
+        :justification=>Gfx.TEXT_JUSTIFY_CENTER//|Gfx.TEXT_JUSTIFY_VCENTER
+    });		    
+    myTextArea.draw(dc);    
+}
+    
+
+function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, height) {
+		
+	var myTextArea;	
+
+	myTextArea = new Ui.TextArea({
+        :text=>msgTxt,
+        :color=>mValueColour,
+        :backgroundColor=>backColour,
+        :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+        :locX=>LocX,
+        :locY=>LocY,
+        :width=>width,
+        :height=>height,
+        :justification=>Gfx.TEXT_JUSTIFY_CENTER
+    });	
+    myTextArea.draw(dc);	
+}
+    
 function timerFormat(time) {
 	var hour = time / 3600;
 	var min = (time / 60) % 60;
