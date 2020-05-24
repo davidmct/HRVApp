@@ -18,6 +18,9 @@ class HRVStorageHandler {
 	// message from Garmin that settings have been changed on mobile - called from main app
 	function onSettingsChangedStore() {
 		// should probably stop any test and reload settings
+		//0.4.04 read changed properties
+		readProperties();
+		// caller will do checks on changes
 	}
 
 // date settings from Garmin are in UTC so use Gregorian.utcInfo() when working with these in place of Gregorian.info()

@@ -16,10 +16,12 @@ using Toybox.Time.Gregorian;
 //9. Trial mode currently disabled
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
+
 //v0.4.xx+ revisions post initial release
 //1. Look at all strings to resources (check saves memory) - aids language translation if needed (may not help)
 //2. Frequency based parameters - need to research
-//3. 
+//3. See if we can use settings to select which parameters to display in history. Need to map to dictionary
+ 
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()
 // - any more local vars rather than global
@@ -399,7 +401,26 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("Settings changed on connect");
 		// DO NOTHING AT MOMENT - next restart will impact
 		// update any things depending on storage functions
-		mStorage.onSettingsChangedStore();	
+		
+		//0.4.04
+		// read in changed data
+		// check old state of sensor and test type
+		var oldSensor = mSensorTypeExt;
+		var oldTestType = testTypeSet;
+		var oldFitWrite = $._mApp.mFitWriteEnabled;
+ 
+		// reload properties
+		mStorage.onSettingsChangedStore();
+		
+		// check whether we need to switch
+		mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
+        // if type has changed then force restart of state machine  
+        mTestControl.fCheckSwitchType( :TestType, oldTestType); 
+        // and if write state has changed!!
+        $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite); 
+        			
+		// restart start machine
+		mTestControl.StateMachine(:RestartControl);
 		
 		Ui.requestUpdate();
 	}
