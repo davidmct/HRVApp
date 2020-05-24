@@ -24,7 +24,11 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     
     function setResetSettings(value) {
 		if (value == 1) { 
+			var oldSensor = $._mApp.mSensorTypeExt;
             $._mApp.mStorage.resetSettings();
+            //0.4.04
+            // this may have changed sensor type !!
+            $._mApp.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
         }	
     }
     
@@ -39,9 +43,11 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     function onBack() {
         Ui.popView(Ui.SLIDE_IMMEDIATE);
     }
- 
-    function onDone() {
-        Ui.popView(Ui.SLIDE_IMMEDIATE);
-    } 
+
+//0.4.04 - should only be called on CheckMenuItem 
+// Leave for class to deal with
+//    function onDone() {
+//        Ui.popView(Ui.SLIDE_IMMEDIATE);
+//    } 
     
 }

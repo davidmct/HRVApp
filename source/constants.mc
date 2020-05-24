@@ -16,9 +16,9 @@ enum {
 	STATS2_VIEW = 2,
 	CURRENT_VIEW = 3,
 	POINCARE_VIEW = 4,
-	POINCARE_VIEW2 = 5,
-	HISTORY_VIEW = 6,
-	NUM_VIEWS = 7
+	//POINCARE_VIEW2 = 5,
+	HISTORY_VIEW = 5,
+	NUM_VIEWS = 6
 }
 
 // Colors index. Arrays start at zero
@@ -121,11 +121,11 @@ enum {
 	TONE_ERROR = 18,
 
 	//Test types
-	TYPE_MANUAL = 0,  //runs as long as useer wants up to max time
-	TYPE_TIMER = 1,   // to 5 mins and can be changed down or to max-time
+	TYPE_MANUAL = false,  //runs as long as user wants up to max time
+	TYPE_TIMER = true,   // to 5 mins and can be changed down or to max-time
 	
-	SENSOR_INTERNAL = 0, // false
-	SENSOR_SEARCH = 1, // true
+	SENSOR_INTERNAL = false, // false
+	SENSOR_SEARCH = true, // true
 	
 	// define test states
 	// Ordered so we know in TESTING or further states

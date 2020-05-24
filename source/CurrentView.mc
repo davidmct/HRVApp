@@ -101,48 +101,20 @@ class CurrentValueView extends Ui.View {
 		
 		mMessage = "Running for "+timer+" out of "+timeLimit;
 		
-		// 0.4.2 - select which text area to use
-		var myTextArea;
+		// 0.4.04 - select which text area to use
+		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
 			Sys.println("UI has TextArea");
-			myTextArea = new Ui.TextArea({
-	            :text=>mMessage,
-	            :color=>mValueColour,
-	            :backgroundColor=>mapColour($._mApp.bgColSet),
-	            :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
-	            :locX=>mMesssgeLocS[0],
-	            :locY=>mMesssgeLocS[1],
-	            :width=>mMesssgeLocS[2],
-	            :height=>mMesssgeLocS[3],
-	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
-	        });					
-		} else {
-			Sys.println("UI does not have TextArea");
-			myTextArea = new Ui.Text({
-	            :text=>mMessage,
-	            :color=>mValueColour,
-	            :backgroundColor=>mapColour($._mApp.bgColSet),
-	            :font=>Gfx.FONT_XTINY,
-	            :locX=>mMesssgeLocS[0],
-	            :locY=>mMesssgeLocS[1],
-	            :width=>mMesssgeLocS[2],
-	            :height=>mMesssgeLocS[3],
-	            :justification=>Gfx.TEXT_JUSTIFY_CENTER
-	        });		
-	        
-	        // now we need to pick font		
-	        // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+			$.f_drawTextArea(dc, mMessage, mValueColour, mapColour($._mApp.bgColSet), 
+				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
-	        if ($._mApp.mDeviceType == RES_240x240) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        } else if ( $._mApp.mDeviceType == RES_260x260 ) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        } else if ( $._mApp.mDeviceType == RES_280x280 ) {
-	        	myTextArea.setFont(Gfx.FONT_SMALL);
-	        }
+		} else {
+			Sys.println("UI has Text not area");
+			$.f_drawText(dc, mMessage, mValueColour, mapColour($._mApp.bgColSet), 
+				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		}
-	    Sys.println("FIX CURRENT VIEW TEXTAREA FONTS");	
+	    //Sys.println("FIX CURRENT VIEW TEXTAREA FONTS");	
 	    	
 		//myTextArea = new Ui.TextArea({
         //    :text=>mMessage,
@@ -154,7 +126,7 @@ class CurrentValueView extends Ui.View {
         //    :height=>mMesssgeLocS[3],
         //    :justification=>Gfx.TEXT_JUSTIFY_CENTER
         //});
-        myTextArea.draw(dc);	
+        //myTextArea.draw(dc);	
         
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		        

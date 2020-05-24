@@ -66,6 +66,8 @@ class SensorHandler {
     	mSensorType = sensorType;
     	mAntIDLocal = mAntID;
     	mFunc = null;
+    	//0.4.04 make sure if nothing used so far variable is null
+    	sensor = null;
     }
     
     // function to call to update TestController
@@ -89,10 +91,13 @@ class SensorHandler {
     	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
 
     	if (oldSensor != $._mApp.mSensorTypeExt) {
-    		// firstly close down original sensor   		
-       		if (oldSensor) { // ANT
+    		// firstly close down original sensor   
+    		// 0.4.04 make type const		
+       		if (oldSensor == SENSOR_SEARCH) { // ANT
        			Sys.println("stopping ext ANT");
-    			if (sensor != null) {sensor.stopExtSensor(); }
+       			if ((sensor != null) && (sensor has :stopExtSensor)) {
+    				sensor.stopExtSensor(); 
+    			}
     		} else { // internal strap or OHR
     			Sys.println("stopping Internal");
     			if (sensor != null) {sensor.stopIntSensor(); }  		
@@ -101,6 +106,7 @@ class SensorHandler {
     		sensor = null;
     		
     		// discard FIT session if active
+    		// we should always have a mFitControl
     		if ($._mApp.mFitControl != null) {
     			$._mApp.mFitControl.discardFITrec();
     		}
@@ -228,7 +234,7 @@ class AntHandler extends Ant.GenericChannel {
 		// will now be searching for strap after openCh()
 		Sys.println("ANT initialised");
 	}	
-	
+
 	function stopExtSensor() {
 		Sys.println("Stopping external sensors");
     	GenericChannel.close();

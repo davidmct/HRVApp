@@ -306,7 +306,11 @@ class TestController {
     function finishTest() {
     	// called when not enough data 
     	Sys.println("finishTest()");
-    	if ($._mApp.mFitControl != null) { $._mApp.mFitControl.discardTest(); }
+    	// 0.4.04 changed to mSession not class as mSession is null if no FIT created
+    	// test maybe unnecessary as in discard aleady
+    	// previous version called mFitControl.discardTest() which doesn't exist
+    	//if ($._mApp.mFitControl.mSession != null) { discardTest(); }
+    	discardTest();
     	endTest();
     	alert(TONE_SUCCESS);
     }
@@ -347,9 +351,10 @@ class TestController {
     	// called from HRVBehaviourDelegate
     	Sys.println("discardTest() called");
     	resetTest(); // may not be necessary as handled by state machine
-    	if ($._mApp.mFitControl != null) {
+    	//0.4.04 test mSession not mFitControl for null
+    	//if ($._mApp.mFitControl.mSession != null) {
     		$._mApp.mFitControl.discardFITrec();
-    	}
+    	//}
     }
     
     function saveTest() {

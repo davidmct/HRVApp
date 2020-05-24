@@ -28,10 +28,10 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("pAuxHRAntID", 0);
 		Storage.setValue("firstLoadEver", true);
 		$._mApp.Properties.setValue("pFitWriteEnabled", false);
-		$._mApp.Properties.setValue("pSensorSelect", true);
+		$._mApp.Properties.setValue("pSensorSelect", SENSOR_SEARCH);
 		$._mApp.Properties.setValue("soundSet", true);
 		$._mApp.Properties.setValue("vibeSet", false);
-		$._mApp.Properties.setValue("testTypeSet", 0);
+		$._mApp.Properties.setValue("testTypeSet", TYPE_TIMER);
 		$._mApp.Properties.setValue("timerTimeSet", 300);
 		$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
 		$._mApp.Properties.setValue("ManualTimeSet", 300);
@@ -48,10 +48,10 @@ class HRVStorageHandler {
 		$._mApp.setProperty("pAuxHRAntID", 0);
 		$._mApp.setProperty("firstLoadEver", true);
 		$._mApp.setProperty("pFitWriteEnabled", false);
-		$._mApp.setProperty("pSensorSelect", true);
+		$._mApp.setProperty("pSensorSelect", SENSOR_SEARCH);
 		$._mApp.setProperty("soundSet", true);
 		$._mApp.setProperty("vibeSet", false);
-		$._mApp.setProperty("testTypeSet", 0);
+		$._mApp.setProperty("testTypeSet", TYPE_TIMER);
 		$._mApp.setProperty("timerTimeSet", 300);
 		$._mApp.setProperty("MaxTimerTimeSet", 300);
 		$._mApp.setProperty("ManualTimeSet", 300);
@@ -215,7 +215,7 @@ class HRVStorageHandler {
 		$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
 		$._mApp.soundSet = $._mApp.getProperty("soundSet");
 		$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
-		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet").toNumber();
+		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet");
 		$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
 		$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
 		$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
@@ -248,7 +248,7 @@ class HRVStorageHandler {
 			$._mApp.mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");
 			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
 			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
-			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet").toNumber();
+			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet");
 			$._mApp.timerTimeSet = $._mApp.Properties.getValue("timerTimeSet").toNumber();
 			$._mApp.mMaxTimerTimeSet = $._mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
 			$._mApp.mManualTimeSet = $._mApp.Properties.getValue("ManualTimeSet").toNumber();

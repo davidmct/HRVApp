@@ -19,6 +19,9 @@
 	</setting>	
 	<setting propertyKey="@Properties.vibeSet" title="@Strings.vibeSetTitle" prompt="@Strings.vibeSetPrompt">
 		<settingConfig type="boolean" />
+	</setting>	
+	<setting propertyKey="@Properties.testTypeSet" title="@Strings.testTypeSetTitle" prompt="@Strings.testTypeSetPrompt">
+		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />

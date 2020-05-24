@@ -155,9 +155,9 @@ class TestView extends Ui.View {
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		mBitMap.draw(dc);
 		
-		// 0.4.2 - select which text area to use
-		var x = 0;
-		if  (x==1) { //(Ui.WatchUi has :TextArea) {
+		// 0.4.04 - select which text area to use
+		//var x = 0;
+		if (Ui.WatchUi has :TextArea) {
 			Sys.println("UI has TextArea");
 			$.f_drawTextArea(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
@@ -168,9 +168,9 @@ class TestView extends Ui.View {
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		}
-		Sys.println("FIX TEST VIEW TEXTAREA FONTS");
+		//Sys.println("FIX TEST VIEW TEXTAREA FONTS");
 		
-		// v0.4.01
+		// v0.4.01 code ..
 		//var myTextArea = new Ui.TextArea({
         //    :text=>msgTxt,
         //    :color=>mValueColour,

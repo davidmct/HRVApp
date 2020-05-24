@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV_Analysis</string>
-	<string id="AppVersion">0.4.00</string>
+	<string id="AppVersion">0.4.04</string>
 	<string id="pDeviceIDTitle">Device ID</string> 
 	<string id="pDeviceIDPrompt">Set by APP</string>
 	<string id="pAuthIDTitle">Licence String</string> 
@@ -35,13 +35,15 @@
 	<string id="lMsUnits">ms</string>  
 	<string id="lHeartRateUnits">bpm</string> 
 	<string id="lNoUnits">times</string>  		
-	<string id="pSensorSelectTitle">Use unregistered HRM?</string> 
+	<string id="pSensorSelectTitle">Use unregistered HRM</string> 
 	<string id="pSensorSelectPrompt">True for unregistered/disabled strap</string>
 	<string id="soundSetTitle">Sound?</string>
 	<string id="soundSetPrompt">On or Off</string>
 	<string id="vibeSetTitle">Vibrate?</string>
 	<string id="vibeSetPrompt">On or Off</string>
-	<string id="timerTimeSetTitle">Timer based test</string>
+	<string id="testTypeSetTitle">Use timer based test</string>
+	<string id="testTypeSetPrompt">set for timer, unset for manual</string>
+	<string id="timerTimeSetTitle">Timer based test time</string>
 	<string id="timerTimeSetPrompt">Length of test in seconds - should be 300 (5mins)</string>
 	<string id="TimeTooLargeError">Maximum value is 600 seconds</string>
 	<string id="ManualTimeSetTitle">Manual test time</string> 
