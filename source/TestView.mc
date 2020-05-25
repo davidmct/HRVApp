@@ -28,6 +28,11 @@ class TestView extends Ui.View {
 	// strapStatus - no label!, Ln, BPM, Timer
 	hidden var mLabelValueLocX = [ 28, 75, 82, 27];
 	hidden var mLabelValueLocY = [ 53, 78, 53, 78];
+	
+	hidden var mFitIconLocX = 50;
+	hidden var mFitIconLocY = 78;
+	hidden var mFitIconLocXS;
+	hidden var mFitIconLocYS;	
 		
 	// label values
 	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER" ];
@@ -115,6 +120,9 @@ class TestView extends Ui.View {
             :locX=>mLocX,
             :locY=>mLocY           
         });
+
+		mFitIconLocXS = (mFitIconLocX * mScaleX)/100;
+		mFitIconLocYS = (mFitIconLocY * mScaleY)/100;	
 	
 	}
         
@@ -223,6 +231,36 @@ class TestView extends Ui.View {
 		}
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, mPulseStr, mJust);
 		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mTimerFont, timer, mJust);
+		
+		// now draw circle based on FIT status
+		var mCircleCol = mapColour($._mApp.bgColSet);
+		if ( mCircleCol == Gfx.COLOR_WHITE) {
+			// background is white so make black!
+			mCircleCol = Gfx.COLOR_BLACK;
+		} else {
+			mCircleCol = Gfx.COLOR_WHITE;		
+		}
+		
+		// draw opposite of background if FIT enabled and not writing
+		// draw red if FIT enabled and writing
+		// else don't draw	
+		// 0.4.05
+		var strDBG = $._mApp.mFitWriteEnabled + ", ";
+		if ( $._mApp.mFitControl.mSession == null) { 
+			strDBG = strDBG+"null"+" not recording";
+		}
+		if ($._mApp.mFitControl.mSession != null ) {
+			strDBG = strDBG + "Session, "+$._mApp.mFitControl.mSession.isRecording();
+		}
+		Sys.println("FIT enabled, mSession, recording: "+strDBG);
+					
+		if ($._mApp.mFitWriteEnabled && $._mApp.mFitControl.mSession != null && $._mApp.mFitControl.mSession.isRecording()) {
+			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
+			dc.fillCircle( mFitIconLocXS, mFitIconLocYS, 10);		
+		} else if ($._mApp.mFitWriteEnabled) {
+			dc.setColor( mCircleCol, Gfx.COLOR_TRANSPARENT);	
+			dc.fillCircle( mFitIconLocXS, mFitIconLocYS, 10);			
+		}
 		   		
    		//View.onUpdate(dc);
    		

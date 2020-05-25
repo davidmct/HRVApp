@@ -21,8 +21,12 @@ using Toybox.Time.Gregorian;
 //1. Look at all strings to resources (check saves memory) - aids language translation if needed (may not help)
 //2. Frequency based parameters - need to research
 //3. See if we can use settings to select which parameters to display in history. Need to map to dictionary
-//4. See if I can add FIT write status on current view
+//4. See if I can add FIT write status on current view - use white to show enabled and red to show active
 //5. Add summary field to FIT that shows which sensor acquired data ie int or ext
+ 
+// 0.4.05
+// Fixed bug in FIT close on excape when not enough samples
+// Added FIT write indicator
  
 // Optimisations:
 // - check no string assignment in loops. Use Lang.format()

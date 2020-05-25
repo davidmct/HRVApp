@@ -89,7 +89,7 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
-		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered");}
+		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered in state "+mTestState); }
 
 		// request to restart		
 		if (caller == :RestartControl) { 
@@ -156,10 +156,11 @@ class TestController {
 				if (caller == :enterPressed) {
 					// now we can setup test ready to go
 					// KEEP OLD data until actually starting the test!
+					Sys.println("TS_READY - enter pressed");	
 					$._mApp.mSensor.mHRData.initForTest();
 					startTest();
 					mTestState = TS_TESTING; 	
-					Sys.println("TS_READY - enter pressed");		
+	
 				} else if (caller == :escapePressed) {
 					// just pop the view by returning false
 					// go back to initialising or READY?
@@ -192,7 +193,13 @@ class TestController {
 					case :escapePressed:
 						// test stopped by user so saving is UI issue if enough
 						stopTest();
-						if (enoughSamples) {mResponse = true;}					
+						if (enoughSamples) {
+							mResponse = true;
+						} else { // we don't have enough samples so close FIT
+							if ($._mApp.mFitControl.mSession != null) {
+    							$._mApp.mFitControl.discardFITrec();
+    						}		
+						}		
 						mTestState = TS_ABORT; 	
 						mTestMessage = "Test terminated";
 					break;
@@ -353,7 +360,7 @@ class TestController {
     	resetTest(); // may not be necessary as handled by state machine
     	//0.4.04 test mSession not mFitControl for null
     	//if ($._mApp.mFitControl.mSession != null) {
-    		$._mApp.mFitControl.discardFITrec();
+    	$._mApp.mFitControl.discardFITrec();
     	//}
     }
     

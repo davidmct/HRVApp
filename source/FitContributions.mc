@@ -42,7 +42,7 @@ const R_P_NN20_FIELD_ID = 21;
 
 class HRVFitContributor {
 
-	hidden var mSession;
+	var mSession;
 
     // FIT Contributions variables    
 

@@ -211,11 +211,22 @@ class AntHandler extends Ant.GenericChannel {
     	mSavedAntID = mAntID;
     	 
         // Get the channel
-        mChanAssign = new Ant.ChannelAssignment(
-            //Ant.CHANNEL_TYPE_RX_NOT_TX,
-            Ant.CHANNEL_TYPE_RX_ONLY,
-            Ant.NETWORK_PLUS);
-            		
+        try {
+	        mChanAssign = new Ant.ChannelAssignment(
+	            //Ant.CHANNEL_TYPE_RX_NOT_TX,
+	            Ant.CHANNEL_TYPE_RX_ONLY,
+	            Ant.NETWORK_PLUS);
+		} catch (ex) {
+			Sys.println("Can't assign ANT channel");
+			stopExtSensor();	
+	        mChanAssign = new Ant.ChannelAssignment(
+	            //Ant.CHANNEL_TYPE_RX_NOT_TX,
+	            Ant.CHANNEL_TYPE_RX_ONLY,
+	            Ant.NETWORK_PLUS);			
+		}
+		finally {
+		}
+	          		
         // Set the configuration
         deviceCfg = new Ant.DeviceConfig( {
             :deviceNumber => mAntID,             //Set to 0 to use wildcard search
@@ -237,8 +248,10 @@ class AntHandler extends Ant.GenericChannel {
 
 	function stopExtSensor() {
 		Sys.println("Stopping external sensors");
-    	GenericChannel.close();
-    	GenericChannel.release();
+		if (GenericChannel != null) {
+    		GenericChannel.close();
+    		GenericChannel.release();
+    	}
 	}
 
     function onAntMsg(msg)
@@ -253,6 +266,9 @@ class AntHandler extends Ant.GenericChannel {
 			//Sys.println("A - "+mMessageCount);
 			mMessageCount++;
 		}
+		
+		// TEST
+		//initialize(mSavedAntID, mHRDataLnk);
 		
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if ($._mApp.mSensor.mSearching) {
@@ -276,20 +292,24 @@ class AntHandler extends Ant.GenericChannel {
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
         	if (mDebuggingANT) {
-        		//Sys.println("ANT EVENT msg");
+        		Sys.println("ANT EVENT msg");
         	}
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
-	            var event = (payload[1] & 0xFF);	            
+	            var event = (payload[1] & 0xFF);	
+	            // force closed
+	            // event =  Ant.MSG_CODE_EVENT_CHANNEL_CLOSED;           
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
 	            		Sys.println("ANT:EVENT: closed");
 	            		//$._mApp.mSensor.openCh();
+	            		// open channel again
+	            		mHRDataLnk.isChOpen = GenericChannel.open();
 	            		// initialise again
-	            		initialize(mSavedAntID, mHRDataLnk);
+	            		//initialize(mSavedAntID, mHRDataLnk);
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
-						$._mApp.mSensor.mSearching = true;
+						//$._mApp.mSensor.mSearching = true;
 						// update Test controller data  
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
@@ -300,7 +320,7 @@ class AntHandler extends Ant.GenericChannel {
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
-						$._mApp.mSensor.mSearching = true;
+						//$._mApp.mSensor.mSearching = true;
 						// update Test controller data  
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
