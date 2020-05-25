@@ -226,7 +226,8 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		finally {
 		}
-	          		
+       	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
+       		          		
         // Set the configuration
         deviceCfg = new Ant.DeviceConfig( {
             :deviceNumber => mAntID,             //Set to 0 to use wildcard search
@@ -238,7 +239,7 @@ class AntHandler extends Ant.GenericChannel {
             //:searchTimeoutHighPriority => 2, 
             :searchThreshold => 0} );           //Pair to all transmitting sensors, 0 disabled, 1 = nearest
        	//mChanAssign.setBackgroundScan(true);
-       	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
+
        	GenericChannel.setDeviceConfig(deviceCfg);
        	mHRDataLnk.isChOpen = GenericChannel.open();
        	
@@ -281,6 +282,8 @@ class AntHandler extends Ant.GenericChannel {
             mHRDataLnk.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
+			mHRDataLnk.mHRMStatusCol = GREEN;
+    		mHRDataLnk.mHRMStatus = "Strap data";
 	
 			//if (mDebuggingANT == true) {
 			//	Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
@@ -306,6 +309,7 @@ class AntHandler extends Ant.GenericChannel {
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
 	            		// initialise again
 	            		//initialize(mSavedAntID, mHRDataLnk);
+	            		// NOTE SURE WE SHOULD LOSE STRAP
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
