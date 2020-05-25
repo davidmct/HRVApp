@@ -49,7 +49,7 @@ using Toybox.Time.Gregorian;
 //   
 
 
-var mDebugging = true;
+var mDebugging = false;
 var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
