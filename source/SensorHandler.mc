@@ -283,7 +283,12 @@ class AntHandler extends Ant.GenericChannel {
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
 			mHRDataLnk.mHRMStatusCol = GREEN;
-    		mHRDataLnk.mHRMStatus = "Strap data";
+    		mHRDataLnk.mHRMStatus = "HR data";
+    		
+    		// this is also called in sample processing but conditional
+    		if ($._mApp.mSensor.mFunc != null) {
+				$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
+			}	
 	
 			//if (mDebuggingANT == true) {
 			//	Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
@@ -303,7 +308,7 @@ class AntHandler extends Ant.GenericChannel {
 	            // event =  Ant.MSG_CODE_EVENT_CHANNEL_CLOSED;           
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
-	            		Sys.println("ANT:EVENT: closed");
+	            		//Sys.println("ANT:EVENT: closed");
 	            		//$._mApp.mSensor.openCh();
 	            		// open channel again
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
@@ -317,7 +322,7 @@ class AntHandler extends Ant.GenericChannel {
 						// update Test controller data  
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-initialising", false, false]);
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
 						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
@@ -331,7 +336,7 @@ class AntHandler extends Ant.GenericChannel {
 							$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
 						}
 						// wait for another message?
-						Sys.println( "RX_FAIL in AntHandler");
+						//Sys.println( "RX_FAIL in AntHandler");
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");

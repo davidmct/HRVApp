@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV_Analysis</string>
-	<string id="AppVersion">0.4.05</string>
+	<string id="AppVersion">0.4.1</string>
 	<string id="pDeviceIDTitle">Device ID</string> 
 	<string id="pDeviceIDPrompt">Set by APP</string>
 	<string id="pAuthIDTitle">Licence String</string> 
@@ -34,7 +34,9 @@
 	<string id="lPercentUnits">%</string>
 	<string id="lMsUnits">ms</string>  
 	<string id="lHeartRateUnits">bpm</string> 
-	<string id="lNoUnits">times</string>  		
+	<string id="lNoUnits">times</string>  	
+	<string id="lSourceLabel">Sensor Source:</string>
+	<string id="lSourceUnits"> </string> 	
 	<string id="pSensorSelectTitle">Use unregistered HRM</string> 
 	<string id="pSensorSelectPrompt">True for unregistered/disabled strap</string>
 	<string id="soundSetTitle">Sound?</string>

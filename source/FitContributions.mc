@@ -32,6 +32,7 @@ const R_NN50_FIELD_ID = 18;
 const R_P_NN50_FIELD_ID = 19;
 const R_NN20_FIELD_ID = 20;
 const R_P_NN20_FIELD_ID = 21;
+const SOURCE_FIELD_ID = 22;
 
 // Logic..
 // Init clears variables?
@@ -60,6 +61,7 @@ class HRVFitContributor {
 	hidden var mSessionmpNN50_Field; 
 	hidden var mSessionmNN20_Field;
 	hidden var mSessionmpNN20_Field;
+	hidden var mSessionSource_Field;
 		
 	hidden var mRecordAvgPulse_Field;
 	hidden var mRecordmRMSSD_Field;
@@ -93,6 +95,8 @@ class HRVFitContributor {
        	mSessionmpNN50_Field = mSession.createField("pNN50", P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
        	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"occurences" });
        	mSessionmpNN20_Field = mSession.createField("pNN20", P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
+       	mSessionSource_Field = mSession.createField("Source", SOURCE_FIELD_ID, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
+       	
 
        	mRecordAvgPulse_Field = mSession.createField("AvgPulse", R_AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
        	mRecordmRMSSD_Field = mSession.createField("RMSSD", R_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
@@ -118,6 +122,7 @@ class HRVFitContributor {
 		mSessionmpNN50_Field.setData(0.0); 
 		mSessionmNN20_Field.setData(0);
 		mSessionmpNN20_Field.setData(0.0);
+		mSessionSource_Field.setData("");
 			
 		mRecordAvgPulse_Field.setData(0);
 		mRecordmRMSSD_Field.setData(0.0);
@@ -199,7 +204,15 @@ class HRVFitContributor {
 		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50);
 		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
 		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20);
-		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);			
+		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
+		
+		var str;
+		if ($._mApp.mSensorTypeExt == SENSOR_SEARCH) {
+			str = "External";
+		} else {
+			str = "Internal";
+		}
+		mSessionSource_Field.setData(str);		
 
 		//Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);		
 	}

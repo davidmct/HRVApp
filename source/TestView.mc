@@ -166,12 +166,12 @@ class TestView extends Ui.View {
 		// 0.4.04 - select which text area to use
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
-			Sys.println("UI has TextArea");
+			if (mDebugging) { Sys.println("UI has TextArea");}
 			$.f_drawTextArea(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
-			Sys.println("UI has Text not area");
+			if (mDebugging) {Sys.println("UI has Text not area");}
 			$.f_drawText(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
@@ -244,15 +244,17 @@ class TestView extends Ui.View {
 		// draw opposite of background if FIT enabled and not writing
 		// draw red if FIT enabled and writing
 		// else don't draw	
-		// 0.4.05
-		var strDBG = $._mApp.mFitWriteEnabled + ", ";
-		if ( $._mApp.mFitControl.mSession == null) { 
-			strDBG = strDBG+"null"+" not recording";
+		// 0.4.1
+		if (mDebugging) {
+			var strDBG = $._mApp.mFitWriteEnabled + ", ";
+			if ( $._mApp.mFitControl.mSession == null) { 
+				strDBG = strDBG+"null"+" not recording";
+			}
+			if ($._mApp.mFitControl.mSession != null ) {
+				strDBG = strDBG + "Session, "+$._mApp.mFitControl.mSession.isRecording();
+			}
+			Sys.println("FIT enabled, mSession, recording: "+strDBG);
 		}
-		if ($._mApp.mFitControl.mSession != null ) {
-			strDBG = strDBG + "Session, "+$._mApp.mFitControl.mSession.isRecording();
-		}
-		Sys.println("FIT enabled, mSession, recording: "+strDBG);
 					
 		if ($._mApp.mFitWriteEnabled && $._mApp.mFitControl.mSession != null && $._mApp.mFitControl.mSession.isRecording()) {
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
@@ -262,10 +264,6 @@ class TestView extends Ui.View {
 			dc.fillCircle( mFitIconLocXS, mFitIconLocYS, 10);			
 		}
 		   		
-   		//View.onUpdate(dc);
-   		
-   		//if(mDebugging) { Sys.println("TestView:onUpdate() exit");}
-   		//return true;	
    		// TEST CODE		
 		//Sys.println("Testview memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+

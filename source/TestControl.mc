@@ -118,7 +118,6 @@ class TestController {
 		
 		switch (mTestState) {
 			case TS_INIT:
-				Sys.println("TS_INIT");
 				// We may need to reinitialise sensors if swapped here
 				mTestMessage = "Initialising...";
 				resetTest();
@@ -127,7 +126,6 @@ class TestController {
 				$._mApp.mSensor.setObserver(self.method(:onNotify));
 			break;
 			case TS_WAITING:
-				//Sys.println("TS_WAITING");
 				// we are waiting for the HR strap to be ready
 				if ( mSensorReady ) { 
 					mTestMessage = setSensorStr+" sensor ready";
@@ -170,7 +168,6 @@ class TestController {
 				}				
 			break;
 			case TS_TESTING:
-				//Sys.println("TS_TESTING");
 				// now we are in the mist of testing
 				mTestMessage = "Breathe regularly and stay still";
 				
@@ -230,14 +227,12 @@ class TestController {
 							
 			break;
 			case TS_ABORT:
-				Sys.println("TS_ABORT");
 				// go back to ready or maybe INIT if new sensors
 				mTestMessage = "Results available until you return to view";
 				mTestState = TS_PAUSE;	
 				resetTest();
 			break;
 			case TS_CLOSE:
-				Sys.println("TS_CLOSE");
 				// go back to ready or maybe INIT if new sensors
 				// maybe TestView is popped at this point?
 				mTestState = TS_PAUSE;	
@@ -246,7 +241,6 @@ class TestController {
 			break;
 			case TS_PAUSE:
 				// allow one update cycle to show close and and abort messages
-				Sys.println("TS_PAUSE");
 				mTestState = TS_READY;					
 			break;
 			default:
@@ -266,9 +260,8 @@ class TestController {
     		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
     		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
     	}
-    	    	
-    	if (mDebugging == true) {Sys.println("TestControl: exiting State machine");}
-		//Ui.requestUpdate();
+
+		if (mDebugging == true) {Sys.println("TestControl: StateMachine() exit in state "+mTestState); }    	    	
 		return mResponse;
 	}
 	
@@ -293,6 +286,7 @@ class TestController {
 	// function onHide() {getModel().setObserver(null);}
 	
 	function startTest() {
+		Sys.println("startTest() called");
 		// make sure no old FIT open
 		discardTest();
 		// set up FIT to write data if enabled
@@ -346,7 +340,7 @@ class TestController {
     }
 
     function resetTest() {
-    	//Sys.println("TestControl: resetTest() called");
+    	Sys.println("TestControl: resetTest() called");
     	// don't call this as useful to see old data before starting a new test
     	//$._mApp.mSensor.mHRData.initForTest();
     	testTimer.stop();
