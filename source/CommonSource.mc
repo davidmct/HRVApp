@@ -1,6 +1,6 @@
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
-using Toybox.Graphics as Gfx;
+using Toybox.Graphics;
 using Toybox.System as Sys;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
@@ -49,7 +49,7 @@ class CustomBackground extends Ui.Drawable {
 function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, height) {
 
 	var myTextArea;
-	var mFont = Gfx.FONT_MEDIUM;
+	var mFont = Graphics.FONT_MEDIUM;
 	var mFontID;
 			
     // now we need to pick font		
@@ -58,13 +58,13 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 	Sys.println("mDeviceType = "+$._mApp.mDeviceType);
 	Sys.println("width, height = "+width+", "+height);
 	
-    if ($._mApp.mDeviceType == RES_240x240) {
-    	mFont = Gfx.FONT_SMALL;
-    } else if ( $._mApp.mDeviceType == RES_260x260 ) {
-    	mFont = Gfx.FONT_SMALL;
-    } else if ( $._mApp.mDeviceType == RES_280x280 ) {
-    	mFont = Gfx.FONT_SMALL;
-    }
+    //if ($._mApp.mDeviceType == RES_240x240) {
+    //	mFont = Graphics.FONT_SMALL;
+    //} else if ( $._mApp.mDeviceType == RES_260x260 ) {
+    //	mFont = Graphics.FONT_SMALL;
+    //} else if ( $._mApp.mDeviceType == RES_280x280 ) {
+    //	mFont = Graphics.FONT_SMALL;
+    //}
     
     // now have to split text over two lines
     // Algo...
@@ -108,7 +108,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
         :locY=>LocY,
         :width=>width,
         :height=>height/2,
-        :justification=>Gfx.TEXT_JUSTIFY_CENTER //|Gfx.TEXT_JUSTIFY_VCENTER
+        :justification=>Graphics.TEXT_JUSTIFY_CENTER //|Gfx.TEXT_JUSTIFY_VCENTER
     });		    
     myTextArea.draw(dc);
     
@@ -121,7 +121,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
         :locY=>LocY+height/2-5,
         :width=>width,
         :height=>height/2,
-        :justification=>Gfx.TEXT_JUSTIFY_CENTER//|Gfx.TEXT_JUSTIFY_VCENTER
+        :justification=>Graphics.TEXT_JUSTIFY_CENTER//|Gfx.TEXT_JUSTIFY_VCENTER
     });		    
     myTextArea.draw(dc);    
 }
@@ -135,12 +135,12 @@ function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width,
         :text=>msgTxt,
         :color=>mValueColour,
         :backgroundColor=>backColour,
-        :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
+        :font=>[Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY],
         :locX=>LocX,
         :locY=>LocY,
         :width=>width,
         :height=>height,
-        :justification=>Gfx.TEXT_JUSTIFY_CENTER
+        :justification=>Graphics.TEXT_JUSTIFY_CENTER
     });	
     myTextArea.draw(dc);	
 }
