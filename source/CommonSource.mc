@@ -7,6 +7,26 @@ using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Lang;
 
+
+var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics.FONT_MEDIUM,Graphics.FONT_LARGE];
+
+function selectFont(dc, string, width, height) {
+    var testString = string; //Dummy string to test data width
+    var fontIdx;
+    var dimensions;
+
+    //Search through fonts from biggest to smallest
+    for (fontIdx = (fonts.size() - 1); fontIdx > 0; fontIdx--) {
+        dimensions = dc.getTextDimensions(testString, fonts[fontIdx]);
+        if ((dimensions[0] <= width) && (dimensions[1] <= height)) {
+            //If this font fits, it is the biggest one that does
+            break;
+        }
+    }
+
+    return fontIdx;
+}    
+
 // This is the custom drawable we will use for backgrounds
 class CustomBackground extends Ui.Drawable {
 
@@ -30,6 +50,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 
 	var myTextArea;
 	var mFont = Gfx.FONT_MEDIUM;
+	var mFontID;
 			
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
@@ -46,14 +67,40 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     }
     
     // now have to split text over two lines
-    var textSize = new [2];
-    textSize = dc.getTextDimensions(msgTxt, mFont);
-    // look for spaces from end backwards and see if first part fits.
-    // if no spaces then just one string
-    // need to split height into two and draw two text area
+    // Algo...
+    // what font fits in twice width available _ call font select function (doesn't fail gracefully if no fit)
+    // Find middle of text then search for a space in either direction
+    // trim text into two strings and check longer by redoing font search on longer (could just check size is ok as well 
+    // but would potentially have to do another search
+    
+    // what font fits whole string in half height and twice width
+    mFontID = selectFont(dc, msgTxt, width*2, height/2);
+    
+    var mMidCharIdx = msgTxt.length()/2;
+    var mSpaceIdx = null;
+    for (var i=mMidCharIdx; i >= 0; i--) {
+    	var subStr = msgTxt.substring(i, i);
+    	if (subStr.equals(" ") ) { mSpaceIdx = i; break;}
+    }
+    
+    var mString1;
+    var mString2;
+    
+    if ( mSpaceIdx == null) {
+    	// no space char found so split string anyway
+    	mString2 = msgTxt.substring(msgTxt.length()/2, msgTxt.length()-1);
+    	mString1 = msgTxt.substring(0, msgTxt.length()/2-1);
+    } else {
+ 		// check longer string fits still
+     	mString2 = msgTxt.substring(mSpaceIdx+1, msgTxt.length()-mSpaceIdx-1-1);
+    	mString1 = msgTxt.substring(0, mSpaceIdx);		
+ 		mFontID = selectFont(dc, mString2, width, height/2);      
+    }
+    
+    mFont = font[mFontID];
 		
 	myTextArea = new Ui.Text({
-        :text=>"line 1", // msgTxt,
+        :text=>mString1,
         :color=>mValueColour,
         :backgroundColor=>backColour,
         :font=>mFont,
@@ -66,12 +113,12 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     myTextArea.draw(dc);
     
 	myTextArea = new Ui.Text({
-        :text=>"line 2", //msgTxt,
+        :text=>mString2,
         :color=>mValueColour,
         :backgroundColor=>backColour,
         :font=>mFont,
         :locX=>LocX+width/2,
-        :locY=>LocY+textSize[1]+5,
+        :locY=>LocY+height/2-5,
         :width=>width,
         :height=>height/2,
         :justification=>Gfx.TEXT_JUSTIFY_CENTER//|Gfx.TEXT_JUSTIFY_VCENTER

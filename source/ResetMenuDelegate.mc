@@ -1,5 +1,6 @@
 using Toybox.WatchUi as Ui;
 using Toybox.Application as App;
+using Toybox.Graphics;
 
 class ResetMenuDelegate extends Ui.Menu2InputDelegate {
 
