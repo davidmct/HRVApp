@@ -3,6 +3,7 @@ using Toybox.Application.Properties as Property;
 using Toybox.Application as App;
 using Toybox.Application.Storage as Storage;
 using Toybox.WatchUi as Ui;
+using Toybox.Lang;
 
 // STORAGE came in with CIQ 2.4 - could cut down code by removing all pre CIQ2.4 code
 
@@ -211,7 +212,7 @@ class HRVStorageHandler {
 (:preCIQ24)	
 	function _CallReadPropProperty() {	
 		// assumes all these values exist
-		$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
+		//$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
 		$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 		$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
@@ -235,16 +236,8 @@ class HRVStorageHandler {
 	function _CallReadPropStorage() {
 		//Property.getValue(name as string);
 		// On very first use of app don't read in properties!
-		//var value;
-		
-		// FORCE NOT OVER WRITE
-		//value = Storage.getValue("firstLoadEver");
-		//if (mDebugging == true) {value = null;}
-			
-		//if (value == null) {
-			//Storage.setValue("firstLoadEver", true);
-		//} else {	
-			$._mApp.timestampSet = Storage.getValue("timestampSet");
+		//try {
+			//$._mApp.timestampSet = Storage.getValue("timestampSet");
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
@@ -263,12 +256,14 @@ class HRVStorageHandler {
 			$._mApp.Label1ColSet = $._mApp.Properties.getValue("Label1ColSet").toNumber();
 			$._mApp.Label3ColSet = $._mApp.Properties.getValue("Label3ColSet").toNumber();
 			$._mApp.Label2ColSet = $._mApp.Properties.getValue("Label2ColSet").toNumber();	
-		//}	
+		//} catch (e) {
+		//	Sys.println(e.getErrorMessage() );
+		//}
 	}
 
 (:storageMethod)	
 	function _CallSavePropStorage() {
-		Storage.setValue("timestampSet", $._mApp.timestampSet);
+		//Storage.setValue("timestampSet", $._mApp.timestampSet);
 		$._mApp.Properties.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
 		$._mApp.Properties.setValue("pSensorSelect", $._mApp.mSensorTypeExt);
 		
@@ -292,7 +287,7 @@ class HRVStorageHandler {
 
 (:preCIQ24)	
 	function _CallSavePropProperty() {
-		$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
+		//$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
 		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
 		$._mApp.setProperty("pSensorSelect", $._mApp.mFitWriteEnabled);
 

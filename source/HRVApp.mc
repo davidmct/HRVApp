@@ -21,6 +21,8 @@ using Toybox.Time.Gregorian;
 //1. Look at all strings to resources (check saves memory) - aids language translation if needed (may not help)
 //2. Frequency based parameters - need to research
 //3. See if we can use settings to select which parameters to display in history. Need to map to dictionary
+
+// ADDED in 0.4.1
 //4. See if I can add FIT write status on current view - use white to show enabled and red to show active
 //5. Add summary field to FIT that shows which sensor acquired data ie int or ext
  
@@ -96,7 +98,7 @@ class HRVAnalysis extends App.AppBase {
 	hidden var mTrialMessage;
 
 	// Settings variables
-    var timestampSet;
+    //var timestampSet;
 	var appNameSet;
 	var versionSet;
 
