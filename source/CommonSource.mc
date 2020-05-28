@@ -12,6 +12,7 @@ var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics
 
 function selectFont(dc, string, width, height) {
     var testString = string; //Dummy string to test data width
+    //testString = "a very long test string to see if we can get to a zero result or not";
     var fontIdx;
     var dimensions;
 
@@ -22,8 +23,10 @@ function selectFont(dc, string, width, height) {
             //If this font fits, it is the biggest one that does
             break;
         }
+        //Sys.print("Testing fontIdx = "+fontIdx);
+        // does it ever go to zero! falls out of bottom with zero 
     }
-
+	//Sys.println("Font Index = "+fontIdx);
     return fontIdx;
 }    
 
@@ -55,8 +58,10 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
 
-	Sys.println("mDeviceType = "+$._mApp.mDeviceType);
-	Sys.println("width, height = "+width+", "+height);
+	//Sys.println("mDeviceType = "+$._mApp.mDeviceType);
+	//Sys.println("width, height = "+width+", "+height);
+	
+	if (msgTxt.length() == 0) { return;}
 	
     //if ($._mApp.mDeviceType == RES_240x240) {
     //	mFont = Graphics.FONT_SMALL;
@@ -74,30 +79,61 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // but would potentially have to do another search
     
     // what font fits whole string in half height and twice width
+    
+    // need to check if string fits in width then ok
+    
+    // Does text fit in first line?
+    mFontID = selectFont(dc, msgTxt, width, height/2);
+    var mTextWidth = dc.getTextWidthInPixels(msgTxt, fonts[mFontID]);
+	// tested whether a font is available that fits string so check within width 
+	// font is possibly 0 the smallest so may not be ideal
+	if (mTextWidth < width && mFontID != 0) {
+			myTextArea = new Ui.Text({
+	        :text=>msgTxt,
+	        :color=>mValueColour,
+	        :backgroundColor=>backColour,
+	        :font=>fonts[mFontID],
+	        :locX=>LocX+width/2,
+	        :locY=>LocY,
+	        :width=>width,
+	        :height=>height/2,
+	        :justification=>Graphics.TEXT_JUSTIFY_CENTER //|Gfx.TEXT_JUSTIFY_VCENTER
+	    });		    
+	    myTextArea.draw(dc);
+		
+		return;
+	}
+    
     mFontID = selectFont(dc, msgTxt, width*2, height/2);
     
     var mMidCharIdx = msgTxt.length()/2;
     var mSpaceIdx = null;
     for (var i=mMidCharIdx; i >= 0; i--) {
-    	var subStr = msgTxt.substring(i, i);
+    	var subStr = msgTxt.substring(i, i+1);
+    	//Sys.println("char = :"+subStr);
     	if (subStr.equals(" ") ) { mSpaceIdx = i; break;}
     }
     
     var mString1;
     var mString2;
     
+    //Sys.println("Message text is: '"+msgTxt+"' of length "+msgTxt.length()+" with mid "+mMidCharIdx);
+    
+    
     if ( mSpaceIdx == null) {
     	// no space char found so split string anyway
-    	mString2 = msgTxt.substring(msgTxt.length()/2, msgTxt.length()-1);
-    	mString1 = msgTxt.substring(0, msgTxt.length()/2-1);
+    	mString2 = msgTxt.substring(msgTxt.length()/2, msgTxt.length());
+    	mString1 = msgTxt.substring(0, msgTxt.length()/2);
+    	//Sys.println("no space found. String 1 and 2 = "+mString1+", "+mString2);
     } else {
  		// check longer string fits still
-     	mString2 = msgTxt.substring(mSpaceIdx+1, msgTxt.length()-mSpaceIdx-1-1);
+     	mString2 = msgTxt.substring(mSpaceIdx+1, msgTxt.length());
     	mString1 = msgTxt.substring(0, mSpaceIdx);		
- 		mFontID = selectFont(dc, mString2, width, height/2);      
+ 		mFontID = selectFont(dc, mString2, width, height/2);   
+    	//Sys.println("Space found @ "+mSpaceIdx+", String 1 and 2 = '"+mString1+"', '"+mString2+"'"); 		   
     }
     
-    mFont = font[mFontID];
+    mFont = fonts[mFontID];
 		
 	myTextArea = new Ui.Text({
         :text=>mString1,
