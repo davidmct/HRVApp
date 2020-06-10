@@ -1,5 +1,5 @@
 using Toybox.System as Sys;
-using Toybox.Application.Properties as Property;
+using Toybox.Application.Properties; // as Property;
 using Toybox.Application as App;
 using Toybox.Application.Storage as Storage;
 using Toybox.WatchUi as Ui;
@@ -37,7 +37,8 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("vibeSet", false);
 		$._mApp.Properties.setValue("testTypeSet", TYPE_TIMER);
 		$._mApp.Properties.setValue("timerTimeSet", 300);
-		$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
+		// 0.4.2
+		//$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
 		$._mApp.Properties.setValue("ManualTimeSet", 300);
 		$._mApp.Properties.setValue("bgColSet", 3);
 		$._mApp.Properties.setValue("lblColSet", 10);
@@ -57,7 +58,8 @@ class HRVStorageHandler {
 		$._mApp.setProperty("vibeSet", false);
 		$._mApp.setProperty("testTypeSet", TYPE_TIMER);
 		$._mApp.setProperty("timerTimeSet", 300);
-		$._mApp.setProperty("MaxTimerTimeSet", 300);
+		//0.4.2
+		//$._mApp.setProperty("MaxTimerTimeSet", 300);
 		$._mApp.setProperty("ManualTimeSet", 300);
 		$._mApp.setProperty("bgColSet", 3);
 		$._mApp.setProperty("lblColSet", 10);
@@ -221,7 +223,9 @@ class HRVStorageHandler {
 		$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
 		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet");
 		$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
-		$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
+		// 0.4.2
+		$._mApp.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;		
+		//$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
 		$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
 		// ColSet are index into colour map
 		$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
@@ -246,7 +250,9 @@ class HRVStorageHandler {
 			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
 			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet");
 			$._mApp.timerTimeSet = $._mApp.Properties.getValue("timerTimeSet").toNumber();
-			$._mApp.mMaxTimerTimeSet = $._mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
+			// 0.4.2
+			$._mApp.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
+			//$._mApp.mMaxTimerTimeSet = $._mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
 			$._mApp.mManualTimeSet = $._mApp.Properties.getValue("ManualTimeSet").toNumber();
 	      
 			// ColSet are index into colour map
@@ -272,7 +278,8 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("vibeSet", $._mApp.vibeSet);
 		$._mApp.Properties.setValue("testTypeSet", $._mApp.testTypeSet);
 		$._mApp.Properties.setValue("timerTimeSet", $._mApp.timerTimeSet);
-		$._mApp.Properties.setValue("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
+		// 0.4.2
+		//$._mApp.Properties.setValue("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
 		$._mApp.Properties.setValue("ManualTimeSet", $._mApp.mManualTimeSet);
       
 		// ColSet are index into colour map
@@ -295,7 +302,8 @@ class HRVStorageHandler {
 		$._mApp.setProperty("vibeSet", $._mApp.vibeSet);
 		$._mApp.setProperty("testTypeSet", $._mApp.testTypeSet);
 		$._mApp.setProperty("timerTimeSet", $._mApp.timerTimeSet);
-		$._mApp.setProperty("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
+		// 0.4.2	
+		//$._mApp.setProperty("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
 		$._mApp.setProperty("ManualTimeSet", $._mApp.mManualTimeSet);
       
 		// ColSet are index into colour map

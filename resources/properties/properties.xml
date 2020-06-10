@@ -6,7 +6,7 @@
 	<property id="pAuthorised" type="boolean">false</property>
 	<!-- number of days for trial -->
 	<property id="pTrailPeriod" type="number">30</property>
-		<!-- date trial started -->
+	<!-- date trial started -->
 	<property id="pTrialStartDate" type="number">0</property>
 	<property id="pAuxHRAntID" type="number">0</property>
 	<property id="pDeviceID" type="string">null</property>
@@ -21,7 +21,8 @@
 	<!--  testTypeSet true = Timer -->
 	<property id="testTypeSet" type="boolean">true</property>
 	<property id="timerTimeSet" type="number">300</property>
-	<property id="MaxTimerTimeSet" type="number">600</property>
+	<!-- v0.4.2 Removed MaxTimerTimeSet and now CONST based on MAX_BPM*MAX_TIME -->
+	<!--  <property id="MaxTimerTimeSet" type="number">600</property> -->
 	<property id="ManualTimeSet" type="number">300</property>
 	<property id="bgColSet" type="number">3</property>
 	<property id="lblColSet" type="number">10</property>

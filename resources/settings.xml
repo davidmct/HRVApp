@@ -24,10 +24,10 @@
 		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
-		<settingConfig type="numeric" min="0" max="600" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>				
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
 		<settingConfig type="list" >
