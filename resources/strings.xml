@@ -75,6 +75,9 @@
 	<string id="LabelColSetPrompt">Select colour</string>
 	<string id="Label3ColSetTitle">History label 3 colour</string> 
 	<string id="Label2ColSetTitle">History label 2 colour</string> 
+	<string id="LabelHistTitle">History Entry</string> 
+	<string id="LabelHistTitlePrompt">Select History Entry</string> 	
+		
 	<!-- Number Picker -->
     <string id="numberPickerTitle">mm:ss</string>
 </resources>
