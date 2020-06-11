@@ -16,7 +16,7 @@ class TestView extends Ui.View {
 	hidden var mTitleLabels = ["HRV"];
 	
 	// x, y, width, height
-	hidden var mMessageLoc = [10, 20, 80, 30]; // %
+	hidden var mMessageLoc = [10, 20, 80, 27]; // %. 0.4.2 changed from 30->27
 	hidden var mMesssgeLocS = new [mMessageLoc.size()];	
 	
 	// coordinates of first and second set of labels as %

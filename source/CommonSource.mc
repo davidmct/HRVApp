@@ -178,7 +178,13 @@ function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width,
         :height=>height,
         :justification=>Graphics.TEXT_JUSTIFY_CENTER
     });	
-    myTextArea.draw(dc);	
+    myTextArea.draw(dc);
+    
+    if (mDebugging) {
+    	// show text box around area
+    	dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_BLACK);
+    	dc.drawRectangle( LocX, LocY, width, height);
+    }
 }
     
 function timerFormat(time) {

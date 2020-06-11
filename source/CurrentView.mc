@@ -18,7 +18,7 @@ class CurrentValueView extends Ui.View {
 	hidden var mTitleLabels = ["Current"];
 	
 	// x, y, width, height
-	hidden var mMessageLoc = [10, 17, 80, 30]; // %
+	hidden var mMessageLoc = [10, 17, 80, 27]; // %. 0.4.2 was 30 height but overlapped
 	hidden var mMesssgeLocS = new [mMessageLoc.size()];	
 	
 	// coordinates of labels as %
