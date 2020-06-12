@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV_Analysis</string>
-	<string id="AppVersion">0.4.2</string>
+	<string id="AppVersion">0.4.3</string>
 	<string id="pDeviceIDTitle">Device ID</string> 
 	<string id="pDeviceIDPrompt">Set by APP</string>
 	<string id="pAuthIDTitle">Licence String</string> 
@@ -75,7 +75,9 @@
 	<string id="LabelColSetPrompt">Select colour</string>
 	<string id="Label3ColSetTitle">History label 3 colour</string> 
 	<string id="Label2ColSetTitle">History label 2 colour</string> 
-	<string id="LabelHistTitle">History Entry</string> 
+	<string id="LabelHistTitle1">History Entry 1</string> 
+	<string id="LabelHistTitle2">History Entry 2</string> 
+	<string id="LabelHistTitle3">History Entry 3</string> 
 	<string id="LabelHistTitlePrompt">Select History Entry</string> 	
 		
 	<!-- Number Picker -->

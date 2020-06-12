@@ -45,7 +45,13 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("txtColSet", 9);
 		$._mApp.Properties.setValue("Label1ColSet", 10);
 		$._mApp.Properties.setValue("Label3ColSet", 12);
-		$._mApp.Properties.setValue("Label2ColSet", 6);			
+		$._mApp.Properties.setValue("Label2ColSet", 6);		
+		
+		//0.4.3
+		$._mApp.Properties.setValue("pHistLabel1", 1);	
+		$._mApp.Properties.setValue("pHistLabel2", 6);	
+		$._mApp.Properties.setValue("pHistLabel3", 7);					
+	
 	}
 
 (:preCIQ24)	
@@ -66,7 +72,12 @@ class HRVStorageHandler {
 		$._mApp.setProperty("txtColSet", 13);
 		$._mApp.setProperty("Label1ColSet", 10);
 		$._mApp.setProperty("Label3ColSet", 12);
-		$._mApp.setProperty("Label2ColSet", 6);		
+		$._mApp.setProperty("Label2ColSet", 6);	
+		
+		//0.4.3
+		$._mApp.setProperty("pHistLabel1", 1);	
+		$._mApp.setProperty("pHistLabel2", 6);	
+		$._mApp.setProperty("pHistLabel3", 7);		
 	
 	}
 	
@@ -234,6 +245,11 @@ class HRVStorageHandler {
 		$._mApp.Label1ColSet = $._mApp.getProperty("Label1ColSet").toNumber();
 		$._mApp.Label3ColSet = $._mApp.getProperty("Label3ColSet").toNumber();
 		$._mApp.Label2ColSet = $._mApp.getProperty("Label2ColSet").toNumber();
+		
+		//0.4.3
+		$._mApp.mHistoryLabel1 = $._mApp.getProperty("pHistLabel1").toNumber();	
+		$._mApp.mHistoryLabel2 = $._mApp.getProperty("pHistLabel2").toNumber();	
+		$._mApp.mHistoryLabel3 = $._mApp.getProperty("pHistLabel3").toNumber();	
 	}
 
 (:storageMethod)	
@@ -262,6 +278,11 @@ class HRVStorageHandler {
 			$._mApp.Label1ColSet = $._mApp.Properties.getValue("Label1ColSet").toNumber();
 			$._mApp.Label3ColSet = $._mApp.Properties.getValue("Label3ColSet").toNumber();
 			$._mApp.Label2ColSet = $._mApp.Properties.getValue("Label2ColSet").toNumber();	
+			
+			//0.4.3
+			$._mApp.mHistoryLabel1 = $._mApp.Properties.getValue("pHistLabel1").toNumber();	
+			$._mApp.mHistoryLabel2 = $._mApp.Properties.getValue("pHistLabel2").toNumber();	
+			$._mApp.mHistoryLabel3 = $._mApp.Properties.getValue("pHistLabel3").toNumber();	
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}
@@ -290,6 +311,10 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("Label3ColSet", $._mApp.Label3ColSet);
 		$._mApp.Properties.setValue("Label2ColSet", $._mApp.Label2ColSet);	
 		
+		//0.4.3
+		$._mApp.Properties.setValue("pHistLabel1", $._mApp.mHistoryLabel1);
+		$._mApp.Properties.setValue("pHistLabel2", $._mApp.mHistoryLabel2);
+		$._mApp.Properties.setValue("pHistLabel3", $._mApp.mHistoryLabel3);
 	}
 
 (:preCIQ24)	
@@ -314,6 +339,10 @@ class HRVStorageHandler {
 		$._mApp.setProperty("Label3ColSet", $._mApp.Label3ColSet);
 		$._mApp.setProperty("Label2ColSet", $._mApp.Label2ColSet);	
 
+		//0.4.3
+		$._mApp.setProperty("pHistLabel1", $._mApp.mHistoryLabel1);
+		$._mApp.setProperty("pHistLabel2", $._mApp.mHistoryLabel2);
+		$._mApp.setProperty("pHistLabel3", $._mApp.mHistoryLabel3);
 	}
 
 	function resetResults() {

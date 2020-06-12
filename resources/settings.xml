@@ -82,6 +82,23 @@
 			<listEntry value="12">@Strings.PURPLE</listEntry>
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
+	</setting><setting propertyKey="@Properties.pHistLabel1" title="@Strings.LabelHistTitle1" prompt="@Strings.LabelHistTitlePrompt">
+		<settingConfig type="list">
+			<!--  the values MUST match the CONST definition for dictionary -->
+			<listEntry value="1">@Strings.lHeartRate</listEntry>
+			<listEntry value="2">@Strings.lMinInterval</listEntry>
+			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="4">@Strings.lMinDiff</listEntry>
+			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
+			<listEntry value="6">@Strings.lRMSSD</listEntry>
+			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
+			<listEntry value="8">@Strings.lSDNN</listEntry>
+			<listEntry value="9">@Strings.lSDSD</listEntry>
+			<listEntry value="10">@Strings.lNN50</listEntry>
+			<listEntry value="11">@Strings.lpNN50</listEntry>
+			<listEntry value="12">@Strings.lNN20</listEntry>
+			<listEntry value="13">@Strings.lpNN20</listEntry>
+		</settingConfig>					
 	</setting>
 	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.Label1ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
@@ -101,7 +118,24 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.LabelColSetPrompt">
+	<setting propertyKey="@Properties.pHistLabel2" title="@Strings.LabelHistTitle2" prompt="@Strings.LabelHistTitlePrompt">
+		<settingConfig type="list">
+			<!--  the values MUST match the CONST definition for dictionary -->
+			<listEntry value="1">@Strings.lHeartRate</listEntry>
+			<listEntry value="2">@Strings.lMinInterval</listEntry>
+			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="4">@Strings.lMinDiff</listEntry>
+			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
+			<listEntry value="6">@Strings.lRMSSD</listEntry>
+			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
+			<listEntry value="8">@Strings.lSDNN</listEntry>
+			<listEntry value="9">@Strings.lSDSD</listEntry>
+			<listEntry value="10">@Strings.lNN50</listEntry>
+			<listEntry value="11">@Strings.lpNN50</listEntry>
+			<listEntry value="12">@Strings.lNN20</listEntry>
+			<listEntry value="13">@Strings.lpNN20</listEntry>
+		</settingConfig>					
+	</setting><setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -119,7 +153,24 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>				
 	</setting>
-	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.LabelColSetPrompt">
+	<setting propertyKey="@Properties.pHistLabel3" title="@Strings.LabelHistTitle3" prompt="@Strings.LabelHistTitlePrompt">
+		<settingConfig type="list">
+			<!--  the values MUST match the CONST definition for dictionary -->
+			<listEntry value="1">@Strings.lHeartRate</listEntry>
+			<listEntry value="2">@Strings.lMinInterval</listEntry>
+			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="4">@Strings.lMinDiff</listEntry>
+			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
+			<listEntry value="6">@Strings.lRMSSD</listEntry>
+			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
+			<listEntry value="8">@Strings.lSDNN</listEntry>
+			<listEntry value="9">@Strings.lSDSD</listEntry>
+			<listEntry value="10">@Strings.lNN50</listEntry>
+			<listEntry value="11">@Strings.lpNN50</listEntry>
+			<listEntry value="12">@Strings.lNN20</listEntry>
+			<listEntry value="13">@Strings.lpNN20</listEntry>
+		</settingConfig>					
+	</setting><setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -137,58 +188,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.pHistLabel1" title="@Strings.LabelHistTitle" prompt="@Strings.LabelHistTitlePrompt">
-		<settingConfig type="list" >
-			<!--  the values MUST match the CONST definition for dictionary -->
-			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
-			<listEntry value="4">@Strings.lMinDiff</listEntry>
-			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
-			<listEntry value="6">@Strings.lRMSSD</listEntry>
-			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
-			<listEntry value="8">@Strings.lSDNN</listEntry>
-			<listEntry value="9">@Strings.lSDSD</listEntry>
-			<listEntry value="10">@Strings.lNN50</listEntry>
-			<listEntry value="11">@Strings.lpNN50</listEntry>
-			<listEntry value="12">@Strings.lNN20</listEntry>
-			<listEntry value="13">@Strings.lpNN20</listEntry>
-		</settingConfig>					
-	</setting>
-	<setting propertyKey="@Properties.pHistLabel2" title="@Strings.LabelHistTitle" prompt="@Strings.LabelHistTitlePrompt">
-		<settingConfig type="list" >
-			<!--  the values MUST match the CONST definition for dictionary -->
-			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
-			<listEntry value="4">@Strings.lMinDiff</listEntry>
-			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
-			<listEntry value="6">@Strings.lRMSSD</listEntry>
-			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
-			<listEntry value="8">@Strings.lSDNN</listEntry>
-			<listEntry value="9">@Strings.lSDSD</listEntry>
-			<listEntry value="10">@Strings.lNN50</listEntry>
-			<listEntry value="11">@Strings.lpNN50</listEntry>
-			<listEntry value="12">@Strings.lNN20</listEntry>
-			<listEntry value="13">@Strings.lpNN20</listEntry>
-		</settingConfig>					
-	</setting>
-	<setting propertyKey="@Properties.pHistLabel3" title="@Strings.LabelHistTitle" prompt="@Strings.LabelHistTitlePrompt">
-		<settingConfig type="list" >
-			<!--  the values MUST match the CONST definition for dictionary -->
-			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
-			<listEntry value="4">@Strings.lMinDiff</listEntry>
-			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
-			<listEntry value="6">@Strings.lRMSSD</listEntry>
-			<listEntry value="7">@Strings.lLnRMSSD</listEntry>
-			<listEntry value="8">@Strings.lSDNN</listEntry>
-			<listEntry value="9">@Strings.lSDSD</listEntry>
-			<listEntry value="10">@Strings.lNN50</listEntry>
-			<listEntry value="11">@Strings.lpNN50</listEntry>
-			<listEntry value="12">@Strings.lNN20</listEntry>
-			<listEntry value="13">@Strings.lpNN20</listEntry>
-		</settingConfig>					
-	</setting>
+	
+	
+	
 </settings>

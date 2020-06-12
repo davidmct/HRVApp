@@ -17,6 +17,13 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// 0.4.3
+// Added ability to set colour and name on history via settings and aligned menu system
+
+// 0.4.2
+// Removed property causing random errors
+// 
+
 //v0.4.xx+ revisions post initial release
 //1. Look at all strings to resources (check saves memory) - aids language translation if needed (may not help)
 //2. Frequency based parameters - need to research
@@ -111,9 +118,15 @@ class HRVAnalysis extends App.AppBase {
 	var bgColSet;
 	var lblColSet;
     var txtColSet;
+    // History labels
 	var Label1ColSet;
 	var Label3ColSet;
 	var Label2ColSet;
+	//0.4.3 
+	//add variables for history text index
+	var mHistoryLabel1;
+	var mHistoryLabel2;
+	var mHistoryLabel3;	
 	
 	var mMenuTitleSize;
 	var mDeviceID;
