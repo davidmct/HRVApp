@@ -20,7 +20,9 @@ class HistoryView extends Ui.View {
 	
 	hidden var customFont = null;
 	
-	hidden var numResultsToDisplay = 0;
+	//0.4.3
+	//hidden var numResultsToDisplay = 0;
+	
 	hidden var labelList = new [MAX_DISPLAY_VAR];
 	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
     
@@ -113,6 +115,7 @@ class HistoryView extends Ui.View {
 	}
 
 	// return labels into dictionary of results offsets
+(:HistoryViaDictionary)
 	function findResultLabels(keys) {		
 		// init arrays
 		for ( var i=0; i < labelList.size(); i++) { labelList[i] = "";}
@@ -178,22 +181,36 @@ class HistoryView extends Ui.View {
 		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
 		//	indexDay+", "+today+", "+$._mApp.mHistorySelectFlags+", "+$._mApp.resultsIndex);
 		
-		if ($._mApp.mHistorySelectFlags == 0) {
-			// no data fields set to dsiplay so go home
-			return;
-		}
+		// OLD 0.4.2 code
+		//if ($._mApp.mHistorySelectFlags == 0) {
+		//	// no data fields set to dsiplay so go home
+		//	return;
+		//}
 		
-		// now find labels and index for data		
-		var mKeys = $.mHistorySelect.keys(); // keys to dictionary
-		numResultsToDisplay = 0;
+		//// now find labels and index for data		
+		//var mKeys = $.mHistorySelect.keys(); // keys to dictionary
+		//numResultsToDisplay = 0;
 		
-		// index into dictionary of results offsets (need +1 to make results index)
-		findResultLabels(mKeys);
+		//// index into dictionary of results offsets (need +1 to make results index)
+		//findResultLabels(mKeys);
 		
 		// CHECK OUTCOME
 		//Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
 		//	+numResultsToDisplay+","+labelList+","+resultsIndexList);
-            	
+		
+		//0.4.3 - Now have list available to match label and colour!
+		// resultsIndexList to null if no data to display
+		if ( $._mApp.mHistoryLabel1 == 0 && $._mApp.mHistoryLabel2 == 0 && $._mApp.mHistoryLabel3 == 0) {
+			return;
+		}	
+		 
+		labelList[0] = $.mHistoryLabelList[$._mApp.mHistoryLabel1];
+        resultsIndexList[0] = ( $._mApp.mHistoryLabel1 == 0 ? null : $._mApp.mHistoryLabel1);
+		labelList[1] = $.mHistoryLabelList[$._mApp.mHistoryLabel2];
+        resultsIndexList[1] = ( $._mApp.mHistoryLabel2 == 0 ? null : $._mApp.mHistoryLabel2);
+		labelList[2] = $.mHistoryLabelList[$._mApp.mHistoryLabel3];
+        resultsIndexList[2] = ( $._mApp.mHistoryLabel3 == 0 ? null : $._mApp.mHistoryLabel3);   
+                        	
         // hard to tie menu on selection order to this list       
         // draw the data being drawn labels
         dc.setColor( mapColour($._mApp.Label1ColSet), Gfx.COLOR_TRANSPARENT);
@@ -240,7 +257,7 @@ class HistoryView extends Ui.View {
 					if (j != null) {
 						var value = $._mApp.results[index+j].toNumber();
 						cnt++;
-						//Sys.println("value : "+value);
+						//Sys.println("index = "+j+", value : "+value);
 						// do min max
 						if(min > value) {
 							min = value;
@@ -310,9 +327,9 @@ class HistoryView extends Ui.View {
 		// if only one data point we must be at start of time and zero entry!
 		if (dataCount == 1) {
 			// load values
-			for (var i=0; i < numResultsToDisplay; i++) {
+			for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 				var j = resultsIndexList[i];	
-				// shouldn't need null test as have number of valid entries and already checked not zero			
+				// up to MAX_DISPLAY_VAR to show - check valid entry			
 				if (j != null) {
 					firstData[i] = $._mApp.results[j].toNumber();
 				} // j != null
@@ -350,7 +367,7 @@ class HistoryView extends Ui.View {
 		do {
 			if ($._mApp.results[index] != 0) { // we have an entry that has been created	
 				// load values
-				for (var i=0; i < numResultsToDisplay; i++) {
+				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 					var j = resultsIndexList[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
@@ -375,7 +392,7 @@ class HistoryView extends Ui.View {
 				// we have more than one entry so OK to not test for no data
 				//if ($._mApp.results[secondIndex] != 0) { // we have an entry that has been created	
 				// load values
-				for (var i=0; i < numResultsToDisplay; i++) {
+				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 					var j = resultsIndexList[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {

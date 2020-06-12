@@ -68,7 +68,16 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 						"SDNN" => SDNN_INDEX, "SDSD" => SDSD_INDEX, 
 						"NN50" => NN50_INDEX, "pNN50" => PNN50_INDEX, 
 						"NN20" => NN20_INDEX, "pNN20" => PNN20_INDEX, 						
-					};						
+					};	
+
+//0.4.3
+// use array of labels instead of dictionary
+// index 0 is null case ie empty
+// must be in same order as INDEX list
+var mHistoryLabelList = [ "", "avgBPM", "minII", "maxII",
+						"minD", "maxD", "rMSSD", "LnrMSSD", 
+						"SDNN", "SDSD", "NN50", "pNN50", 
+						"NN20", "pNN20"];						
 
 // SAMPLE PROCESSING
 const MIN_BPM = 30;
