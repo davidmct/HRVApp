@@ -211,7 +211,7 @@ class HistoryView extends Ui.View {
 		labelList[2] = $.mHistoryLabelList[$._mApp.mHistoryLabel3];
         resultsIndexList[2] = ( $._mApp.mHistoryLabel3 == 0 ? null : $._mApp.mHistoryLabel3);   
                         	
-        // hard to tie menu on selection order to this list       
+        // hard to tie menu on selection order to this list-> fixed 0.4.3
         // draw the data being drawn labels
         dc.setColor( mapColour($._mApp.Label1ColSet), Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, labelList[0], mJust);			

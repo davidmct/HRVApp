@@ -6,6 +6,21 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
      
 	function initialize() { Menu2InputDelegate.initialize(); }  
 	
+	// 0.4.3 move code to function
+	function AddColourItems( menu) {
+		// get labels for colours ie key 
+        var mKeys = $.mColourNumbersString.keys();
+        var i;
+        for (i = 0; i < $.mColourNumbersString.size() ; i++) {
+        	var mColName = mKeys[i].toString();
+        	var mColValue = $.mColourNumbersString.get(mColName);
+        	if (mColValue != TRANSPARENT) {
+        	    //Sys.println("Label menu item colour: " + mColName);
+        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+        	}
+    	}
+	}
+	
    	function onSelect(item) {
         var id = item.getId();
                   
@@ -17,32 +32,35 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         }
         else if( id.equals("labels"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Label Colour")});
+            AddColourItems( menu);
             // get labels for colours ie key 
-            var mKeys = $.mColourNumbersString.keys();
-            var i;
-            for (i = 0; i < $.mColourNumbersString.size() ; i++) {
-            	var mColName = mKeys[i].toString();
-            	var mColValue = $.mColourNumbersString.get(mColName);
-            	if (mColValue != TRANSPARENT) {
-            		//Sys.println("Label menu item colour: " + mColName);
-	        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
-	        	}
-        	}
+            //var mKeys = $.mColourNumbersString.keys();
+            //var i;
+            //for (i = 0; i < $.mColourNumbersString.size() ; i++) {
+            //	var mColName = mKeys[i].toString();
+            //	var mColValue = $.mColourNumbersString.get(mColName);
+            //	if (mColValue != TRANSPARENT) {
+            //		//Sys.println("Label menu item colour: " + mColName);
+	        //		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+	        //	}
+        	//}
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setLabel)), Ui.SLIDE_IMMEDIATE );
         } else if( id.equals("text"))  {
-             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Text Colour")});
-            // get labels for colour keys
-            var mKeys = $.mColourNumbersString.keys();
-            var i;
-            for (i = 0; i < $.mColourNumbersString.size() ; i++) {
-            	var mColName = mKeys[i].toString();
-            	var mColValue = $.mColourNumbersString.get(mColName);
-            	if (mColValue != TRANSPARENT) {
-            	    //Sys.println("Label menu item colour: " + mColName);
-	        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
-	        	}
-        	}
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Text Colour")});
+            AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setText)), Ui.SLIDE_IMMEDIATE );         	
+        } else if( id.equals("history1"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 1")});
+            AddColourItems( menu);
+	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory1)), Ui.SLIDE_IMMEDIATE );         	
+        } else if( id.equals("history2"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 2")});
+            AddColourItems( menu);
+	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory2)), Ui.SLIDE_IMMEDIATE );         	
+        } else if( id.equals("history3"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 3")});
+            AddColourItems( menu);
+	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory3)), Ui.SLIDE_IMMEDIATE );         	
         }
     }
 
@@ -76,6 +94,11 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
 
     function setLabel(value) { $._mApp.lblColSet = value;  }
     function setText(value) { $._mApp.txtColSet = value; }
+    //0.4.3
+    function setHistory1(value) { $._mApp.mHistoryLabel1 = value;}
+    function setHistory2(value) { $._mApp.mHistoryLabel2 = value;}
+    function setHistory3(value) { $._mApp.mHistoryLabel3 = value;}
+    
 }
 
 

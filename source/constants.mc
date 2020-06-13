@@ -61,6 +61,7 @@ var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRA
 // HISTORY VIEW SELECTOR
 
 // for menu on selecting history view items
+(:HistoryViaDictionary)
 var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX, 
 						"minII" => MIN_II_INDEX, "maxII" => MIN_II_INDEX,
 						"minD" => MIN_DIFF_INDEX, "maxD" => MIN_DIFF_INDEX,

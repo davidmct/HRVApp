@@ -18,7 +18,11 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
 	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
 	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
-	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	        
+	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	 
+	        //0.4.3
+	        menu.addItem(new Ui.MenuItem("History 1", null, "history1", null));
+	       	menu.addItem(new Ui.MenuItem("History 2", null, "history2", null));
+	        menu.addItem(new Ui.MenuItem("History 3", null, "history3", null));	               
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
         else if ( id.equals("sound"))  {

@@ -19,6 +19,9 @@ using Toybox.Time.Gregorian;
 
 // 0.4.3
 // Added ability to set colour and name on history via settings and aligned menu system
+// need to change MainMenuDelegate to have which history item to select and then use existing menu create of list of options.
+// select only one item but none is OK. This currently uses HistoryMenuDelegate so would need an intermediate menu
+// Colours not yet setable for history item but should be extension of ColourMenuDelegate
 
 // 0.4.2
 // Removed property causing random errors
