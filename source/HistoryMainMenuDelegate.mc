@@ -28,10 +28,9 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
     	}
 	}
 	
-    function AddToggleMenuItems( mMenu, labelNum) {
+    function AddHistoryMenuItems( mMenu, labelNum) {
         var options = {:enabled=>"selected", :disabled=>"deselected"};
-        var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};
-                  
+        var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};                 
         for (var i = 0; i < $.mHistoryLabelList.size() ; i++) {
         	var mHistoryName = $.mHistoryLabelList[i].toString();
         	var selectState = 0;
@@ -44,7 +43,8 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
         		selectState = ($._mApp.mHistoryLabel3 == i) ? true : false;
         	}
         	//Sys.println("SelectState = "+selectState);
-        	mMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, i.toString(), selectState, align));	        	
+        	mMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, i.toString(), selectState, align));
+        	//mMenu.addItem(new Ui.MenuItem(mHistoryName, null, i.toString(), null));	        	
     	}
 	}	
 
@@ -54,17 +54,17 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
         
         if( id.equals("historyLbl1")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 1")});           
-            AddToggleMenuItems( toggleMenu, 1);
+            AddHistoryMenuItems( toggleMenu, 1);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(1, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    
         } 
         else if( id.equals("historyLbl2")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 2")});
-            AddToggleMenuItems( toggleMenu, 2);
+            AddHistoryMenuItems( toggleMenu, 2);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(2, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    
         }
 		else if( id.equals("historyLbl3")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 3")});
-            AddToggleMenuItems( toggleMenu, 3);
+            AddHistoryMenuItems( toggleMenu, 3);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(3, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    
         }
     }

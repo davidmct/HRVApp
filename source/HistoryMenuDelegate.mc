@@ -81,9 +81,9 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
        	// fix the checked state as only one allowed
        	for ( var i=0; $.mHistoryLabelList.size(); i++) {
        		if ( i == index) {
-       			mMenu.mItems[i].setEnabled(true);
+       			mMenu.getItem(mMenu.findItemById(i.toString())).setEnabled(true);    
        		} else {
-       			mMenu.mItems[i].setEnabled(false);	
+       			mMenu.getItem(mMenu.findItemById(i.toString())).setEnabled(false);	
        		}
        	}	
     }    
