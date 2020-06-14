@@ -67,6 +67,19 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         	} else if (instanceIndex == 3) {
         		$._mApp.mHistoryLabel3 = index;
         	}
+        	
+        	// fix the checked state as only one allowed
+	       	for ( var i=0; i < $.mHistoryLabelList.size(); i++) {
+	       		var itemID = mMenu.findItemById(i.toString());
+	       		//Sys.println("itemID = "+itemID+" from i ="+i);
+	       		if ( i == index) {
+	       			mMenu.getItem(itemID).setEnabled(true);    
+	       		} else {
+	       			mMenu.getItem(itemID).setEnabled(false);	
+	       		}
+	       	}
+	       	Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
+        	
        	} else {
        		Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
           	if (instanceIndex == 1) {
@@ -75,20 +88,29 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         		$._mApp.mHistoryLabel2 = 0;
         	} else if (instanceIndex == 3) {
         		$._mApp.mHistoryLabel3 = 0;
-        	}      		
+        	}   
+        	
+        	// defaults to "none" and turn off current selection
+        	var i=index;
+        	var itemID = mMenu.findItemById(i.toString());
+       		mMenu.getItem(itemID).setEnabled(false); 
+       		i = 0;
+        	itemID = mMenu.findItemById(i.toString());
+       		mMenu.getItem(itemID).setEnabled(true);        		   
+   		    Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[i]);
        	}	
        	
-       	// fix the checked state as only one allowed
-       	for ( var i=0; i < $.mHistoryLabelList.size(); i++) {
-       		var itemID = mMenu.findItemById(i.toString());
-       		//Sys.println("itemID = "+itemID+" from i ="+i);
-       		if ( i == index) {
-       			mMenu.getItem(itemID).setEnabled(true);    
-       		} else {
-       			mMenu.getItem(itemID).setEnabled(false);	
-       		}
-       	}	
-       	Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
+       	//// fix the checked state as only one allowed
+       	//for ( var i=0; i < $.mHistoryLabelList.size(); i++) {
+       	//	var itemID = mMenu.findItemById(i.toString());
+       	//	//Sys.println("itemID = "+itemID+" from i ="+i);
+       	//	if ( i == index) {
+       	//		mMenu.getItem(itemID).setEnabled(true);    
+       	//	} else {
+       	//		mMenu.getItem(itemID).setEnabled(false);	
+       	//	}
+       	//}	
+
     }    
 
 (:HistoryViaDictionary)

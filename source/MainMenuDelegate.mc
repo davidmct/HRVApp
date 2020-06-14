@@ -104,11 +104,15 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function onBack() {
+    	//0.4.3 - should save changes to any properties
+    	$._mApp.mStorage.saveProperties();
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
         Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
+        //0.4.3 - should save changes to any properties
+    	$._mApp.mStorage.saveProperties();
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
         Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }   
