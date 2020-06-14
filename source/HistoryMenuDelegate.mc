@@ -79,13 +79,16 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
        	}	
        	
        	// fix the checked state as only one allowed
-       	for ( var i=0; $.mHistoryLabelList.size(); i++) {
+       	for ( var i=0; i < $.mHistoryLabelList.size(); i++) {
+       		var itemID = mMenu.findItemById(i.toString());
+       		//Sys.println("itemID = "+itemID+" from i ="+i);
        		if ( i == index) {
-       			mMenu.getItem(mMenu.findItemById(i.toString())).setEnabled(true);    
+       			mMenu.getItem(itemID).setEnabled(true);    
        		} else {
-       			mMenu.getItem(mMenu.findItemById(i.toString())).setEnabled(false);	
+       			mMenu.getItem(itemID).setEnabled(false);	
        		}
        	}	
+       	Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
     }    
 
 (:HistoryViaDictionary)
