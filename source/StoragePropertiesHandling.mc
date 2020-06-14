@@ -250,6 +250,14 @@ class HRVStorageHandler {
 		$._mApp.mHistoryLabel1 = $._mApp.getProperty("pHistLabel1").toNumber();	
 		$._mApp.mHistoryLabel2 = $._mApp.getProperty("pHistLabel2").toNumber();	
 		$._mApp.mHistoryLabel3 = $._mApp.getProperty("pHistLabel3").toNumber();	
+		
+		// no history selected. binary flags as bits
+		// set default selection
+		// Used in menu creation
+		// Note array 0 entry is time stamp but use for null case
+		//$._mApp.mHistorySelectFlags = (1 << $._mApp.mHistoryLabel1);
+		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel2);
+		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel3);	
 	}
 
 (:storageMethod)	
@@ -283,6 +291,7 @@ class HRVStorageHandler {
 			$._mApp.mHistoryLabel1 = $._mApp.Properties.getValue("pHistLabel1").toNumber();	
 			$._mApp.mHistoryLabel2 = $._mApp.Properties.getValue("pHistLabel2").toNumber();	
 			$._mApp.mHistoryLabel3 = $._mApp.Properties.getValue("pHistLabel3").toNumber();	
+			
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}

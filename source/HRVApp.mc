@@ -136,7 +136,7 @@ class HRVAnalysis extends App.AppBase {
 
 	// Results array variable
 	var results;
-	var mHistorySelectFlags;
+	//var mHistorySelectFlags;
 	// write pointer into results array
 	var resultsIndex;
 
@@ -326,14 +326,7 @@ class HRVAnalysis extends App.AppBase {
 		UpdateTrialState();
 				
 		//Menu title size
-		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
-		
-		// no history selected. binary flags as bits
-		// set default selection
-		// Note array 0 entry is time stamp
-		mHistorySelectFlags = (1 << (AVG_PULSE_INDEX-1));
-		mHistorySelectFlags |= (1 << (RMSSD_INDEX-1));
-		mHistorySelectFlags |= (1 << (LNRMSSD_INDEX-1));		
+		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();		
 						
     	AppBase.initialize();
     }

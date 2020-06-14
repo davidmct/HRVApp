@@ -75,7 +75,7 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 // use array of labels instead of dictionary
 // index 0 is null case ie empty
 // must be in same order as INDEX list
-var mHistoryLabelList = [ "", "avgBPM", "minII", "maxII",
+var mHistoryLabelList = [ "none", "avgBPM", "minII", "maxII",
 						"minD", "maxD", "rMSSD", "LnrMSSD", 
 						"SDNN", "SDSD", "NN50", "pNN50", 
 						"NN20", "pNN20"];						

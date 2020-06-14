@@ -53,25 +53,12 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:NoWrite, "No Write", mFitWrite == false) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         } 
-        else if( id.equals("historySelection")) {      
-            var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Select 3")});
-            var mKeys = $.mHistorySelect.keys();
-            var options = {:enabled=>"selected", :disabled=>"deselected"};
-            var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};
-            
-            // TEST
-            //$.mHistorySelectFlags = 3;
-            
-            for (var i = 0; i < $.mHistorySelect.size() ; i++) {
-            	var mHistoryName = mKeys[i].toString();
-            	// can't control order unless use individual lines and no dictionary
-            	// get value for current key
-            	var index = $.mHistorySelect.get(mHistoryName);
-            	var selectState = ($._mApp.mHistorySelectFlags & (1 << (index-1))) ? true : false;
-            	//Sys.println("SelectState = "+selectState);
-	        	toggleMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, mHistoryName, selectState, align));	        	
-        	}
-           	Ui.pushView(toggleMenu, new HistoryMenuDelegate(), Ui.SLIDE_IMMEDIATE );      
+        else if( id.equals("historySelection")) { 
+	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("History")});
+	        menu.addItem(new Ui.MenuItem("History Lbl 1", null, "historyLbl1", null));
+	        menu.addItem(new Ui.MenuItem("History Lbl 2", null, "historyLbl2", null));
+	        menu.addItem(new Ui.MenuItem("History Lbl 3", null, "historyLbl3", null));
+	        Ui.pushView(menu, new HistoryMainMenuDelegate(), Ui.SLIDE_IMMEDIATE );               	    
         }
         else if ( id.equals("load") ) {
         	// you can't do this whilst testing! Otherwise screws data

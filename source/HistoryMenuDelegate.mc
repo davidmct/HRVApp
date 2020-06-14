@@ -4,11 +4,17 @@ using Toybox.Application as App;
 using Toybox.Graphics;
 
 class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
-	
-    function initialize() {
+
+	var instanceIndex;
+		
+    function initialize(num) {
+    	// which history label do we set?
+    	instanceIndex = num;
         Menu2InputDelegate.initialize();
     }
 
+(:HistoryViaDictionary)
+// pre 0.4.3 method 
     function onSelect(item) {
         var id = item.getId();       
         // could use switch
@@ -41,6 +47,37 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
  		//Sys.println("History menu delegate. mHistorySelectFlags = "+$.mHistorySelectFlags.format("%x"));
     }
     
+    function onSelect(item) {
+        var id = item.getId();       
+        // id is a number as a string
+        var index = id.toNumber();
+        
+        // problem is that this is a toggle essentially so could select or deselect    
+        // assume code sets this as required when item clicked
+        if (item.isEnabled()) {
+			// only allowed one item ... should reset state
+        	Sys.println("History menu delegate. selected "+id+" index "+index+" for label "+instanceIndex);
+         	if (instanceIndex == 1) {
+        		$._mApp.mHistoryLabel1 = index;
+        	} else if (instanceIndex == 2) {
+        		$._mApp.mHistoryLabel2 = index;
+        	} else if (instanceIndex == 3) {
+        		$._mApp.mHistoryLabel3 = index;
+        	}
+       	} else {
+       		Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
+          	if (instanceIndex == 1) {
+        		$._mApp.mHistoryLabel1 = 0;
+        	} else if (instanceIndex == 2) {
+        		$._mApp.mHistoryLabel2 = 0;
+        	} else if (instanceIndex == 3) {
+        		$._mApp.mHistoryLabel3 = 0;
+        	}      		
+       	}		
+    }    
+
+(:HistoryViaDictionary)
+// pre 0.4.3 method     
     function checkToMany() {
     	// count number of bits set
     	// should be DATA_SET_SIZE
