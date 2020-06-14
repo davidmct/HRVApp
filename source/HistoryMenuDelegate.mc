@@ -6,10 +6,13 @@ using Toybox.Graphics;
 class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
 
 	var instanceIndex;
+	var mMenu;
 		
-    function initialize(num) {
+    function initialize(num, menu) {
     	// which history label do we set?
     	instanceIndex = num;
+    	// pass the toggle menu list!!
+    	mMenu = menu;
         Menu2InputDelegate.initialize();
     }
 
@@ -73,7 +76,16 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         	} else if (instanceIndex == 3) {
         		$._mApp.mHistoryLabel3 = 0;
         	}      		
-       	}		
+       	}	
+       	
+       	// fix the checked state as only one allowed
+       	for ( var i=0; $.mHistoryLabelList.size(); i++) {
+       		if ( i == index) {
+       			mMenu.mItems[i].setEnabled(true);
+       		} else {
+       			mMenu.mItems[i].setEnabled(false);	
+       		}
+       	}	
     }    
 
 (:HistoryViaDictionary)
