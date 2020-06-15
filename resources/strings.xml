@@ -18,6 +18,7 @@
 	<string id="lpNN50ChartTitle">NN50 as % of samples</string>
 	<string id="lNN20ChartTitle">II delta > 20ms</string>
 	<string id="lpNN20ChartTitle">NN20 as % of samples</string>
+	<string id="lHistoryNull">None</string>
 	<string id="lHeartRate">Average bpm</string>
 	<string id="lMinInterval">Minimum II</string>
 	<string id="lMaxInterval">Maximum II</string>

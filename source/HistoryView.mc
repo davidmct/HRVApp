@@ -220,6 +220,8 @@ class HistoryView extends Ui.View {
 		dc.setColor( mapColour($._mApp.Label3ColSet), Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, labelList[2], mJust);	
 		
+		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
+		
 		// TEST CODE..
 		// set results up to end point...
 		//for (var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE ; i++) { $._mApp.results[i] = 0;}
