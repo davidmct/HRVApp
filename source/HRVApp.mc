@@ -496,6 +496,8 @@ class HRVAnalysis extends App.AppBase {
 		var i;
 		var base;
 		
+		mStorage.PrintStats();
+		
 		if (mNumEntries <= 0) { return;}
 		Sys.println("Dumping intervals");
 		

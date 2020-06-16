@@ -112,6 +112,19 @@ class HRVStorageHandler {
 		}
 	}
 	
+	function PrintStats() {
+		//0.4.3 - Need to check calculations are correct - possible bug
+		var str;
+		
+		str = "Dumping stats:\n";
+		str = str+"avgPulse, mRMSSD, mLnRMSSD, mSDNN, mSDSD, mNN50, mpNN50, mNN20, mpNN20\n";
+		str = str+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mRMSSD+","+$._mApp.mSampleProc.mLnRMSSD+","+
+			$._mApp.mSampleProc.mSDNN+","+$._mApp.mSampleProc.mSDSD+","+$._mApp.mSampleProc.mNN50+","+
+			$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20;
+	
+		Sys.println(str);
+	}
+	
 	function saveStatsToStore() {
 		Sys.println("saveStatsToStore() called");	
 		var stats = new [11];
