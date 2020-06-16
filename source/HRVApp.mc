@@ -22,6 +22,8 @@ using Toybox.Time.Gregorian;
 // need to change MainMenuDelegate to have which history item to select and then use existing menu create of list of options.
 // select only one item but none is OK. This currently uses HistoryMenuDelegate so would need an intermediate menu
 // Colours not yet setable for history item but should be extension of ColourMenuDelegate
+// Ensure Ln(rMSSD) doesn't go negative
+// DONE
 
 // 0.4.2
 // Removed property causing random errors
