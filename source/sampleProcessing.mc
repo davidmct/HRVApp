@@ -241,6 +241,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 	function calcSD(x) {	
 		var sd = 0.0;
 		var absSample = x[0].abs(); 
+		var cntFloat = dataCount.toFloat();
 		// A(0)=0
 		// A(k)=A(k-1)+ (x(k)-A(k-1))/k
 		//where A is the mean value.
@@ -252,7 +253,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		//	s(n)^2 = Q(n)/(n-1)		
 		// k = dataCount
 		
-		x[1] = x[2] + (absSample - x[2]) / dataCount;
+		x[1] = x[2] + (absSample - x[2]) / cntFloat;
 		x[3] = x[4] + (absSample - x[2]) * (absSample - x[1]);
 		// A_k = A_k1 + (absSample - A_k1) / dataCount;
 		// Q_k = Q_k1 + (absSample - A_k1) * (absSample - A_k);
@@ -261,7 +262,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 			sd = 0.0;
 		} else {
 			//sd =  Math.sqrt( Q_k) / (dataCount - 1));
-			sd =  Math.sqrt( x[3] / (dataCount - 1));
+			sd =  Math.sqrt( x[3] / (cntFloat - 1));
 		}
 		
 		// shift 
@@ -306,17 +307,17 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		mSDSD_param[0] = devMs;
 		mSDSD = calcSD(mSDSD_param); 
 						
-		var str = Lang.format("Cnt, mRSSD, (A, Q, SD):, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$",
-			[dataCount.format("%d"), mRMSSD, mSDNN_param[1].format("%0.2f"), mSDNN_param[3].format("%0.2f"),mSDNN.format("%0.2f"),
-			 mSDSD_param[1].format("%0.2f"), mSDSD_param[3].format("%0.2f"), mSDSD.format("%0.2f")]);
-		Sys.println(str);
+		//var str = Lang.format("Cnt, mRSSD, (A, Q, SD):, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$",
+		//	[dataCount.format("%d"), mRMSSD, mSDNN_param[1].format("%0.2f"), mSDNN_param[3].format("%0.2f"),mSDNN.format("%0.2f"),
+		//	 mSDSD_param[1].format("%0.2f"), mSDSD_param[3].format("%0.2f"), mSDSD.format("%0.2f")]);
+		//Sys.println(str);
 		
 		// difference more than 50ms
 		// some sources say over 2 min periods, others over an hour
 		// SHOULD USE DIFF
-		if (devMs.abs() > 50 ) { mNN50 += 1;}
+		if (diff > 50 ) { mNN50 += 1;}
 		// difference more than 20ms 
-		if (devMs.abs() > 20 ) { mNN20 += 1;}
+		if (diff > 20 ) { mNN20 += 1;}
 		
 		// percentage scaled to 100 
 		var dfp = dataCount.toFloat();			
@@ -325,6 +326,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		mpNN20 = (mNN20.toFloat() * 100.0) / dfp; 	
 		
 		//Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
+		Sys.println("Cnt, mNN50:, "+dataCount+","+mNN50);
 	}
 
 }
