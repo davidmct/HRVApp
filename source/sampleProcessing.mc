@@ -123,7 +123,7 @@ class SampleProcessing {
 		minDiffFound = 2000;
 		maxDiffFound = 0;
 		devMs = 0;
-		devSqSum = 0;
+		devSqSum = 0.0;
 		pulseSum = 0;
 		dataCount = 0;	
 		avgPulse = 0;

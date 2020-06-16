@@ -23,6 +23,7 @@ using Toybox.Time.Gregorian;
 // select only one item but none is OK. This currently uses HistoryMenuDelegate so would need an intermediate menu
 // Colours not yet setable for history item but should be extension of ColourMenuDelegate
 // Ensure Ln(rMSSD) doesn't go negative
+// devSumSq to float to make sure doesn't go over range of integer
 // DONE
 
 // 0.4.2
