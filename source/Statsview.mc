@@ -132,7 +132,7 @@ class StatsView extends Ui.View {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel1Labels[i], mJust);			
 			}
 			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%.1f"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.avgPulse.format("%d"), mJust);
 			

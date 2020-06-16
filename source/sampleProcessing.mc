@@ -264,10 +264,6 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 			sd =  Math.sqrt( x[3] / (dataCount - 1));
 		}
 		
-		//var str = Lang.format("calcSD sd, A(k), Q(k), dataCount : $1$, $2$, $3$, $4$",
-		//	[sd.format("%0.2f"), x[1].format("%0.2f"), x[3].format("%0.2f"), dataCount.format("%d")]);
-		//Sys.println(str);
-		
 		// shift 
 		//A_k1 = A_k;
 		//Q_k1 = Q_k;
@@ -309,18 +305,21 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		mSDNN = calcSD(mSDNN_param);
 		mSDSD_param[0] = devMs;
 		mSDSD = calcSD(mSDSD_param); 
+						
+		var str = Lang.format("Cnt, mRSSD, (A, Q, SD):, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$",
+			[dataCount.format("%d"), mRMSSD, mSDNN_param[1].format("%0.2f"), mSDNN_param[3].format("%0.2f"),mSDNN.format("%0.2f"),
+			 mSDSD_param[1].format("%0.2f"), mSDSD_param[3].format("%0.2f"), mSDSD.format("%0.2f")]);
+		Sys.println(str);
 		
 		// difference more than 50ms
 		// some sources say over 2 min periods, others over an hour
+		// SHOULD USE DIFF
 		if (devMs.abs() > 50 ) { mNN50 += 1;}
 		// difference more than 20ms 
 		if (devMs.abs() > 20 ) { mNN20 += 1;}
 		
 		// percentage scaled to 100 
-		var dfp = dataCount.toFloat();		
-		// fake data
-		//if (dataCount > 10) {mNN50 = 8;}
-		//if (dataCount > 10) {mNN20 = 2;}		
+		var dfp = dataCount.toFloat();			
 		
 		mpNN50 = (mNN50.toFloat() * 100.0) / dfp; 
 		mpNN20 = (mNN20.toFloat() * 100.0) / dfp; 	
