@@ -205,7 +205,10 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 			//Sys.println("Sb");
 			addSample(intMs, beatsInGap);				
 			updateRunningStats(previousIntMs, intMs, livePulse);			
-		}					
+		} else {
+			// debug
+			Sys.println("Samp rej"+intMs+" Max: "+maxMs+" Min: "+minMs );
+		}				
 	}
 
 	function addSample( intervalMs, beatsInGap) {
@@ -326,7 +329,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		mpNN20 = (mNN20.toFloat() * 100.0) / dfp; 	
 		
 		//Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
-		Sys.println("Cnt, mNN50:, "+dataCount+","+mNN50);
+		//Sys.println("Cnt, mNN50:, "+dataCount+","+mNN50);
 	}
 
 }
