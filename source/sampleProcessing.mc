@@ -180,7 +180,8 @@ class SampleProcessing {
 		var maxMs = 60000 / (livePulse * 0.7);
 		var minMs = 60000 / (livePulse * 1.4);
 		
-		if (beatsInGap != null && beatsInGap != 1) {Sys.println("BeatsInGap > 1");}
+		// Given ANT sensor only provides one interval then we should probably ignore this sample
+		if (beatsInGap != null && beatsInGap != 1) {Sys.println("C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
 		
 		// need to check whether long gap is caused by multiple beats in gap and handle
 		// eg missed beats ie beatsInGap > 1
@@ -208,7 +209,7 @@ class SampleProcessing {
 			updateRunningStats(previousIntMs, intMs, livePulse);			
 		} else {
 			// debug
-			Sys.println("Samp rej "+intMs+" Max: "+maxMs+" Min: "+minMs );
+			Sys.println("C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
 		}				
 	}
 
