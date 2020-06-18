@@ -268,9 +268,6 @@ class AntHandler extends Ant.GenericChannel {
 			mMessageCount++;
 		}
 		
-		// TEST
-		//initialize(mSavedAntID, mHRDataLnk);
-		
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if ($._mApp.mSensor.mSearching) {
                 $._mApp.mSensor.mSearching = false;
