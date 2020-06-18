@@ -202,6 +202,7 @@ class HRVAnalysis extends App.AppBase {
 (:storageMethod)    
     function saveTrialWithStorage() {		
 		// save trial variables
+		$._mApp.Properties.setValue("pTrialMode", mTrialMode);
 		$._mApp.Properties.setValue("pTrialStarted", mTrialStarted);
 		$._mApp.Properties.setValue("pAuthorised", mAuthorised );
 		$._mApp.Properties.setValue("pTrialStartDate", mTrialStartDate);
@@ -210,6 +211,7 @@ class HRVAnalysis extends App.AppBase {
  
  (:preCIQ24)   
     function saveTrialNoStorage() {
+    	$._mApp.SetProperty("pTrialMode", mTrialMode);
 		$._mApp.setProperty("pTrialStarted", mTrialStarted);
 		$._mApp.setProperty("pAuthorised", mAuthorised );
 		$._mApp.setProperty("pTrialStartDate", mTrialStartDate );   

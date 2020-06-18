@@ -384,7 +384,16 @@ class AntHandler extends Ant.GenericChannel {
 			}
 			
 			//Sys.println("HR->S");
-			var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
+			//0.4.3 - beatCount is byte that goes from 0-255 and wraps!!
+			var beatsInGap;
+			// wrap case
+			if ( mHRDataLnk.mPrevBeatCount == 255) { 
+				beatsInGap = beatCount+1;	
+			} else {
+				beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
+			}		
+			
+			//var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
 			var isTesting = false;
 			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			

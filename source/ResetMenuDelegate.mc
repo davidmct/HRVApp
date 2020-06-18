@@ -40,10 +40,11 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
             $._mApp.mStorage.storeResults();
         }	
     }
-    
-    function onBack() {
-        Ui.popView(Ui.SLIDE_IMMEDIATE);
-    }
+ 
+//0.4.3 - leave for class   
+//    function onBack() {
+//        Ui.popView(Ui.SLIDE_IMMEDIATE);
+//   }
 
 //0.4.04 - should only be called on CheckMenuItem 
 // Leave for class to deal with
