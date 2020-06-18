@@ -207,7 +207,7 @@ function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 			updateRunningStats(previousIntMs, intMs, livePulse);			
 		} else {
 			// debug
-			Sys.println("Samp rej"+intMs+" Max: "+maxMs+" Min: "+minMs );
+			Sys.println("Samp rej "+intMs+" Max: "+maxMs+" Min: "+minMs );
 		}				
 	}
 
