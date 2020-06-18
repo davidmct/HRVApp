@@ -17,6 +17,9 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.4.4
+// Change debug method for time critical parts
+
 // 0.4.3
 // Added ability to set colour and name on history via settings and aligned menu system
 // need to change MainMenuDelegate to have which history item to select and then use existing menu create of list of options.
@@ -62,7 +65,6 @@ using Toybox.Time.Gregorian;
 //   load using var thing = Ui.loadResoruce(Rez.JsonData.xxx);
 //   <resources> jsonData id ="xxx"> what ever </jsonData>
 //   
-
 
 var mDebugging = false;
 var mDebuggingANT = false;
@@ -399,6 +401,9 @@ class HRVAnalysis extends App.AppBase {
     	
     	// Update FIT data
     	mFitControl.compute();
+    	
+    	// output any debug if present
+    	$.FlushMsg();
     	
     	// update views
         Ui.requestUpdate();

@@ -15,7 +15,8 @@ base.resourcePath=$(resBase)
 # need to include base so decompile works
 #preCIQ24 storage handling excluded or #storageMethod for post 2.4 version
 # :HistoryViaDictionary - used old dictionary method of looking up labels for chart
-base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;HistoryViaDictionary
+# :MemDebug or ConsoleDebug
+base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;HistoryViaDictionary;ConsoleDebug
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!
