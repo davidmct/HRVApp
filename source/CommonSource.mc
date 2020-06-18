@@ -10,6 +10,29 @@ using Toybox.Lang;
 
 var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics.FONT_MEDIUM,Graphics.FONT_LARGE];
 
+//0.4.4 - in memory debug
+var mDebugString ="";
+const MAX_DEBUG_STRING = 1000;
+
+(:MemDebug)
+function DebugMsg( flag, Msg) {
+	// do we have space? Just Flush every second then should be fine
+	//if ( Msg.length() + Msg.length() > MAX_DEBUG_STRING) {FlushMsg();}
+	
+	if (flag) { mDebugString = mDebugString + Msg + "\n";}
+}
+
+function FlushMsg() {
+	if (mDebugString.length() != 0) {
+		Sys.println(mDebugString);
+		mDebugString = "";
+	}
+}
+
+(:ConsoleDebug)
+function DebugMsg( flag, Msg) {
+	if (flag) { Sys.println("Msg");}
+}
 function selectFont(dc, string, width, height) {
     var testString = string; //Dummy string to test data width
     //testString = "a very long test string to see if we can get to a zero result or not";
