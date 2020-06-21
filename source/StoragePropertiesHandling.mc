@@ -57,7 +57,7 @@ class HRVStorageHandler {
 (:preCIQ24)	
 	function fresetPropertiesPreCIQ24() {		
 		$._mApp.setProperty("pAuxHRAntID", 0);
-		$._mApp.setProperty("firstLoadEver", true);
+		//$._mApp.setProperty("firstLoadEver", true);
 		$._mApp.setProperty("pFitWriteEnabled", false);
 		$._mApp.setProperty("pSensorSelect", SENSOR_SEARCH);
 		$._mApp.setProperty("soundSet", true);

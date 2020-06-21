@@ -163,7 +163,41 @@ class HRVAnalysis extends App.AppBase {
     // Block size for dump to debug of intervals
     const BLOCK_SIZE = 40;
 
-(:storageMethod)    
+(:storageMethod) 
+    function initializeWithStorage() {
+		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
+		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
+		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
+		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
+		
+		//Modification for 0.4.4 - remove properties which are not settings and use storage
+		// load trial variables
+		// 1st test for first time by failure to read!
+		var test;
+		test = Store.getValue("pTrialMode");
+		
+		if (test == null) {
+			// failed to read so need to initialise
+			Store.setValue("pTrialMode", false);
+			Store.setValue("pTrialStarted", false);
+			Store.setValue("pAuthorised", false);
+			Store.setValue("pTrailPeriod", 30);
+			Store.setValue("pTrialStartDate", 0);
+		}
+
+		mTrialMode = Store.getValue("pTrialMode");
+		mTrialStarted = Store.getValue("pTrialStarted");
+		mAuthorised = Store.getValue("pAuthorised");
+		mTrailPeriod = Store.getValue("pTrailPeriod");
+		mTrialStartDate = Store.getValue("pTrialStartDate");
+		
+		$._mApp.Properties.setValue("pDeviceID", mDeviceID);
+		// code to authenticate device with given DeviceID
+		mAuthID = $._mApp.Properties.getValue("pAuthID");       
+    }
+    
+(:exTrialParamProperty)   
+// pre 0.4.4 code
     function initializeWithStorage() {
 		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
 		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
@@ -201,7 +235,18 @@ class HRVAnalysis extends App.AppBase {
     
     }
     
-(:storageMethod)    
+(:storageMethod)   
+    function saveTrialWithStorage() {		
+		// save trial variables
+		Store.setValue("pTrialMode", mTrialMode);
+		Store.setValue("pTrialStarted", mTrialStarted);
+		Store.setValue("pAuthorised", mAuthorised );
+		Store.setValue("pTrialStartDate", mTrialStartDate);
+		      
+    }
+    
+(:exTrialParamProperty)   
+// pre 0.4.4 code 
     function saveTrialWithStorage() {		
 		// save trial variables
 		$._mApp.Properties.setValue("pTrialMode", mTrialMode);

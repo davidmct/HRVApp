@@ -1,17 +1,19 @@
 <properties>
+	<!-- moved to storage in 0.4.4 -->
 	<!-- set to true if trail mode being used -->
-	<property id="pTrialMode" type="boolean">false</property>
-	<property id="pTrialStarted" type="boolean">false</property>
+	<!--  <property id="pTrialMode" type="boolean">false</property> -->
+	<!-- <property id="pTrialStarted" type="boolean">false</property> -->
 	<!-- set to true if authenticated to use -->
-	<property id="pAuthorised" type="boolean">false</property>
+	<!-- <property id="pAuthorised" type="boolean">false</property> -->
 	<!-- number of days for trial -->
-	<property id="pTrailPeriod" type="number">30</property>
+	<!-- <property id="pTrailPeriod" type="number">30</property> -->
 	<!-- date trial started -->
-	<property id="pTrialStartDate" type="number">0</property>
+	<!-- <property id="pTrialStartDate" type="number">0</property>-->
+
 	<property id="pAuxHRAntID" type="number">0</property>
 	<property id="pDeviceID" type="string">null</property>
 	<property id="pAuthID" type="string">Not Set</property>
-	<property id="firstLoadEver" type ="boolean">false</property>
+	<!-- <property id="firstLoadEver" type ="boolean">false</property> -->
 	<property id="timestampSet" type="number">1447234278</property>
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
 	<!-- pSensorSelect true is external search -->
