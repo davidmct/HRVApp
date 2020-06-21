@@ -145,7 +145,9 @@ enum {
 	TS_TESTING = 4,
 	TS_ABORT = 5,
 	TS_CLOSE = 6,
-	TS_PAUSE =7
+	TS_PAUSE = 7,
+	//0.4.4 - allow one more cycle to read message
+	TS_PAUSE2 = 8
 }
 
 

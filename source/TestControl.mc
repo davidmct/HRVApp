@@ -144,10 +144,14 @@ class TestController {
 			case TS_READY:
 				// stars are aligned. we have a source of data and waiting to go
 				if(TYPE_TIMER == testType) {
-					mTestMessage = "Timer test ready. Press Enter";
+					//0.4.4 - simplify message
+					//mTestMessage = "Timer test ready. Press Enter";
+					mTestMessage = "Begin timer test?";
 				}
 				else if(TYPE_MANUAL == testType) {
-					mTestMessage= "Manual test ready. Press Enter";
+					//0.4.4 - simplify message
+					//mTestMessage= "Manual test ready. Press Enter";
+					mTestMessage = "Begin manual test?";
 				}
 				//Sys.println("TS_READY: message: "+mTestMessage);
 				
@@ -164,12 +168,16 @@ class TestController {
 					// go back to initialising or READY?
 					endTest(); // maybe in line as only timer to stop
 					mTestState = TS_INIT; 
-					mTestMessage = "escape pressed";
+					//04.4.4 - not on screen long and people know key pressed
+					//mTestMessage = "escape pressed";
+					mTestMessage = "";
 				}				
 			break;
 			case TS_TESTING:
 				// now we are in the mist of testing
-				mTestMessage = "Breathe regularly and stay still";
+				//04.04.4
+				//mTestMessage = "Breathe regularly and stay still";
+				mTestMessage = "Testing HRV";
 				
 				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
 				
@@ -228,7 +236,7 @@ class TestController {
 			break;
 			case TS_ABORT:
 				// go back to ready or maybe INIT if new sensors
-				mTestMessage = "Results available until you return to view";
+				mTestMessage = "Results available until next test";
 				mTestState = TS_PAUSE;	
 				resetTest();
 			break;
@@ -236,13 +244,18 @@ class TestController {
 				// go back to ready or maybe INIT if new sensors
 				// maybe TestView is popped at this point?
 				mTestState = TS_PAUSE;	
-				mTestMessage = "Results available until you return to view";
+				mTestMessage = "Results available until next test";
 				resetTest();
 			break;
 			case TS_PAUSE:
 				// allow one update cycle to show close and and abort messages
+				mTestState = TS_PAUSE2;					
+			break;
+			case TS_PAUSE2:
+				// allow one update cycle to show close and and abort messages
 				mTestState = TS_READY;					
 			break;
+			
 			default:
 				Sys.println("UNKNOWN state in test controller!");
 			break;	

@@ -66,7 +66,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
 			// true if enough samples to save but we have to be in testing state
 			if (res == true) {
-				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save result")});
+				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save?")});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
