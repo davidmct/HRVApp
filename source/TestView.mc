@@ -21,21 +21,23 @@ class TestView extends Ui.View {
 	
 	// coordinates of first and second set of labels as %
 	// split to 1D array to save memory
-	hidden var mLabelSetX = [ 32, 76, 64, 27];
-	hidden var mLabelSetY = [ 53, 66, 53, 66];
+	//0.4.4 
+	// Int/Ext is a dynamic label which will be set in code. Aligned above FIT write. 5th element
+	hidden var mLabelSetX = [ 32, 76, 64, 27, 50];
+	hidden var mLabelSetY = [ 53, 66, 53, 66, 66];
 	
 	// coordinates of  value cordinates as %
-	// strapStatus - no label!, Ln, BPM, Timer
-	hidden var mLabelValueLocX = [ 28, 75, 82, 27];
-	hidden var mLabelValueLocY = [ 53, 78, 53, 78];
+	// strapStatus - no label!, Ln, BPM, Timer, Int/Ext	 
+	hidden var mLabelValueLocX = [ 28, 75, 82, 27, 50];
+	hidden var mLabelValueLocY = [ 53, 78, 53, 78, 66];
+	
+	// label values
+	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
 	
 	hidden var mFitIconLocX = 50;
 	hidden var mFitIconLocY = 78;
 	hidden var mFitIconLocXS;
 	hidden var mFitIconLocYS;	
-		
-	// label values
-	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER" ];
 
 	// x%, y%, width/height
 	hidden var mRectHorizWH = 100;
@@ -134,7 +136,6 @@ class TestView extends Ui.View {
 		}
     }
 
-
        
     //! Update the view
     function onUpdate(dc) {
@@ -211,12 +212,18 @@ class TestView extends Ui.View {
 		//0.4.00
 		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";		
 		//0.4.01
-		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "I_" : "E_";
-		str = str+$._mApp.mSensor.mHRData.mHRMStatus;
+		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "I_" : "E_";
+		//str = str+$._mApp.mSensor.mHRData.mHRMStatus;
+		//0.4.4
+		str = $._mApp.mSensor.mHRData.mHRMStatus;
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, str, mJust);
 		
-		// now show values
+		//0.4.4 - Separate field for I/E
+		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
+		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);	
+		dc.drawText( mLabelSetXS[4], mLabelSetYS[4], mLabelFont, str, mJust);		
 		
+		// now show values		
 		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
 		// 0.4.00 release for approval

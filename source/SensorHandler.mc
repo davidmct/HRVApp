@@ -171,7 +171,7 @@ class SensorHandler {
 		//if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
 		
 		mHRData.mHRMStatusCol = RED;
-    	mHRData.mHRMStatus = "Found strap";
+    	mHRData.mHRMStatus = "Connected"; //"Found strap";
         // may need some other changes
     }
     
@@ -185,7 +185,7 @@ class SensorHandler {
     	}
     	mHRData.isChOpen = false;
 		mHRData.mHRMStatusCol = RED;
-    	mHRData.mHRMStatus = "HRM closed";
+    	mHRData.mHRMStatus = "ANT closed";
 	    mHRData.livePulse = 0;
 		mSearching = true;
 		

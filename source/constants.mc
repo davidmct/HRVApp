@@ -17,9 +17,9 @@ enum {
 	STATS3_VIEW = 3,
 	//CURRENT_VIEW = 4,
 	POINCARE_VIEW = 4,
-	//POINCARE_VIEW2 = 5,
-	HISTORY_VIEW = 5,
-	NUM_VIEWS = 6
+	POINCARE_VIEW2 = 5,
+	HISTORY_VIEW = 6,
+	NUM_VIEWS = 7
 }
 
 // Colors index. Arrays start at zero
