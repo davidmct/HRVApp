@@ -68,7 +68,7 @@ class TestController {
 	function onNotify(symbol, params) {
 		// [ msgTxt, HR status, state INIT]
 		var stateInit;
-		mHRmsgTxt = params[0];
+		mHRmsgTxt = params[0]; // no longer used!
 		mSensorReady = params[1];	
 		stateInit = params[2];
 		//Sys.println("TestControl: onNotify : "+params);
@@ -77,7 +77,9 @@ class TestController {
 			Sys.println("TestControl: statemachine forced INIT");
 			mTestState = TS_INIT;
 			StateMachine(:restart);
-		}		
+		}	
+		
+		$.DebugMsg(false, "mHRmsgTxt - "+mHRmsgTxt);
 	}
 	
 	// probably need to modify Sensor to notify statemachine when found strap etc
