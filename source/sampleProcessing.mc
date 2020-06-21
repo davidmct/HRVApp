@@ -181,7 +181,7 @@ class SampleProcessing {
 		var minMs = 60000 / (livePulse * 1.4);
 		
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
-		if (beatsInGap != null && beatsInGap != 1) {Sys.println("C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
+		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
 		
 		// need to check whether long gap is caused by multiple beats in gap and handle
 		// eg missed beats ie beatsInGap > 1
@@ -193,7 +193,6 @@ class SampleProcessing {
 		if (mSampleIndex == 0) {
 			if ( maxMs > intMs && minMs < intMs) { 				
 				addSample(intMs, null); 
-				//Sys.println("S0 "+intMs); 
 			}
 			return;
 		}
@@ -203,13 +202,11 @@ class SampleProcessing {
 		// 0.4.3 remove check of previous as should be OK by defintion!!	
 		if (maxMs > intMs && minMs < intMs ){ // && 
 			//maxMs > previousIntMs && minMs < previousIntMs) {		
-			
-			//Sys.println("Sb");
 			addSample(intMs, beatsInGap);				
 			updateRunningStats(previousIntMs, intMs, livePulse);			
 		} else {
 			// debug
-			Sys.println("C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
+			$.DebugMsg( true, "C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
 		}				
 	}
 
@@ -245,7 +242,10 @@ class SampleProcessing {
 	// must start at dataCount = 1 otherwise large offset in calc!
 	function calcSD(x) {	
 		var sd = 0.0;
-		var absSample = x[0].abs(); 
+		//var absSample = x[0].abs(); 
+		// x[0] already positive
+		var absSample = x[0];
+		
 		var cntFloat = dataCount.toFloat();
 		// A(0)=0
 		// A(k)=A(k-1)+ (x(k)-A(k-1))/k
@@ -285,12 +285,13 @@ class SampleProcessing {
 		// note that Math lib has stdev(data, mean) for standard deviation
 
 		// don't need to take abs value as only being squared!
+		// 0.4.4 but used elsewhere
 		devMs = (intMs - previousIntMs);
+		devMs = devMs.abs();
 
 		// now see how wide the difference is between consectutive intervals
-		var diff = devMs.abs();
-		if (diff > maxDiffFound) { maxDiffFound = diff;}
-		if (diff < minDiffFound) { minDiffFound = diff;}
+		if (devMs > maxDiffFound) { maxDiffFound = devMs;}
+		if (devMs < minDiffFound) { minDiffFound = devMs;}
 		
 		devSqSum += devMs * devMs;
 		pulseSum += livePulse;
@@ -307,22 +308,22 @@ class SampleProcessing {
 		}
 		avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
 		
-		mSDNN_param[0] = intMs;
+		mSDNN_param[0] = intMs.abs();
 		mSDNN = calcSD(mSDNN_param);
 		mSDSD_param[0] = devMs;
 		mSDSD = calcSD(mSDSD_param); 
 						
 		//var str = Lang.format("Cnt, mRSSD, (A, Q, SD):, $1$, $2$, $3$, $4$, $5$, $6$, $7$, $8$",
-		//	[dataCount.format("%d"), mRMSSD, mSDNN_param[1].format("%0.2f"), mSDNN_param[3].format("%0.2f"),mSDNN.format("%0.2f"),
+		//	[dataCount.format("%d"), mRMSSD.format("%0.1f"), mSDNN_param[1].format("%0.2f"), mSDNN_param[3].format("%0.2f"),mSDNN.format("%0.2f"),
 		//	 mSDSD_param[1].format("%0.2f"), mSDSD_param[3].format("%0.2f"), mSDSD.format("%0.2f")]);
-		//Sys.println(str);
+		//$.DebugMsg( true, str);
 		
 		// difference more than 50ms
 		// some sources say over 2 min periods, others over an hour
 		// SHOULD USE DIFF
-		if (diff > 50 ) { mNN50 += 1;}
+		if (devMs > 50 ) { mNN50 += 1;}
 		// difference more than 20ms 
-		if (diff > 20 ) { mNN20 += 1;}
+		if (devMs > 20 ) { mNN20 += 1;}
 		
 		// percentage scaled to 100 
 		var dfp = dataCount.toFloat();			
@@ -330,8 +331,8 @@ class SampleProcessing {
 		mpNN50 = (mNN50.toFloat() * 100.0) / dfp; 
 		mpNN20 = (mNN20.toFloat() * 100.0) / dfp; 	
 		
-		//Sys.println("count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
-		//Sys.println("Cnt, mNN50:, "+dataCount+","+mNN50);
+		//$.DebugMsg( true, "count, mNN50, mpNN50, mNN20, mpNN20: "+dataCount+","+mNN50+","+mpNN50+","+mNN20+","+mpNN20);
+		//$.DebugMsg( true, "Cnt, mNN50:, "+dataCount+","+mNN50);
 	}
 
 }

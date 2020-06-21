@@ -258,21 +258,22 @@ class AntHandler extends Ant.GenericChannel {
     function onAntMsg(msg)
     {
 		var payload = msg.getPayload();		
-		if (mDebuggingANT == true) {
-	        //Sys.println("device ID = " + msg.deviceNumber);
-			//Sys.println("deviceType = " + msg.deviceType);
-			//Sys.println("transmissionType= " + msg.transmissionType);
-			//Sys.println("getPayload = " + msg.getPayload());
-			//Sys.println("messageId = " + msg.messageId);	
-			//Sys.println("A - "+mMessageCount);
-			mMessageCount++;
-		}
+        //$.DebugMsg( mDebuggingANT, "device ID = " + msg.deviceNumber);
+		//$.DebugMsg( mDebuggingANT, "deviceType = " + msg.deviceType);
+		//$.DebugMsg( mDebuggingANT, "transmissionType= " + msg.transmissionType);
+		//$.DebugMsg( mDebuggingANT, "getPayload = " + msg.getPayload());
+		//$.DebugMsg( mDebuggingANT, "messageId = " + msg.messageId);	
+		//$.DebugMsg( mDebuggingANT, "A - "+mMessageCount);
 		
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
         	if ($._mApp.mSensor.mSearching) {
                 $._mApp.mSensor.mSearching = false;
                 // Update our device configuration primarily to see the device number of the sensor we paired to
                 deviceCfg = GenericChannel.getDeviceConfig();
+                
+                //0.4.4
+                // This may be too early as may need a number of messages
+                $._mApp.auxHRAntID = $._mApp.mSensor.deviceCfg.deviceNumber;
             }
 			// not sure this handles all page types and 65th special page correctly
     		      
@@ -296,9 +297,7 @@ class AntHandler extends Ant.GenericChannel {
 			newHRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
-        	if (mDebuggingANT) {
-        		Sys.println("ANT EVENT msg");
-        	}
+        	$.DebugMsg( mDebuggingANT, "ANT EVENT msg");
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
 	            var event = (payload[1] & 0xFF);	
 	            // force closed

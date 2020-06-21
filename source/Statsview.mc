@@ -10,7 +10,7 @@ class StatsView extends Ui.View {
 	
 	// title location %
 	hidden var mTitleLoc = [50,10];
-	hidden var mTitleLabels = ["Stats #1", "Stats #2"];
+	hidden var mTitleLabels = ["Stats #1", "Stats #2", "Stats #3"];
 	
 	// coordinates of first and second set of labels as %
 	// split to 1D array to save memory
@@ -24,6 +24,7 @@ class StatsView extends Ui.View {
 	// label values
 	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "" ];
 	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "", "" ];
+	hidden var mLabel3Labels = [ "II","Min II", "Max II", "", "", "" ];
 
 	// x%, y%, width/height
 	hidden var mRectHorizWH = 64;
@@ -146,7 +147,7 @@ class StatsView extends Ui.View {
 			trunc = ($._mApp.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
 			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, str, mJust);										
-		} else {
+		} else if (viewToShow == 2) {
 			// draw second set of labels and values
 			// x, y, font, text, just
 			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
@@ -160,8 +161,19 @@ class StatsView extends Ui.View {
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);				
-		}
-		
+		} else if (viewToShow == 3) {
+			// draw third set of labels and values
+			// x, y, font, text, just
+			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[2], mJust);
+			for (var i=0; i < mLabelSetXS.size(); i++) {
+				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel3Labels[i], mJust);			
+			}
+			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);				
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.getCurrentEntry().format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
+		}		
 		// change every 6 seconds
     	//viewToShow = (viewToShow + 1) % 6;
     	//Sys.println("viewToShow : "+viewToShow);

@@ -92,6 +92,7 @@ class HRVAnalysis extends App.AppBase {
 	//var mApp;
 	var mSensor;
 	var mAntID;
+	var auxHRAntID; // found sensor ID
 	// true if external unknown strap ie not enabled in watch
 	// 1 = true, 0 = false and INTERNAL_SENSOR
 	var mSensorTypeExt;
@@ -166,6 +167,8 @@ class HRVAnalysis extends App.AppBase {
 (:storageMethod) 
     function initializeWithStorage() {
 		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
+		auxHRAntID = mAntID; // default
+		
 		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
 		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
 		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
@@ -514,19 +517,22 @@ class HRVAnalysis extends App.AppBase {
 		viewNum = newViewNum;
 		
 		//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
-
 		if (STATS1_VIEW == viewNum) {
 			return new StatsView(1);
 		}
 		else if (STATS2_VIEW == viewNum) {
 			return new StatsView(2);
-		}		
+		}
+		//0.4.4 - removing current view as no extra info and 
+		else if (STATS3_VIEW == viewNum) {
+			return new StatsView(3);
+		}				
 		else if (HISTORY_VIEW == viewNum) {
 			return new HistoryView();
 		}
-		else if (CURRENT_VIEW == viewNum) {
-			return new CurrentValueView();
-		}
+		//else if (CURRENT_VIEW == viewNum) {
+		//	return new CurrentValueView();
+		//}
 		else if (POINCARE_VIEW == viewNum) {
 			return new PoincareView(1);
 		}

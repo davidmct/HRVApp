@@ -8,6 +8,7 @@ using Toybox.System as Sys;
 // Show time in test and current RMSSD and interval
 // also max/min difference between RR intervals 
 
+(:noCurrentView)
 class CurrentValueView extends Ui.View {
 
 	var timer = "";

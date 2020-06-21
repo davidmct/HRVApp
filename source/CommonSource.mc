@@ -33,6 +33,7 @@ function FlushMsg() {
 function DebugMsg( flag, Msg) {
 	if (flag) { Sys.println("Msg");}
 }
+
 function selectFont(dc, string, width, height) {
     var testString = string; //Dummy string to test data width
     //testString = "a very long test string to see if we can get to a zero result or not";
