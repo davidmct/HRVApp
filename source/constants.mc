@@ -82,8 +82,8 @@ var mHistoryLabelList = [ "none", "avgBPM", "minII", "maxII",
 						"NN20", "pNN20"];						
 
 // SAMPLE PROCESSING
-const MIN_BPM = 30;
-const MAX_BPM = 150; // max that will fill buffer in time below. Could be 200!!
+const MIN_BPM = 35;
+const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
 const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)
 

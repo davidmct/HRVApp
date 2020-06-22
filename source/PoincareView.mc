@@ -202,8 +202,8 @@ class PoincareView extends Ui.View {
 			max = $._mApp.mSampleProc.maxIntervalFound;
 			min = $._mApp.mSampleProc.minIntervalFound;
 		} else {
-			max = 2000; // 30 BPM in ms
-			min = 400; // 150 BPM
+			max = 60000/MIN_BPM; // 35 BPM in ms
+			min = 60000/MAX_BPM; // 150 BPM
 		}
 		
 		//Sys.println("Poincare: max, min "+max+" , "+min);
@@ -261,7 +261,6 @@ class PoincareView extends Ui.View {
 		// can't do same with x value as maybe different scale factors
 		
 		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
-		//var debugPlot = "x, y: ";
 		// assume scaleX and ScaleY are the SAME
 		var mPrevY = ((previousSample - floor) * scaleX).toNumber();
 		
@@ -273,6 +272,8 @@ class PoincareView extends Ui.View {
 		//var error = 1000*scaleX - a.toFloat();
 		//Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
 		
+		//var debugPlot = "x, y: ";
+
 		// buffer starts from zero
 		for( var i=1; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
@@ -290,7 +291,8 @@ class PoincareView extends Ui.View {
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			// 2x2 rectangle too small on real screen
 			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
-			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";			
+			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";
+			//debugPlot += "("+(x).toString()+","+(y).toString()+"), ";			
 			mPrevY = y;  //previousSample = sampleN1;
 		}
 		
@@ -298,12 +300,7 @@ class PoincareView extends Ui.View {
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
-		//Sys.println("timers: "+Sys.getTimer()+", "+startTimeP);
-		//Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
-		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-		//	", "+System.getSystemStats().freeMemory.toString()+
-		//	", "+System.getSystemStats().totalMemory.toString()			
-		//	);	
+
    		return true;
     }
     
