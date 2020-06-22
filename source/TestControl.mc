@@ -134,7 +134,7 @@ class TestController {
 					mTestState = TS_READY; 
 					//0.4.4
 					// Print ID to see if we can display for external or known!
-					$.DebugMsg( $._mApp.mAntID != 0, "ANT ID = "+$._mApp.auxHRAntID);
+					$.DebugMsg( $._mApp.mAntID != 0, "ANT ID = "+$._mApp.mAuxHRAntID);
 				} else {
 					mTestMessage = "Waiting for "+setSensorStr+" HR source";
 				}

@@ -92,7 +92,7 @@ class HRVAnalysis extends App.AppBase {
 	//var mApp;
 	var mSensor;
 	var mAntID;
-	var auxHRAntID; // found sensor ID
+	var mAuxHRAntID; // found sensor ID
 	// true if external unknown strap ie not enabled in watch
 	// 1 = true, 0 = false and INTERNAL_SENSOR
 	var mSensorTypeExt;
@@ -167,7 +167,7 @@ class HRVAnalysis extends App.AppBase {
 (:storageMethod) 
     function initializeWithStorage() {
 		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
-		auxHRAntID = mAntID; // default
+		mAuxHRAntID = mAntID; // default
 		
 		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
 		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 

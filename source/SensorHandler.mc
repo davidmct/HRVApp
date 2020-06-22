@@ -273,7 +273,9 @@ class AntHandler extends Ant.GenericChannel {
                 
                 //0.4.4
                 // This may be too early as may need a number of messages
-                $._mApp.auxHRAntID = $._mApp.mSensor.deviceCfg.deviceNumber;
+                // deviceConfig is local hidden var
+                $._mApp.mAuxHRAntID = deviceCfg.deviceNumber;
+                //$._mApp.auxHRAntID = $._mApp.mSensor.deviceCfg.deviceNumber;
             }
 			// not sure this handles all page types and 65th special page correctly
     		      
