@@ -373,7 +373,7 @@ class HRVAnalysis extends App.AppBase {
 			initializeNoStorage();
 		}
 		
-		Sys.println("HRVApp: ANT ID set to : " + mAntID);
+		Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
@@ -449,7 +449,7 @@ class HRVAnalysis extends App.AppBase {
     	
     	// Update FIT data
     	mFitControl.compute();
-    	
+    	   	
     	// output any debug if present
     	$.FlushMsg();
     	

@@ -65,7 +65,7 @@ class SensorHandler {
     	// true if external strap 		
     	mSensorType = sensorType;
     	mAntIDLocal = mAntID;
-    	mFunc = null;
+	   	mFunc = null;
     	//0.4.04 make sure if nothing used so far variable is null
     	sensor = null;
     }
@@ -201,7 +201,7 @@ class AntHandler extends Ant.GenericChannel {
     const DEVICE_TYPE = 120;  //strap
 	const PERIOD = 8070; // 4x per second	
 	hidden var mChanAssign;
-	hidden var deviceCfg;
+	var deviceCfg;
 	hidden var mMessageCount=0;
 	hidden var mHRDataLnk;
 	hidden var mSavedAntID;
@@ -217,7 +217,7 @@ class AntHandler extends Ant.GenericChannel {
 	            Ant.CHANNEL_TYPE_RX_ONLY,
 	            Ant.NETWORK_PLUS);
 		} catch (ex) {
-			Sys.println("Can't assign ANT channel");
+			Sys.println("Can't assign ANT channel, try again");
 			stopExtSensor();	
 	        mChanAssign = new Ant.ChannelAssignment(
 	            //Ant.CHANNEL_TYPE_RX_NOT_TX,
@@ -257,7 +257,8 @@ class AntHandler extends Ant.GenericChannel {
 
     function onAntMsg(msg)
     {
-		var payload = msg.getPayload();		
+		var payload = msg.getPayload();	
+			
         //$.DebugMsg( mDebuggingANT, "device ID = " + msg.deviceNumber);
 		//$.DebugMsg( mDebuggingANT, "deviceType = " + msg.deviceType);
 		//$.DebugMsg( mDebuggingANT, "transmissionType= " + msg.transmissionType);
@@ -272,10 +273,12 @@ class AntHandler extends Ant.GenericChannel {
                 deviceCfg = GenericChannel.getDeviceConfig();
                 
                 //0.4.4
-                // This may be too early as may need a number of messages
-                // deviceConfig is local hidden var
-                $._mApp.mAuxHRAntID = deviceCfg.deviceNumber;
-                //$._mApp.auxHRAntID = $._mApp.mSensor.deviceCfg.deviceNumber;
+	            // This may be too early as may need a number of messages
+				// using deviceCfg just gives value for setup!!!
+				//$.DebugMsg( true, " msg.deviceNumber ="+msg.deviceNumber);
+	            $._mApp.mAuxHRAntID = msg.deviceNumber;
+	           
+                $.DebugMsg( true, "Ant ID found = "+$._mApp.mAuxHRAntID+". mSearching = false");
             }
 			// not sure this handles all page types and 65th special page correctly
     		      
@@ -286,9 +289,10 @@ class AntHandler extends Ant.GenericChannel {
     		mHRDataLnk.mHRMStatus = "HR data";
     		
     		// this is also called in sample processing but conditional
-    		if ($._mApp.mSensor.mFunc != null) {
-				$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
-			}	
+    		//0.4.4 - can't see reason for this!!
+    		//if ($._mApp.mSensor.mFunc != null) {
+			//	$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
+			//}	
 	
 			//if (mDebuggingANT == true) {
 			//	Sys.println("ANT: Pulse is :" + mHRDataLnk.livePulse);
@@ -365,8 +369,11 @@ class AntHandler extends Ant.GenericChannel {
 		// check we have a pulse and another beat recorded 
 		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {
 			//mHRDataLnk.isPulseRx = true;
-			mHRDataLnk.mHRMStatusCol = GREEN;
-			mHRDataLnk.mHRMStatus = "HR data";
+			// 0.4.4 
+			// don't need two next lines as in msg handler!
+			//mHRDataLnk.mHRMStatusCol = GREEN;
+			//mHRDataLnk.mHRMStatus = "HR data";
+			
 			mHRDataLnk.mNoPulseCount = 0;
 			
 			// update Test controller data  

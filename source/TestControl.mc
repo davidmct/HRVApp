@@ -68,7 +68,7 @@ class TestController {
 	function onNotify(symbol, params) {
 		// [ msgTxt, HR status, state INIT]
 		var stateInit;
-		mHRmsgTxt = params[0]; // no longer used!
+		mHRmsgTxt = params[0]; // used in view
 		mSensorReady = params[1];	
 		stateInit = params[2];
 		//Sys.println("TestControl: onNotify : "+params);
@@ -79,7 +79,7 @@ class TestController {
 			StateMachine(:restart);
 		}	
 		
-		$.DebugMsg(false, "mHRmsgTxt - "+mHRmsgTxt);
+		$.DebugMsg(true, "mHRmsgTxt - "+mHRmsgTxt+", Sensor ready? "+mSensorReady);
 	}
 	
 	// probably need to modify Sensor to notify statemachine when found strap etc
@@ -132,9 +132,6 @@ class TestController {
 				if ( mSensorReady ) { 
 					mTestMessage = setSensorStr+" sensor ready";
 					mTestState = TS_READY; 
-					//0.4.4
-					// Print ID to see if we can display for external or known!
-					$.DebugMsg( $._mApp.mAntID != 0, "ANT ID = "+$._mApp.mAuxHRAntID);
 				} else {
 					mTestMessage = "Waiting for "+setSensorStr+" HR source";
 				}
@@ -147,6 +144,12 @@ class TestController {
 				}				
 			break;
 			case TS_READY:
+				//0.4.4
+				// Print ID to see if we can display for external or known!
+				//$.DebugMsg( true, "Found ANT ID = "+$._mApp.mAuxHRAntID);
+				
+				// we know ANT ID is now available
+				
 				// stars are aligned. we have a source of data and waiting to go
 				if(TYPE_TIMER == testType) {
 					//0.4.4 - simplify message
