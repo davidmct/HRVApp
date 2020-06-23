@@ -71,7 +71,7 @@ class TestController {
 		mHRmsgTxt = params[0]; // used in view
 		mSensorReady = params[1];	
 		stateInit = params[2];
-		//Sys.println("TestControl: onNotify : "+params);
+		Sys.println("TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
 			Sys.println("TestControl: statemachine forced INIT");
@@ -79,7 +79,7 @@ class TestController {
 			StateMachine(:restart);
 		}	
 		
-		$.DebugMsg(true, "mHRmsgTxt - "+mHRmsgTxt+", Sensor ready? "+mSensorReady);
+		//$.DebugMsg(true, "mHRmsgTxt - "+mHRmsgTxt+", Sensor ready? "+mSensorReady);
 	}
 	
 	// probably need to modify Sensor to notify statemachine when found strap etc
