@@ -136,7 +136,7 @@ class SensorHandler {
 				$._mApp.mTestControl.StateMachine(:RestartControl); 
 			}
 			
-			Sys.println("Sensor switched, reset issued");
+			Sys.println("Sensor switched");
     	} else {
     		Sys.println("Sensor unchanged");
     	}  	
@@ -187,7 +187,8 @@ class SensorHandler {
     }
     
 	// Close Ant channel.
-    function closeCh() {
+(:discard)  
+    function closeCh() { // never called
     	// release dumps whole config
     	if(mHRData.isChOpen) {
     		//GenericChannel.release();
@@ -216,11 +217,14 @@ class AntHandler extends Ant.GenericChannel {
 	var deviceCfg;
 	hidden var mMessageCount=0;
 	hidden var mHRDataLnk;
-	hidden var mSavedAntID;
+	//hidden var mSavedAntID;
 	
     function initialize(mAntID, mHRData) {
     	mHRDataLnk = mHRData;
-    	mSavedAntID = mAntID;
+    	
+    	//$.DebugMsg( true, "mANTID : "+mAntID+" mHRDataLnk="+mHRDataLnk+" mHRData="+mHRData);
+    	
+    	//mSavedAntID = mAntID;
     	mChanAssign = null;
     	deviceCfg = null;
     	 
@@ -239,7 +243,7 @@ class AntHandler extends Ant.GenericChannel {
 	            Ant.NETWORK_PLUS);			
 		}
 		finally {
-			if (mChanAssign == null) { var mErr = new myException( "CNo ANT channels available");}
+			if (mChanAssign == null) { var mErr = new myException( "No ANT channels available");}
 		}
        	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
        		          		
@@ -256,6 +260,7 @@ class AntHandler extends Ant.GenericChannel {
        	//mChanAssign.setBackgroundScan(true);
 
        	GenericChannel.setDeviceConfig(deviceCfg);
+       	// returns true if channel open
        	mHRDataLnk.isChOpen = GenericChannel.open();
        	
     	// update Test controller data  
@@ -265,7 +270,7 @@ class AntHandler extends Ant.GenericChannel {
 		}       	
        	
 		// will now be searching for strap after openCh()
-		Sys.println("ANT initialised");
+		Sys.println("ANT initialised. IsOpen:"+mHRDataLnk.isChOpen);
 	}	
 
 	function stopExtSensor() {
@@ -281,6 +286,8 @@ class AntHandler extends Ant.GenericChannel {
     function onAntMsg(msg)
     {
 		var payload = msg.getPayload();	
+		
+		$.DebugMsg( true, "m.dt="+msg.messageId);
 			
         //$.DebugMsg( mDebuggingANT, "device ID = " + msg.deviceNumber);
 		//$.DebugMsg( mDebuggingANT, "deviceType = " + msg.deviceType);
@@ -311,6 +318,8 @@ class AntHandler extends Ant.GenericChannel {
 			mHRDataLnk.mHRMStatusCol = GREEN;
     		mHRDataLnk.mHRMStatus = "HR data";
     		
+    		$.DebugMsg(true, "d");
+    		
     		// this is also called in sample processing but conditional
     		//0.4.4 - can't see reason for this!!
     		//if ($._mApp.mSensor.mFunc != null) {
@@ -326,7 +335,8 @@ class AntHandler extends Ant.GenericChannel {
 			newHRSampleProcessing(beatCount, beatEvent);
         }
         else if( Ant.MSG_ID_CHANNEL_RESPONSE_EVENT == msg.messageId ) {
-        	$.DebugMsg( mDebuggingANT, "ANT EVENT msg");
+        	//$.DebugMsg( mDebuggingANT, "ANT EVENT msg");
+        	//$.DebugMsg( true, "e");
        		if (Ant.MSG_ID_RF_EVENT == (payload[0] & 0xFF)) {
 	            var event = (payload[1] & 0xFF);	
 	            // force closed
@@ -334,6 +344,7 @@ class AntHandler extends Ant.GenericChannel {
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
 	            		//Sys.println("ANT:EVENT: closed");
+	            		$.DebugMsg( true, "e.c");
 	            		//$._mApp.mSensor.openCh();
 	            		// open channel again
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
@@ -352,6 +363,7 @@ class AntHandler extends Ant.GenericChannel {
 						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
+	            		$.DebugMsg( true, "e.f");
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
@@ -366,23 +378,28 @@ class AntHandler extends Ant.GenericChannel {
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");
+						$.DebugMsg( true, "e.s");
 						$._mApp.mSensor.mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
 						//Sys.println( "ANT: EVENT timeout");
 						////closeCh();
 						////openCh();
+						$.DebugMsg( true, "e.t");
 						break;
 	            	default:
 	            		// channel response
+	            		$.DebugMsg( true, "e.d");
 	            		//Sys.println( "ANT:EVENT: default");
 	            		break;
 	    		} 
         	} else {
         		//Sys.println("Not an RF EVENT");
+        		$.DebugMsg( true, "e.n."+msg.messageId);
         	} 
         } else {
     		//other message!
+    		$.DebugMsg( true, "e."+msg.messageId);
     		//Sys.println( "ANT other message " + msg.messageId);
     	}
     }
