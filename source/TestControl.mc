@@ -74,9 +74,9 @@ class TestController {
 		Sys.println("TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
-			Sys.println("TestControl: statemachine forced INIT");
+			Sys.println("TC:OnNotify: statemachine forced INIT");
 			mTestState = TS_INIT;
-			StateMachine(:restart);
+			StateMachine(:RestartControl);
 		}	
 		
 		//$.DebugMsg(true, "mHRmsgTxt - "+mHRmsgTxt+", Sensor ready? "+mSensorReady);

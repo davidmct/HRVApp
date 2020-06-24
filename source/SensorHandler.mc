@@ -100,7 +100,9 @@ class SensorHandler {
     			}
     		} else { // internal strap or OHR
     			//Sys.println("stopping Internal");
-    			if (sensor != null) {sensor.stopIntSensor(); }  		
+    			if ((sensor != null) && (sensor has :stopIntSensor)) {
+    				sensor.stopIntSensor(); 
+    			}  		
     		}
     		
     		sensor = null;
@@ -120,18 +122,21 @@ class SensorHandler {
 	    	// now create connection
 	    	SetUpSensors();
 	    				
-    		// update Test controller data  
-			if (mFunc != null) {
-				// sensor not ready and need a restart
-				mFunc.invoke(:Update, [ "Switching sensor", false, true]);
+    		// update Test controller data 
+    		// 0.4.5 This is done in SetUpSensors so remove
+    		if (false) { 
+				if (mFunc != null) {
+					// sensor not ready and need a restart
+					mFunc.invoke(:Update, [ "Switching sensor", false, true]);
+				}
+				
+				// sending above message causes restart anyway !!
+				
+				// kill any running test
+				$._mApp.mTestControl.StateMachine(:RestartControl); 
 			}
 			
-			// sending above message causes restart anyway !!
-			
-			// kill any running test
-			$._mApp.mTestControl.StateMachine(:RestartControl); 
-			
-			Sys.println("Sensor switched");
+			Sys.println("Sensor switched, reset issued");
     	} else {
     		Sys.println("Sensor unchanged");
     	}  	
@@ -153,10 +158,11 @@ class SensorHandler {
     		sensor = new InternalSensor(mHRData);
     	}
     	// update Test controller data  
-    	if (mFunc != null) {
-    		// no message and not ready; no state change needed
-    		mFunc.invoke(:Update, [ "Setup sensor", false, false]);
-    	}
+    	// 0.4.5 - done in init of each sensor
+    	//if (mFunc != null) {
+    	//	// no message and not ready; no state change needed
+    	//	mFunc.invoke(:Update, [ "Setup sensor", false, false]);
+    	//}
     }
  
 (:discard)   
@@ -215,6 +221,8 @@ class AntHandler extends Ant.GenericChannel {
     function initialize(mAntID, mHRData) {
     	mHRDataLnk = mHRData;
     	mSavedAntID = mAntID;
+    	mChanAssign = null;
+    	deviceCfg = null;
     	 
         // Get the channel
         try {
@@ -231,6 +239,7 @@ class AntHandler extends Ant.GenericChannel {
 	            Ant.NETWORK_PLUS);			
 		}
 		finally {
+			if (mChanAssign == null) { var mErr = new myException( "CNo ANT channels available");}
 		}
        	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
        		          		
@@ -251,8 +260,8 @@ class AntHandler extends Ant.GenericChannel {
        	
     	// update Test controller data  
 		if ($._mApp.mSensor.mFunc != null) {
-			// no message and not ready, no state change
-			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, false]);
+			// no message and not ready, no state change -> 0.4.5 force reset
+			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, true]);
 		}       	
        	
 		// will now be searching for strap after openCh()
@@ -336,6 +345,7 @@ class AntHandler extends Ant.GenericChannel {
 	    				mHRDataLnk.livePulse = 0;
 						//$._mApp.mSensor.mSearching = true;
 						// update Test controller data  
+						$.DebugMsg(true, "CL.O."+mHRDataLnk.isChOpen);
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
 							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
@@ -477,8 +487,8 @@ class InternalSensor {
 	    
     	// update Test controller data  
 		if ($._mApp.mSensor.mFunc != null) {
-			// no message and not ready, no state change
-			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, false]);
+			// no message and not ready, no state change -> 0.4.5 force reset of controller
+			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup: Int", false, true]);
 		}
 	}
 	
