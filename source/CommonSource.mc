@@ -19,7 +19,7 @@ function DebugMsg( flag, Msg) {
 	// do we have space? Just Flush every second then should be fine
 	//if ( Msg.length() + Msg.length() > MAX_DEBUG_STRING) {FlushMsg();}
 	
-	if (flag) { mDebugString = mDebugString + Msg + "\n";}
+	if (flag) { mDebugString = mDebugString + Msg + ", ";}
 }
 
 function FlushMsg() {

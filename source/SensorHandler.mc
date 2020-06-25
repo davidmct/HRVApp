@@ -287,7 +287,8 @@ class AntHandler extends Ant.GenericChannel {
     {
 		var payload = msg.getPayload();	
 		
-		$.DebugMsg( true, "m.dt="+msg.messageId);
+		$.DebugMsg( true, "m.dt="+msg.messageId+"mS="+$._mApp.mSensor.mSearching);
+		//if ( msg.messageId == 64) { $.DebugMsg( true, "type="+msg.deviceType+" TT="+msg.transmissionType);}
 			
         //$.DebugMsg( mDebuggingANT, "device ID = " + msg.deviceNumber);
 		//$.DebugMsg( mDebuggingANT, "deviceType = " + msg.deviceType);
@@ -350,7 +351,7 @@ class AntHandler extends Ant.GenericChannel {
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
 	            		// initialise again
 	            		//initialize(mSavedAntID, mHRDataLnk);
-	            		// NOTE SURE WE SHOULD LOSE STRAP
+	            		// NOT SURE WE SHOULD LOSE STRAP
 						mHRDataLnk.mHRMStatusCol = RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
@@ -359,22 +360,25 @@ class AntHandler extends Ant.GenericChannel {
 						$.DebugMsg(true, "CL.O."+mHRDataLnk.isChOpen);
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
+							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", false, false]);
 						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
 	            		$.DebugMsg( true, "e.f");
-						mHRDataLnk.mHRMStatusCol = RED;
-    					mHRDataLnk.mHRMStatus = "Lost strap";
-	    				mHRDataLnk.livePulse = 0;
-						//$._mApp.mSensor.mSearching = true;
-						// update Test controller data  
-    					if ($._mApp.mSensor.mFunc != null) {
-							// no message and not ready, no state change
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
-						}
+	            		
+	            		// Maybe should ignore this state!!
+	            		
+	            		//0.4.5 comment out
+						//mHRDataLnk.mHRMStatusCol = RED;
+    					//mHRDataLnk.mHRMStatus = "Lost strap";
+	    				//mHRDataLnk.livePulse = 0;
+						////$._mApp.mSensor.mSearching = true;
+						//// update Test controller data  
+    					//if ($._mApp.mSensor.mFunc != null) {
+						//	// no message and not ready, no state change
+						//	$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
+						//}
 						// wait for another message?
-						//Sys.println( "RX_FAIL in AntHandler");
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");
@@ -395,7 +399,7 @@ class AntHandler extends Ant.GenericChannel {
 	    		} 
         	} else {
         		//Sys.println("Not an RF EVENT");
-        		$.DebugMsg( true, "e.n."+msg.messageId);
+        		//$.DebugMsg( true, "e.n."+msg.messageId);
         	} 
         } else {
     		//other message!
@@ -405,11 +409,9 @@ class AntHandler extends Ant.GenericChannel {
     }
     
 	function newHRSampleProcessing(beatCount, beatEvent) {
-		//if (mDebuggingANT) {Sys.println("HR-SP");}
 	
 		// check we have a pulse and another beat recorded 
 		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {
-			//mHRDataLnk.isPulseRx = true;
 			// 0.4.4 
 			// don't need two next lines as in msg handler!
 			//mHRDataLnk.mHRMStatusCol = GREEN;
@@ -466,7 +468,7 @@ class AntHandler extends Ant.GenericChannel {
 		}
 		mHRDataLnk.mPrevBeatCount = beatCount;
 		mHRDataLnk.mPrevBeatEvent = beatEvent;
-		//Sys.println("HRSampleProcessing - end");
+		//$.DebugMsg( false, "HRSampleProcessing - end");
 	}
 }
 
