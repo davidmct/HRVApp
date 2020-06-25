@@ -71,7 +71,7 @@ class TestController {
 		mHRmsgTxt = params[0]; // used in view
 		mSensorReady = params[1];	
 		stateInit = params[2];
-		Sys.println("TestControl: onNotify : "+params);
+		$.DebugMsg(false, "TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
 			Sys.println("TC:OnNotify: statemachine forced INIT");

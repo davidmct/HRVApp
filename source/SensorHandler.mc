@@ -87,23 +87,40 @@ class SensorHandler {
     	}
     }
     
+    // clean-up on exit
+    function CloseSensors() {
+ 		//  
+ 		if ( sensor == null) { return;}
+ 		
+  		if (sensor has :stopExtSensor) {
+    		sensor.stopExtSensor(); 
+    	} else if (sensor has :stopIntSensor) {
+    		sensor.stopIntSensor(); 
+    	}   
+    }
+    
     function fSwitchSensor( oldSensor) {
     	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
 
     	if (oldSensor != $._mApp.mSensorTypeExt) {
     		// firstly close down original sensor   
-    		// 0.4.04 make type const		
-       		if (oldSensor == SENSOR_SEARCH) { // ANT
-       			//Sys.println("stopping ext ANT");
-       			if ((sensor != null) && (sensor has :stopExtSensor)) {
-    				sensor.stopExtSensor(); 
-    			}
-    		} else { // internal strap or OHR
-    			//Sys.println("stopping Internal");
-    			if ((sensor != null) && (sensor has :stopIntSensor)) {
-    				sensor.stopIntSensor(); 
-    			}  		
-    		}
+    		
+    		//0.4.5 optimisation 
+    		// no need to check OldSensor as only active one needs to be closed
+    		CloseSensors();
+    		
+    		//// 0.4.04 make type const		
+       		//if (oldSensor == SENSOR_SEARCH) { // ANT
+       		//	//Sys.println("stopping ext ANT");
+       		//	if ((sensor != null) && (sensor has :stopExtSensor)) {
+    		//		sensor.stopExtSensor(); 
+    		//	}
+    		//} else { // internal strap or OHR
+    		//	//Sys.println("stopping Internal");
+    		//	if ((sensor != null) && (sensor has :stopIntSensor)) {
+    		//		sensor.stopIntSensor(); 
+    		//	}  		
+    		//}
     		
     		sensor = null;
     		
@@ -124,17 +141,15 @@ class SensorHandler {
 	    				
     		// update Test controller data 
     		// 0.4.5 This is done in SetUpSensors so remove
-    		if (false) { 
-				if (mFunc != null) {
-					// sensor not ready and need a restart
-					mFunc.invoke(:Update, [ "Switching sensor", false, true]);
-				}
-				
-				// sending above message causes restart anyway !!
-				
-				// kill any running test
-				$._mApp.mTestControl.StateMachine(:RestartControl); 
-			}
+    		//if (false) { 
+			//	if (mFunc != null) {
+			//		// sensor not ready and need a restart
+			//		mFunc.invoke(:Update, [ "Switching sensor", false, true]);
+			//	}				
+			//	// sending above message causes restart anyway !!				
+			//	// kill any running test
+			//	$._mApp.mTestControl.StateMachine(:RestartControl); 
+			//}
 			
 			Sys.println("Sensor switched");
     	} else {
@@ -287,7 +302,8 @@ class AntHandler extends Ant.GenericChannel {
     {
 		var payload = msg.getPayload();	
 		
-		$.DebugMsg( true, "m.dt="+msg.messageId+"mS="+$._mApp.mSensor.mSearching);
+		//$.DebugMsg( true, "m.dt="+msg.messageId+"mS="+$._mApp.mSensor.mSearching);
+
 		//if ( msg.messageId == 64) { $.DebugMsg( true, "type="+msg.deviceType+" TT="+msg.transmissionType);}
 			
         //$.DebugMsg( mDebuggingANT, "device ID = " + msg.deviceNumber);
@@ -319,7 +335,7 @@ class AntHandler extends Ant.GenericChannel {
 			mHRDataLnk.mHRMStatusCol = GREEN;
     		mHRDataLnk.mHRMStatus = "HR data";
     		
-    		$.DebugMsg(true, "d");
+    		//$.DebugMsg(true, "d");
     		
     		// this is also called in sample processing but conditional
     		//0.4.4 - can't see reason for this!!
@@ -345,7 +361,7 @@ class AntHandler extends Ant.GenericChannel {
 	            switch( event) {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
 	            		//Sys.println("ANT:EVENT: closed");
-	            		$.DebugMsg( true, "e.c");
+	            		//$.DebugMsg( true, "e.c");
 	            		//$._mApp.mSensor.openCh();
 	            		// open channel again
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
@@ -357,14 +373,14 @@ class AntHandler extends Ant.GenericChannel {
 	    				mHRDataLnk.livePulse = 0;
 						//$._mApp.mSensor.mSearching = true;
 						// update Test controller data  
-						$.DebugMsg(true, "CL.O."+mHRDataLnk.isChOpen);
+						//$.DebugMsg(true, "CL.O."+mHRDataLnk.isChOpen);
     					if ($._mApp.mSensor.mFunc != null) {
 							// no message and not ready, no state change
 							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", false, false]);
 						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
-	            		$.DebugMsg( true, "e.f");
+	            		//$.DebugMsg( true, "e.f");
 	            		
 	            		// Maybe should ignore this state!!
 	            		
@@ -382,18 +398,18 @@ class AntHandler extends Ant.GenericChannel {
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");
-						$.DebugMsg( true, "e.s");
+						//$.DebugMsg( true, "e.s");
 						$._mApp.mSensor.mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
 						//Sys.println( "ANT: EVENT timeout");
 						////closeCh();
 						////openCh();
-						$.DebugMsg( true, "e.t");
+						//$.DebugMsg( true, "e.t");
 						break;
 	            	default:
 	            		// channel response
-	            		$.DebugMsg( true, "e.d");
+	            		//$.DebugMsg( true, "e.d");
 	            		//Sys.println( "ANT:EVENT: default");
 	            		break;
 	    		} 
@@ -403,7 +419,7 @@ class AntHandler extends Ant.GenericChannel {
         	} 
         } else {
     		//other message!
-    		$.DebugMsg( true, "e."+msg.messageId);
+    		//$.DebugMsg( true, "e."+msg.messageId);
     		//Sys.println( "ANT other message " + msg.messageId);
     	}
     }
@@ -482,11 +498,12 @@ class InternalSensor {
 	
 	function stopIntSensor() {
 		Sys.println("Stopping internal sensors");
-		// suspicion that having no sensors kills optical after testing until long timeout
-		//Sensor.setEnabledSensors( [] );
 		Sensor.unregisterSensorDataListener( );
 		//0.4.5
     	$._mApp.mSensor.mSearching = true;
+    	// suspicion that having no sensors kills optical after testing until long timeout
+    	// Note CIQ ignores off state of ANT HRM. See if this line of code releases it.
+		Sensor.setEnabledSensors( [] );
 	}
 	
 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+

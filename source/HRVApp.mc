@@ -468,6 +468,12 @@ class HRVAnalysis extends App.AppBase {
 		// Dump all interval data to txt file on device
 		if (mDumpIntervals == true) {DumpIntervals();}
 		
+		Sys.println("Closing sensors");
+		if (mSensor != null) {
+			mSensor.CloseSensors();
+			mSensor = null;
+		} 
+		
 		Sys.println("App stopped");
     }
     
