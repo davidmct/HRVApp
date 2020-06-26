@@ -17,6 +17,10 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.4.5 
+// Fixed sensor switch bug
+// new poincare view
+
 //0.4.4
 // Change debug method for time critical parts
 
