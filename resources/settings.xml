@@ -29,6 +29,9 @@
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>				
+	<setting propertyKey="@Properties.pNumberBeatsGraph" title="@Strings.lnumberBeatsGraph" prompt="@Strings.lnumberBeatsGraphPrompt">
+		<settingConfig type="numeric" min="2" max="10" errorMessage="@Strings.lnumberBeatsGraphPrompt" />
+	</setting>
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>

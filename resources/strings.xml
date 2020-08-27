@@ -52,6 +52,8 @@
 	<string id="TimeTooLargeError">Maximum value is 480 seconds</string>
 	<string id="ManualTimeSetTitle">Manual test time</string> 
 	<!--  <string id="ManualTimeSetPrompt">Maximum allowed manual time 600 seconds</string> -->
+	<string id="lnumberBeatsGraph">Beats to show in graph</string>
+	<string id="lnumberBeatsGraphPrompt">Range 2..10></string>
 	<string id="bgColSetTitle">Background colour</string>
 	<string id="bgColSetPrompt">Pick Colour</string>
 	<string id="WHITE">WHITE</string>

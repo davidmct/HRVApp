@@ -17,6 +17,11 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.4.6
+// Added plot of beats over last N sammples
+// Added missed and skipped beat detection
+
+
 //0.4.5 
 // Fixed sensor switch bug
 // new poincare view
@@ -140,6 +145,9 @@ class HRVAnalysis extends App.AppBase {
 	var mHistoryLabel1;
 	var mHistoryLabel2;
 	var mHistoryLabel3;	
+	
+	//0.4.6
+	var mNumberBeatsGraph;
 	
 	var mMenuTitleSize;
 	var mDeviceID;
@@ -548,7 +556,11 @@ class HRVAnalysis extends App.AppBase {
 		}
 		else if (POINCARE_VIEW2 == viewNum) {
 			return new PoincareView(2);
-		}			
+		}	
+		else if (BEATS_VIEW == viewNum) {
+			Sys.println("Beats view setup");
+			return new BeatView();
+		}		
 		else {
 			return new TestView();
 		}
