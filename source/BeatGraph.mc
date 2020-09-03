@@ -200,10 +200,11 @@ class BeatView extends Ui.View {
     	// leave numbering axis for now
     	
     	// Assume last sample of previous batch starts at zero. Move half way to next sample
-    	min = $._mApp.mIntervalSampleBuffer[mNumberEntries-1-mSampleNum] / 2;
-    	max = sumII + min;
+    	// smallest value is 0 as timing from previous beat
+    	min = 0;
+    	max = sumII;
     			
-		Sys.println("Poincare: max, min "+max+" , "+min);
+		//Sys.println("Beatview: max, min "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
@@ -215,14 +216,13 @@ class BeatView extends Ui.View {
 			ceil += 5;
 		} 
 		
-		Sys.println("BeatView: Ceil, floor "+ceil+" , "+floor);
+		//Sys.println("BeatView: Ceil, floor "+ceil+" , "+floor);
 				
 		//var range = ceil - floor;
 		var scaleX = chartHeight / (ceil - floor).toFloat();
 		
-		Sys.println("BeatView scale factor X: "+scaleX);
-		
-		
+		//Sys.println("BeatView scale factor X: "+scaleX);
+				
 		// calc numbers on axis and update label
 		//var mid = floor + (ceil - floor) / 2;
 		//// as display area is tight on Y axis ONLY draw mid value
@@ -238,43 +238,56 @@ class BeatView extends Ui.View {
 		// Draw the data
 		
 		// set colour of rectangles. can't see white on white :-)
-		if ($._mApp.bgColSet == BLACK) {
-			MapSetColour(dc, WHITE, $._mApp.bgColSet);
-		} else {
-			// SHOULDn'T this be BLACK, WHITE??
-			MapSetColour(dc, BLACK, $._mApp.bgColSet);	
-		}
+		//if ($._mApp.bgColSet == BLACK) {
+		//	MapSetColour(dc, WHITE, $._mApp.bgColSet);
+		//} else {
+		//	// SHOULDn'T this be BLACK, WHITE??
+		//	MapSetColour(dc, BLACK, $._mApp.bgColSet);	
+		//}
 		
-		
+		dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 		// now draw graph
 		var sample;
 		var incSum = min;
 		
 		// how far up Y axis to start line in pixels
-		var yBase = ((floor+10) * scaleX).toNumber();
+		var yBase = ((floor+200) * scaleX).toNumber();
 		// where to start HR line from on X axis. Min is half 1st sample
-		var xBase = ((min-floor) * scaleX).toNumber();
 		
-		// need a line to first pulse
-		dc.drawLine( leftX, floorY-yBase, leftX+xBase, floorY);		
+		var StartX_unscaled = $._mApp.mIntervalSampleBuffer[mNumberEntries-1-mSampleNum] / 2;
+		var xBase = ((StartX_unscaled-floor) * scaleX).toNumber();
+		
+		// need a line to first pulse - should be on same Y point
+		var mYBaseline = floorY-yBase;
+				
+		var firstPass = true;
+		var mXcoord = 0;
+		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
+		var cOffset = mYBaseline-cHeight;
 		
 		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
 			
-			var mXcoord = ((sample - floor) * scaleX).toNumber();
+			if (firstPass ==true) {
+				// offset half of pulse
+				dc.drawLine( leftX, mYBaseline, leftX+xBase, mYBaseline);					
+				firstPass = false;
+				mXcoord = 0;
+			} else {	
+				mXcoord = ((sample - floor) * scaleX).toNumber();
+				// draw line from previous sample or Y axis to sample point
+				dc.drawLine( leftX+xBase, mYBaseline, leftX+mXcoord+xBase, mYBaseline);
+			}
 			
-			var a = leftX+mXcoord+xBase;
-			var b = floorY-yBase;
-			Sys.println("BestView: mXcoord, xBase, leftX+mXcoord+xBase, floorY-yBase, ceilY "+mXcoord+" "+a+" ", floorY-yBase, ceilY
+			//var a = leftX+mXcoord+xBase;
+			//var b = cHeight;
+			//Sys.println("BestView: Sample: "+sample+" Rect x="+a+" rect Y="+mYBaseline+" rect H="+b);
 			
 			// draw spike from Y base to top of chart x, y, w, h		
-			dc.fillRectangle(leftX+mXcoord+xBase, floorY-yBase, 4, ceilY);			
+			dc.fillRectangle(leftX+mXcoord+xBase, cOffset, 3, cHeight);			
 			
 			// move base
 			xBase += mXcoord;
-						
-			// draw line from previous sample or Y axis to sample point
-			dc.drawLine( leftX+xBase, floorY-yBase, 4, floorY-yBase);
 						
 		} // end sample loop
 		
