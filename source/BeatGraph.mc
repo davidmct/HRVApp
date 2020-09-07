@@ -36,34 +36,6 @@ class BeatView extends Ui.View {
     hidden var mTitleLoc = [50,11]; // %
 	hidden var mTitleLocS = [0, 0];	
 	hidden var mTitleLabels = ["Beats"];
-	
-	// coordinates of set of labels as %
-	// split to 1D array to save memory
-	// RR ms, TopValY, MidValY, LowerValY, TopValX, MidValX, LowerValX, 
-	hidden var mLabelValueLocX = [ 50, 11, 11, 11, 75, 50, 29];
-	hidden var mLabelValueLocY = [ 95, 82, 50, 18, 86, 86, 86];
-	hidden var mLabelInterval = "RR ms";
-		
-	// x%, y%, width/height. 
-	hidden var mRectHorizWH = 65;//64
-	hidden var mRectHorizX = 17; // 18
-	hidden var mRectHorizY = [ 82];//[ 17, 50, 82]
-
-	hidden var mRectVertWH = 65; //64
-	hidden var mRectVertY = 17; //18
-	hidden var mRectVertX = [ 17];//[ 17, 50, 82]
-	
-	// scaled variables
-	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
-	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
-	
-	hidden var mRectHorizWHS = 0;
-	hidden var mRectHorizXS = 0;
-	hidden var mRectHorizYS = new [mRectHorizY.size() ];
-	
-	hidden var mRectVertWHS = 0;
-	hidden var mRectVertYS = 0;
-	hidden var mRectVertXS = new [mRectVertX.size() ];
 		
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_XTINY;
@@ -111,24 +83,7 @@ class BeatView extends Ui.View {
 		
 		// convert % to numbers based on screen size
 		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
-				
-		for( var i=0; i < mLabelValueLocXS.size(); i++) {
-			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
-			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
-		}	
-								
-		for( var i=0; i < mRectHorizYS.size(); i++) {
-			mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
-		}	
-		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
-		mRectHorizXS = (mRectHorizX * mScaleX)/100;
-		
-		for( var i=0; i < mRectVertXS.size(); i++) {
-			mRectVertXS[i] = (mRectVertX[i] * mScaleY)/100;		
-		}	
-		mRectVertWHS = (mRectVertWH * mScaleX)/100;
-		mRectVertYS = (mRectVertY * mScaleX)/100;
-						
+										
 		return true;
 	}
 	
@@ -148,20 +103,8 @@ class BeatView extends Ui.View {
 		dc.clear();
 		
 		// draw lines
-		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
-
-		for (var i=0; i < mRectHorizYS.size(); i++) {
-			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
-		}
-		for (var i=0; i < mRectVertXS.size(); i++) {
-			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
-		}
-		
-	
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
-		// draw "RR ms"
-		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, mLabelInterval, mJust);
 		
     	// Range determined by sum of previous N samples 
     	var max;
@@ -222,28 +165,6 @@ class BeatView extends Ui.View {
 		var scaleX = chartHeight / (ceil - floor).toFloat();
 		
 		//Sys.println("BeatView scale factor X: "+scaleX);
-				
-		// calc numbers on axis and update label
-		//var mid = floor + (ceil - floor) / 2;
-		//// as display area is tight on Y axis ONLY draw mid value
-		
-		//dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);			
-		////dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
-		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
-		////dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);		
-		//dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
-		//dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
-		//dc.drawText( mLabelValueLocXS[6], mLabelValueLocYS[6], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);
-			
-		// Draw the data
-		
-		// set colour of rectangles. can't see white on white :-)
-		//if ($._mApp.bgColSet == BLACK) {
-		//	MapSetColour(dc, WHITE, $._mApp.bgColSet);
-		//} else {
-		//	// SHOULDn'T this be BLACK, WHITE??
-		//	MapSetColour(dc, BLACK, $._mApp.bgColSet);	
-		//}
 		
 		dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 		// now draw graph
@@ -265,7 +186,8 @@ class BeatView extends Ui.View {
 		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
 		var cOffset = mYBaseline-cHeight;
 		
-		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries; i++ ){		
+		// -1 on end test as showing one more than needed
+		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
 			
 			if (firstPass ==true) {
