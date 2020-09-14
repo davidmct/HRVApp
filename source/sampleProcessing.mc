@@ -157,30 +157,35 @@ class SampleProcessing {
 			return getSample(index-1);
 		}
 	}
+	
+(:newSampleProcessing)
+	// function to threshold data and set flags on interval status
+	function fThresholdSample() {
+	
+	
+	
+	
+	}
 
 (:newSampleProcessing) 	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		Sys.println("new sampling called");
-				// shouldn't capture data
-		if (!isTesting) {return;}
-		
-		if (livePulse == 0) {
-			// could happen on first loop - avoids divide by 0
+
+		if (!isTesting) || (livePulse == 0) {
+			// Don't capture data if not testing OR
+			// livePulse== 0 could happen on first loop - avoids divide by 0
 			// If we still have an interval could create BPM from that...
-			//Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
+			// Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
 			return;
 		}
-		
-		// Calculate estimated ranges for reliable data
-		var maxMs = 60000 / (livePulse * 0.7);
-		var minMs = 60000 / (livePulse * 1.4);
 		
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
 		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
 		
-		// need to check whether long gap is caused by multiple beats in gap and handle
-		// eg missed beats ie beatsInGap > 1
-					
+		// Calculate estimated ranges for reliable data
+		var maxMs = 60000 / (livePulse * 0.7);
+		var minMs = 60000 / (livePulse * 1.4);
+						
 		// Only update hrv data if testing started, & values look to be error free	
 		
 		// special case of 1st sample as previous will be zero!
