@@ -17,6 +17,9 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.4.7
+// Can I add payment link to settings???
+
 //0.4.6
 // Added plot of beats over last N sammples
 // Added missed and skipped beat detection

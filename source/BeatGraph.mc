@@ -15,6 +15,20 @@ using Toybox.System as Sys;
 //		repeat for all beats
 // IF we had double/skipped indicator could draw in different colour!!
 
+// Code to add
+// 1. Colour pulses
+//	    Lower threshold exceeded = Pink
+//	    Upper threshold exceeded = Purple
+//	    Add text showing % delta from average
+// 2. Average line
+//		Blue line showing average at each point (use point X value to plot?). May need to recalc as not stored. Also watch for fewer samples than # beats to plot
+
+// Data needed
+// Threshold average from last 5 accepted as OK points
+// Need to have scale for Y axis based on average range ? Needs to be entire II range as per Poincare.
+// Point status as per sample processing
+
+
 
 class BeatView extends Ui.View {
 

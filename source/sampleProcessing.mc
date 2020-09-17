@@ -74,6 +74,45 @@ using Toybox.Lang as Lang;
 
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
+
+// 0.4.7
+// Need to pick what upper and lower thresholds to choose: UpperThreshold and LowerThreshold
+// [Very tight, tight, nominal, loose, very loose] matches [ ... ] set of % variances allowed
+
+// Need to update Count of Lower and Upper threshold exceeded
+
+// Status bits
+//   Use two integers as bit fields bit[0] = current, bit[1] = previous
+//   bit = 0 means OK, bit = 1 means LOW or HIGH depending on variable
+// status combinations
+// OK, OK -> 
+// OK High (H)
+// OK L
+// L H
+// L L
+// H L
+// H H
+
+// Init
+//	Setup thresholds being used setup (settings need a pick list), status all OK
+//	StartThresholding = false
+
+// Sample #n arrived
+// If n=0 then as now
+// if n < filter length
+//		status  = oK for current sample
+//		add sample
+//		update stats and rtn
+// if n >= filter length AND not (StartThresholding)
+//		StartThresholding = true
+//		Add sample
+//		Work out average of previous 5 samples
+// else
+// 		Add sample??
+//		Test against threshold
+//		Set status of sample
+//		check this and ;last sample
+
 class SampleProcessing {
 
 	// these need to be moved from ANThandler and references changed
@@ -171,7 +210,7 @@ class SampleProcessing {
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		Sys.println("new sampling called");
 
-		if (!isTesting) || (livePulse == 0) {
+		if ((!isTesting) || (livePulse == 0)) {
 			// Don't capture data if not testing OR
 			// livePulse== 0 could happen on first loop - avoids divide by 0
 			// If we still have an interval could create BPM from that...
