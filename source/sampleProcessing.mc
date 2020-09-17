@@ -76,22 +76,22 @@ using Toybox.Lang as Lang;
 
 
 // 0.4.7
-// Need to pick what upper and lower thresholds to choose: UpperThreshold and LowerThreshold
+// Need to pick what Long and Short thresholds to choose: LongThreshold and ShortThreshold
 // [Very tight, tight, nominal, loose, very loose] matches [ ... ] set of % variances allowed
 
 // Need to update Count of Lower and Upper threshold exceeded
 
 // Status bits
 //   Use two integers as bit fields bit[0] = current, bit[1] = previous
-//   bit = 0 means OK, bit = 1 means LOW or HIGH depending on variable
-// status combinations
-// OK, OK -> 
-// OK High (H)
-// OK L
-// L H
-// L L
-// H L
-// H H
+//   bit = 0 means OK, bit = 1 means LONG or SHORT depending on variable
+// status combinations and action
+// OK, OK -> add latest sample to stats
+// OK S -> wait
+// OK L -> wait
+// L S -> inc ectopic, missed beat
+// L L -> inc, heart slowing down?
+// S L -> inc, double beat
+// S S -> inc, ??? maybe change of rate up
 
 // Init
 //	Setup thresholds being used setup (settings need a pick list), status all OK
@@ -111,7 +111,11 @@ using Toybox.Lang as Lang;
 // 		Add sample??
 //		Test against threshold
 //		Set status of sample
-//		check this and ;last sample
+//		check this and last sample against status combinations and take action
+//		if not OK then rtn else ???
+
+// last two sample values should be in buffer
+// need to increment counts of ectopic beats
 
 class SampleProcessing {
 
