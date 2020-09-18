@@ -17,13 +17,18 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-//0.4.7
-// Can I add payment link to settings???
 
 //0.4.6
 // Added plot of beats over last N sammples
 // Added missed and skipped beat detection
-
+// Can I add payment link to settings???
+// Need to UPDATE
+// 1. Menu system for setting thresholds
+// 2. FIT file update using new variables
+// 3. Update stats pages with new variables for beats
+// 4. Do I add double/missed to History display and store??
+// 5. Sample processing itself
+// 6. Beat display chart
 
 //0.4.5 
 // Fixed sensor switch bug

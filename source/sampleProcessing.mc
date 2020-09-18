@@ -76,14 +76,17 @@ using Toybox.Lang as Lang;
 
 
 // 0.4.7
-// Need to pick what Long and Short thresholds to choose: LongThreshold and ShortThreshold
+// Need to pick what Upper and lower delta thresholds to choose: UpperThreshold ( II has gone longer) and LowerThreshold (II gone shorter)
+// Thresholds are % values compared to running average to accommodate changing base heart rate. Absolute number is not relative to that beat
+// For user define in terms of tightness
 // [Very tight, tight, nominal, loose, very loose] matches [ ... ] set of % variances allowed
+// use enum or dictionary?
 
 // Need to update Count of Lower and Upper threshold exceeded
 
 // Status bits
 //   Use two integers as bit fields bit[0] = current, bit[1] = previous
-//   bit = 0 means OK, bit = 1 means LONG or SHORT depending on variable
+//   bit = 0 means OK, bit = 1 means LONG (over upperthreshold) or SHORT (below lower threshold) depending on variable
 // status combinations and action
 // OK, OK -> add latest sample to stats
 // OK S -> wait
@@ -142,6 +145,17 @@ class SampleProcessing {
 	var mNN20;
 	var mpNN20;
 	
+	// 0.4.6 variables for ectopic beats
+	var vMissedBeatCnt;
+	var vDoubleBeatCnt;
+	hidden var vRunningAvg;
+	// % permitted deviation from average 
+	var vUpperThesholdSet;
+	var vLowerThesholdSet;
+	// bit flags for samples exceeding limits
+	var vUpperFlag;
+	var vLowerFlag;
+	
 	// index always points to next available slot
 	hidden var mSampleIndex;
 	
@@ -180,6 +194,18 @@ class SampleProcessing {
 		mpNN20 = 0.0;
 		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
+		vMissedBeatCnt = 0;
+		vDoubleBeatCnt = 0;
+		vRunningAvg = 0.0;
+		
+		// These should be set in main INIT
+		// NEED TO FIX TO CORRECT CODE
+		vUpperThesholdSet = 0.0;
+		vLowerThesholdSet = 0.0;
+
+		// need to be int
+		vUpperFlag = 0;
+		vLowerFlag = 0;
 	}
 	
 	function getNumberOfSamples() {
