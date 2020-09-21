@@ -150,8 +150,8 @@ class SampleProcessing {
 	var vDoubleBeatCnt;
 	hidden var vRunningAvg;
 	// % permitted deviation from average 
-	var vUpperThesholdSet;
-	var vLowerThesholdSet;
+	var vUpperThesholdSet; // long % over
+	var vLowerThesholdSet; // short period under %
 	// bit flags for samples exceeding limits
 	var vUpperFlag;
 	var vLowerFlag;
@@ -226,6 +226,33 @@ class SampleProcessing {
 			return getSample(index-1);
 		}
 	}
+
+(:newSampleProcessing)
+	// function to return average of N samples from buffer starting at index
+	// for now just use simplistic sum and divide approach
+	// returns float
+	function fRunningAverage( start, length) {
+		var avg = 0.0;
+		var iterations = length; // default value - we have enough samples
+		var sum = 0;
+		
+		// how many samples do we have in bugger from start. Number samples also next free slot so -1
+		var cSamples = getNumberOfSamples();
+		if ((start + length) > (cSamples - 1)) {
+			// not enough samples for length so make do
+			iterations = cSamples - 1 - (start+length);
+		}
+		
+		var i;
+		for (i=0; i < iterations; i++) {
+			sum += $._mApp.mIntervalSampleBuffer[start+i];
+		}
+	
+		avg = sum.toFloat() / iterations;
+		
+		Sys.println("Running Average of "+iterations+" samples gives "+avg+" starting from "+start);
+		return avg;	
+	}	
 	
 (:newSampleProcessing)
 	// function to threshold data and set flags on interval status

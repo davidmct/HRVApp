@@ -31,6 +31,8 @@ using Toybox.System as Sys;
 //			2. scale is based on 1st average and current min/max II delta as upper and lower limts. Then can plot labels. Maybe too compressed scale
 // NOTE. Only actual II value is stored and not delta. min/max gloabl variables are delta based not II 
 
+
+// RunningAverage( start, length) - function in sample processing
 // Data needed
 // Threshold average from last 5 accepted as OK points
 // Need to have scale for Y axis based on average range ? Needs to be entire II range as per Poincare.
