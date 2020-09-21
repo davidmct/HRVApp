@@ -199,7 +199,7 @@ class SampleProcessing {
 		vRunningAvg = 0.0;
 		
 		// These should be set in main INIT
-		// NEED TO FIX TO CORRECT CODE
+		// NEED TO FIX TO CORRECT CODE once variables created
 		vUpperThesholdSet = 0.0;
 		vLowerThesholdSet = 0.0;
 

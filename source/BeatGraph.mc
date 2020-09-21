@@ -22,6 +22,14 @@ using Toybox.System as Sys;
 //	    Add text showing % delta from average
 // 2. Average line
 //		Blue line showing average at each point (use point X value to plot?). May need to recalc as not stored. Also watch for fewer samples than # beats to plot
+//		Plot delta of current II compared to average of last 5 samples - on ectopic beat then avg does not include ecoptic beat ie needs to be 5 preceeding these events. 
+//			Plot % difference. 0% is mid-point of scale
+//		avg line should be scaled for min/max of current set of data ie set of averages for all points to be displayed then make centre mid point
+//			Two approaches here
+//			1. avg line scale is min/max of plotted data set. Shows changing average magnified. Possible issue if not changing much as would give exaggerated scale - need to test
+//				and expand range
+//			2. scale is based on 1st average and current min/max II delta as upper and lower limts. Then can plot labels. Maybe too compressed scale
+// NOTE. Only actual II value is stored and not delta. min/max gloabl variables are delta based not II 
 
 // Data needed
 // Threshold average from last 5 accepted as OK points
