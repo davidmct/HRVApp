@@ -82,6 +82,19 @@
 	<string id="LabelHistTitle2">History Entry 2</string> 
 	<string id="LabelHistTitle3">History Entry 3</string> 
 	<string id="LabelHistTitlePrompt">Select History Entry</string> 	
+	
+	<string id="LongThresholdtTitle">Missing Pulse Threshold</string>
+	<string id="ShortThresholdtTitle">Double Pulse Threshold</string> 
+	<string id="ThresholdPrompt">Select Threshold</string> 
+
+	<string id="VTIGHT">Very tight</string> 
+	<string id="TIGHT">Tight</string> 
+	<string id="NOMINAL">Nominal</string>
+	<string id="LOOSE">Loose</string>
+	<string id="VLOOSE">Very Loose</string>
+	
+	<string id="PayURLTitle">Please support</string> 
+	<string id="PayURLString">xxxxx</string>
 		
 	<!-- Number Picker -->
     <string id="numberPickerTitle">mm:ss</string>

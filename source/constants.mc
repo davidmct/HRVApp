@@ -61,8 +61,11 @@ var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRA
 	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
 	
 // Ectopic beat thresholds as %
+// can pull value using var = mLo...String[ "Very tight"];
+
 var mLongThresholdString = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
 var mShortThresholdString = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+var mThresholdStringMap = [ "Very tight", "Tight", "Nominal", "Loose", "Very loose"];
 
 // HISTORY VIEW SELECTOR
 

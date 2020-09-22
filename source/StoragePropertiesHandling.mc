@@ -279,7 +279,9 @@ class HRVStorageHandler {
 		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel3);	
 		
 		//0.4.6
-		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();			
+		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
+		
+		// NEED TO ADD READ OF Thresholds and map to actual values		
 
 	}
 
