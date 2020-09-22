@@ -59,6 +59,10 @@ var colours =[Graphics.COLOR_WHITE, Graphics.COLOR_LT_GRAY,Graphics.COLOR_DK_GRA
 var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
 	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
 	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
+	
+// Ectopic beat thresholds as %
+var mLongThresholdString = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+var mShortThresholdString = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
 
 // HISTORY VIEW SELECTOR
 

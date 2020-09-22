@@ -177,6 +177,10 @@ class HRVAnalysis extends App.AppBase {
     var mSampleProc; // instance of sample processor
     var mFitControl;
     
+    // % permitted deviation from average for ectopic beats
+	var vUpperThresholdSet; // long % over
+	var vLowerThresholdSet; // short period under %
+    
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;

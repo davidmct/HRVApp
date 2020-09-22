@@ -149,9 +149,7 @@ class SampleProcessing {
 	var vMissedBeatCnt;
 	var vDoubleBeatCnt;
 	hidden var vRunningAvg;
-	// % permitted deviation from average 
-	var vUpperThesholdSet; // long % over
-	var vLowerThesholdSet; // short period under %
+
 	// bit flags for samples exceeding limits
 	var vUpperFlag;
 	var vLowerFlag;
@@ -197,11 +195,6 @@ class SampleProcessing {
 		vMissedBeatCnt = 0;
 		vDoubleBeatCnt = 0;
 		vRunningAvg = 0.0;
-		
-		// These should be set in main INIT
-		// NEED TO FIX TO CORRECT CODE once variables created
-		vUpperThesholdSet = 0.0;
-		vLowerThesholdSet = 0.0;
 
 		// need to be int
 		vUpperFlag = 0;

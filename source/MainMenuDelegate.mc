@@ -83,6 +83,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         	// create long sub-menus
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
 	        menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
+	        menu.addItem(new Ui.MenuItem("Threshold", null, "threshold", null));
 	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
 	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
 	        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));

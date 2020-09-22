@@ -14,6 +14,12 @@ class SettingsMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
+        else if ( id.equals("threshold"))   {
+ 			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Threshold")});
+	        menu.addItem(new Ui.MenuItem("Upper", null, "upper", null));     
+	        menu.addItem(new Ui.MenuItem("Lower", null, "lower", null));   	          
+ 	        Ui.pushView(menu, new ThresholdMenuDelegate(), Ui.SLIDE_IMMEDIATE );       
+        }
         else if ( id.equals("colour"))   {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
 	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));

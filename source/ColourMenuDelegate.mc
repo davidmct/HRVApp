@@ -33,17 +33,6 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         else if( id.equals("labels"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Label Colour")});
             AddColourItems( menu);
-            // get labels for colours ie key 
-            //var mKeys = $.mColourNumbersString.keys();
-            //var i;
-            //for (i = 0; i < $.mColourNumbersString.size() ; i++) {
-            //	var mColName = mKeys[i].toString();
-            //	var mColValue = $.mColourNumbersString.get(mColName);
-            //	if (mColValue != TRANSPARENT) {
-            //		//Sys.println("Label menu item colour: " + mColName);
-	        //		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
-	        //	}
-        	//}
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setLabel)), Ui.SLIDE_IMMEDIATE );
         } else if( id.equals("text"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Text Colour")});
