@@ -18,9 +18,9 @@ class ThresholdListMenuDelegate extends Ui.Menu2InputDelegate {
         // id is dictionary entry
         var value;
         if (mkeySet == 0) {
-        	value = $.mLongThresholdString.get(id);
+        	value = $.mLongThresholdMap.get(id);
         } else {
-        	value = $.mShortThresholdString.get(id);
+        	value = $.mShortThresholdMap.get(id);
         }	
         
         mFunc.invoke( value);   
@@ -43,9 +43,9 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
 	function AddThresholdItems( menu) {
 		// get labels for thresholds ie key 
 		// as both thresholds have the same name then can use just one for labels
-        var mKeys = $.mLongThresholdString.keys();
+        var mKeys = $.mLongThresholdMap.keys();
         var i;
-        for (i = 0; i < $.mLongThresholdString.size() ; i++) {
+        for (i = 0; i < $.mLongThresholdMap.size() ; i++) {
         	var mColName = mKeys[i].toString();
         	Sys.println("Add threshold menu item "+mColName+" index "+i);
         	menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));

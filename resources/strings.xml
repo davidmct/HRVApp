@@ -94,7 +94,7 @@
 	<string id="VLOOSE">Very Loose</string>
 	
 	<string id="PayURLTitle">Please support</string> 
-	<string id="PayURLString">xxxxx</string>
+	<!-- <string id="PayURLString">xxxxx</string> -->
 		
 	<!-- Number Picker -->
     <string id="numberPickerTitle">mm:ss</string>

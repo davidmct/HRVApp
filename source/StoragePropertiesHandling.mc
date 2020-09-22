@@ -281,8 +281,11 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
 		
-		// NEED TO ADD READ OF Thresholds and map to actual values		
-
+		// NEED TO ADD READ OF Thresholds and map to actual values
+		var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
+		$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
+		index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
+		$._mApp.vLowerThresholdSet = mShortThresholdMap[ mThresholdStrings[index]];
 	}
 
 (:storageMethod)	

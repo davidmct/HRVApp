@@ -40,5 +40,5 @@
 	
 	<property id="pLongThresholdIndex"  type="number">2</property>
 	<property id="pShortThresholdIndex" type="number">2</property>
-	<property id="pPaypalRef" type="url">xxxxx</property>
+	<property id="pPaypalRef" type="string">www.paypal.me</property>
 </properties>

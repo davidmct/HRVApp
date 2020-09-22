@@ -215,8 +215,8 @@
 			<listEntry value="4">@Strings.VLOOSE</listEntry>
 		</settingConfig>					
 	</setting>	
-	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLTitle" helpurl="@Strings.PayURLString">
-	<settingConfig type="url"  readonly="true" </settingConfig>	
+	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLTitle"> <!--helpUrl="@Strings.PayURLString">-->
+	<settingConfig type="url"  readonly="true" />	
 	</setting>
 	
 </settings>
