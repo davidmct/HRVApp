@@ -376,8 +376,11 @@ class HRVStorageHandler {
 		var i = 0;
 		do {
 			index = i;
-			value = values[i];		
+			value = values[i];	
+			i++;	
 		} while (( i < values.size() ) && (value != mThreshold));
+		
+		Sys.println("Upper threshold property save : "+index);	
 		$._mApp.Properties.setValue("pLongThresholdIndex", index);
 		
 		mThreshold = $._mApp.vLowerThresholdSet; 
@@ -386,8 +389,11 @@ class HRVStorageHandler {
 		i = 0;
 		do {
 			index = i;
-			value = values[i];		
-		} while (( i < values.size() ) && (value != mThreshold));		
+			value = values[i];	
+			i++;	
+		} while (( i < values.size() ) && (value != mThreshold));
+		
+		Sys.println("Lower threshold property save : "+index);			
 		$._mApp.Properties.setValue("pShortThresholdIndex", index);	
 			
 	}
@@ -432,8 +438,11 @@ class HRVStorageHandler {
 		var i = 0;
 		do {
 			index = i;
-			value = values[i];		
+			value = values[i];	
+			i++;	
 		} while (( i < values.size() ) && (value != mThreshold));
+		
+		Sys.println("Upper threshold property save : "+index);
 		$._mApp.setProperty("pLongThresholdIndex", index);
 		
 		mThreshold = $._mApp.vLowerThresholdSet; 
@@ -442,8 +451,11 @@ class HRVStorageHandler {
 		i = 0;
 		do {
 			index = i;
-			value = values[i];		
-		} while (( i < values.size() ) && (value != mThreshold));		
+			value = values[i];	
+			i++;	
+		} while (( i < values.size() ) && (value != mThreshold));	
+		
+		Sys.println("Lower threshold property save : "+index);	
 		$._mApp.setProperty("pShortThresholdIndex", index);	
 			
 

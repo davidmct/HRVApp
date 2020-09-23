@@ -79,17 +79,46 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 				}				
 			}          
         }        
-        else if( id.equals("settings") ) {
-        	// create long sub-menus
-	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Settings")});
-	        menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
-	        menu.addItem(new Ui.MenuItem("Threshold", null, "threshold", null));
-	        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
-	        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
-	        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));
-	        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));
-	        Ui.pushView(menu, new SettingsMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+        else if ( id.equals("timer")) {
+     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
+	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
+	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
+        else if ( id.equals("threshold"))   {
+ 			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Threshold")});
+	        menu.addItem(new Ui.MenuItem("Upper", null, "upper", null));     
+	        menu.addItem(new Ui.MenuItem("Lower", null, "lower", null));   	          
+ 	        Ui.pushView(menu, new ThresholdMenuDelegate(), Ui.SLIDE_IMMEDIATE );       
+        }
+        else if ( id.equals("colour"))   {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
+	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
+	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
+	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	 
+	        //0.4.3
+	        menu.addItem(new Ui.MenuItem("History 1", null, "history1", null));
+	       	menu.addItem(new Ui.MenuItem("History 2", null, "history2", null));
+	        menu.addItem(new Ui.MenuItem("History 3", null, "history3", null));	               
+	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+        }
+        else if ( id.equals("sound"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_IMMEDIATE );     
+        }
+        else if ( id.equals("vibration"))  {
+            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Vibration")});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_IMMEDIATE );  
+        }
+        else if (id.equals("reset")) {
+	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
+	        menu.addItem(new Ui.MenuItem("Results", null, "results", null));
+	        menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
+	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+        }  
         else if( id.equals("about"))  {
         	// build simple menu with version from system file
         	// Generate a new Menu for mainmenu
@@ -103,6 +132,14 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
     }
+    
+    function setSound(value) {
+		if (value == 1) { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
+    }
+
+    function setVibe(value) {
+		if (value == 1) { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
+    } 
     
     function onBack() {
     	//0.4.3 - should save changes to any properties

@@ -86,8 +86,13 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         menu.addItem(new Ui.MenuItem("Source", null, "source", null));  
         menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
         menu.addItem(new Ui.MenuItem("History view", null, "historySelection", null));       
-        menu.addItem(new Ui.MenuItem("Load Intervals", null, "load", null));        
-        menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
+        menu.addItem(new Ui.MenuItem("Load Intervals", null, "load", null)); 
+       	menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
+        menu.addItem(new Ui.MenuItem("Threshold", null, "threshold", null));
+        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
+        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
+        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));   
+        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));    
         menu.addItem(new Ui.MenuItem("About", null, "about", null));
         Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
 		return true;
