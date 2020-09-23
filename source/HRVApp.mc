@@ -29,6 +29,7 @@ using Toybox.Time.Gregorian;
 // 4. Do I add double/missed to History display and store??
 // 5. Sample processing itself
 // 6. Beat display chart
+// 7. Restructure ,emus to save memory - move settings up a level
 
 //0.4.5 
 // Fixed sensor switch bug
