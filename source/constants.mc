@@ -24,21 +24,21 @@ enum {
 }
 
 // Colors index. Arrays start at zero
-const 	WHITE = 0;
-const	LT_GRAY = 1;
-const	DK_GRAY = 2;
-const	BLACK = 3;
-const	RED = 4;
-const	DK_RED = 5;
-const	ORANGE = 6;
-const	YELLOW = 7;
-const	GREEN = 8;
-const	DK_GREEN = 9;
-const	BLUE = 10;
-const	DK_BLUE = 11;
-const	PURPLE = 12;
-const	PINK = 13;
-const	TRANSPARENT = 14;
+//const 	WHITE = 0;
+//const	LT_GRAY = 1;
+//const	DK_GRAY = 2;
+//const	BLACK = 3;
+//const	RED = 4;
+//const	DK_RED = 5;
+//const	ORANGE = 6;
+//const	YELLOW = 7;
+//const	GREEN = 8;
+//const	DK_GREEN = 9;
+//const	BLUE = 10;
+//const	DK_BLUE = 11;
+//const	PURPLE = 12;
+//const	PINK = 13;
+//const	TRANSPARENT = 14;
 
 // colour management
 
@@ -56,9 +56,9 @@ var colours =[Graphics.COLOR_WHITE, Graphics.COLOR_LT_GRAY,Graphics.COLOR_DK_GRA
 
 
 // for menu construction .. and could get rid of enum and change map at some point
-var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
-	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
-	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
+//var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
+//	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
+//	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
 	
 // Ectopic beat thresholds as %
 // can pull value using var = mLo...String[ "Very tight"];

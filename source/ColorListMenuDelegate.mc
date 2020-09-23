@@ -11,9 +11,10 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
    	function onSelect(item) {
         var id = item.getId();
         // id is dictionary entry
-        var value = $.mColourNumbersString.get(id);
+        var ColStringDict = Ui.loadResource(Rez.JsonData.jsonColourDict);
+        var value = ColStringDict.get(id);
         
-        if (value < 0 || value >= $.mColourNumbersString.size()) {
+        if (value < 0 || value >= ColStringDict.size()) {
         	// opps
         	var mErr = new myException( "ColourListMenuDelegate: colour out of range");
         } else {

@@ -23,13 +23,16 @@ using Toybox.Time.Gregorian;
 // Added missed and skipped beat detection
 // Can I add payment link to settings???
 // Need to UPDATE
-// 1. Menu system for setting thresholds
+// 1. Menu system for setting thresholds - DONE
 // 2. FIT file update using new variables
 // 3. Update stats pages with new variables for beats
 // 4. Do I add double/missed to History display and store??
 // 5. Sample processing itself
 // 6. Beat display chart
-// 7. Restructure ,emus to save memory - move settings up a level
+// 7. Restructure ,emus to save memory - move settings up a level DONE. Little saving
+// 8. Can anything be moved to JSON data?
+//		-colours and mColourNumbersString good candiates but would need to hard code values. can remove enum as well
+//		- also possibly history maps and then threshold (needed on save and menu operation
 
 //0.4.5 
 // Fixed sensor switch bug
