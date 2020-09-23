@@ -50,7 +50,10 @@ class HRVStorageHandler {
 		//0.4.3
 		$._mApp.Properties.setValue("pHistLabel1", 1);	
 		$._mApp.Properties.setValue("pHistLabel2", 6);	
-		$._mApp.Properties.setValue("pHistLabel3", 7);					
+		$._mApp.Properties.setValue("pHistLabel3", 7);	
+		
+		//0.4.6
+		$._mApp.Properties.setValue("pNumberBeatsGraph", 10);					
 	
 	}
 
@@ -78,6 +81,9 @@ class HRVStorageHandler {
 		$._mApp.setProperty("pHistLabel1", 1);	
 		$._mApp.setProperty("pHistLabel2", 6);	
 		$._mApp.setProperty("pHistLabel3", 7);		
+		
+		//0.4.6
+		$._mApp.setProperty("pNumberBeatsGraph", 10);	
 	
 	}
 	
@@ -271,6 +277,15 @@ class HRVStorageHandler {
 		//$._mApp.mHistorySelectFlags = (1 << $._mApp.mHistoryLabel1);
 		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel2);
 		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel3);	
+		
+		//0.4.6
+		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
+		
+		// NEED TO ADD READ OF Thresholds and map to actual values
+		var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
+		$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
+		index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
+		$._mApp.vLowerThresholdSet = mShortThresholdMap[ mThresholdStrings[index]];
 	}
 
 (:storageMethod)	
@@ -308,6 +323,8 @@ class HRVStorageHandler {
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}
+			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();				
+
 	}
 
 (:storageMethod)	
@@ -337,6 +354,10 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("pHistLabel1", $._mApp.mHistoryLabel1);
 		$._mApp.Properties.setValue("pHistLabel2", $._mApp.mHistoryLabel2);
 		$._mApp.Properties.setValue("pHistLabel3", $._mApp.mHistoryLabel3);
+		
+		//0.4.6
+		$._mApp.Properties.setValue("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);				
+		
 	}
 
 (:preCIQ24)	
@@ -365,6 +386,10 @@ class HRVStorageHandler {
 		$._mApp.setProperty("pHistLabel1", $._mApp.mHistoryLabel1);
 		$._mApp.setProperty("pHistLabel2", $._mApp.mHistoryLabel2);
 		$._mApp.setProperty("pHistLabel3", $._mApp.mHistoryLabel3);
+		
+		//0.4.6
+		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);		
+
 	}
 
 	function resetResults() {

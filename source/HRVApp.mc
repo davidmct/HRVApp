@@ -17,6 +17,20 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+
+//0.4.6
+// Added plot of beats over last N sammples
+// Added missed and skipped beat detection
+// Can I add payment link to settings???
+// Need to UPDATE
+// 1. Menu system for setting thresholds
+// 2. FIT file update using new variables
+// 3. Update stats pages with new variables for beats
+// 4. Do I add double/missed to History display and store??
+// 5. Sample processing itself
+// 6. Beat display chart
+// 7. Restructure ,emus to save memory - move settings up a level
+
 //0.4.5 
 // Fixed sensor switch bug
 // new poincare view
@@ -141,6 +155,9 @@ class HRVAnalysis extends App.AppBase {
 	var mHistoryLabel2;
 	var mHistoryLabel3;	
 	
+	//0.4.6
+	var mNumberBeatsGraph;
+	
 	var mMenuTitleSize;
 	var mDeviceID;
 
@@ -160,6 +177,10 @@ class HRVAnalysis extends App.AppBase {
     var mIntervalSampleBuffer; // buffer in app space for intervals
     var mSampleProc; // instance of sample processor
     var mFitControl;
+    
+    // % permitted deviation from average for ectopic beats
+	var vUpperThresholdSet; // long % over
+	var vLowerThresholdSet; // short period under %
     
     // ensure second update
     hidden var _uiTimer;
@@ -548,7 +569,11 @@ class HRVAnalysis extends App.AppBase {
 		}
 		else if (POINCARE_VIEW2 == viewNum) {
 			return new PoincareView(2);
-		}			
+		}	
+		else if (BEATS_VIEW == viewNum) {
+			Sys.println("Beats view setup");
+			return new BeatView();
+		}		
 		else {
 			return new TestView();
 		}

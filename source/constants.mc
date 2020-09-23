@@ -18,8 +18,9 @@ enum {
 	//CURRENT_VIEW = 4,
 	POINCARE_VIEW = 4,
 	POINCARE_VIEW2 = 5,
-	HISTORY_VIEW = 6,
-	NUM_VIEWS = 7
+	BEATS_VIEW = 6,
+	HISTORY_VIEW = 7,
+	NUM_VIEWS = 8
 }
 
 // Colors index. Arrays start at zero
@@ -58,6 +59,13 @@ var colours =[Graphics.COLOR_WHITE, Graphics.COLOR_LT_GRAY,Graphics.COLOR_DK_GRA
 var mColourNumbersString = {"WHITE"=>WHITE,"LT_GRAY"=>LT_GRAY, "DK_GRAY"=>DK_GRAY,"BLACK"=>BLACK, "RED"=>RED, 
 	"DK_RED"=>DK_RED, "ORANGE"=>ORANGE,	"YELLOW"=>YELLOW, "GREEN"=>GREEN, "DK_GREEN" => DK_GREEN, "BLUE" => BLUE,
 	"DK_BLUE" => DK_BLUE, "PURPLE" => PURPLE, "PINK" => PINK, "TRANSPARENT" => TRANSPARENT};
+	
+// Ectopic beat thresholds as %
+// can pull value using var = mLo...String[ "Very tight"];
+
+var mLongThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+var mShortThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+var mThresholdStrings = [ "Very tight", "Tight", "Nominal", "Loose", "Very loose"];
 
 // HISTORY VIEW SELECTOR
 

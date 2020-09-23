@@ -23,7 +23,7 @@ class StatsView extends Ui.View {
 		
 	// label values
 	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "" ];
-	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "", "" ];
+	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Missed", "Dbl" ];
 	hidden var mLabel3Labels = [ "II","Min II", "Max II", "", "", "" ];
 
 	// x%, y%, width/height
@@ -160,7 +160,9 @@ class StatsView extends Ui.View {
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mNN50.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);				
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);	
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.vMissedBeatCnt.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vDoubleBeatCnt.format("%d"), mJust);									
 		} else if (viewToShow == 3) {
 			// draw third set of labels and values
 			// x, y, font, text, just

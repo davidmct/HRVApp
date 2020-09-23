@@ -75,6 +75,52 @@ using Toybox.Lang as Lang;http:
 
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
+
+// 0.4.7
+// Need to pick what Upper and lower delta thresholds to choose: UpperThreshold ( II has gone longer) and LowerThreshold (II gone shorter)
+// Thresholds are % values compared to running average to accommodate changing base heart rate. Absolute number is not relative to that beat
+// For user define in terms of tightness
+// [Very tight, tight, nominal, loose, very loose] matches [ ... ] set of % variances allowed
+// use enum or dictionary?
+
+// Need to update Count of Lower and Upper threshold exceeded
+
+// Status bits
+//   Use two integers as bit fields bit[0] = current, bit[1] = previous
+//   bit = 0 means OK, bit = 1 means LONG (over upperthreshold) or SHORT (below lower threshold) depending on variable
+// status combinations and action
+// OK, OK -> add latest sample to stats
+// OK S -> wait
+// OK L -> wait
+// L S -> inc ectopic, missed beat
+// L L -> inc, heart slowing down?
+// S L -> inc, double beat
+// S S -> inc, ??? maybe change of rate up
+
+// Init
+//	Setup thresholds being used setup (settings need a pick list), status all OK
+//	StartThresholding = false
+
+// Sample #n arrived
+// If n=0 then as now
+// if n < filter length
+//		status  = oK for current sample
+//		add sample
+//		update stats and rtn
+// if n >= filter length AND not (StartThresholding)
+//		StartThresholding = true
+//		Add sample
+//		Work out average of previous 5 samples
+// else
+// 		Add sample??
+//		Test against threshold
+//		Set status of sample
+//		check this and last sample against status combinations and take action
+//		if not OK then rtn else ???
+
+// last two sample values should be in buffer
+// need to increment counts of ectopic beats
+
 class SampleProcessing {
 
 	// these need to be moved from ANThandler and references changed
@@ -99,6 +145,15 @@ class SampleProcessing {
 	var mpNN50; 
 	var mNN20;
 	var mpNN20;
+	
+	// 0.4.6 variables for ectopic beats
+	var vMissedBeatCnt;
+	var vDoubleBeatCnt;
+	hidden var vRunningAvg;
+
+	// bit flags for samples exceeding limits
+	var vUpperFlag;
+	var vLowerFlag;
 	
 	// index always points to next available slot
 	hidden var mSampleIndex;
@@ -138,6 +193,13 @@ class SampleProcessing {
 		mpNN20 = 0.0;
 		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
+		vMissedBeatCnt = 0;
+		vDoubleBeatCnt = 0;
+		vRunningAvg = 0.0;
+
+		// need to be int
+		vUpperFlag = 0;
+		vLowerFlag = 0;
 	}
 	
 	function getNumberOfSamples() {
@@ -159,10 +221,84 @@ class SampleProcessing {
 		}
 	}
 
+(:newSampleProcessing)
+	// function to return average of N samples from buffer starting at index
+	// for now just use simplistic sum and divide approach
+	// returns float
+	function fRunningAverage( start, length) {
+		var avg = 0.0;
+		var iterations = length; // default value - we have enough samples
+		var sum = 0;
+		
+		// how many samples do we have in bugger from start. Number samples also next free slot so -1
+		var cSamples = getNumberOfSamples();
+		if ((start + length) > (cSamples - 1)) {
+			// not enough samples for length so make do
+			iterations = cSamples - 1 - (start+length);
+		}
+		
+		var i;
+		for (i=0; i < iterations; i++) {
+			sum += $._mApp.mIntervalSampleBuffer[start+i];
+		}
+	
+		avg = sum.toFloat() / iterations;
+		
+		Sys.println("Running Average of "+iterations+" samples gives "+avg+" starting from "+start);
+		return avg;	
+	}	
+	
+(:newSampleProcessing)
+	// function to threshold data and set flags on interval status
+	function fThresholdSample() {
+	
+	
+	
+	
+	}
+
 (:newSampleProcessing) 	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		Sys.println("new sampling called");
-	
+
+		if ((!isTesting) || (livePulse == 0)) {
+			// Don't capture data if not testing OR
+			// livePulse== 0 could happen on first loop - avoids divide by 0
+			// If we still have an interval could create BPM from that...
+			// Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
+			return;
+		}
+		
+		// Given ANT sensor only provides one interval then we should probably ignore this sample
+		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
+		
+		// Calculate estimated ranges for reliable data
+		var maxMs = 60000 / (livePulse * 0.7);
+		var minMs = 60000 / (livePulse * 1.4);
+						
+		// Only update hrv data if testing started, & values look to be error free	
+		
+		// special case of 1st sample as previous will be zero!
+		// make sure not stupid number
+		if (mSampleIndex == 0) {
+			if ( maxMs > intMs && minMs < intMs) { 				
+				addSample(intMs, null); 
+			}
+			return;
+		}
+		
+		var previousIntMs = getSample(mSampleIndex-1);	
+		//Sys.println("S p "+ previousIntMs + " i " +intMs);
+		// 0.4.3 remove check of previous as should be OK by defintion!!	
+		if (maxMs > intMs && minMs < intMs ){ // && 
+			//maxMs > previousIntMs && minMs < previousIntMs) {		
+			addSample(intMs, beatsInGap);				
+			updateRunningStats(previousIntMs, intMs, livePulse);			
+		} else {
+			// debug
+			$.DebugMsg( true, "C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
+		}	
+	// end new rawSampleProcessing
 	}
 
 (:oldSampleProcessing)	

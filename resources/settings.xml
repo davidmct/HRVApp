@@ -29,6 +29,9 @@
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>				
+	<setting propertyKey="@Properties.pNumberBeatsGraph" title="@Strings.lnumberBeatsGraph" prompt="@Strings.lnumberBeatsGraphPrompt">
+		<settingConfig type="numeric" min="2" max="10" errorMessage="@Strings.lnumberBeatsGraphPrompt" />
+	</setting>
 	<setting propertyKey="@Properties.bgColSet" title="@Strings.bgColSetTitle" prompt="@Strings.bgColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
@@ -82,7 +85,8 @@
 			<listEntry value="12">@Strings.PURPLE</listEntry>
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
-	</setting><setting propertyKey="@Properties.pHistLabel1" title="@Strings.LabelHistTitle1" prompt="@Strings.LabelHistTitlePrompt">
+	</setting>
+	<setting propertyKey="@Properties.pHistLabel1" title="@Strings.LabelHistTitle1" prompt="@Strings.LabelHistTitlePrompt">
 		<settingConfig type="list">
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
@@ -137,7 +141,8 @@
 			<listEntry value="12">@Strings.lNN20</listEntry>
 			<listEntry value="13">@Strings.lpNN20</listEntry>
 		</settingConfig>					
-	</setting><setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.LabelColSetPrompt">
+	</setting>
+	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -173,7 +178,8 @@
 			<listEntry value="12">@Strings.lNN20</listEntry>
 			<listEntry value="13">@Strings.lpNN20</listEntry>
 		</settingConfig>					
-	</setting><setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.LabelColSetPrompt">
+	</setting>
+	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetTitle" prompt="@Strings.LabelColSetPrompt">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -191,7 +197,26 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	
-	
+	<setting propertyKey="@Properties.pLongThresholdIndex" title="@Strings.LongThresholdtTitle" prompt="@Strings.ThresholdPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.VTIGHT</listEntry>
+			<listEntry value="1">@Strings.TIGHT</listEntry>
+			<listEntry value="2">@Strings.NOMINAL</listEntry>
+			<listEntry value="3">@Strings.LOOSE</listEntry>
+			<listEntry value="4">@Strings.VLOOSE</listEntry>
+		</settingConfig>					
+	</setting>
+	<setting propertyKey="@Properties.pShortThresholdIndex" title="@Strings.ShortThresholdtTitle" prompt="@Strings.ThresholdPrompt">
+		<settingConfig type="list" >
+			<listEntry value="0">@Strings.VTIGHT</listEntry>
+			<listEntry value="1">@Strings.TIGHT</listEntry>
+			<listEntry value="2">@Strings.NOMINAL</listEntry>
+			<listEntry value="3">@Strings.LOOSE</listEntry>
+			<listEntry value="4">@Strings.VLOOSE</listEntry>
+		</settingConfig>					
+	</setting>	
+	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLTitle"> <!--helpUrl="@Strings.PayURLString">-->
+	<settingConfig type="url"  readonly="true" />	
+	</setting>
 	
 </settings>
