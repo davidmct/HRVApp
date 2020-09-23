@@ -53,7 +53,9 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("pHistLabel3", 7);	
 		
 		//0.4.6
-		$._mApp.Properties.setValue("pNumberBeatsGraph", 10);					
+		$._mApp.Properties.setValue("pNumberBeatsGraph", 10);	
+		$._mApp.Properties.setValue("pLongThresholdIndex", 2); // nominal
+		$._mApp.Properties.setValue("pShortThresholdIndex", 2); // nominal	
 	
 	}
 
@@ -84,6 +86,8 @@ class HRVStorageHandler {
 		
 		//0.4.6
 		$._mApp.setProperty("pNumberBeatsGraph", 10);	
+		$._mApp.setProperty("pLongThresholdIndex", 2); // nominal
+		$._mApp.setProperty("pShortThresholdIndex", 2); // nominal	
 	
 	}
 	
@@ -281,7 +285,6 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
 		
-		// NEED TO ADD READ OF Thresholds and map to actual values
 		var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
 		$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
 		index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
@@ -323,7 +326,12 @@ class HRVStorageHandler {
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}
-			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();				
+			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();	
+			
+			var index = $._mApp.Properties.getValue("pLongThresholdIndex").toNumber();
+			$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
+			index = $._mApp.Properties.getValue("pShortThresholdIndex").toNumber();	
+			$._mApp.vLowerThresholdSet = mShortThresholdMap[ mThresholdStrings[index]];			
 
 	}
 
@@ -356,8 +364,32 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("pHistLabel3", $._mApp.mHistoryLabel3);
 		
 		//0.4.6
-		$._mApp.Properties.setValue("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);				
+		$._mApp.Properties.setValue("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);
 		
+		var index;
+		var mThreshold;
+		var value;
+		// need to reverse lookup current threshold string from value then index in array
+		mThreshold = $._mApp.vUpperThresholdSet; 
+		var values = $.mLongThresholdMap.values();
+		// get actual thresholds
+		var i = 0;
+		do {
+			index = i;
+			value = values[i];		
+		} while (( i < values.size() ) && (value != mThreshold));
+		$._mApp.Properties.setValue("pLongThresholdIndex", index);
+		
+		mThreshold = $._mApp.vLowerThresholdSet; 
+		values = $.mShortThresholdMap.values();
+		// get actual thresholds
+		i = 0;
+		do {
+			index = i;
+			value = values[i];		
+		} while (( i < values.size() ) && (value != mThreshold));		
+		$._mApp.Properties.setValue("pShortThresholdIndex", index);	
+			
 	}
 
 (:preCIQ24)	
@@ -388,7 +420,32 @@ class HRVStorageHandler {
 		$._mApp.setProperty("pHistLabel3", $._mApp.mHistoryLabel3);
 		
 		//0.4.6
-		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);		
+		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);	
+		
+		var index;
+		var mThreshold;
+		var value;
+		// need to reverse lookup current threshold string from value then index in array
+		mThreshold = $._mApp.vUpperThresholdSet; 
+		var values = $.mLongThresholdMap.values();
+		// get actual thresholds
+		var i = 0;
+		do {
+			index = i;
+			value = values[i];		
+		} while (( i < values.size() ) && (value != mThreshold));
+		$._mApp.setProperty("pLongThresholdIndex", index);
+		
+		mThreshold = $._mApp.vLowerThresholdSet; 
+		values = $.mShortThresholdMap.values();
+		// get actual thresholds
+		i = 0;
+		do {
+			index = i;
+			value = values[i];		
+		} while (( i < values.size() ) && (value != mThreshold));		
+		$._mApp.setProperty("pShortThresholdIndex", index);	
+			
 
 	}
 

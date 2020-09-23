@@ -1,7 +1,7 @@
 using Toybox.Application as App;
 using Toybox.System as Sys;
 using Toybox.Math;
-using Toybox.Lang as Lang;http:
+using Toybox.Lang as Lang;
 
 
 
