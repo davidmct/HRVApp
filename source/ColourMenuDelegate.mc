@@ -15,7 +15,7 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         for (i = 0; i < ColStringDict.size() ; i++) {
         	var mColName = mKeys[i].toString();
         	var mColValue = ColStringDict.get(mColName);
-        	if (mColValue != TRANSPARENT) {
+        	if (mColValue != 14 ) { //TRANSPARENT) {
         	    //Sys.println("Label menu item colour: " + mColName);
         		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
         	}
@@ -61,14 +61,14 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     		$._mApp.bgColSet = WHITE;
     		//Sys.println("WHITE background set "+WHITE);
     		if(WHITE == $._mApp.txtColSet) {
-	    		$._mApp.txtColSet = BLACK;
+	    		$._mApp.txtColSet = 3; //BLACK;
 	    	}
     	}
     	else {
-    		$._mApp.bgColSet = BLACK;
+    		$._mApp.bgColSet = 3; //BLACK;
     		//Sys.println("BLACK background set "+BLACK);
-    		if(BLACK == $._mApp.txtColSet) {
-	    		$._mApp.txtColSet = WHITE;
+    		if(3 == $._mApp.txtColSet) { //BLACK
+	    		$._mApp.txtColSet = 0; //WHITE;
 	    	}
     	}   	
     	//Sys.println("Colours: back, text "+$._mApp.bgColSet+" "+$._mApp.txtColSet);

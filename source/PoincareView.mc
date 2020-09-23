@@ -243,10 +243,10 @@ class PoincareView extends Ui.View {
 		// Draw the data
 		
 		// set colour of rectangles. can't see white on white :-)
-		if ($._mApp.bgColSet == BLACK) {
-			MapSetColour(dc, WHITE, $._mApp.bgColSet);
+		if ($._mApp.bgColSet == 3) { // BLACK
+			MapSetColour(dc, 0, $._mApp.bgColSet); //WHITE
 		} else {
-			MapSetColour(dc, BLACK, $._mApp.bgColSet);	
+			MapSetColour(dc, 3, $._mApp.bgColSet);	
 		}
 		
 		// reduce entries by 1 as points to next free slot

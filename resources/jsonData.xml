@@ -1,5 +1,6 @@
 <resources>
-	<jsonData id="jsonColourDict2">{"WHITE":0, "LT_GRAY":1, "DK_GRAY":2} </jsonData>
-	<jsonData id="jsonColourDict3">{"WHITE":0, "LT_GRAY":1, "DK_GRAY":2, "BLACK":3 "RED":4, "DK_RED":5, 
+	<jsonData id="jsonColourDict">{"WHITE":0, "LT_GRAY":1, "DK_GRAY":2, "BLACK":3, "RED":4, "DK_RED":5, 
 		"ORANGE":6, "YELLOW":7, "GREEN":8, "DK_GREEN":9, "BLUE":10, "DK_BLUE":11, "PURPLE":12, "PINK":13, "TRANSPARENT":14} </jsonData>
+	<jsonData id="jsonColourList">[16777215, 11184810, 5592405, 0, 16711680, 11141120, 16733440, 16755200,
+				65280, 43520, 43775, 255, 11141375, 16711935, -1]</jsonData>
 </resources>

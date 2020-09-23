@@ -40,7 +40,7 @@ class SensorHandler {
     	function initialize() {
         	isChOpen = false;
 			// had to add $ to find RED symbol. enum stopped working here but was OK in other code!!
-			mHRMStatusCol = $.RED;
+			mHRMStatusCol = 4; //$.RED;
     		mHRMStatus = "Searching...";
 			initForTest();
 			resetTestVariables();
