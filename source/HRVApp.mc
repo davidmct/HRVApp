@@ -18,7 +18,7 @@ using Toybox.Time.Gregorian;
 //17. Check download and setting online properties works
 
 
-//0.4.6
+//0.4.7
 // Added plot of beats over last N sammples
 // Added missed and skipped beat detection
 // Can I add payment link to settings???

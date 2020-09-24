@@ -18,6 +18,8 @@
 	<string id="lpNN50ChartTitle">NN50 as % of samples</string>
 	<string id="lNN20ChartTitle">II delta > 20ms</string>
 	<string id="lpNN20ChartTitle">NN20 as % of samples</string>
+	<string id="lMissedTitle">Count of Missed beats</string>
+	<string id="lDoubleTitle">Count of Double beats</string>	
 	<string id="lHistoryNull">None</string>
 	<string id="lHeartRate">Average bpm</string>
 	<string id="lMinInterval">Minimum II</string>
@@ -32,6 +34,8 @@
 	<string id="lpNN20">% NN20</string>
 	<string id="lMinDiff">Min II delta</string>
 	<string id="lMaxDiff">Max II delta</string>	
+	<string id="lMissed">Missed beats</string>	
+	<string id="lDouble">Double beats</string>	
 	<string id="lPercentUnits">%</string>
 	<string id="lMsUnits">ms</string>  
 	<string id="lHeartRateUnits">bpm</string> 

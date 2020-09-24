@@ -34,6 +34,13 @@ const R_NN20_FIELD_ID = 20;
 const R_P_NN20_FIELD_ID = 21;
 const SOURCE_FIELD_ID = 22;
 
+// 0.4.7 - add ectopic beat data
+const MISSED_FIELD_ID = 23;
+const R_MISSED_FIELD_ID = 24;
+const DOUBLE_FIELD_ID = 25;
+const R_DOUBLE_FIELD_ID = 26;
+
+
 // Logic..
 // Init clears variables?
 // Test control will open Session which should also create fields
@@ -62,6 +69,8 @@ class HRVFitContributor {
 	hidden var mSessionmNN20_Field;
 	hidden var mSessionmpNN20_Field;
 	hidden var mSessionSource_Field;
+	hidden var mSessionMISSED_Field;
+	hidden var mSessionDOUBLE_Field;
 		
 	hidden var mRecordAvgPulse_Field;
 	hidden var mRecordmRMSSD_Field;
@@ -72,6 +81,8 @@ class HRVFitContributor {
 	hidden var mRecordmpNN50_Field; 
 	hidden var mRecordmNN20_Field;
 	hidden var mRecordmpNN20_Field;
+	hidden var mRecordMISSED_Field;
+	hidden var mRecordDOUBLE_Field;
 
     // Constructor ... 
     function initialize() {
@@ -96,8 +107,9 @@ class HRVFitContributor {
        	mSessionmNN20_Field = mSession.createField("NN20", NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"occurences" });
        	mSessionmpNN20_Field = mSession.createField("pNN20", P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
        	mSessionSource_Field = mSession.createField("Source", SOURCE_FIELD_ID, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
+       	mSessionMISSED_Field = mSession.createField("Missed", MISSED_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSessionDOUBLE_Field = mSession.createField("Double", DOUBLE_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	
-
        	mRecordAvgPulse_Field = mSession.createField("AvgPulse", R_AVG_PULSE_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
        	mRecordmRMSSD_Field = mSession.createField("RMSSD", R_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
        	mRecordmLnRMSSD_Field = mSession.createField("LnRMSSD", R_LN_RMSSD_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
@@ -107,7 +119,9 @@ class HRVFitContributor {
        	mRecordmpNN50_Field = mSession.createField("pNN50", R_P_NN50_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
        	mRecordmNN20_Field = mSession.createField("NN20", R_NN20_FIELD_ID, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"occurences" });
 		mRecordmpNN20_Field = mSession.createField("pNN20", R_P_NN20_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
-		 
+       	mRecordMISSED_Field = mSession.createField("Missed", R_MISSED_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
+       	mRecordDOUBLE_Field = mSession.createField("Double", R_DOUBLE_FIELD_ID, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
+       			 
 		mSessionMinIntervalFound_Field.setData(0);
 		mSessionMaxIntervalFound_Field.setData(0);
 		mSessionMinDiffFound_Field.setData(0);
@@ -123,6 +137,8 @@ class HRVFitContributor {
 		mSessionmNN20_Field.setData(0);
 		mSessionmpNN20_Field.setData(0.0);
 		mSessionSource_Field.setData("");
+		mSessionMISSED_Field.setData(0.0);
+		mSessionDOUBLE_Field.setData(0.0);
 			
 		mRecordAvgPulse_Field.setData(0);
 		mRecordmRMSSD_Field.setData(0.0);
@@ -133,7 +149,8 @@ class HRVFitContributor {
 		mRecordmpNN50_Field.setData(0.0); 
 		mRecordmNN20_Field.setData(0);
 		mRecordmpNN20_Field.setData(0.0);
-
+		mRecordMISSED_Field.setData(0.0);
+		mRecordDOUBLE_Field.setData(0.0);
     }
     
 	function createSession() {
@@ -205,7 +222,9 @@ class HRVFitContributor {
 		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
 		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20);
 		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
-		
+		mSessionMISSED_Field.setData($._mApp.mSampleProc.vMissedBeatCnt.toFloat());
+		mSessionDOUBLE_Field.setData($._mApp.mSampleProc.vDoubleBeatCnt.toFloat());
+			
 		var str;
 		if ($._mApp.mSensorTypeExt == SENSOR_SEARCH) {
 			str = "External";
@@ -232,7 +251,9 @@ class HRVFitContributor {
 		mRecordmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
 		mRecordmNN20_Field.setData($._mApp.mSampleProc.mNN20);
 		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
-		
+		mRecordMISSED_Field.setData($._mApp.mSampleProc.vMissedBeatCnt.toFloat());
+		mRecordDOUBLE_Field.setData($._mApp.mSampleProc.vDoubleBeatCnt.toFloat());
+
 	}
 	
 	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
