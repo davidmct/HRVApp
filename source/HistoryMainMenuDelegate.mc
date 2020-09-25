@@ -30,9 +30,11 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
 	
     function AddHistoryMenuItems( mMenu, labelNum) {
         var options = {:enabled=>"selected", :disabled=>"deselected"};
-        var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};                 
-        for (var i = 0; i < $.mHistoryLabelList.size() ; i++) {
-        	var mHistoryName = $.mHistoryLabelList[i].toString();
+        var align = {:alignment=>Ui.MenuItem.MENU_ITEM_LABEL_ALIGN_RIGHT};  
+        var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
+                       
+        for (var i = 0; i < mHistoryLabelList.size() ; i++) {
+        	var mHistoryName = mHistoryLabelList[i].toString();
         	var selectState = 0;
         	// should have made HistoryLabel an array
         	if (labelNum == 1) {

@@ -18,7 +18,7 @@ base.resourcePath=$(resBase)
 # :MemDebug or ConsoleDebug
 base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;HistoryViaDictionary;ConsoleDebug
 # exTrialParamProperty: specific code change in HRVApp.mc for trial mode from properties to storage
-base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView
+base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!

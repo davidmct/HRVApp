@@ -196,7 +196,7 @@ class SensorHandler {
 		}
 		//if (mDebuggingANT == true) { Sys.println("openCh(): isOpen? "+ mHRData.isChOpen);}
 		
-		mHRData.mHRMStatusCol = RED;
+		mHRData.mHRMStatusCol = 4; //RED;
     	mHRData.mHRMStatus = "Connected"; //"Found strap";
         // may need some other changes
     }
@@ -211,7 +211,7 @@ class SensorHandler {
     		if (mSensorType) { sensor.GenericChannel.close();}
     	}
     	mHRData.isChOpen = false;
-		mHRData.mHRMStatusCol = RED;
+		mHRData.mHRMStatusCol = 4; //RED;
     	mHRData.mHRMStatus = "ANT closed";
 	    mHRData.livePulse = 0;
 		mSearching = true;
@@ -332,7 +332,7 @@ class AntHandler extends Ant.GenericChannel {
             mHRDataLnk.livePulse = payload[7].toNumber();
 			var beatEvent = ((payload[4] | (payload[5] << 8)).toNumber() * 1000) / 1024;
 			var beatCount = payload[6].toNumber();
-			mHRDataLnk.mHRMStatusCol = GREEN;
+			mHRDataLnk.mHRMStatusCol = 8; //GREEN;
     		mHRDataLnk.mHRMStatus = "HR data";
     		
     		//$.DebugMsg(true, "d");
@@ -368,7 +368,7 @@ class AntHandler extends Ant.GenericChannel {
 	            		// initialise again
 	            		//initialize(mSavedAntID, mHRDataLnk);
 	            		// NOT SURE WE SHOULD LOSE STRAP
-						mHRDataLnk.mHRMStatusCol = RED;
+						mHRDataLnk.mHRMStatusCol = 4; //RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
 						//$._mApp.mSensor.mSearching = true;
@@ -430,7 +430,7 @@ class AntHandler extends Ant.GenericChannel {
 		if(mHRDataLnk.mPrevBeatCount != beatCount && 0 < mHRDataLnk.livePulse) {
 			// 0.4.4 
 			// don't need two next lines as in msg handler!
-			//mHRDataLnk.mHRMStatusCol = GREEN;
+			//mHRDataLnk.mHRMStatusCol = 8; //GREEN;
 			//mHRDataLnk.mHRMStatus = "HR data";
 			
 			mHRDataLnk.mNoPulseCount = 0;
@@ -472,7 +472,7 @@ class AntHandler extends Ant.GenericChannel {
 			if(0 < mHRDataLnk.livePulse) {
 				var limit = 1 + 60000 / mHRDataLnk.livePulse / 246; // 246 = 4.06 KHz
 				if(limit < mHRDataLnk.mNoPulseCount) {
-					mHRDataLnk.mHRMStatusCol = RED;
+					mHRDataLnk.mHRMStatusCol = 4; //RED;
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
 					if ($._mApp.mSensor.mFunc != null) {
@@ -542,7 +542,7 @@ class InternalSensor {
 			if (sensorInfo == null || sensorInfo.heartRate == null) {
 				// flag no data and 
 				mHRDataLnk.livePulse = 0;
-				mHRDataLnk.mHRMStatusCol = RED;
+				mHRDataLnk.mHRMStatusCol = 4; //RED;
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {
@@ -550,7 +550,7 @@ class InternalSensor {
 				}
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;
-				mHRDataLnk.mHRMStatusCol = GREEN;
+				mHRDataLnk.mHRMStatusCol = 8; //GREEN;
 				mHRDataLnk.mHRMStatus = "HR data";
 				// update Test controller data  
 				if ($._mApp.mSensor.mFunc != null) {

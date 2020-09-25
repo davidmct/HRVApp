@@ -286,9 +286,12 @@ class HRVStorageHandler {
 		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
 		
 		var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
-		$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
+		var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
+        var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
+		$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
 		index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
-		$._mApp.vLowerThresholdSet = mShortThresholdMap[ mThresholdStrings[index]];
+		$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
+
 	}
 
 (:storageMethod)	
@@ -329,10 +332,50 @@ class HRVStorageHandler {
 			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();	
 			
 			var index = $._mApp.Properties.getValue("pLongThresholdIndex").toNumber();
-			$._mApp.vUpperThresholdSet = mLongThresholdMap[ mThresholdStrings[index]];
+			var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
+            var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
+			$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
 			index = $._mApp.Properties.getValue("pShortThresholdIndex").toNumber();	
-			$._mApp.vLowerThresholdSet = mShortThresholdMap[ mThresholdStrings[index]];			
+			$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
 
+	}
+	
+	function fFindThresholdIndex() {
+		var long = 0;
+		var short = 0;
+		
+		var index;
+		var mThreshold;
+		var value;
+		// need to reverse lookup current threshold string from value then index in array
+		mThreshold = $._mApp.vUpperThresholdSet; 
+		
+		var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
+		// get actual thresholds
+		var i = 0;
+		do {
+			index = i;
+			value = mLongThresholdMap[i];	
+			i++;	
+		} while (( i < mLongThresholdMap.size() ) && (value != mThreshold));
+		
+		Sys.println("Upper threshold property save : "+index);	
+		long = index;
+		
+		mThreshold = $._mApp.vLowerThresholdSet; 
+		var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);	
+		// get actual thresholds
+		i = 0;
+		do {
+			index = i;
+			value = mShortThresholdMap[i];	
+			i++;	
+		} while (( i < mShortThresholdMap.size() ) && (value != mThreshold));
+		
+		Sys.println("Lower threshold property save : "+index);			
+		short = index;
+	
+		return [long, short];
 	}
 
 (:storageMethod)	
@@ -366,35 +409,14 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.Properties.setValue("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);
 		
-		var index;
-		var mThreshold;
-		var value;
-		// need to reverse lookup current threshold string from value then index in array
-		mThreshold = $._mApp.vUpperThresholdSet; 
-		var values = $.mLongThresholdMap.values();
-		// get actual thresholds
-		var i = 0;
-		do {
-			index = i;
-			value = values[i];	
-			i++;	
-		} while (( i < values.size() ) && (value != mThreshold));
 		
-		Sys.println("Upper threshold property save : "+index);	
-		$._mApp.Properties.setValue("pLongThresholdIndex", index);
+		//0.4.7
+		// move code to function
+		var res = new [2];
+		res = fFindThresholdIndex();
 		
-		mThreshold = $._mApp.vLowerThresholdSet; 
-		values = $.mShortThresholdMap.values();
-		// get actual thresholds
-		i = 0;
-		do {
-			index = i;
-			value = values[i];	
-			i++;	
-		} while (( i < values.size() ) && (value != mThreshold));
-		
-		Sys.println("Lower threshold property save : "+index);			
-		$._mApp.Properties.setValue("pShortThresholdIndex", index);	
+		$._mApp.Properties.setValue("pLongThresholdIndex", res[0]);		
+		$._mApp.Properties.setValue("pShortThresholdIndex", res[1]);	
 			
 	}
 
@@ -428,37 +450,12 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);	
 		
-		var index;
-		var mThreshold;
-		var value;
-		// need to reverse lookup current threshold string from value then index in array
-		mThreshold = $._mApp.vUpperThresholdSet; 
-		var values = $.mLongThresholdMap.values();
-		// get actual thresholds
-		var i = 0;
-		do {
-			index = i;
-			value = values[i];	
-			i++;	
-		} while (( i < values.size() ) && (value != mThreshold));
+		var res = new [2];
+		res = fFindThresholdIndex();
 		
-		Sys.println("Upper threshold property save : "+index);
-		$._mApp.setProperty("pLongThresholdIndex", index);
+		$._mApp.setProperty("pLongThresholdIndex", res[0]);		
+		$._mApp.setProperty("pShortThresholdIndex", res[1]);	
 		
-		mThreshold = $._mApp.vLowerThresholdSet; 
-		values = $.mShortThresholdMap.values();
-		// get actual thresholds
-		i = 0;
-		do {
-			index = i;
-			value = values[i];	
-			i++;	
-		} while (( i < values.size() ) && (value != mThreshold));	
-		
-		Sys.println("Lower threshold property save : "+index);	
-		$._mApp.setProperty("pShortThresholdIndex", index);	
-			
-
 	}
 
 	function resetResults() {

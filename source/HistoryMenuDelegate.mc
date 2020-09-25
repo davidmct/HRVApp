@@ -69,7 +69,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         	}
         	
         	// fix the checked state as only one allowed
-	       	for ( var i=0; i < $.mHistoryLabelList.size(); i++) {
+	       	for ( var i=0; i < cHISTORYLABELLISTSIZE; i++) { //$.mHistoryLabelList.size(); i++) {
 	       		var itemID = mMenu.findItemById(i.toString());
 	       		//Sys.println("itemID = "+itemID+" from i ="+i);
 	       		if ( i == index) {
@@ -78,7 +78,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
 	       			mMenu.getItem(itemID).setEnabled(false);	
 	       		}
 	       	}
-	       	Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
+	       	//Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
         	
        	} else {
        		Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
@@ -97,7 +97,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
        		i = 0;
         	itemID = mMenu.findItemById(i.toString());
        		mMenu.getItem(itemID).setEnabled(true);        		   
-   		    Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[i]);
+   		    //Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[i]);
        	}	
        	
        	//// fix the checked state as only one allowed

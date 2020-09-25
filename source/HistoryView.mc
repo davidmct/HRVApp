@@ -150,6 +150,8 @@ class HistoryView extends Ui.View {
     	var mLabelColour = mapColour( $._mApp.lblColSet);
 		var mValueColour = mapColour( $._mApp.txtColSet);
 		
+		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
+		
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
 		var today = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
@@ -204,11 +206,11 @@ class HistoryView extends Ui.View {
 			return;
 		}	
 		 
-		labelList[0] = $.mHistoryLabelList[$._mApp.mHistoryLabel1];
+		labelList[0] = mHistoryLabelList[$._mApp.mHistoryLabel1];
         resultsIndexList[0] = ( $._mApp.mHistoryLabel1 == 0 ? null : $._mApp.mHistoryLabel1);
-		labelList[1] = $.mHistoryLabelList[$._mApp.mHistoryLabel2];
+		labelList[1] = mHistoryLabelList[$._mApp.mHistoryLabel2];
         resultsIndexList[1] = ( $._mApp.mHistoryLabel2 == 0 ? null : $._mApp.mHistoryLabel2);
-		labelList[2] = $.mHistoryLabelList[$._mApp.mHistoryLabel3];
+		labelList[2] = mHistoryLabelList[$._mApp.mHistoryLabel3];
         resultsIndexList[2] = ( $._mApp.mHistoryLabel3 == 0 ? null : $._mApp.mHistoryLabel3);   
                         	
         // hard to tie menu on selection order to this list-> fixed 0.4.3

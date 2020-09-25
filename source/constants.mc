@@ -65,9 +65,10 @@ enum {
 // Ectopic beat thresholds as %
 // can pull value using var = mLo...String[ "Very tight"];
 
-var mLongThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
-var mShortThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
-var mThresholdStrings = [ "Very tight", "Tight", "Nominal", "Loose", "Very loose"];
+// moved to json and no dictionary
+//var mLongThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+//var mShortThresholdMap = {"Very tight"=>10, "Tight"=>15, "Nominal"=>18, "Loose"=>20, "Very loose"=>25};
+//var mThresholdStrings = [ "Very tight", "Tight", "Nominal", "Loose", "Very loose"];
 
 // HISTORY VIEW SELECTOR
 
@@ -86,10 +87,13 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 // use array of labels instead of dictionary
 // index 0 is null case ie empty
 // must be in same order as INDEX list
-var mHistoryLabelList = [ "none", "avgBPM", "minII", "maxII",
-						"minD", "maxD", "rMSSD", "LnrMSSD", 
-						"SDNN", "SDSD", "NN50", "pNN50", 
-						"NN20", "pNN20"];						
+//var mHistoryLabelList = [ "none", "avgBPM", "minII", "maxII",
+//						"minD", "maxD", "rMSSD", "LnrMSSD", 
+//						"SDNN", "SDSD", "NN50", "pNN50", 
+//						"NN20", "pNN20"];	
+
+// data held in JSON xml						
+const cHISTORYLABELLISTSIZE = 14;					
 
 // SAMPLE PROCESSING
 const MIN_BPM = 35;
