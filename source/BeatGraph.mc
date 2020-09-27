@@ -189,8 +189,7 @@ class BeatView extends Ui.View {
 		var scaleX = chartHeight / (ceil - floor).toFloat();
 		
 		//Sys.println("BeatView scale factor X: "+scaleX);
-		
-		dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
+
 		// now draw graph
 		var sample;
 		var incSum = min;
@@ -210,9 +209,15 @@ class BeatView extends Ui.View {
 		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
 		var cOffset = mYBaseline-cHeight;
 		
+		// index from 0
+		var mFlagOffset = mSampleNum-1;
+		
 		// -1 on end test as showing one more than needed
 		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
+			
+			// default line colour is red		
+			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 			
 			if (firstPass ==true) {
 				// offset half of pulse
@@ -229,7 +234,33 @@ class BeatView extends Ui.View {
 			//var b = cHeight;
 			//Sys.println("BestView: Sample: "+sample+" Rect x="+a+" rect Y="+mYBaseline+" rect H="+b);
 			
-			// draw spike from Y base to top of chart x, y, w, h		
+			//Spike colour is dependent on the status
+			// 1. Colour pulses
+			//	    Lower threshold exceeded = Pink
+			//	    Upper threshold exceeded = Purple
+			//	    Add text showing % delta from average
+			// vUpperFlag - assume that bit 0 equals current sample
+			// vLowerFlag;
+			// i starts at mNumberEntries-1-mSampleNum which is earliest spike
+			
+			// TEST
+			$._mApp.mSampleProc.vLowerFlag = 0x1;
+			$._mApp.mSampleProc.vUpperFlag = 0x2;
+			
+			
+			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLowerFlag;
+			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vUpperFlag;	
+			Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
+					 
+			if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
+				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
+				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+			} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
+				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );
+			}	
+			mFlagOffset--;
+			// draw spike from Y base to top of chart x, y, w, h
 			dc.fillRectangle(leftX+mXcoord+xBase, cOffset, 3, cHeight);			
 			
 			// move base
