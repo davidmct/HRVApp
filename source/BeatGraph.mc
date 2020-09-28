@@ -209,10 +209,24 @@ class BeatView extends Ui.View {
 		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
 		var cOffset = mYBaseline-cHeight;
 		
-		// index from 0
+		// normal beat width
+		var mPulseWidth = 4;
+		
+		// index from 0 to determine state of particular beat
 		var mFlagOffset = mSampleNum-1;
 		
 		// -1 on end test as showing one more than needed
+		
+		// FIX:::
+		// Can remove baseline and also get rid of first pass logic
+		
+		// Going to ploy labels as another loop to make logic easier as averages need to skill excoptic beats!
+		// Can also plot average line!
+		var mXdata = new [mNumberEntries];
+		// market as ectopic so use sample processing average
+		var mIgnoreSample = new [mNumberEntries];
+		var mXDataIndex = 0; // could have done using mFlagOffset and reverse but more complex
+		
 		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
 			
@@ -241,32 +255,49 @@ class BeatView extends Ui.View {
 			//	    Add text showing % delta from average
 			// vUpperFlag - assume that bit 0 equals current sample
 			// vLowerFlag;
-			// i starts at mNumberEntries-1-mSampleNum which is earliest spike
+			// i starts at mNumberEntries-1-mSampleNum which is earliest pulse
 			
 			// TEST
-			$._mApp.mSampleProc.vLowerFlag = 0x1;
-			$._mApp.mSampleProc.vUpperFlag = 0x2;
-			
-			
+			//$._mApp.mSampleProc.vLowerFlag = 0x1;
+			//$._mApp.mSampleProc.vUpperFlag = 0x2;
+						
 			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLowerFlag;
 			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vUpperFlag;	
 			Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
-					 
+
+			mPulseWidth = 4;	
+			mIgnoreSample[mXDataIndex] = true;
+							 
 			if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
 				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
 				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				mPulseWidth = 6;			
 			} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
 				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );
-			}	
-			mFlagOffset--;
+				mPulseWidth = 6;				
+			} else {
+				// default is sample is OK
+				mIgnoreSample[mXDataIndex] = false;	
+			}
+			
+			// save X co-coord for avg plot and labels
+			mXdata[mXDataIndex] = leftX+mXcoord+xBase;
+			mXDataIndex++;
+			
 			// draw spike from Y base to top of chart x, y, w, h
-			dc.fillRectangle(leftX+mXcoord+xBase, cOffset, 3, cHeight);			
+			dc.fillRectangle(leftX+mXcoord+xBase, cOffset, mPulseWidth, cHeight);			
 			
 			// move base
 			xBase += mXcoord;
 						
+			// move to next flag
+			mFlagOffset--;
+						
 		} // end sample loop
+		
+		
+		// ADD Label and avg plot code
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
