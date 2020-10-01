@@ -3,7 +3,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
-//0.4.6 
+//0.4.7 
 //This file draws a graph of a number of beats scaled to fix axis
 
 //Algo
@@ -30,7 +30,6 @@ using Toybox.System as Sys;
 //				and expand range
 //			2. scale is based on 1st average and current min/max II delta as upper and lower limts. Then can plot labels. Maybe too compressed scale
 // NOTE. Only actual II value is stored and not delta. min/max gloabl variables are delta based not II 
-// 3. Make spiokes blocks of colour and remove lower line
 
 // RunningAverage( start, length) - function in sample processing
 // Data needed
@@ -71,6 +70,7 @@ class BeatView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
+	hidden var aAvgPointValue = new [$._mApp.mNumberBeatsGraph];
 
 	function initialize() { 
 		View.initialize();
@@ -155,10 +155,6 @@ class BeatView extends Ui.View {
     	// work out X range covered
     	var sumII = 0;
     	for (var i=0; i < mSampleNum; i++) {
-    		//var temp;
-    		//temp = mNumberEntries-i;
-    		//var value = $._mApp.mIntervalSampleBuffer[mNumberEntries-i-1];
-    		//Sys.println("BeatView: temp, value: "+temp+" "+value);
     		sumII += $._mApp.mIntervalSampleBuffer[mNumberEntries-i-1];
     	}
     	
@@ -204,7 +200,7 @@ class BeatView extends Ui.View {
 		// need a line to first pulse - should be on same Y point
 		var mYBaseline = floorY-yBase;
 				
-		var firstPass = true;
+		//var firstPass = true;
 		var mXcoord = 0;
 		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
 		var cOffset = mYBaseline-cHeight;
@@ -226,8 +222,9 @@ class BeatView extends Ui.View {
 		// market as ectopic so use sample processing average
 		var mIgnoreSample = new [mNumberEntries];
 		var mXDataIndex = 0; // could have done using mFlagOffset and reverse but more complex
+		var mSampleStartIndex = mNumberEntries-1-mSampleNum;
 		
-		for( var i = mNumberEntries-1-mSampleNum; i < mNumberEntries-1; i++ ){		
+		for( var i = mSampleStartIndex; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
 			
 			// default line colour is red		
@@ -246,10 +243,6 @@ class BeatView extends Ui.View {
 			//}
 			
 			mXcoord = ((sample - floor) * scaleX).toNumber();
-			
-			//var a = leftX+mXcoord+xBase;
-			//var b = cHeight;
-			//Sys.println("BestView: Sample: "+sample+" Rect x="+a+" rect Y="+mYBaseline+" rect H="+b);
 			
 			//Spike colour is dependent on the status
 			// 1. Colour pulses
@@ -302,11 +295,40 @@ class BeatView extends Ui.View {
 		
 		
 		// ADD Label and avg plot code
+		fCalcAvgValues(mNumberEntries, mSampleStartIndex, mIgnoreSample);
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
 
    		return true;
+    }
+    
+    // Work out for each sample what the average value of previous 5 points is
+    function fCalcAvgValues( mNumEntries, mIndex, mFlag) {   	
+    	// If less than 5 points we need to do best we can   
+    	// if sample is special case then use unadjusted sampleProcessing value   	
+    	if ( mNumEntries == 1 ) {
+    		aAvgPointValue[0] = $._mApp.mIntervalSampleBuffer[mIndex];
+    		return;
+    	} else {
+    		// iterate through samples of interest
+    		for(var i = 0;  i < mNumEntries; i++ ) {
+    			// now we have to construct averages
+    			var avg = 0;
+    			if (mFlag[i] == true ) {
+    				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;		
+    			} else {  
+    				// look back 5 samples NOT including this one 				
+    				for( var j = -5; j < 0; j++ ) {
+    					// have to make sure in array!!
+    					if ((mIndex + j ) > 0 ) 
+    					// break;
+    				} 
+    			}
+    		
+    		}    	
+    	}
+    
     }
     
     function onHide() {

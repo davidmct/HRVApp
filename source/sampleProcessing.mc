@@ -149,7 +149,7 @@ class SampleProcessing {
 	// 0.4.6 variables for ectopic beats
 	var vMissedBeatCnt;
 	var vDoubleBeatCnt;
-	hidden var vRunningAvg;
+	var vRunningAvg;
 
 	// bit flags for samples exceeding limits
 	var vUpperFlag;
