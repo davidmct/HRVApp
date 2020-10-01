@@ -30,7 +30,7 @@ using Toybox.System as Sys;
 //				and expand range
 //			2. scale is based on 1st average and current min/max II delta as upper and lower limts. Then can plot labels. Maybe too compressed scale
 // NOTE. Only actual II value is stored and not delta. min/max gloabl variables are delta based not II 
-
+// 3. Make spiokes blocks of colour and remove lower line
 
 // RunningAverage( start, length) - function in sample processing
 // Data needed
@@ -196,9 +196,9 @@ class BeatView extends Ui.View {
 		
 		// how far up Y axis to start line in pixels
 		var yBase = ((floor+200) * scaleX).toNumber();
-		// where to start HR line from on X axis. Min is half 1st sample
 		
-		var StartX_unscaled = $._mApp.mIntervalSampleBuffer[mNumberEntries-1-mSampleNum] / 2;
+		// where to start HR line from on X axis. Min is half 1st sample		
+		var StartX_unscaled = 0; //$._mApp.mIntervalSampleBuffer[mNumberEntries-1-mSampleNum] / 2;
 		var xBase = ((StartX_unscaled-floor) * scaleX).toNumber();
 		
 		// need a line to first pulse - should be on same Y point
@@ -209,7 +209,7 @@ class BeatView extends Ui.View {
 		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
 		var cOffset = mYBaseline-cHeight;
 		
-		// normal beat width
+		// beat width
 		var mPulseWidth = 4;
 		
 		// index from 0 to determine state of particular beat
@@ -233,16 +233,19 @@ class BeatView extends Ui.View {
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 			
-			if (firstPass ==true) {
-				// offset half of pulse
-				dc.drawLine( leftX, mYBaseline, leftX+xBase, mYBaseline);					
-				firstPass = false;
-				mXcoord = 0;
-			} else {	
-				mXcoord = ((sample - floor) * scaleX).toNumber();
-				// draw line from previous sample or Y axis to sample point
-				dc.drawLine( leftX+xBase, mYBaseline, leftX+mXcoord+xBase, mYBaseline);
-			}
+			//if (firstPass ==true) {
+			//	// offset half of pulse
+			//	dc.drawLine( leftX, mYBaseline, leftX+xBase, mYBaseline);					
+			//	firstPass = false;
+			//	mXcoord = 0;
+			//} else {	
+			//	mXcoord = ((sample - floor) * scaleX).toNumber();
+			//	// draw line from previous sample or Y axis to sample point
+			//	dc.drawLine( leftX+xBase, mYBaseline, leftX+mXcoord+xBase, mYBaseline);
+			//
+			//}
+			
+			mXcoord = ((sample - floor) * scaleX).toNumber();
 			
 			//var a = leftX+mXcoord+xBase;
 			//var b = cHeight;
@@ -261,21 +264,22 @@ class BeatView extends Ui.View {
 			//$._mApp.mSampleProc.vLowerFlag = 0x1;
 			//$._mApp.mSampleProc.vUpperFlag = 0x2;
 						
+			mXcoord = ((sample - floor) * scaleX).toNumber();
+						
 			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLowerFlag;
 			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vUpperFlag;	
 			Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
-
-			mPulseWidth = 4;	
+			
 			mIgnoreSample[mXDataIndex] = true;
 							 
 			if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
 				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
-				mPulseWidth = 6;			
+				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );	
+				mPulseWidth = 6;	
 			} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );
-				mPulseWidth = 6;				
+				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );	
+				mPulseWidth = 6;			
 			} else {
 				// default is sample is OK
 				mIgnoreSample[mXDataIndex] = false;	
