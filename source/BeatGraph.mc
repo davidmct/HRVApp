@@ -71,6 +71,7 @@ class BeatView extends Ui.View {
 	hidden var mScaleY;
 	hidden var mScaleX;
 	hidden var aAvgPointValue = new [$._mApp.mNumberBeatsGraph];
+	hidden var aAvgPointDelta = new [$._mApp.mNumberBeatsGraph];
 
 	function initialize() { 
 		View.initialize();
@@ -292,10 +293,24 @@ class BeatView extends Ui.View {
 			mFlagOffset--;
 						
 		} // end sample loop
-		
-		
+				
 		// ADD Label and avg plot code
 		fCalcAvgValues(mSampleNum, mSampleStartIndex, mIgnoreSample);
+		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		
+		// now we have averages and X location so can plot text
+		for ( var i = 0; i < mSampleNum; i++) {
+			// mXdata[] has x value
+			// text needs to be above bar (may need to alternate top/bottom)
+			// cOffset should be top of bar as they are drawn downwards to larger y
+			// aAvgPointValue contains average values
+			if ((i % 2) == 0) {
+				dc.drawText( mXdata[i], cOffset, Gfx.FONT_XTINY, "abc", Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );
+			} else {
+				dc.drawText( mXdata[i], cOffset+cHeight, Gfx.FONT_XTINY, "abc", Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );			
+			}
+		
+		}
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
@@ -304,22 +319,23 @@ class BeatView extends Ui.View {
     }
     
     // Work out for each sample what the average value of previous 5 points is
-    function fCalcAvgValues( mNumEntries, mIndex, mFlag) {  
-    	// mNumEntries - number of smaples to process
+    function fCalcAvgValues( mNumSamples, mIndex, mFlag) {  
+    	// mNumSamples - number of samples to process
     	// mIndex - buffer index we are currently at (last sample entered
     	// mFlag - flag ecoptic beats to ignore in average
     		
     	// If less than 5 points we need to do best we can   
     	// if sample is special case then use unadjusted sampleProcessing value  
-    	Sys.println("fCalcAvgValues: params: Entries = "+mNumEntries+", mIndex = "+mIndex+", Flags="+mFlag);
+    	Sys.println("fCalcAvgValues: params: Entries = "+mNumSamples+", mIndex = "+mIndex+", Flags="+mFlag);
     		
-    	if ( mNumEntries == 1 ) {
-    		aAvgPointValue[0] = $._mApp.mIntervalSampleBuffer[mIndex];
+    	if ( mNumSamples == 1 ) {
+    		aAvgPointValue[0] = $._mApp.mIntervalSampleBuffer[mIndex].toFloat();
+    		aAvgPointDelta[0] = 0.0;
     		return;
     	} 
     	
 		// iterate through samples of interest
-		for(var i = 0;  i < mNumEntries; i++ ) {
+		for(var i = 0;  i < mNumSamples; i++ ) {
 			// now we have to construct averages
 			var tSum = 0;
 			var tCnt = 0;
