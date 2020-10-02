@@ -218,9 +218,9 @@ class BeatView extends Ui.View {
 		
 		// Going to ploy labels as another loop to make logic easier as averages need to skill excoptic beats!
 		// Can also plot average line!
-		var mXdata = new [mNumberEntries];
+		var mXdata = new [mSampleNum];
 		// market as ectopic so use sample processing average
-		var mIgnoreSample = new [mNumberEntries];
+		var mIgnoreSample = new [mSampleNum];
 		var mXDataIndex = 0; // could have done using mFlagOffset and reverse but more complex
 		var mSampleStartIndex = mNumberEntries-1-mSampleNum;
 		
@@ -295,7 +295,7 @@ class BeatView extends Ui.View {
 		
 		
 		// ADD Label and avg plot code
-		fCalcAvgValues(mNumberEntries, mSampleStartIndex, mIgnoreSample);
+		fCalcAvgValues(mSampleNum, mSampleStartIndex, mIgnoreSample);
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
@@ -304,31 +304,45 @@ class BeatView extends Ui.View {
     }
     
     // Work out for each sample what the average value of previous 5 points is
-    function fCalcAvgValues( mNumEntries, mIndex, mFlag) {   	
+    function fCalcAvgValues( mNumEntries, mIndex, mFlag) {  
+    	// mNumEntries - number of smaples to process
+    	// mIndex - buffer index we are currently at (last sample entered
+    	// mFlag - flag ecoptic beats to ignore in average
+    		
     	// If less than 5 points we need to do best we can   
-    	// if sample is special case then use unadjusted sampleProcessing value   	
+    	// if sample is special case then use unadjusted sampleProcessing value  
+    	Sys.println("fCalcAvgValues: params: Entries = "+mNumEntries+", mIndex = "+mIndex+", Flags="+mFlag);
+    		
     	if ( mNumEntries == 1 ) {
     		aAvgPointValue[0] = $._mApp.mIntervalSampleBuffer[mIndex];
     		return;
-    	} else {
-    		// iterate through samples of interest
-    		for(var i = 0;  i < mNumEntries; i++ ) {
-    			// now we have to construct averages
-    			var avg = 0;
-    			if (mFlag[i] == true ) {
-    				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;		
-    			} else {  
-    				// look back 5 samples NOT including this one 				
-    				for( var j = -5; j < 0; j++ ) {
-    					// have to make sure in array!!
-    					if ((mIndex + j ) > 0 ) 
-    					// break;
-    				} 
-    			}
-    		
-    		}    	
-    	}
-    
+    	} 
+    	
+		// iterate through samples of interest
+		for(var i = 0;  i < mNumEntries; i++ ) {
+			// now we have to construct averages
+			var tSum = 0;
+			var tCnt = 0;
+			if (mFlag[i] == true ) {
+				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;		
+			} 
+			else {  
+				// look back 5 samples NOT including this one 				
+				for( var j = -5; j < 0; j++ ) {
+					// have to make sure in array!!
+					if ((mIndex + j ) > 0 ) {
+						// within buffer so add to sum and inc cnt
+						tCnt++;
+						tSum += $._mApp.mIntervalSampleBuffer[mIndex+j];					
+					}
+					// break;
+				}
+				Sys.println("fCalcAvgValues tCnt: "+tCnt); 
+				
+				aAvgPointValue[i] = (tCnt == 0? 0.0: tSum.toFloat() / tCnt); 
+			}		
+		}
+		Sys.println("fCalcAvgValues : "+ aAvgPointValue);   
     }
     
     function onHide() {
