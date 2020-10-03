@@ -383,10 +383,12 @@ class HRVAnalysis extends App.AppBase {
         $._mApp = App.getApp();
          
         mStorage = new HRVStorageHandler();
+        // ensure we have all parameters setup before needed
+        mStorage.readProperties();  
+                
         mTestControl = new TestController();
         mSampleProc = new SampleProcessing();
-        mStorage.readProperties();  
-        
+       
         mFitControl = null; // no FIT created yet
                
 		//A unique alphanumeric device identifier.

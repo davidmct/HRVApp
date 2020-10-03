@@ -134,14 +134,16 @@ class BeatView extends Ui.View {
     	// Range determined by sum of previous N samples 
     	var max;
     	var min;
-  	
-    	// check we have enough samples
+   	
+		// if no sample processing then exit 
+    	if ($._mApp.mSampleProc == null ) { return true;}
     	
-    	// reduce entries by 1 as points to next free slot
+    	// reduce entries by 1 as points to next free slot    	
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
 		// how many points to plot
     	var mSampleNum = 0;
-    	   			
+    	
+     	// check we have enough samples   	   			
 		// need two entries before we start!
 		if ( mNumberEntries < 2) { return true;}
     	
@@ -340,7 +342,10 @@ class BeatView extends Ui.View {
 			var tSum = 0;
 			var tCnt = 0;
 			if (mFlag[i] == true ) {
-				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;		
+				// delta is from running average ignoring these values
+				// PROBLEM THIS IS NOT CORRECT - RunningAvg is at current point in time and flags may have moved down pipeline
+				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;
+				aAvgPointDelta[i] = $._mApp.mIntervalSampleBuffer[mIndex+i] - aAvgPointValue[i];	
 			} 
 			else {  
 				// look back 5 samples NOT including this one 				

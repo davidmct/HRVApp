@@ -111,6 +111,7 @@ const RESULTS = "RESULTS";
 
 // Samples needed for stats min
 const MIN_SAMPLES = 20;
+const MAX_NUMBERBEATSGRAPH = 10;
 
 // HISTORY VIEW
 

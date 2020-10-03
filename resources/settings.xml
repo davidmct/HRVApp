@@ -28,7 +28,8 @@
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetTitle" prompt="@Strings.timerTimeSetPrompt">
 		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
-	</setting>				
+	</setting>	
+	<!-- pNumberBeatsGraph maximum is set in constants file as AX_NUMBERBEATSGRAPH  -->			
 	<setting propertyKey="@Properties.pNumberBeatsGraph" title="@Strings.lnumberBeatsGraph" prompt="@Strings.lnumberBeatsGraphPrompt">
 		<settingConfig type="numeric" min="2" max="10" errorMessage="@Strings.lnumberBeatsGraphPrompt" />
 	</setting>

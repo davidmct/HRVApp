@@ -150,6 +150,13 @@ class SampleProcessing {
 	var vMissedBeatCnt;
 	var vDoubleBeatCnt;
 	var vRunningAvg;
+	
+	// keep a record of averages calculated in circular buffer
+	var aAvgStore;
+	// associated value of II to make beat graph simpler
+	// NOTE need to write current avg into this buffer when ectopic and not update avg
+	var aIIValue;
+	var aAvgStoreIndex;
 
 	// bit flags for samples exceeding limits
 	var vUpperFlag;
@@ -163,6 +170,10 @@ class SampleProcessing {
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
 		$._mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		aAvgStore = new [MAX_NUMBERBEATSGRAPH];
+		aIIValue = new [MAX_NUMBERBEATSGRAPH];
+		aAvgStoreIndex = 0;
+		
 		resetSampleBuffer();
 		resetHRVData();
 	}
@@ -170,6 +181,9 @@ class SampleProcessing {
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
 		$._mApp.mIntervalSampleBuffer[0] = 0;
+		aAvgStoreIndex = 0;	
+		aAvgStore[0] = 0.0;
+		aIIValue[0] = 0;	
 		minIntervalFound = 2000; // around 30 BPM
 		maxIntervalFound = 0;
 	}
