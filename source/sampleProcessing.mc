@@ -234,6 +234,38 @@ class SampleProcessing {
 			return getSample(index-1);
 		}
 	}
+		
+	function addAverage( mAvg, mSample) {
+		// Might choose to add complexity to this depending how ectopic algo works out
+		aAvgStore[aAvgStoreIndex] =	mAvg;
+		aIIValue[aAvgStoreIndex] = mSample;
+		// wrap pointer
+		aAvgStoreIndex = (aAvgStoreIndex+1) % MAX_NUMBERBEATSGRAPH; 	
+	}
+	
+	// Get pointer into buffer
+	function getAverageIndex() {
+		// will point to sapce after last sample
+		return aAvgStoreIndex;
+	}
+	
+	// Get average sample from Index which is offset from current pointer
+	// Assume caller knows pointer is pointing to next space
+	// Positive index goes backwards in buffer
+	function getAvgAndII( mAvgIndexOffset) {
+	
+		Sys.println("getAvgAndII: mAvgIndexOffset = "+mAvgIndexOffset);
+		
+		if ((mAvgIndexOffset < 0) || (mAvgIndexOffset >= MAX_NUMBERBEATSGRAPH)) {
+			Sys.println("getAvgAndII. ERROR Offset out of range");
+			return [null, null]; // maybe null better
+		}
+		var mPointer = (aAvgStoreIndex + MAX_NUMBERBEATSGRAPH - 1 - mAvgIndexOffset) % MAX_NUMBERBEATSGRAPH;
+		
+		Sys.println("getAvgAndII: mPointer= "+mPointer);
+		
+		return [aAvgStore[mPointer], aIIValue[mPointer] ];	
+	}
 
 (:newSampleProcessing)
 	// function to return average of N samples from buffer starting at index

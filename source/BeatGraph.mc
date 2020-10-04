@@ -70,8 +70,8 @@ class BeatView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-	hidden var aAvgPointValue = new [$._mApp.mNumberBeatsGraph];
-	hidden var aAvgPointDelta = new [$._mApp.mNumberBeatsGraph];
+	//hidden var aAvgPointValue = new [$._mApp.mNumberBeatsGraph];
+	//hidden var aAvgPointDelta = new [$._mApp.mNumberBeatsGraph];
 
 	function initialize() { 
 		View.initialize();
@@ -297,20 +297,50 @@ class BeatView extends Ui.View {
 		} // end sample loop
 				
 		// ADD Label and avg plot code
-		fCalcAvgValues(mSampleNum, mSampleStartIndex, mIgnoreSample);
+		// Assume average is available already in sample processing
+		//fCalcAvgValues(mSampleNum, mSampleStartIndex, mIgnoreSample);
+		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		
 		// now we have averages and X location so can plot text
+		var mStr;
+		var mDeltaPc;
+		var a = new[2];
+		var mTxtSize;
+		var yPos;
+		var xPos;
+		
 		for ( var i = 0; i < mSampleNum; i++) {
 			// mXdata[] has x value
 			// text needs to be above bar (may need to alternate top/bottom)
 			// cOffset should be top of bar as they are drawn downwards to larger y
-			// aAvgPointValue contains average values
-			if ((i % 2) == 0) {
-				dc.drawText( mXdata[i], cOffset, Gfx.FONT_XTINY, "abc", Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );
+			a = $._mApp.mSampleProc.getAvgAndII( mSampleNum-i-1);
+			// a[0] can be used to plot avg line but need to scale across all of them
+			// a[1] is II sample
+			
+			Sys.println("Beatgraph call to getAvgAndII gives: "+a);
+			
+			// check we have this number of entries - shouldn't happen once code complete
+			if ((a[0] == null) || (a[1] == null) || (a[0] == 0.0)) {
+				mDeltaPc = 0;
 			} else {
-				dc.drawText( mXdata[i], cOffset+cHeight, Gfx.FONT_XTINY, "abc", Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );			
+				mDeltaPc = 100 * (( a[1].toFloat() - a[0]) / a[0]);
 			}
+			
+			mStr = format("$1$%",[mDeltaPc.format("%d")]);
+			mTxtSize = dc.getTextDimensions(mStr, mLabelFont);
+			// move text half width
+			xPos = mXdata[i] + mTxtSize[0]/2;
+			
+			if ((i % 2) == 0) {
+				yPos = cOffset-10;
+				mDeltaPc = -28;
+			} else {
+				mDeltaPc = 28;
+				yPos = cOffset+cHeight+10;
+			}
+			
+			dc.drawText( xPos, yPos, mLabelFont, mStr, Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );
 		
 		}
 		
@@ -321,6 +351,7 @@ class BeatView extends Ui.View {
     }
     
     // Work out for each sample what the average value of previous 5 points is
+    (:discard)
     function fCalcAvgValues( mNumSamples, mIndex, mFlag) {  
     	// mNumSamples - number of samples to process
     	// mIndex - buffer index we are currently at (last sample entered
