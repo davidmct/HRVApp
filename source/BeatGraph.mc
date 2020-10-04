@@ -131,9 +131,16 @@ class BeatView extends Ui.View {
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
-    	// Range determined by sum of previous N samples 
+    	// X Range determined by sum of previous N samples 
     	var max;
     	var min;
+    	
+    	// y range needed for AVG plot
+    	var Ymin = 20000;
+    	var Ymax = 0;
+    	
+    	// average values
+    	var a = new[2];
    	
 		// if no sample processing then exit 
     	if ($._mApp.mSampleProc == null ) { return true;}
@@ -158,7 +165,7 @@ class BeatView extends Ui.View {
     	// work out X range covered
     	var sumII = 0;
     	for (var i=0; i < mSampleNum; i++) {
-    		sumII += $._mApp.mIntervalSampleBuffer[mNumberEntries-i-1];
+    		sumII += $._mApp.mIntervalSampleBuffer[mNumberEntries-i-1]; 		
     	}
     	
     	// We'll offset the x-axis by half the first sample so we can see final one
@@ -186,6 +193,24 @@ class BeatView extends Ui.View {
 				
 		//var range = ceil - floor;
 		var scaleX = chartHeight / (ceil - floor).toFloat();
+		
+		// work out Y range   	
+    	for (var i=0; i < mSampleNum; i++) {   	
+    		a = $._mApp.mSampleProc.getAvgAndII( mSampleNum-i-1);
+			// a[0] can be used to plot avg line but need to scale across all of them
+			// a[1] is II sample
+			var mAvgValue = a[0];
+			// check we have this number of entries - shouldn't happen once code complete
+			if ((mAvgValue == null) || (a[1] == null) || (mAvgValue == 0.0)) {
+				// ignore
+			} else {
+    	    	if (mAvgValue < Ymin) { Ymin = mAvgValue;}
+    			if (Ymax < mAvgValue) { Ymax = mAvgValue;}
+    		}
+    	}
+ 
+		// Y scale could be very narrow if all values the same so add 50 to top and bottom
+		var scaleY = chartHeight / (Ymax + 50 - Ymin - 50).toFloat();
 		
 		//Sys.println("BeatView scale factor X: "+scaleX);
 
@@ -305,10 +330,14 @@ class BeatView extends Ui.View {
 		// now we have averages and X location so can plot text
 		var mStr;
 		var mDeltaPc;
-		var a = new[2];
 		var mTxtSize;
 		var yPos;
 		var xPos;
+		var y1 = scaleY * (cOffset+cHeight/2);
+		var y2 = 0; 
+		var mPlotAvg;
+		
+		dc.setPenWidth(4);
 		
 		for ( var i = 0; i < mSampleNum; i++) {
 			// mXdata[] has x value
@@ -321,29 +350,36 @@ class BeatView extends Ui.View {
 			Sys.println("Beatgraph call to getAvgAndII gives: "+a);
 			
 			// check we have this number of entries - shouldn't happen once code complete
+			// force average for line to sensible value
 			if ((a[0] == null) || (a[1] == null) || (a[0] == 0.0)) {
 				mDeltaPc = 0;
+				y1 = scaleY * (cOffset+cHeight/2);
+				y2 = y1;
 			} else {
 				mDeltaPc = 100 * (( a[1].toFloat() - a[0]) / a[0]);
+				y1 = a[0];
 			}
 			
-			mStr = format("$1$%",[mDeltaPc.format("%d")]);
+			// no % symbol as not in custom font yet
+			mStr = format("$1$",[mDeltaPc.format("%d")]);
 			mTxtSize = dc.getTextDimensions(mStr, mLabelFont);
 			// move text half width
 			xPos = mXdata[i] + mTxtSize[0]/2;
 			
 			if ((i % 2) == 0) {
 				yPos = cOffset-10;
-				mDeltaPc = -28;
 			} else {
-				mDeltaPc = 28;
 				yPos = cOffset+cHeight+10;
 			}
 			
 			dc.drawText( xPos, yPos, mLabelFont, mStr, Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );
-		
+			// Draw average line in same colour. Line starts from previous sample to next
+			if (i != 0) {
+				dc.drawLine(mXdata[i-1], y1, mXdata[i], y2 );
+			}
+			y2 = y1;					
 		}
-		
+			
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
 
