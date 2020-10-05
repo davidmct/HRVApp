@@ -205,10 +205,12 @@ class BeatView extends Ui.View {
     	}
     	
     	// expand Y but make sure +ve
-    	Ymin = (Ymin-50 >= 0? Ymin-50: Ymin); 
+    	Ymin = (Ymin-100 >= 0? Ymin-100: Ymin); 
+    	Ymax += 100;
  
 		// Y scale could be very narrow if all values the same so add 50 to top and bottom
-		var scaleY = chartHeight / (Ymax + 50 - Ymin).toFloat();
+		var scaleY = chartHeight / (Ymax - Ymin).toFloat();
+		//scaleY = scaleY / 2.0; // compress scale
 		
 		Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
 		Sys.println("BeatView: chartHeight: "+chartHeight+" scale factor X: "+scaleX+" scale Y = "+scaleY);
@@ -320,11 +322,12 @@ class BeatView extends Ui.View {
 		var mTxtSize;
 		var yPos;
 		var xPos;
-		var y1 = ctrY;
 		var y2 = 0; 
+		var yOffset = ((Ymax-Ymin)/2)*scaleY; // mid-range
+		var y1 = yOffset+20; //ctrY;		
 		var mPlotAvg;
 		
-		dc.setPenWidth(4);
+		dc.setPenWidth(3);
 		
 		for ( var i = 0; i < mSampleNum; i++) {
 			// mXdata[] has x value
@@ -341,13 +344,13 @@ class BeatView extends Ui.View {
 			// force average for line to sensible value
 			if ((a0 == null) || (a1 == null) || (a0 == 0.0)) {
 				mDeltaPc = 0;
-				y1 = ctrY;
+				y1 = yOffset+ceilY; //ctrY;
 				y2 = y1;
 			} else {
 				mDeltaPc = 100 * (( a1.toFloat() - a0) / a0);
 				// bigger II means higher on screen = negative offset
 				// correct Y for widening YMin value eearlier on min/max search
-				y2 = floorY - scaleY * (a0 - (Ymin-50));
+				y2 = (floorY - scaleY * (a0 - Ymin.toFloat())).toNumber()+20;
 			}
 			
 			Sys.println("mDelatPc = "+ mDeltaPc+", ctrY: "+ctrY+", a0 "+a0+", y1:y2= ["+y1+","+y2+"]");
