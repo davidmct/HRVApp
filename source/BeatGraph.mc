@@ -211,7 +211,7 @@ class BeatView extends Ui.View {
 		var scaleY = chartHeight / (Ymax + 50 - Ymin).toFloat();
 		
 		Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
-		Sys.println("BeatView scale factor X: "+scaleX+" scale Y = "+scaleY);
+		Sys.println("BeatView: chartHeight: "+chartHeight+" scale factor X: "+scaleX+" scale Y = "+scaleY);
 
 		// now draw graph
 		var sample;
@@ -320,7 +320,7 @@ class BeatView extends Ui.View {
 		var mTxtSize;
 		var yPos;
 		var xPos;
-		var y1 = scaleY * (cOffset+cHeight/2);
+		var y1 = ctrY;
 		var y2 = 0; 
 		var mPlotAvg;
 		
@@ -341,14 +341,16 @@ class BeatView extends Ui.View {
 			// force average for line to sensible value
 			if ((a0 == null) || (a1 == null) || (a0 == 0.0)) {
 				mDeltaPc = 0;
-				y1 = scaleY * (cOffset+cHeight/2);
+				y1 = ctrY;
 				y2 = y1;
 			} else {
 				mDeltaPc = 100 * (( a1.toFloat() - a0) / a0);
-				y2 = scaleY * a0;
+				// bigger II means higher on screen = negative offset
+				// correct Y for widening YMin value eearlier on min/max search
+				y2 = floorY - scaleY * (a0 - (Ymin-50));
 			}
 			
-			Sys.println("mDelatPc = "+ mDeltaPc+", y1:y2= ["+y1+","+y2+"]");
+			Sys.println("mDelatPc = "+ mDeltaPc+", ctrY: "+ctrY+", a0 "+a0+", y1:y2= ["+y1+","+y2+"]");
 			
 			// no % symbol as not in custom font yet
 			mStr = format("$1$",[mDeltaPc.format("%d")]);
