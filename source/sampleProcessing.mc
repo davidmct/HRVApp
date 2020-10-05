@@ -156,7 +156,7 @@ class SampleProcessing {
 	// associated value of II to make beat graph simpler
 	// NOTE need to write current avg into this buffer when ectopic and not update avg
 	var aIIValue;
-	var aAvgStoreIndex;
+	//var aAvgStoreIndex;
 
 	// bit flags for samples exceeding limits
 	var vUpperFlag;
@@ -171,9 +171,7 @@ class SampleProcessing {
 		// if we make a circular buffer then will need to make lots of calls to get data
 		$._mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
 		aAvgStore = new [MAX_NUMBERBEATSGRAPH];
-		aIIValue = new [MAX_NUMBERBEATSGRAPH];
-		aAvgStoreIndex = 0;
-		
+		aIIValue = new [MAX_NUMBERBEATSGRAPH];		
 		resetSampleBuffer();
 		resetHRVData();
 	}
@@ -181,9 +179,7 @@ class SampleProcessing {
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
 		$._mApp.mIntervalSampleBuffer[0] = 0;
-		aAvgStoreIndex = 0;	
-		aAvgStore[0] = 0.0;
-		aIIValue[0] = 0;	
+		clearAvgBuffer();
 		minIntervalFound = 2000; // around 30 BPM
 		maxIntervalFound = 0;
 	}
@@ -216,6 +212,19 @@ class SampleProcessing {
 		vLowerFlag = 0;
 	}
 	
+	function clearAvgBuffer() {
+		var length = aAvgStore.size();
+		
+		// TEST
+		var dataAvg = [900, 950, 960, 950, 900, 890, 900, 950, 925, 900];
+		var dataII =  [910, 990, 900, 1000, 980, 990, 840, 900, 925, 910];
+		
+		for (var i = 0; i < length; i++) {
+			aAvgStore[i] = dataAvg[i]; //0.0;
+			aIIValue[i] = dataII[i]; //0;	
+		}			
+	}
+	
 	function getNumberOfSamples() {
 		// starts at zero
 		return mSampleIndex;
@@ -234,7 +243,24 @@ class SampleProcessing {
 			return getSample(index-1);
 		}
 	}
-		
+	
+	// move buffers to right so slot 0 free for new entry
+	function shiftAvgBuffer() {
+		var length = aAvgStore.size();
+		for (var i = 1; i < length; i++) {
+			aAvgStore[i] = aAvgStore[i-1];
+			aIIValue[i] = aIIValue[i-1];	
+		}			
+	}	
+
+	function addAverage( mAvg, mSample) {
+		// Might choose to add complexity to this depending how ectopic algo works out
+		shiftAvgBuffer();
+		aAvgStore[0] =	mAvg;
+		aIIValue[0] = mSample;
+	}
+
+	(:discard)	
 	function addAverage( mAvg, mSample) {
 		// Might choose to add complexity to this depending how ectopic algo works out
 		aAvgStore[aAvgStoreIndex] =	mAvg;
@@ -244,6 +270,7 @@ class SampleProcessing {
 	}
 	
 	// Get pointer into buffer
+	(:discard)
 	function getAverageIndex() {
 		// will point to sapce after last sample
 		return aAvgStoreIndex;
@@ -252,6 +279,7 @@ class SampleProcessing {
 	// Get average sample from Index which is offset from current pointer
 	// Assume caller knows pointer is pointing to next space
 	// Positive index goes backwards in buffer
+	(:discard)
 	function getAvgAndII( mAvgIndexOffset) {
 	
 		Sys.println("getAvgAndII: mAvgIndexOffset = "+mAvgIndexOffset);

@@ -70,8 +70,6 @@ class BeatView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-	//hidden var aAvgPointValue = new [$._mApp.mNumberBeatsGraph];
-	//hidden var aAvgPointDelta = new [$._mApp.mNumberBeatsGraph];
 
 	function initialize() { 
 		View.initialize();
@@ -136,7 +134,7 @@ class BeatView extends Ui.View {
     	var min;
     	
     	// y range needed for AVG plot
-    	var Ymin = 20000;
+    	var Ymin = 2000;
     	var Ymax = 0;
     	
     	// average values
@@ -196,23 +194,24 @@ class BeatView extends Ui.View {
 		
 		// work out Y range   	
     	for (var i=0; i < mSampleNum; i++) {   	
-    		a = $._mApp.mSampleProc.getAvgAndII( mSampleNum-i-1);
-			// a[0] can be used to plot avg line but need to scale across all of them
-			// a[1] is II sample
-			var mAvgValue = a[0];
+    		var a = $._mApp.mSampleProc.aAvgStore[i];
 			// check we have this number of entries - shouldn't happen once code complete
-			if ((mAvgValue == null) || (a[1] == null) || (mAvgValue == 0.0)) {
+			if ((a == null) || (a == 0.0)) {
 				// ignore
 			} else {
-    	    	if (mAvgValue < Ymin) { Ymin = mAvgValue;}
-    			if (Ymax < mAvgValue) { Ymax = mAvgValue;}
+    	    	if (a < Ymin) { Ymin = a;}
+    			if (Ymax < a) { Ymax = a;}
     		}
     	}
+    	
+    	// expand Y but make sure +ve
+    	Ymin = (Ymin-50 >= 0? Ymin-50: Ymin); 
  
 		// Y scale could be very narrow if all values the same so add 50 to top and bottom
-		var scaleY = chartHeight / (Ymax + 50 - Ymin - 50).toFloat();
+		var scaleY = chartHeight / (Ymax + 50 - Ymin).toFloat();
 		
-		//Sys.println("BeatView scale factor X: "+scaleX);
+		Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
+		Sys.println("BeatView scale factor X: "+scaleX+" scale Y = "+scaleY);
 
 		// now draw graph
 		var sample;
@@ -257,18 +256,6 @@ class BeatView extends Ui.View {
 			
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
-			
-			//if (firstPass ==true) {
-			//	// offset half of pulse
-			//	dc.drawLine( leftX, mYBaseline, leftX+xBase, mYBaseline);					
-			//	firstPass = false;
-			//	mXcoord = 0;
-			//} else {	
-			//	mXcoord = ((sample - floor) * scaleX).toNumber();
-			//	// draw line from previous sample or Y axis to sample point
-			//	dc.drawLine( leftX+xBase, mYBaseline, leftX+mXcoord+xBase, mYBaseline);
-			//
-			//}
 			
 			mXcoord = ((sample - floor) * scaleX).toNumber();
 			
@@ -343,28 +330,31 @@ class BeatView extends Ui.View {
 			// mXdata[] has x value
 			// text needs to be above bar (may need to alternate top/bottom)
 			// cOffset should be top of bar as they are drawn downwards to larger y
-			a = $._mApp.mSampleProc.getAvgAndII( mSampleNum-i-1);
+			var a0 = $._mApp.mSampleProc.aAvgStore[mSampleNum-i-1];
+			var a1 = $._mApp.mSampleProc.aIIValue[mSampleNum-i-1];
 			// a[0] can be used to plot avg line but need to scale across all of them
 			// a[1] is II sample
 			
-			Sys.println("Beatgraph call to getAvgAndII gives: "+a);
+			Sys.println("Beatgraph plot samples: "+a0+" ,"+a1);
 			
 			// check we have this number of entries - shouldn't happen once code complete
 			// force average for line to sensible value
-			if ((a[0] == null) || (a[1] == null) || (a[0] == 0.0)) {
+			if ((a0 == null) || (a1 == null) || (a0 == 0.0)) {
 				mDeltaPc = 0;
 				y1 = scaleY * (cOffset+cHeight/2);
 				y2 = y1;
 			} else {
-				mDeltaPc = 100 * (( a[1].toFloat() - a[0]) / a[0]);
-				y1 = a[0];
+				mDeltaPc = 100 * (( a1.toFloat() - a0) / a0);
+				y2 = scaleY * a0;
 			}
+			
+			Sys.println("mDelatPc = "+ mDeltaPc+", y1:y2= ["+y1+","+y2+"]");
 			
 			// no % symbol as not in custom font yet
 			mStr = format("$1$",[mDeltaPc.format("%d")]);
 			mTxtSize = dc.getTextDimensions(mStr, mLabelFont);
 			// move text half width
-			xPos = mXdata[i] + mTxtSize[0]/2;
+			xPos = mXdata[i] + mTxtSize[0]/3;
 			
 			if ((i % 2) == 0) {
 				yPos = cOffset-10;
@@ -377,7 +367,7 @@ class BeatView extends Ui.View {
 			if (i != 0) {
 				dc.drawLine(mXdata[i-1], y1, mXdata[i], y2 );
 			}
-			y2 = y1;					
+			y1 = y2;					
 		}
 			
 		// performance check only on real devices
