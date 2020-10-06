@@ -381,54 +381,7 @@ class BeatView extends Ui.View {
 
    		return true;
     }
-    
-    // Work out for each sample what the average value of previous 5 points is
-    (:discard)
-    function fCalcAvgValues( mNumSamples, mIndex, mFlag) {  
-    	// mNumSamples - number of samples to process
-    	// mIndex - buffer index we are currently at (last sample entered
-    	// mFlag - flag ecoptic beats to ignore in average
-    		
-    	// If less than 5 points we need to do best we can   
-    	// if sample is special case then use unadjusted sampleProcessing value  
-    	Sys.println("fCalcAvgValues: params: Entries = "+mNumSamples+", mIndex = "+mIndex+", Flags="+mFlag);
-    		
-    	if ( mNumSamples == 1 ) {
-    		aAvgPointValue[0] = $._mApp.mIntervalSampleBuffer[mIndex].toFloat();
-    		aAvgPointDelta[0] = 0.0;
-    		return;
-    	} 
-    	
-		// iterate through samples of interest
-		for(var i = 0;  i < mNumSamples; i++ ) {
-			// now we have to construct averages
-			var tSum = 0;
-			var tCnt = 0;
-			if (mFlag[i] == true ) {
-				// delta is from running average ignoring these values
-				// PROBLEM THIS IS NOT CORRECT - RunningAvg is at current point in time and flags may have moved down pipeline
-				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;
-				aAvgPointDelta[i] = $._mApp.mIntervalSampleBuffer[mIndex+i] - aAvgPointValue[i];	
-			} 
-			else {  
-				// look back 5 samples NOT including this one 				
-				for( var j = -5; j < 0; j++ ) {
-					// have to make sure in array!!
-					if ((mIndex + j ) > 0 ) {
-						// within buffer so add to sum and inc cnt
-						tCnt++;
-						tSum += $._mApp.mIntervalSampleBuffer[mIndex+j];					
-					}
-					// break;
-				}
-				Sys.println("fCalcAvgValues tCnt: "+tCnt); 
-				
-				aAvgPointValue[i] = (tCnt == 0? 0.0: tSum.toFloat() / tCnt); 
-			}		
-		}
-		Sys.println("fCalcAvgValues : "+ aAvgPointValue);   
-    }
-    
+        
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();

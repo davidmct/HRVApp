@@ -131,6 +131,8 @@ class SampleProcessing {
 	hidden var mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
+	hidden var mStartThreshold = false;
+	
 	var dataCount;
 	var avgPulse;
 	var minIntervalFound;
@@ -180,6 +182,7 @@ class SampleProcessing {
 		mSampleIndex = 0;
 		$._mApp.mIntervalSampleBuffer[0] = 0;
 		clearAvgBuffer();
+		mStartThreshold = false;
 		minIntervalFound = 2000; // around 30 BPM
 		maxIntervalFound = 0;
 	}
@@ -216,12 +219,14 @@ class SampleProcessing {
 		var length = aAvgStore.size();
 		
 		// TEST
-		var dataAvg = [900, 950, 960, 950, 900, 890, 900, 950, 925, 900];
-		var dataII =  [910, 990, 900, 1000, 980, 990, 840, 900, 925, 910];
+		//var dataAvg = [900, 950, 960, 950, 900, 890, 900, 950, 925, 900];
+		//var dataII =  [910, 990, 900, 1000, 980, 990, 840, 900, 925, 910];
 		
 		for (var i = 0; i < length; i++) {
-			aAvgStore[i] = dataAvg[i]; //0.0;
-			aIIValue[i] = dataII[i]; //0;	
+			//aAvgStore[i] = dataAvg[i]; //0.0;
+			//aIIValue[i] = dataII[i]; //0;	
+			aAvgStore[i] = 0.0;
+			aIIValue[i] = 0;	
 		}			
 	}
 	
@@ -260,16 +265,67 @@ class SampleProcessing {
 		aIIValue[0] = mSample;
 	}
 
+
+    // Work out for each sample what the average value of previous 5 points is
 (:newSampleProcessing)
+	// function to return average of N samples from buffer starting at current sample
+	// Need to skip ectopic beats in past and if we run out of buffer do best we can!
+	// Would need two episodes in last 10 beats to fail
+	// returns float
+	
+	// USE aAVGStore. See if modify AddAverage to replicate if this handled ectopic beats (by just adding unadjusted average
+	// would have to use differential average then avg(n) = (a0+ ...+a4)/5 = avg(n-1) + (a5-a0)/5
+	// a0 calculated after 5 samples
+    function fCalcAvgValues( sampleIn, NumSamples) {  
+    	// sampleIn - latest 
+    	// NumSamples = number in main buffer
+    	// mFlag (global) - flag showing ecoptic beats to ignore in average
+    	
+		// iterate through samples of interest
+		for(var i = 0;  i < mNumSamples; i++ ) {
+			// now we have to construct averages
+			var tSum = 0;
+			var tCnt = 0;
+			if (mFlag[i] == true ) {
+				// delta is from running average ignoring these values
+				// PROBLEM THIS IS NOT CORRECT - RunningAvg is at current point in time and flags may have moved down pipeline
+				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;
+				aAvgPointDelta[i] = $._mApp.mIntervalSampleBuffer[mIndex+i] - aAvgPointValue[i];	
+			} 
+			else {  
+				// look back 5 samples NOT including this one 				
+				for( var j = -5; j < 0; j++ ) {
+					// have to make sure in array!!
+					if ((mIndex + j ) > 0 ) {
+						// within buffer so add to sum and inc cnt
+						tCnt++;
+						tSum += $._mApp.mIntervalSampleBuffer[mIndex+j];					
+					}
+					// break;
+				}
+				Sys.println("fCalcAvgValues tCnt: "+tCnt); 
+				
+				aAvgPointValue[i] = (tCnt == 0? 0.0: tSum.toFloat() / tCnt); 
+			}		
+		}
+		Sys.println("fCalcAvgValues : "+ aAvgPointValue);   
+    }
+
+(:discard)
 	// function to return average of N samples from buffer starting at index
 	// for now just use simplistic sum and divide approach
+	// Need to skip ectopic beats in past
 	// returns float
-	function fRunningAverage( start, length) {
+	
+	// THIS COULD USE aAVGStore and AddAverage if this handled ectopic beats (by just adding unadjusted average
+	// would have to use differential average then avg(n) = (a0+ ...+a4)/5 = avg(n-1) + (a5-a0)/5
+	// a0 calculated after 5 samples
+	function fRunningAverage( start, length, samplesAvailable) {
 		var avg = 0.0;
 		var iterations = length; // default value - we have enough samples
 		var sum = 0;
 		
-		// how many samples do we have in bugger from start. Number samples also next free slot so -1
+		// how many samples do we have in buffer from start. Number samples also next free slot so -1
 		var cSamples = getNumberOfSamples();
 		if ((start + length) > (cSamples - 1)) {
 			// not enough samples for length so make do
@@ -286,7 +342,10 @@ class SampleProcessing {
 		Sys.println("Running Average of "+iterations+" samples gives "+avg+" starting from "+start);
 		return avg;	
 	}	
-	
+
+			//var mLowerTrue = (1 << mFlagOffset) & vLowerFlag;
+			//var mUpperTrue = (1 << mFlagOffset) & vUpperFlag;	
+				
 (:newSampleProcessing)
 	// function to threshold data and set flags on interval status
 	function fThresholdSample() {
@@ -298,8 +357,9 @@ class SampleProcessing {
 
 (:newSampleProcessing) 	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
-		Sys.println("new sampling called");
-
+		Sys.println("v0.4.7 rawSampleProcessing called");
+		
+		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0)) {
 			// Don't capture data if not testing OR
 			// livePulse== 0 could happen on first loop - avoids divide by 0
@@ -307,36 +367,84 @@ class SampleProcessing {
 			// Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
 			return;
 		}
-		
+						
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
 		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
+				
+		// Sample #n arrived
 		
-		// Calculate estimated ranges for reliable data
+		// Calculate estimated ranges for reliable data based on current pulse
 		var maxMs = 60000 / (livePulse * 0.7);
 		var minMs = 60000 / (livePulse * 1.4);
-						
-		// Only update hrv data if testing started, & values look to be error free	
-		
+	
 		// special case of 1st sample as previous will be zero!
 		// make sure not stupid number
 		if (mSampleIndex == 0) {
 			if ( maxMs > intMs && minMs < intMs) { 				
 				addSample(intMs, null); 
+				vUpperFlag = 0;
+				vLowerFlag = 0;
+				// oldest sample for average!
+				aIIValue[4] = intMs;
+				aAvgStore[4] = intMs;
+				vRunningAvg = intMs;
 			}
 			return;
 		}
 		
-		var previousIntMs = getSample(mSampleIndex-1);	
-		//Sys.println("S p "+ previousIntMs + " i " +intMs);
-		// 0.4.3 remove check of previous as should be OK by defintion!!	
-		if (maxMs > intMs && minMs < intMs ){ // && 
-			//maxMs > previousIntMs && minMs < previousIntMs) {		
-			addSample(intMs, beatsInGap);				
-			updateRunningStats(previousIntMs, intMs, livePulse);			
+		// If n=0 then as now
+		// if n < filter length
+		//		status  = oK for current sample
+		//		add sample
+		//		update stats and rtn
+
+		var previousIntMs = getSample(mSampleIndex-1);			
+		if (mSampleIndex < 5) {
+			if ( maxMs > intMs && minMs < intMs) { 				
+				addSample(intMs, null); 
+				// No need to update vLower and vUpper flags as not testing
+				updateRunningStats(previousIntMs, intMs, livePulse);
+				vRunningAvg += intMs;
+				aAvgStore[4-mSampleIndex] = vRunningAvg / (mSampleIndex+1) ;
+				aIIValue[4-mSampleIndex] = intMs;
+			}
+			return;
+		} else if (mSampleIndex == 5) {
+			vRunningAvg = aAvgStore[0];			
+		}
+		
+		// now should have pipeline of averages and values of II
+		
+		// if n >= filter length AND not (StartThresholding)
+		//		StartThresholding = true
+		//		Add sample
+		//		Work out average of previous 5 samples
+		// else
+		// 		Add sample??
+		//		Test against threshold
+		//		Set status of sample
+		//		check this and last sample against status combinations and take action
+		//		if not OK then rtn else ???
+		
+		// last two sample values should be in buffer
+		// need to increment counts of ectopic beats
+
+		// will only get here if more than 5 samples arrived
+		var mLatestAvg;
+		if (!mStartThreshold) {
+			mStartThreshold = true; 
+			vRunningAvg = aAvgStore[0];
+			mLatestAvg = fCalcAvgValues( intMs, mSampleIndex);	
+			addAverage( mLatestAvg, intMs);
+			addSample(intMs, null); 
+			updateRunningStats(previousIntMs, intMs, livePulse);	
 		} else {
-			// debug
-			$.DebugMsg( true, "C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
-		}	
+		
+		
+		
+		
+		} // end threshold test
+
 	// end new rawSampleProcessing
 	}
 
