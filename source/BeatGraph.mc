@@ -209,7 +209,7 @@ class BeatView extends Ui.View {
  
 		// Y scale could be very narrow if all values the same so add 50 to top and bottom
 		var scaleY = chartHeight / (Ymax - Ymin).toFloat();
-		//scaleY = scaleY / 2.0; // compress scale
+		scaleY = scaleY / 1.5; // compress scale as don't want to overflow pulse rectangle area
 		
 		Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
 		Sys.println("BeatView: chartHeight: "+chartHeight+" scale factor X: "+scaleX+" scale Y = "+scaleY);
@@ -317,9 +317,17 @@ class BeatView extends Ui.View {
 		// Actual difference between avg value and mid-point of range
 		var mDeltaAvg = 0;
 		var y1 = ctrY;		
+
+		dc.setPenWidth(1);
+				
+		// label avg axis
+		dc.drawText( leftX+5, mColStart, mLabelFont, format("$1$",[Ymax.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( leftX, ctrY, mLabelFont, format("$1$",[mAvgOffset.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( leftX+5, mColHeight+mColStart, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 		
 		dc.setPenWidth(3);
-		
+				
 		for ( var i = 0; i < mSampleNum; i++) {
 			// mXdata[] has x value
 			// text needs to be above bar (may need to alternate top/bottom)
