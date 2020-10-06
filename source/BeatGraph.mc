@@ -45,8 +45,7 @@ class BeatView extends Ui.View {
 	hidden var mProcessingTime;
 	
 	hidden var customFont = null;
-		
-	//hidden var mPoincareLayout;
+
 	hidden var cGridWith;
 	hidden var chartHeight;
     hidden var ctrX;
@@ -219,20 +218,10 @@ class BeatView extends Ui.View {
 		var sample;
 		var incSum = min;
 		
-		// how far up Y axis to start line in pixels
-		var yBase = ((floor+200) * scaleX).toNumber();
-		
-		// where to start HR line from on X axis. Min is half 1st sample		
-		var StartX_unscaled = 0; //$._mApp.mIntervalSampleBuffer[mNumberEntries-1-mSampleNum] / 2;
+		// where to start HR line from on X axis. 	
+		var StartX_unscaled = 0;
 		var xBase = ((StartX_unscaled-floor) * scaleX).toNumber();
-		
-		// need a line to first pulse - should be on same Y point
-		var mYBaseline = floorY-yBase;
-				
-		//var firstPass = true;
 		var mXcoord = 0;
-		var cHeight = ((mYBaseline-ceilY) *2 ) /3; 
-		var cOffset = mYBaseline-cHeight;
 		
 		// beat width
 		var mPulseWidth = 4;
@@ -240,18 +229,20 @@ class BeatView extends Ui.View {
 		// index from 0 to determine state of particular beat
 		var mFlagOffset = mSampleNum-1;
 		
-		// -1 on end test as showing one more than needed
+		// -1 on end test as showing one more than neede
 		
-		// FIX:::
-		// Can remove baseline and also get rid of first pass logic
-		
-		// Going to ploy labels as another loop to make logic easier as averages need to skill excoptic beats!
-		// Can also plot average line!
+		// Going to plot labels as another loop to make logic easier as averages need to skill excoptic beats!
 		var mXdata = new [mSampleNum];
 		// market as ectopic so use sample processing average
 		var mIgnoreSample = new [mSampleNum];
 		var mXDataIndex = 0; // could have done using mFlagOffset and reverse but more complex
 		var mSampleStartIndex = mNumberEntries-1-mSampleNum;
+		
+		// Setup Y structure of bar plots and text
+		// 10% top and bottom
+		var cBorder = ((chartHeight * 20) / 100).toNumber();
+		var mColStart = ceilY+cBorder;
+		var mColHeight = chartHeight - 2 * cBorder;
 		
 		for( var i = mSampleStartIndex; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
@@ -298,9 +289,9 @@ class BeatView extends Ui.View {
 			// save X co-coord for avg plot and labels
 			mXdata[mXDataIndex] = leftX+mXcoord+xBase;
 			mXDataIndex++;
-			
+
 			// draw spike from Y base to top of chart x, y, w, h
-			dc.fillRectangle(leftX+mXcoord+xBase, cOffset, mPulseWidth, cHeight);			
+			dc.fillRectangle(leftX+mXcoord+xBase, mColStart, mPulseWidth, mColHeight);			
 			
 			// move base
 			xBase += mXcoord;
@@ -310,22 +301,22 @@ class BeatView extends Ui.View {
 						
 		} // end sample loop
 				
-		// ADD Label and avg plot code
-		// Assume average is available already in sample processing
-		//fCalcAvgValues(mSampleNum, mSampleStartIndex, mIgnoreSample);
+		//Label and avg plot code
 		
 		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
 		
 		// now we have averages and X location so can plot text
 		var mStr;
 		var mDeltaPc;
-		var mTxtSize;
+		var mTxtSize = dc.getTextDimensions("000", mLabelFont);
 		var yPos;
 		var xPos;
 		var y2 = 0; 
-		var yOffset = ((Ymax-Ymin)/2)*scaleY; // mid-range
-		var y1 = yOffset+20; //ctrY;		
-		var mPlotAvg;
+		// We want to centre avg on graph about ctrY
+		var mAvgOffset = ((Ymax-Ymin)/2)+Ymin;
+		// Actual difference between avg value and mid-point of range
+		var mDeltaAvg = 0;
+		var y1 = ctrY;		
 		
 		dc.setPenWidth(3);
 		
@@ -344,27 +335,29 @@ class BeatView extends Ui.View {
 			// force average for line to sensible value
 			if ((a0 == null) || (a1 == null) || (a0 == 0.0)) {
 				mDeltaPc = 0;
-				y1 = yOffset+ceilY; //ctrY;
+				mDeltaAvg = 0;
+				y1 = ctrY;
 				y2 = y1;
 			} else {
 				mDeltaPc = 100 * (( a1.toFloat() - a0) / a0);
 				// bigger II means higher on screen = negative offset
 				// correct Y for widening YMin value eearlier on min/max search
-				y2 = (floorY - scaleY * (a0 - Ymin.toFloat())).toNumber()+20;
+				mDeltaAvg = a0 - mAvgOffset;
+				y2 = ctrY - scaleY * mDeltaAvg; //(floorY - scaleY * (a0 - Ymin.toFloat())).toNumber()+20;
 			}
 			
 			Sys.println("mDelatPc = "+ mDeltaPc+", ctrY: "+ctrY+", a0 "+a0+", y1:y2= ["+y1+","+y2+"]");
 			
 			// no % symbol as not in custom font yet
 			mStr = format("$1$",[mDeltaPc.format("%d")]);
-			mTxtSize = dc.getTextDimensions(mStr, mLabelFont);
+
 			// move text half width
-			xPos = mXdata[i] + mTxtSize[0]/3;
+			xPos = mXdata[i] + mTxtSize[0]/4;
 			
 			if ((i % 2) == 0) {
-				yPos = cOffset-10;
+				yPos = mColStart-10;
 			} else {
-				yPos = cOffset+cHeight+10;
+				yPos = mColStart+mColHeight+10;
 			}
 			
 			dc.drawText( xPos, yPos, mLabelFont, mStr, Gfx.TEXT_JUSTIFY_CENTER | Gfx.TEXT_JUSTIFY_VCENTER );
