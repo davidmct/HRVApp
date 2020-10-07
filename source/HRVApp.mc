@@ -17,6 +17,11 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// Future ..
+// Add another screen maybe based on poincare or HISTORY showing plot of rMSSD, NNX against sample number
+// X axis would be scaled buffer length
+// Y-axis selectable statistic selected by menu like current history graph
+
 
 //0.4.7
 // Added plot of beats over last N sammples
@@ -24,15 +29,16 @@ using Toybox.Time.Gregorian;
 // Can I add payment link to settings???
 // Need to UPDATE
 // 1. Menu system for setting thresholds - DONE
-// 2. FIT file update using new variables
-// 3. Update stats pages with new variables for beats
+// 2. FIT file update using new variables _ PARTIAL. added fit structure
+// 3. Update stats pages with new variables for beats -DONE
 // 4. Do I add double/missed to History display and store??
 // 5. Sample processing itself
-// 6. Beat display chart
-// 7. Restructure ,emus to save memory - move settings up a level DONE. Little saving
-// 8. Can anything be moved to JSON data?
+// 6. Beat display chart - DONE. Needs full testing
+// 7. Restructure ,menus to save memory - move settings up a level DONE. Little saving
+// 8. Can anything be moved to JSON data? MOSTLY DONE
 //		-colours and mColourNumbersString good candiates but would need to hard code values. can remove enum as well
 //		- also possibly history maps and then threshold (needed on save and menu operation
+// 9. Check memory use during runs and what is consuming most data
 
 //0.4.5 
 // Fixed sensor switch bug
