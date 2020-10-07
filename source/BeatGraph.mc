@@ -113,19 +113,16 @@ class BeatView extends Ui.View {
     function onUpdate(dc) {
     	// performance check
     	startTimeP = Sys.getTimer();
-    	
-    	var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		if ($._mApp.mDeviceType == RES_240x240) {	
 			mLabelFont = customFont;
 		}
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
 		// draw lines
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
     	// X Range determined by sum of previous N samples 
@@ -303,7 +300,7 @@ class BeatView extends Ui.View {
 				
 		//Label and avg plot code
 		
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		
 		// now we have averages and X location so can plot text
 		var mStr;

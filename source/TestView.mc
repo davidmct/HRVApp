@@ -144,13 +144,10 @@ class TestView extends Ui.View {
 			//Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
 			//Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
 		}
-				    
-		var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($._mApp.bgColSet));
 
-		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -160,7 +157,7 @@ class TestView extends Ui.View {
 			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
 		}
 
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		mBitMap.draw(dc);
 		
@@ -168,12 +165,12 @@ class TestView extends Ui.View {
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
 			if (mDebugging) { Sys.println("UI has TextArea");}
-			$.f_drawTextArea(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
+			$.f_drawTextArea(dc, msgTxt, $._mApp.mValueColour, $._mApp.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
 			if (mDebugging) {Sys.println("UI has Text not area");}
-			$.f_drawText(dc, msgTxt, mValueColour, mapColour($._mApp.bgColSet), 
+			$.f_drawText(dc, msgTxt, $._mApp.mValueColour, $._mApp.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		}
@@ -193,7 +190,7 @@ class TestView extends Ui.View {
         //});
         //myTextArea.draw(dc);	
 		
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		// Specical case in [0] of HRM status
 		// 0.4.00
 		//for (var i=1; i < mLabelSetX.size(); i++) {
@@ -220,11 +217,11 @@ class TestView extends Ui.View {
 		
 		//0.4.4 - Separate field for I/E
 		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
-		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);	
+		dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);	
 		dc.drawText( mLabelSetXS[4], mLabelSetYS[4], mLabelFont, str, mJust);		
 		
 		// now show values		
-		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
+		dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);			
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
 		// 0.4.00 release for approval
 		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSensor.mHRData.livePulse.format("%d"), mJust);
@@ -240,7 +237,7 @@ class TestView extends Ui.View {
 		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mTimerFont, timer, mJust);
 		
 		// now draw circle based on FIT status
-		var mCircleCol = mapColour($._mApp.bgColSet);
+		var mCircleCol = $._mApp.mBgColour;
 		if ( mCircleCol == Gfx.COLOR_WHITE) {
 			// background is white so make black!
 			mCircleCol = Gfx.COLOR_BLACK;

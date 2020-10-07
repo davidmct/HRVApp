@@ -146,9 +146,6 @@ class HistoryView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-    	
-    	var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
 		
@@ -167,7 +164,7 @@ class HistoryView extends Ui.View {
 		// draw the layout. remove if trying manual draw of layout elements
     	//View.onUpdate(dc);
 
-		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -177,7 +174,7 @@ class HistoryView extends Ui.View {
 			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 1);
 		}
 
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 
 		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
@@ -215,11 +212,11 @@ class HistoryView extends Ui.View {
                         	
         // hard to tie menu on selection order to this list-> fixed 0.4.3
         // draw the data being drawn labels
-        dc.setColor( mapColour($._mApp.Label1ColSet), Gfx.COLOR_TRANSPARENT);
+        dc.setColor( $._mApp.Label1Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, labelList[0], mJust);			
-        dc.setColor( mapColour($._mApp.Label2ColSet), Gfx.COLOR_TRANSPARENT);
+        dc.setColor( $._mApp.Label2Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, labelList[1], mJust);	
-		dc.setColor( mapColour($._mApp.Label3ColSet), Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.Label3Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, labelList[2], mJust);	
 		
 		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
@@ -309,7 +306,7 @@ class HistoryView extends Ui.View {
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
 		// Built new font instead
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
@@ -346,11 +343,11 @@ class HistoryView extends Ui.View {
 			//Sys.println("HistoryView() single data point");
 			
 			// now we should have a continuous set of points having found a non-zero entry
-			MapSetColour(dc,  $._mApp.Label1ColSet, $._mApp.bgColSet);
+			dc.setColor($._mApp.Label1Colour, $._mApp.mBgColour);
 			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
-			MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+			dc.setColor($._mApp.Label2Colour, $._mApp.mBgColour);
 			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
-			MapSetColour(dc,  $._mApp.Label3ColSet, $._mApp.bgColSet);
+			dc.setColor($._mApp.Label3Colour, $._mApp.mBgColour);
 			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
 			
 			// TEST CODE		

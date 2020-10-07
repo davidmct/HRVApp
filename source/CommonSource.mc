@@ -59,15 +59,11 @@ class CustomBackground extends Ui.Drawable {
 
     function initialize(settings) {
         Drawable.initialize({});
-        //mColour = mapColour( $._mApp.bgColSet);
     }
 
     // fill background
     function draw(dc) {
-    	// could draw a rectangle
-    	var fore = mapColour( 14); // TRANSPARENT);
-    	var back = mapColour($._mApp.bgColSet);
-        dc.setColor(back, back);
+        dc.setColor(-1, $._mApp.mBgColour);
     	dc.clear();
 
     }

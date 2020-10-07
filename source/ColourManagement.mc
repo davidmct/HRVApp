@@ -2,7 +2,22 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics;
 using Toybox.System as Sys;
 
+// Setup global colours
+function mapIndexToColours() {
+		
+	var mColours = Ui.loadResource(Rez.JsonData.jsonColourList); 
+    
+    $._mApp.mLabelColour = mColours[$._mApp.lblColSet];
+    $._mApp.mValueColour = mColours[$._mApp.txtColSet];
+	$._mApp.mBgColour = mColours[$._mApp.bgColSet];
+	// This colour is dynamic
+	//$._mApp.mHRColour = mColours[$._mApp.mSensor.mHRData.mHRMStatusCol];
+	$._mApp.Label1Colour = mColours[$._mApp.Label1ColSet];		
+	$._mApp.Label2Colour = mColours[$._mApp.Label2ColSet];
+	$._mApp.Label3Colour = mColours[$._mApp.Label3ColSet];
 
+	return;		
+}
 
 function mapColour(index) {
 	var col;
@@ -20,6 +35,7 @@ function mapColour(index) {
 	return mColours[col];		
 }
 
+(:discard)
 function MapSetColour( dc, fore, back) {
 	// map colours to be used
 	var fore_pick = mapColour(fore);

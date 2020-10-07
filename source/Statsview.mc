@@ -108,10 +108,7 @@ class StatsView extends Ui.View {
     function onUpdate(dc) { 
     	//Sys.println("StatsView: onUpdate() called");
 		
-		var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
-		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -127,12 +124,12 @@ class StatsView extends Ui.View {
 		if (viewToShow == 1 ) {
 			// draw 1st set of labels and values
 			// x, y, font, text, just
-			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 			for (var i=0; i < mLabelSetX.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel1Labels[i], mJust);			
 			}
-			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);	
+			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);	
 			//0.4.3 set to 0.1f from %d for rMSSD - does it fit?		
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%.1f"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
@@ -150,13 +147,13 @@ class StatsView extends Ui.View {
 		} else if (viewToShow == 2) {
 			// draw second set of labels and values
 			// x, y, font, text, just
-			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[1], mJust);
 			for (var i=0; i < mLabelSetXS.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel2Labels[i], mJust);			
 			}
 			
-			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);			
+			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);			
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mNN50.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
@@ -166,12 +163,12 @@ class StatsView extends Ui.View {
 		} else if (viewToShow == 3) {
 			// draw third set of labels and values
 			// x, y, font, text, just
-			dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[2], mJust);
 			for (var i=0; i < mLabelSetXS.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel3Labels[i], mJust);			
 			}
-			dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);				
+			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);				
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.getCurrentEntry().format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	

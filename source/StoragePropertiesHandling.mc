@@ -102,6 +102,7 @@ class HRVStorageHandler {
 		}	
 		// now load up variables
 		readProperties();
+		mapIndexToColours();
 	}
 
 	function readProperties() {	
@@ -274,6 +275,8 @@ class HRVStorageHandler {
 		$._mApp.mHistoryLabel2 = $._mApp.getProperty("pHistLabel2").toNumber();	
 		$._mApp.mHistoryLabel3 = $._mApp.getProperty("pHistLabel3").toNumber();	
 		
+		mapIndexToColours();
+		
 		// no history selected. binary flags as bits
 		// set default selection
 		// Used in menu creation
@@ -325,6 +328,8 @@ class HRVStorageHandler {
 			$._mApp.mHistoryLabel1 = $._mApp.Properties.getValue("pHistLabel1").toNumber();	
 			$._mApp.mHistoryLabel2 = $._mApp.Properties.getValue("pHistLabel2").toNumber();	
 			$._mApp.mHistoryLabel3 = $._mApp.Properties.getValue("pHistLabel3").toNumber();	
+			
+			mapIndexToColours();
 			
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );

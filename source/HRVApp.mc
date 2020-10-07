@@ -158,6 +158,16 @@ class HRVAnalysis extends App.AppBase {
 	var Label1ColSet;
 	var Label3ColSet;
 	var Label2ColSet;
+	
+	// actual values of colour based on ColSet index
+	// saves lots of UI resource loads and func calls
+	var mLabelColour;
+    var mValueColour;
+	var mBgColour;
+	var mHRColour;
+	var Label1Colour;		
+	var Label2Colour;
+	var Label3Colour;
 	//0.4.3 
 	//add variables for history text index
 	var mHistoryLabel1;

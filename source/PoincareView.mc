@@ -169,15 +169,12 @@ class PoincareView extends Ui.View {
     	startTimeP = Sys.getTimer();
     	
     	mShowCount++;
-    	
-    	var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);
 		
 		if ($._mApp.mDeviceType == RES_240x240) {	
 			mLabelFont = customFont;
 		}
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -190,7 +187,7 @@ class PoincareView extends Ui.View {
 			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
 		}
 		
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[viewToShow-1], mJust);
 		// draw "RR ms"
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, mLabelInterval, mJust);
@@ -232,7 +229,7 @@ class PoincareView extends Ui.View {
 		var mid = floor + (ceil - floor) / 2;
 		// as display area is tight on Y axis ONLY draw mid value
 		
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);			
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);			
 		//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
 		//dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);		
@@ -244,9 +241,9 @@ class PoincareView extends Ui.View {
 		
 		// set colour of rectangles. can't see white on white :-)
 		if ($._mApp.bgColSet == 3) { // BLACK
-			MapSetColour(dc, 0, $._mApp.bgColSet); //WHITE
+			dc.setColor(Gfx.COLOR_WHITE, $._mApp.mBgColour);
 		} else {
-			MapSetColour(dc, 3, $._mApp.bgColSet);	
+			dc.setColor(Gfx.COLOR_BLACK, $._mApp.mBgColour);
 		}
 		
 		// reduce entries by 1 as points to next free slot

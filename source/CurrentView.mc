@@ -89,15 +89,13 @@ class CurrentValueView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-
-		var mLabelColour = mapColour( $._mApp.lblColSet);
-		var mValueColour = mapColour( $._mApp.txtColSet);		
+	
 		var mMessage = "";
 		
-		dc.setColor(Gfx.COLOR_TRANSPARENT, mapColour($._mApp.bgColSet));
+		dc.setColor(Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
 		mMessage = "Running for "+timer+" out of "+timeLimit;
@@ -106,12 +104,11 @@ class CurrentValueView extends Ui.View {
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
 			if (mDebugging) { Sys.println("UI has TextArea");}
-			$.f_drawTextArea(dc, mMessage, mValueColour, mapColour($._mApp.bgColSet), 
-				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
+			$.f_drawTextArea(dc, mMessage, mValueColour, $._mApp.mBgColour, mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
 			if (mDebugging) { Sys.println("UI has Text not TextArea");}
-			$.f_drawText(dc, mMessage, mValueColour, mapColour($._mApp.bgColSet), 
+			$.f_drawText(dc, mMessage, mValueColour, $._mApp.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		}
@@ -129,7 +126,7 @@ class CurrentValueView extends Ui.View {
         //});
         //myTextArea.draw(dc);	
         
-		dc.setColor( mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		        
         // draw rest of labels
   		for (var i=0; i < mLabelSetX.size(); i++) {
@@ -137,7 +134,7 @@ class CurrentValueView extends Ui.View {
 		}      
         
         // draw values
-		dc.setColor( mValueColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%d"), mJust);
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.getCurrentEntry().format("%d"), mJust);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
