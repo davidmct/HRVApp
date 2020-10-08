@@ -1,0 +1,23 @@
+Future ..
+
+1. Add another screen maybe based on poincare or HISTORY showing plot of rMSSD, NNX against sample number
+	X axis would be scaled buffer length
+	Y-axis selectable statistic selected by menu like current history graph
+	
+2. A screen showing advice based on HRV trend
+	Could be a bar chart or like WHoop strap colour coded to show some status
+	Could look at history and curve fit then use trend to say whether rising or falling
+	possible to build a 30 day baseline (avg) on the app and give advice 
+	(perhaps colour coded - red, yellow, green like seen on the whoop strap or the HRV Stress Test on Garmin devices itself) on how hard to train on a given day ? 
+	Most HRV apps or Watches use some sort of Red, Green, Yellow Gauge to advice the user what to do
+	
+3. Widget version of app
+	Could require HRV analysis app to pass history if we want to use this using change of context
+	Would be limited to 2 min by watchdog
+	Could capture it's own history and do screen similar to (2)
+	use this widget reading to compare it against the 30 day avg baseline and use a color coding on the widget ? To see if you should be able to train or not. 
+	At best color coded and easy to interpret
+	
+4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
+
+5. 

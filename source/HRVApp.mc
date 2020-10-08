@@ -17,10 +17,7 @@ using Toybox.Time.Gregorian;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-// Future ..
-// Add another screen maybe based on poincare or HISTORY showing plot of rMSSD, NNX against sample number
-// X axis would be scaled buffer length
-// Y-axis selectable statistic selected by menu like current history graph
+
 
 
 //0.4.7
