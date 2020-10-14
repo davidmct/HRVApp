@@ -20,4 +20,22 @@ Future ..
 	
 4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
 
-5. 
+5. Another graph
+	Maybe should create a class to do this more generically!!
+	Plot X as interval number segment [n..m] with m being current
+	Plot Y is scaled II range: either min max or 30bpm (2000) to 150bpm (400ms) (130 bpm = 500ms)
+	Colour lines or points if ectopic (LS or SL) and if over/under threshold as sometimes one sample only
+	Need to invert axis as usual
+	Could use new buffer method for pulse flag
+	
+6. New buffer for flag...
+	Sample number is < 1208 so need 11 bits (2048) leaving 4 bits for flag
+	Flag = OK, S, L, ?
+	Buffer is circular of length N (say 20) which stores index number of sample and flag added using OR
+	Could use this for rest of processing as well as graphs
+	Using average this way would work ...
+	
+	We want to look back ignoring any samples which are SL, LS - others are OK
+	Either scan entire list everytime for match (needing SL, LS to be contiguous OR
+	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
+	
