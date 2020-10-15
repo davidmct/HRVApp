@@ -19,8 +19,9 @@ enum {
 	POINCARE_VIEW = 4,
 	POINCARE_VIEW2 = 5,
 	BEATS_VIEW = 6,
-	HISTORY_VIEW = 7,
-	NUM_VIEWS = 8
+	INTERVAL_VIEW =7,
+	HISTORY_VIEW = 8,
+	NUM_VIEWS = 9
 }
 
 // Colors index. Arrays start at zero

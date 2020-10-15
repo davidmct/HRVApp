@@ -247,8 +247,6 @@ class BeatView extends Ui.View {
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 			
-			mXcoord = ((sample - floor) * scaleX).toNumber();
-			
 			//Spike colour is dependent on the status
 			// 1. Colour pulses
 			//	    Lower threshold exceeded = Pink
