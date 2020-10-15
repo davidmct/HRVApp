@@ -98,8 +98,8 @@ class IntervalView extends Ui.View {
     	  	
     	// y range needed for plot
     	// FIXED IN FIRST IMPLEMENTATION
-    	var Ymin = 2000;
-    	var Ymax = 400;
+    	var Ymin = 400;
+    	var Ymax = 2000;
    	
 		// if no sample processing then exit 
     	if ($._mApp.mSampleProc == null ) { return true;}
@@ -128,7 +128,7 @@ class IntervalView extends Ui.View {
 		var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
 		// now draw graph
 		var sample = $._mApp.mIntervalSampleBuffer[mStartIndex];
-		var mY0 = floorY - ((sample-Ymax) * scaleY).toNumber();
+		var mY0 = floorY - ((sample-Ymin) * scaleY).toNumber();
 		var mX0 = leftX;
 		var mY1;
 		
@@ -138,11 +138,12 @@ class IntervalView extends Ui.View {
 		for( var i = mStartIndex+1; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point	
 			sample = $._mApp.mIntervalSampleBuffer[i];
-			mY1 = floorY - ((sample-Ymax) * scaleY).toNumber();
+			mY1 = floorY - ((sample-Ymin) * scaleY).toNumber();
 			
 			// default line colour is red		
-			dc.setColor( Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
-			dc.drawLine(mY0, mX0, mY1, mX0+1);
+			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
+			dc.drawLine(mX0, mY0, mX0+1, mY1);
+			Sys.println("IntervalPlot: sample, "+sample+" line from : mX0, mY0 "+mX0+", "+mY0+" to "+mX0+"+1, "+mY1);
 			
 			mX0++;
 			mY0 = mY1;
@@ -152,9 +153,9 @@ class IntervalView extends Ui.View {
 		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
-		dc.drawText( leftX+5, ceilY, mLabelFont, format("$1$",[Ymax.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( leftX+5, floorY, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
-		dc.drawLine( leftX+5, ctrY, rightX, ctrY);
+		dc.drawText( leftX+15, ceilY, mLabelFont, format("$1$",[Ymax.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( leftX+15, floorY, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
