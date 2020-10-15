@@ -57,29 +57,29 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
                   
      	if( id.equals("b")) {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Background")});
+            var menu = new Ui.Menu2({:title=>"Background"});
 	        menu.addItem(new Ui.MenuItem("White", null, "1", null));
 	        menu.addItem(new Ui.MenuItem("Black", null, "2", null));
 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setBackground)), Ui.SLIDE_IMMEDIATE );
         }
         else if( id.equals("l"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Label Colour")});
+            var menu = new Ui.Menu2({:title=>"Label Colour"});
             AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setLabel)), Ui.SLIDE_IMMEDIATE );
         } else if( id.equals("t"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Text Colour")});
+            var menu = new Ui.Menu2({:title=>"Text Colour"});
             AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setText)), Ui.SLIDE_IMMEDIATE );         	
         } else if( id.equals("h1"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 1")});
+            var menu = new Ui.Menu2({:title=>"Hist 1"});
             AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory1)), Ui.SLIDE_IMMEDIATE );         	
         } else if( id.equals("h2"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 2")});
+            var menu = new Ui.Menu2({:title=>"Hist 2"});
             AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory2)), Ui.SLIDE_IMMEDIATE );         	
         } else if( id.equals("h3"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Hist 3")});
+            var menu = new Ui.Menu2({:title=>"Hist 3"});
             AddColourItems( menu);
 	        Ui.pushView(menu, new ColourListMenuDelegate(self.method(:setHistory3)), Ui.SLIDE_IMMEDIATE );         	
         }

@@ -66,7 +66,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
 			// true if enough samples to save but we have to be in testing state
 			if (res == true) {
-				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save?")});
+				var menu = new Ui.Menu2({:title=>"Save?"});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "2", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
@@ -80,7 +80,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onMenu() {
 		
 		// Generate a new Menu for mainmenu
-        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main")});
+        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", true)});
         // add items
         menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
         menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
@@ -103,7 +103,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			var res = $._mApp.mTestControl.StateMachine(:escapePressed);	
 			// true means we need to check to save	
 			if (res == true) {		
-				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
+				var menu = new Ui.Menu2({:title=>"Save test"});
 		        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 		        menu.addItem(new Ui.MenuItem("No", null, "2", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
@@ -144,10 +144,12 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 class DrawableMenuTitle extends Ui.Drawable {
     var mIsTitleSelected = false;
     hidden var mTitle = "unset";
+    hidden var drawTrue;
 
-    function initialize(label) {
+    function initialize(label, mDrawBit) {
         Drawable.initialize({});
         mTitle = label;
+        drawTrue = mDrawBit;
     }
 
     function setSelected(isTitleSelected) {
@@ -157,12 +159,19 @@ class DrawableMenuTitle extends Ui.Drawable {
     // Draw the application icon and main menu title
     function draw(dc) {
         var spacing = 2;
-        var appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
-        var bitmapWidth = appIcon.getWidth();
+        var appIcon = null;
+        var bitmapWidth = 0;
+        var bitmapX = 0;
+        var bitmapY = 0;              
         var labelWidth = dc.getTextWidthInPixels(mTitle, $._mApp.mMenuTitleSize);
+        
+        if ( drawTrue) { 
+        	appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
+          	bitmapWidth = appIcon.getWidth();
+          	bitmapX = (dc.getWidth() - (bitmapWidth + spacing + labelWidth)) / 2;
+        	bitmapY = (dc.getHeight() - appIcon.getHeight()) / 2;
+        }
 
-        var bitmapX = (dc.getWidth() - (bitmapWidth + spacing + labelWidth)) / 2;
-        var bitmapY = (dc.getHeight() - appIcon.getHeight()) / 2;
         var labelX = bitmapX + bitmapWidth + spacing;
         var labelY = dc.getHeight() / 2;
 
@@ -170,8 +179,13 @@ class DrawableMenuTitle extends Ui.Drawable {
         dc.setColor(bkColor, bkColor);
         dc.clear();
 
-        dc.drawBitmap(bitmapX, bitmapY, appIcon);
+        if ( drawTrue) { dc.drawBitmap(bitmapX, bitmapY, appIcon);}
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(labelX, labelY, $._mApp.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        
+        if (drawTrue) {
+        	dc.drawText(labelX, labelY, $._mApp.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        } else {        
+        	dc.drawText(dc.getWidth()/2, labelY, Gfx.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        }
     }
 }

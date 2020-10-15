@@ -18,7 +18,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    	{
 		        :focusItemHeight=>45,
 		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
-		        :title=>new DrawableMenuTitle("Test"),
+		        :title=>new DrawableMenuTitle("Test", false),
 		        :footer=>new DrawableMenuFooter()
 		    	});
 		    customMenu.addItem(new CustomItem(:Manual, "Manual", (TYPE_MANUAL== mTestSelected)) );
@@ -32,7 +32,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    	{
 		        :focusItemHeight=>45,
 		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
-		        :title=>new DrawableMenuTitle("Source"),
+		        :title=>new DrawableMenuTitle("Source", false),
 		        :footer=>new DrawableMenuFooter()
 		    	});
 		    customMenu.addItem(new CustomItem(:Internal, "Internal", mExtStrap == SENSOR_INTERNAL) );
@@ -46,7 +46,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    	{
 		        :focusItemHeight=>45,
 		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
-		        :title=>new DrawableMenuTitle("Fit write"),
+		        :title=>new DrawableMenuTitle("Fit write", false),
 		        :footer=>new DrawableMenuFooter()
 		    	});
 		    customMenu.addItem(new CustomItem(:Write, "Write", mFitWrite == true) );
@@ -54,7 +54,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         } 
         else if( id.equals("h")) { 
-	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("History")});
+	        var menu = new Ui.Menu2({:title=>"History"});
 	        menu.addItem(new Ui.MenuItem("History 1", null, "1", null));
 	        menu.addItem(new Ui.MenuItem("History 2", null, "2", null));
 	        menu.addItem(new Ui.MenuItem("History 3", null, "3", null));
@@ -80,18 +80,18 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 			}          
         }        
         else if ( id.equals("ti")) {
-     		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
+     		var menu = new Ui.Menu2({:title=>"Timer"});
 	        menu.addItem(new Ui.MenuItem("Duration", null, "d", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
         else if ( id.equals("th"))   {
- 			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Threshold")});
+ 			var menu = new Ui.Menu2({:title=>"Threshold"});
 	        menu.addItem(new Ui.MenuItem("Upper", null, "u", null));     
 	        menu.addItem(new Ui.MenuItem("Lower", null, "l", null));   	          
  	        Ui.pushView(menu, new ThresholdMenuDelegate(), Ui.SLIDE_IMMEDIATE );       
         }
         else if ( id.equals("c"))   {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
+            var menu = new Ui.Menu2({:title=>"Colour"});
 	        menu.addItem(new Ui.MenuItem("Background", null, "b", null));
 	        menu.addItem(new Ui.MenuItem("Text", null, "t", null));
 	        menu.addItem(new Ui.MenuItem("Labels", null, "l", null));	 
@@ -102,19 +102,19 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
         else if ( id.equals("so"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
+            var menu = new Ui.Menu2({:title=>"Sound"});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_IMMEDIATE );     
         }
         else if ( id.equals("v"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Vibration")});
+            var menu = new Ui.Menu2({:title=>"Vibration"});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_IMMEDIATE );  
         }
         else if (id.equals("r")) {
-	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
+	        var menu = new Ui.Menu2({:title=>"Reset"});
 	        menu.addItem(new Ui.MenuItem("Results", null, "r", null));
 	        menu.addItem(new Ui.MenuItem("Settings", null, "s", null));
 	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_IMMEDIATE );
@@ -122,7 +122,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         else if( id.equals("a"))  {
         	// build simple menu with version from system file
         	// Generate a new Menu for mainmenu
-	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
+	        var menu = new Ui.Menu2({:title=>"About"});
 	       	var mAppVer = Ui.loadResource(Rez.Strings.AppVersion);
 	        var mID = $._mApp.mDeviceID;
 	        if (mID == null) {mID = "No device ID";}

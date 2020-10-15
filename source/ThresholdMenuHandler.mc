@@ -93,11 +93,11 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
         Sys.println("Threshold onselect id "+id);
                   
      	if( id.equals("u"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Upper")});
+            var menu = new Ui.Menu2({:title=>"Upper"});
             AddThresholdItems( menu);
 	        Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
         } else if( id.equals("l"))  {
-            var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Lower")});
+            var menu = new Ui.Menu2({:title=>"Lower"});
             AddThresholdItems( menu);
 	        Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE );         	
         }
