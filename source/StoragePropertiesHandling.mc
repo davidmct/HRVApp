@@ -251,7 +251,6 @@ class HRVStorageHandler {
 		// assumes all these values exist
 		//$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
 		$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 		$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
 		$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
 		$._mApp.soundSet = $._mApp.getProperty("soundSet");
@@ -304,7 +303,6 @@ class HRVStorageHandler {
 		//try {
 			//$._mApp.timestampSet = Storage.getValue("timestampSet");
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			$._mApp.versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
 			$._mApp.mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");
 			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");

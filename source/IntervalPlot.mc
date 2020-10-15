@@ -97,9 +97,8 @@ class IntervalView extends Ui.View {
 		// X range is unscaled and just point number out of range
     	  	
     	// y range needed for plot
-    	// FIXED IN FIRST IMPLEMENTATION
-    	var Ymin = 400;
-    	var Ymax = 2000;
+    	var Ymin = 2500;
+    	var Ymax = 0;
    	
 		// if no sample processing then exit 
     	if ($._mApp.mSampleProc == null ) { return true;}
@@ -124,11 +123,42 @@ class IntervalView extends Ui.View {
     	}
     	
     	Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex);
+    	
+    	// scan array looking for min and max
+    	var value;
+    	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
+			// first iteration this is end point	
+			value = $._mApp.mIntervalSampleBuffer[i];
+			if(Ymin > value) {
+				Ymin = value;
+			}
+			if(Ymax < value) {
+				Ymax = value;
+			}
+		}
+		value = null;
+    	
+    	// Create the range in blocks of 5
+		var ceil = (Ymax + 5) - (Ymax % 5);
+		var floor = Ymin - (Ymin % 5);
+		if (floor < 0 ) { floor = 0;}
+		
+		var test = (ceil - floor) % 10;
+		if (test == 5) { 
+			ceil += 5;
+		} 
+		
+		Ymin = null;
+		Ymax = null;
+		test = null;
+		
+		var scaleY = chartHeight / (ceil - floor).toFloat();
 
-		var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
+		//var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
+		
 		// now draw graph
 		var sample = $._mApp.mIntervalSampleBuffer[mStartIndex];
-		var mY0 = floorY - ((sample-Ymin) * scaleY).toNumber();
+		var mY0 = floorY - ((sample-floor) * scaleY).toNumber();
 		var mX0 = leftX;
 		var mY1;
 		
@@ -138,7 +168,7 @@ class IntervalView extends Ui.View {
 		for( var i = mStartIndex+1; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point	
 			sample = $._mApp.mIntervalSampleBuffer[i];
-			mY1 = floorY - ((sample-Ymin) * scaleY).toNumber();
+			mY1 = floorY - ((sample-floor) * scaleY).toNumber();
 			
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
@@ -153,8 +183,8 @@ class IntervalView extends Ui.View {
 		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
-		dc.drawText( leftX+15, ceilY, mLabelFont, format("$1$",[Ymax.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( leftX+15, floorY, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		dc.drawText( leftX+15, ceilY, mLabelFont, format("$1$",[ceil.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( leftX+15, floorY, mLabelFont, format("$1$",[floor.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
 		// performance check only on real devices

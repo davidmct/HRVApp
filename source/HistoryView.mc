@@ -18,7 +18,7 @@ class HistoryView extends Ui.View {
 	hidden var xStep;
 	hidden var floor;
 	
-	hidden var customFont = null;
+	//hidden var customFont = null;
 	
 	//0.4.3
 	//hidden var numResultsToDisplay = 0;
@@ -67,9 +67,10 @@ class HistoryView extends Ui.View {
 		cGridWidth = a.toNumber();
 		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
 		chartHeight = a.toNumber();
+		a = null;
 		
 		if ($._mApp.mDeviceType == RES_240x240) {		
-			customFont = Ui.loadResource(Rez.Fonts.smallFont);
+			mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
 		}
 		
 		// chartHeight defines height of chart and sets scale
@@ -156,11 +157,7 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
-		
-		if ($._mApp.mDeviceType == RES_240x240) {	
-			mLabelFont = customFont;
-		}
-		
+
 		// draw the layout. remove if trying manual draw of layout elements
     	//View.onUpdate(dc);
 
@@ -408,11 +405,11 @@ class HistoryView extends Ui.View {
 	 			
 	 			//Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
 
-				MapSetColour(dc, $._mApp.Label1ColSet, $._mApp.bgColSet);
+				dc.setColor($._mApp.Label1Colour, $._mApp.mBgColour);
 				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
-				MapSetColour(dc, $._mApp.Label2ColSet, $._mApp.bgColSet);
+				dc.setColor($._mApp.Label2Colour, $._mApp.mBgColour);
 				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
-				MapSetColour(dc,$._mApp.Label3ColSet, $._mApp.bgColSet);
+				dc.setColor($._mApp.Label3Colour, $._mApp.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 
 				pointNumber++;	

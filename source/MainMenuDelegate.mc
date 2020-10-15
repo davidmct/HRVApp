@@ -123,7 +123,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         	// build simple menu with version from system file
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
-	       	var mAppVer = $._mApp.versionSet;
+	       	var mAppVer = Ui.loadResource(Rez.Strings.AppVersion);
 	        var mID = $._mApp.mDeviceID;
 	        if (mID == null) {mID = "No device ID";}
 	        //Sys.println("Device indentifier = "+mID);

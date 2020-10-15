@@ -140,7 +140,6 @@ class HRVAnalysis extends App.AppBase {
 	// Settings variables
     //var timestampSet;
 	var appNameSet;
-	var versionSet;
 
 	var soundSet;
 	var vibeSet;
@@ -210,7 +209,6 @@ class HRVAnalysis extends App.AppBase {
 		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
 		mAuxHRAntID = mAntID; // default
 		
-		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
 		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
 		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
 		
@@ -244,7 +242,6 @@ class HRVAnalysis extends App.AppBase {
 // pre 0.4.4 code
     function initializeWithStorage() {
 		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
-		versionSet = Ui.loadResource(Rez.Strings.AppVersion);	
 		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
 		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
 		
@@ -263,7 +260,6 @@ class HRVAnalysis extends App.AppBase {
  (:preCIQ24)   
     function initializeNoStorage() {
  		mAntID = $._mApp.getProperty("pAuxHRAntID");
-		versionSet = Ui.loadResource(Rez.Strings.AppVersion);
 		mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
 		mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
 		
