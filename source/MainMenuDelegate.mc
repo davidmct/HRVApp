@@ -12,7 +12,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     function onSelect(item) {
         var id = item.getId();
     
-     	if( id.equals("test")) {
+     	if( id.equals("t")) {
   			var mTestSelected = $._mApp.testTypeSet;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
@@ -25,7 +25,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Timer, "Timer", (TYPE_TIMER== mTestSelected)) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         }
-     	else if( id.equals("source")) {
+     	else if( id.equals("s")) {
 			// optical/registered strap or unknown/disabled
   			var mExtStrap = $._mApp.mSensorTypeExt;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
@@ -39,7 +39,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         }
-        else if( id.equals("fitOutput")) {
+        else if( id.equals("f")) {
 			// want to set FIT file creation
   			var mFitWrite = $._mApp.mFitWriteEnabled;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
@@ -53,14 +53,14 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:NoWrite, "No Write", mFitWrite == false) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         } 
-        else if( id.equals("historySelection")) { 
+        else if( id.equals("h")) { 
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("History")});
-	        menu.addItem(new Ui.MenuItem("History Lbl 1", null, "historyLbl1", null));
-	        menu.addItem(new Ui.MenuItem("History Lbl 2", null, "historyLbl2", null));
-	        menu.addItem(new Ui.MenuItem("History Lbl 3", null, "historyLbl3", null));
+	        menu.addItem(new Ui.MenuItem("History 1", null, "1", null));
+	        menu.addItem(new Ui.MenuItem("History 2", null, "2", null));
+	        menu.addItem(new Ui.MenuItem("History 3", null, "3", null));
 	        Ui.pushView(menu, new HistoryMainMenuDelegate(), Ui.SLIDE_IMMEDIATE );               	    
         }
-        else if ( id.equals("load") ) {
+        else if ( id.equals("l") ) {
         	// you can't do this whilst testing! Otherwise screws data
         	if ( $._mApp.mTestControl.mTestState >= TS_TESTING) {
         		$._mApp.mTestControl.alert(TONE_ERROR);
@@ -79,47 +79,47 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 				}				
 			}          
         }        
-        else if ( id.equals("timer")) {
+        else if ( id.equals("ti")) {
      		var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Timer")});
-	        menu.addItem(new Ui.MenuItem("Duration", null, "duration", null));
+	        menu.addItem(new Ui.MenuItem("Duration", null, "d", null));
 	        Ui.pushView(menu, new TimerMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
-        else if ( id.equals("threshold"))   {
+        else if ( id.equals("th"))   {
  			var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Threshold")});
-	        menu.addItem(new Ui.MenuItem("Upper", null, "upper", null));     
-	        menu.addItem(new Ui.MenuItem("Lower", null, "lower", null));   	          
+	        menu.addItem(new Ui.MenuItem("Upper", null, "u", null));     
+	        menu.addItem(new Ui.MenuItem("Lower", null, "l", null));   	          
  	        Ui.pushView(menu, new ThresholdMenuDelegate(), Ui.SLIDE_IMMEDIATE );       
         }
-        else if ( id.equals("colour"))   {
+        else if ( id.equals("c"))   {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Colour")});
-	        menu.addItem(new Ui.MenuItem("Background", null, "background", null));
-	        menu.addItem(new Ui.MenuItem("Text", null, "text", null));
-	        menu.addItem(new Ui.MenuItem("Labels", null, "labels", null));	 
+	        menu.addItem(new Ui.MenuItem("Background", null, "b", null));
+	        menu.addItem(new Ui.MenuItem("Text", null, "t", null));
+	        menu.addItem(new Ui.MenuItem("Labels", null, "l", null));	 
 	        //0.4.3
-	        menu.addItem(new Ui.MenuItem("History 1", null, "history1", null));
-	       	menu.addItem(new Ui.MenuItem("History 2", null, "history2", null));
-	        menu.addItem(new Ui.MenuItem("History 3", null, "history3", null));	               
+	        menu.addItem(new Ui.MenuItem("History 1", null, "h1", null));
+	       	menu.addItem(new Ui.MenuItem("History 2", null, "h2", null));
+	        menu.addItem(new Ui.MenuItem("History 3", null, "h3", null));	               
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
-        else if ( id.equals("sound"))  {
+        else if ( id.equals("so"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Sound")});
-	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSound)), Ui.SLIDE_IMMEDIATE );     
         }
-        else if ( id.equals("vibration"))  {
+        else if ( id.equals("v"))  {
             var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Vibration")});
-	        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-	        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setVibe)), Ui.SLIDE_IMMEDIATE );  
         }
-        else if (id.equals("reset")) {
+        else if (id.equals("r")) {
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Reset")});
-	        menu.addItem(new Ui.MenuItem("Results", null, "results", null));
-	        menu.addItem(new Ui.MenuItem("Settings", null, "settings", null));
+	        menu.addItem(new Ui.MenuItem("Results", null, "r", null));
+	        menu.addItem(new Ui.MenuItem("Settings", null, "s", null));
 	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }  
-        else if( id.equals("about"))  {
+        else if( id.equals("a"))  {
         	// build simple menu with version from system file
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("About")});
@@ -127,8 +127,8 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        var mID = $._mApp.mDeviceID;
 	        if (mID == null) {mID = "No device ID";}
 	        //Sys.println("Device indentifier = "+mID);
-	        menu.addItem(new Ui.MenuItem(mAppVer, null, "test", null));
-	        menu.addItem(new Ui.MenuItem(mID, null, "deviceID", null));
+	        menu.addItem(new Ui.MenuItem(mAppVer, null, "t", null));
+	        menu.addItem(new Ui.MenuItem(mID, null, "d", null));
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
     }

@@ -54,17 +54,17 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();       
         // could use switch
         
-        if( id.equals("historyLbl1")) {            
+        if( id.equals("1")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 1")});           
             AddHistoryMenuItems( toggleMenu, 1);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(1, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    
         } 
-        else if( id.equals("historyLbl2")) {            
+        else if( id.equals("2")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 2")});
             AddHistoryMenuItems( toggleMenu, 2);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(2, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    
         }
-		else if( id.equals("historyLbl3")) {            
+		else if( id.equals("3")) {            
             var toggleMenu = new Ui.Menu2({:title=> new DrawableMenuTitle("Label 3")});
             AddHistoryMenuItems( toggleMenu, 3);
            	Ui.pushView(toggleMenu, new HistoryMenuDelegate(3, toggleMenu), Ui.SLIDE_IMMEDIATE );            	    

@@ -16,6 +16,7 @@ function mapIndexToColours() {
 	$._mApp.Label2Colour = mColours[$._mApp.Label2ColSet];
 	$._mApp.Label3Colour = mColours[$._mApp.Label3ColSet];
 
+	mColours = null;
 	return;		
 }
 

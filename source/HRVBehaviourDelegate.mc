@@ -67,8 +67,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			// true if enough samples to save but we have to be in testing state
 			if (res == true) {
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save?")});
-		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+		        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+		        menu.addItem(new Ui.MenuItem("No", null, "2", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 				return true;
 			}
@@ -82,18 +82,18 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		// Generate a new Menu for mainmenu
         var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main")});
         // add items
-        menu.addItem(new Ui.MenuItem("Test type", null, "test", null));
-        menu.addItem(new Ui.MenuItem("Source", null, "source", null));  
-        menu.addItem(new Ui.MenuItem("Fit Output", null, "fitOutput", null));
-        menu.addItem(new Ui.MenuItem("History view", null, "historySelection", null));       
-        menu.addItem(new Ui.MenuItem("Load Intervals", null, "load", null)); 
-       	menu.addItem(new Ui.MenuItem("Timer", null, "timer", null));
-        menu.addItem(new Ui.MenuItem("Threshold", null, "threshold", null));
-        menu.addItem(new Ui.MenuItem("Colours", null, "colour", null));
-        menu.addItem(new Ui.MenuItem("Sound", null, "sound", null));
-        menu.addItem(new Ui.MenuItem("Vibration", null, "vibration", null));   
-        menu.addItem(new Ui.MenuItem("Reset", null, "reset", null));    
-        menu.addItem(new Ui.MenuItem("About", null, "about", null));
+        menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
+        menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
+        menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
+        menu.addItem(new Ui.MenuItem("History view", null, "h", null));       
+        menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
+       	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
+        menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
+        menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
+        menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
+        menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
+        menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
+        menu.addItem(new Ui.MenuItem("About", null, "a", null));
         Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
 		return true;
     }
@@ -104,8 +104,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			// true means we need to check to save	
 			if (res == true) {		
 				var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Save test")});
-		        menu.addItem(new Ui.MenuItem("Yes", null, "optOne", null));
-		        menu.addItem(new Ui.MenuItem("No", null, "optTwo", null));
+		        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+		        menu.addItem(new Ui.MenuItem("No", null, "2", null));
 	 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setSave)), Ui.SLIDE_IMMEDIATE );  
 			} 	
 		
