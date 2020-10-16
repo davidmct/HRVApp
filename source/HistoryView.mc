@@ -144,11 +144,42 @@ class HistoryView extends Ui.View {
 		} // end search
 		return;
 	}
+	
+(:oldResults)
+	// dummy function to allow most of onUpdate to stay same
+	function prepResults() {}
+	
+(:newResults)
+	function prepResults() {
+		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		
+		// if retrieve returns null i eno storage then we will have all 0's
+		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
+			$._mApp.results[i] = 0;
+		}
+		// this will be overridden if we load results
+		$._mApp.resultsIndex = 0;
+		
+		$._mApp.mStorage.retrieveResults();
+		
+		Sys.println("Retrieved results ="+$._mApp.results);
+	}
+	
+(:oldResults)
+	function freeResults() {}
+	
+(:newResults)
+	function freeResults() {$._mApp.results = null;}
+
 
     //! Update the view
     function onUpdate(dc) {
 		
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
+		
+		prepResults();
+		
+		Sys.println("Results = "+$._mApp.results);
 		
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
@@ -422,9 +453,18 @@ class HistoryView extends Ui.View {
 		while ( day != today);
 		
 		// TEST CODE		
-		//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-		//	", "+System.getSystemStats().freeMemory.toString()+
-		//	", "+System.getSystemStats().totalMemory.toString()			
-		//	);
+		Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);
+		
+		//remove buffer
+		freeResults();
+    }
+    
+    //! Called when this View is removed from the screen. Save the
+    //! state of your app here.
+    function onHide() {
+    	// free up all the arrays - NO as maybe switches without a new ...
     }
 }

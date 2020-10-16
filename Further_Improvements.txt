@@ -39,3 +39,6 @@ Future ..
 	Either scan entire list everytime for match (needing SL, LS to be contiguous OR
 	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
 	
+7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
+
+	

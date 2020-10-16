@@ -378,7 +378,8 @@ class TestController {
     	$._mApp.mFitControl.discardFITrec();
     	//}
     }
-    
+
+(:oldResults) // moved to storage   
     function saveTest() {
     	Sys.println("TestControl: saveTest() called");
     	
@@ -441,6 +442,19 @@ class TestController {
     	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null
 
     }
+ 
+// core functionality moved to storage  
+(:newResults) 
+    function saveTest() {
+    	Sys.println("TestControl: saveTest() called");
+    	
+    	// prepare results and save
+    	$._mApp.mStorage.prepareSaveResults( utcStart); 
+    	
+     	// FIT FILE SESSION RESULTS HERE
+    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null   	
+    	
+    } // end save test
     
 	// called by startTest() to initial test timers etc
     function start() {

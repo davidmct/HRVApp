@@ -461,6 +461,7 @@ class HRVStorageHandler {
 		
 	}
 
+(:oldResults)
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
 		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
@@ -471,6 +472,23 @@ class HRVStorageHandler {
 		}
 		// this will be overridden if we load results
 		$._mApp.resultsIndex = 0;
+	}
+	
+(:newResults)
+	function resetResults() {
+		// should only be called from settings - also called onStart() but followed by load
+		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		Sys.println("resetResults() array created");
+
+		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
+			$._mApp.results[i] = 0;
+		}
+		$._mApp.resultsIndex = 0;
+		
+		// force history to empty
+		storeResults();
+		 
+		$._mApp.results = null;
 	}
 
 (:preCIQ24)
@@ -526,6 +544,34 @@ class HRVStorageHandler {
 		return true;
 	}
 
+(:discard)	
+	function retrieveResults( buffer) {
+		var mCheck;
+		// currently references a results array in HRVApp
+		if (Toybox.Application has :Storage) {
+			try {
+				mCheck = Storage.getValue("resultsArray");
+				$._mApp.resultsIndex = Storage.getValue("resultIndex");
+			}
+			catch (ex) {
+				Sys.println("ERROR: retrieveResults: no results array");
+				$._mApp.resultsIndex = 0;
+				return false;
+			}				
+			
+			if (mCheck != null) { buffer = mCheck; } 
+			
+			Sys.println("retrievefunc:\n mCheck ="+mCheck+"\nbuffer ="+buffer);
+			// have a null if not saved 1st time
+			if ($._mApp.resultsIndex == null) {$._mApp.resultsIndex = 0;}
+			return true;			
+		} else {
+			retrieveResultsProp();	
+		}
+		Sys.println("restrieveResults() finished");
+		return true;
+	}
+
 (:preCIQ24)
 	function storeResultsProp() {
 		$._mApp.setProperty("resultIndex", $._mApp.resultsIndex);
@@ -562,6 +608,85 @@ class HRVStorageHandler {
 			storeResultsProp();
 		}
 	}
+
+(:newResults)
+	// function to readin results array 
+	// update current day values and write back to store 	
+	function prepareSaveResults( utcStart) {
+		// need to load results array fill and then save
+		// assume pointer still valid
+		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		
+		// if retrieve returns null i eno storage then we will have all 0's
+		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
+			$._mApp.results[i] = 0;
+		}
+		// this will be overridden if we load results
+		$._mApp.resultsIndex = 0;
+		
+		retrieveResults(); 
+
+    	// seconds in day = 86400
+    	// make whole number of days (still seconds since UNIX epoch)
+    	// This ignores possiblity of 32 bit integar of time wrapping on testday and epoch
+    	// should change to use time functions available
+		var testDayutc = utcStart - (utcStart % 86400);
+		
+		// next slot in cycle, can overwrite multiple times in a day and keep last ones
+		// Check whether we are creating another set of results on the same day by inspecting previous entry
+		var previousEntry = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		var previousIndex = previousEntry * DATA_SET_SIZE;
+		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
+		
+		var x = $._mApp.results[previousIndex + TIME_STAMP_INDEX];
+		// convery to day units
+		var previousSavedutc = 	x - (x % 86400);
+		x = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		var currentSavedutc = x - (x % 86400);
+		var index;
+		
+		if (testDayutc == previousSavedutc) {
+			// overwrite current days entry
+			index = previousIndex;
+		}
+		else {
+			index = currentIndex;			
+			// written a new entry so move pointer
+   			// increment write pointer to circular buffer
+   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   		}
+			
+		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
+
+		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
+		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
+		$._mApp.results[index + MIN_II_INDEX] = $._mApp.mSampleProc.minIntervalFound;
+		$._mApp.results[index + MAX_II_INDEX] = $._mApp.mSampleProc.maxIntervalFound;		
+		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.minDiffFound;
+		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.maxDiffFound;				
+		$._mApp.results[index + RMSSD_INDEX] = $._mApp.mSampleProc.mRMSSD;
+		$._mApp.results[index + LNRMSSD_INDEX] = $._mApp.mSampleProc.mLnRMSSD;
+
+		$._mApp.results[index + SDNN_INDEX] = $._mApp.mSampleProc.mSDNN;
+		$._mApp.results[index + SDSD_INDEX] = $._mApp.mSampleProc.mSDSD; 
+		$._mApp.results[index + NN50_INDEX] = $._mApp.mSampleProc.mNN50;
+		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
+		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
+		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
+   		
+   		Sys.println("storing results ... ="+$._mApp.results);
+   		
+    	// better write results to memory!!
+    	storeResults(); 
+    	// save intervals as well so we can reload and display
+    	saveIntervalsToStore();
+    	saveStatsToStore();   	
+    	
+    	// discard results buffer as large
+    	$._mApp.results = null;
+    	
+	} // end prepareResults 
 	
 }
 

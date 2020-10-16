@@ -452,11 +452,15 @@ class HRVAnalysis extends App.AppBase {
 	    	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
 	    }
 
+		// 0.4.9 Don't do this unless needed
 		// Retrieve saved results from memory
 		// create and clear buffer - only one set per day
-		mStorage.resetResults();
+		//mStorage.resetResults();
+		
+		// 0.4.9 Don't do this unless needed
 		//restore previous results from properties/store		
-		mStorage.retrieveResults();
+		//mStorage.retrieveResults();
+		
 		// initialise for testing
 		mTestControl.resetTest();
 		
