@@ -4,7 +4,7 @@
 	<jsonData id="jsonColourList">[16777215, 11184810, 5592405, 0, 16711680, 11141120, 16733440, 16755200,
 				65280, 43520, 43775, 255, 11141375, 16711935, -1]</jsonData>
 	<jsonData id="jsonHistoryLabelList">["none", "avgBPM", "minII", "maxII", "minD", "maxD", "rMSSD", "LnrMSSD", "SDNN", "SDSD", "NN50", "pNN50", "NN20", "pNN20"]</jsonData>		
-	<jsonData id="jsonLongThresholdMap">[0.10, 0.15, 0.18, 0.20, 0.25]</jsonData>
-	<jsonData id="jsonShortThresholdMap">[0.10, 0.15, 0.18, 0.20, 0.25]</jsonData>
+	<jsonData id="jsonLongThresholdMap">[0.12, 0.15, 0.20, 0.25, 0.30]</jsonData>
+	<jsonData id="jsonShortThresholdMap">[0.12, 0.15, 0.20, 0.25, 0.30]</jsonData>
 	<jsonData id="jsonThresholdStrings">[ "Very tight", "Tight", "Nominal", "Loose", "Very loose"]</jsonData>
 </resources>

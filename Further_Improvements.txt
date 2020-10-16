@@ -20,7 +20,7 @@ Future ..
 	
 4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
 
-5. Another graph
+5. Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
 	Plot X as interval number segment [n..m] with m being current
 	Plot Y is scaled II range: either min max or 30bpm (2000) to 150bpm (400ms) (130 bpm = 500ms)
@@ -40,5 +40,7 @@ Future ..
 	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
 	
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
+8. Disallow menu's when testing to save memory
 
+9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields
 	
