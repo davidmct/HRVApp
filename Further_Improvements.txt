@@ -40,7 +40,8 @@ Future ..
 	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
 	
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
-8. Disallow menu's when testing to save memory
-
-9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields
+8. Disallow menu's when testing
+9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats
+10. On interval plot do points every 2 pixels so half amount of data
+   
 	

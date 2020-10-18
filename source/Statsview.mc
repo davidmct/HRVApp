@@ -22,8 +22,8 @@ class StatsView extends Ui.View {
 	hidden var mLabelValueLocY = [ 32, 32, 53, 53, 75, 75 ];
 		
 	// label values
-	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "" ];
-	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Missed", "Dbl" ];
+	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "Ectopic" ];
+	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Long", "Short" ];
 	hidden var mLabel3Labels = [ "II","Min II", "Max II", "", "", "" ];
 
 	// x%, y%, width/height
@@ -143,7 +143,10 @@ class StatsView extends Ui.View {
 			
 			trunc = ($._mApp.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
-			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, str, mJust);										
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, str, mJust);		
+			
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vEBeatCnt.format("%d"), mJust);
+											
 		} else if (viewToShow == 2) {
 			// draw second set of labels and values
 			// x, y, font, text, just
@@ -158,8 +161,8 @@ class StatsView extends Ui.View {
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);	
-			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.vMissedBeatCnt.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vDoubleBeatCnt.format("%d"), mJust);									
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.vLongBeatCnt.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vShortBeatCnt.format("%d"), mJust);									
 		} else if (viewToShow == 3) {
 			// draw third set of labels and values
 			// x, y, font, text, just

@@ -149,8 +149,9 @@ class SampleProcessing {
 	var mpNN20;
 	
 	// 0.4.6 variables for ectopic beats
-	var vMissedBeatCnt;
-	var vDoubleBeatCnt;
+	var vLongBeatCnt;
+	var vShortBeatCnt;
+	var vEBeatCnt;
 	var vRunningAvg;
 	
 	// keep a record of averages calculated in circular buffer
@@ -206,8 +207,9 @@ class SampleProcessing {
 		mpNN20 = 0.0;
 		mSDNN_param = [0, 0.0, 0.0, 0.0, 0.0];
 		mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
-		vMissedBeatCnt = 0;
-		vDoubleBeatCnt = 0;
+		vLongBeatCnt = 0;
+		vShortBeatCnt = 0;
+		vEBeatCnt = 0;
 		vRunningAvg = 0.0;
 
 		// need to be int
