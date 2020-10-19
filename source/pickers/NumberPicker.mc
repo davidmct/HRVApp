@@ -11,7 +11,7 @@ class NumberPicker extends WatchUi.Picker {
 
     function initialize(initial_v, limit_v, inc_v) {
 
-        var title = new WatchUi.Text({:text=>Rez.Strings.numberPickerTitle, :locX=>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_BOTTOM, :color=>Graphics.COLOR_WHITE});
+        var title = new WatchUi.Text({:text=>Rez.Strings.numberPickerT, :locX=>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_BOTTOM, :color=>Graphics.COLOR_WHITE});
         // allow for two 2 digit fields
         var factories = new [3];
         // need to split initial number over four digits
