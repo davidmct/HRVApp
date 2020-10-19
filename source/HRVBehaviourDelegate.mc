@@ -80,7 +80,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onMenu() {
 		
 		// Generate a new Menu for mainmenu
-        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", true)});
+        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
         // add items
         menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
         menu.addItem(new Ui.MenuItem("Source", null, "s", null));  

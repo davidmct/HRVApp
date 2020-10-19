@@ -8,7 +8,7 @@ class TestView extends Ui.View {
 	
 	var msgTxt = "";
 	var timer = timerFormat(0);	
-	hidden var mBitMap;
+	hidden var mBitMap = null;
 	hidden var mBitMapLoc = [32,4];
 
 	hidden var mTitleLoc = [61, 12]; // %
@@ -115,13 +115,13 @@ class TestView extends Ui.View {
 	
 		$._mApp.mTestControl.setObserver(self.method(:onNotify));	
 		
-		var mLocX = (mBitMapLoc[0] * mScaleX)/100;
-		var mLocY = (mBitMapLoc[1] * mScaleY)/100;		
-		mBitMap = new Ui.Bitmap({
-            :rezId=>Rez.Drawables.mHrvIcon,
-            :locX=>mLocX,
-            :locY=>mLocY           
-        });
+		//var mLocX = (mBitMapLoc[0] * mScaleX)/100;
+		//var mLocY = (mBitMapLoc[1] * mScaleY)/100;		
+		//mBitMap = new Ui.Bitmap({
+        //    :rezId=>Rez.Drawables.mHrvIcon,
+        //    :locX=>mLocX,
+        //    :locY=>mLocY           
+        //});
 
 		mFitIconLocXS = (mFitIconLocX * mScaleX)/100;
 		mFitIconLocYS = (mFitIconLocY * mScaleY)/100;	
@@ -147,6 +147,16 @@ class TestView extends Ui.View {
 		
 		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($._mApp.bgColSet));
 
+		var mLocX = (mBitMapLoc[0] * mScaleX)/100;
+		var mLocY = (mBitMapLoc[1] * mScaleY)/100;	
+		if (mBitMap == null) {	
+			mBitMap = new Ui.Bitmap({
+	            :rezId=>Rez.Drawables.mHrvIcon,
+	            :locX=>mLocX,
+	            :locY=>mLocY           
+	        });
+	    }
+        
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
@@ -281,6 +291,7 @@ class TestView extends Ui.View {
     	// don't want to send null as state machine still running
     	//$._mApp.mTestControl.setObserver(null);
     	// free up all the arrays - NO as maybe switches without a new ...
+    	mBitMap = null;
     }
 
 }

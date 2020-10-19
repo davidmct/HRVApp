@@ -69,10 +69,6 @@ class HistoryView extends Ui.View {
 		chartHeight = a.toNumber();
 		a = null;
 		
-		if ($._mApp.mDeviceType == RES_240x240) {		
-			mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
-		}
-		
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
     	ctrX = dc.getWidth() / 2;
@@ -176,6 +172,14 @@ class HistoryView extends Ui.View {
     function onUpdate(dc) {
 		
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
+		
+		if ($._mApp.mDeviceType == RES_240x240) {
+			if (mLabelFont == null) {	
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
+		}
 		
 		prepResults();
 		
@@ -458,13 +462,14 @@ class HistoryView extends Ui.View {
 			", "+System.getSystemStats().totalMemory.toString()			
 			);
 		
-		//remove buffer
-		freeResults();
     }
     
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
     	// free up all the arrays - NO as maybe switches without a new ...
+    	mLabelFont = null;
+  		//remove buffer
+		freeResults();  	
     }
 }

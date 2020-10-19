@@ -13,7 +13,7 @@ class IntervalView extends Ui.View {
 	hidden var startTimeP;
 	hidden var mProcessingTime;
 	
-	hidden var customFont = null;
+	//hidden var customFont = null;
 
 	hidden var cGridWith;
 	hidden var chartHeight;
@@ -52,10 +52,6 @@ class IntervalView extends Ui.View {
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {		
-			customFont = Ui.loadResource(Rez.Fonts.smallFont);
-		}
-		
 		// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
 		// impacts all layout numbers!
@@ -83,9 +79,23 @@ class IntervalView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {	
-			mLabelFont = customFont;
+		if ($._mApp.mDeviceType == RES_240x240) {
+			if (mLabelFont == null) {
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
 		}
+		
+		if ($._mApp.mDeviceType == RES_240x240) {
+			if (mLabelFont == null) {
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
+		}
+		
+		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
@@ -200,7 +210,8 @@ class IntervalView extends Ui.View {
 		Sys.println("IntervalPlot memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 			", "+System.getSystemStats().freeMemory.toString()+
 			", "+System.getSystemStats().totalMemory.toString()			
-			);	   
+			);	 
+		mLabelFont = null;  
     
     }
 }

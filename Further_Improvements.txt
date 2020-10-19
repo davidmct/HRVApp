@@ -43,5 +43,9 @@ Future ..
 8. Disallow menu's when testing
 9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats
 10. On interval plot do points every 2 pixels so half amount of data
-11. Need to review all variables and ensure unique names eg in functions - add m prefix seems to fix scope   
-	
+11. Need to review all variables and ensure unique names eg in functions - add m prefix seems to fix scope  
+12. Shorten strings - watch search / replace does all workspace not just project 
+13. Set variables to null when finished
+14. Unload custom fonts when done
+15. Note when a view is hidden onHide gets called. I fthis nulls variables then may need to call onLayout() again.
+    In onUpdate() cehck if variables are null before calling onLayout

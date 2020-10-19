@@ -51,7 +51,7 @@ class PoincareView extends Ui.View {
 	
 	hidden var viewToShow;
 	
-	hidden var customFont = null;
+	//hidden var customFont = null;
 		
 	//hidden var mPoincareLayout;
 	hidden var cGridWith;
@@ -95,7 +95,7 @@ class PoincareView extends Ui.View {
 	hidden var mRectVertYS = 0;
 	hidden var mRectVertXS = new [mRectVertX.size() ];
 		
-	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mLabelFont = null;
 	hidden var mValueFont = Gfx.FONT_XTINY;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_RED;
@@ -120,9 +120,9 @@ class PoincareView extends Ui.View {
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {		
-			customFont = Ui.loadResource(Rez.Fonts.smallFont);
-		}
+		//if ($._mApp.mDeviceType == RES_240x240) {		
+		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
+		//}
 		
 		// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
@@ -170,8 +170,12 @@ class PoincareView extends Ui.View {
     	
     	mShowCount++;
 		
-		if ($._mApp.mDeviceType == RES_240x240) {	
-			mLabelFont = customFont;
+		if ($._mApp.mDeviceType == RES_240x240) {
+			if (mLabelFont == null) {
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
@@ -308,8 +312,9 @@ class PoincareView extends Ui.View {
 		Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 			", "+System.getSystemStats().freeMemory.toString()+
 			", "+System.getSystemStats().totalMemory.toString()			
-			);	   
-    
+			);	
+			   
+    	mLabelFont = null;
     }
 }
 

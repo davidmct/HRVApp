@@ -44,7 +44,7 @@ class BeatView extends Ui.View {
 	hidden var startTimeP;
 	hidden var mProcessingTime;
 	
-	hidden var customFont = null;
+	//hidden var customFont = null;
 
 	hidden var cGridWith;
 	hidden var chartHeight;
@@ -59,7 +59,7 @@ class BeatView extends Ui.View {
 	hidden var mTitleLocS = [0, 0];	
 	hidden var mTitleLabels = ["Beats"];
 		
-	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mLabelFont = null; //Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_XTINY;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_BLUE;
@@ -83,9 +83,9 @@ class BeatView extends Ui.View {
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {		
-			customFont = Ui.loadResource(Rez.Fonts.smallFont);
-		}
+		//if ($._mApp.mDeviceType == RES_240x240) {		
+		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
+		//}
 		
 		// chartHeight defines height of chart and sets scale
 		// needs to divide by 6 for horizontal lines
@@ -114,10 +114,16 @@ class BeatView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {	
-			mLabelFont = customFont;
+		if ($._mApp.mDeviceType == RES_240x240) {
+			if (mLabelFont == null) {
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
+		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
+				
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
 		dc.clear();
 		
@@ -384,7 +390,9 @@ class BeatView extends Ui.View {
 		Sys.println("BeatGraph memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 			", "+System.getSystemStats().freeMemory.toString()+
 			", "+System.getSystemStats().totalMemory.toString()			
-			);	   
+			);	
+	
+		mLabelFont = null;   
     
     }
 }

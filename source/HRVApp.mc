@@ -113,6 +113,8 @@ class HRVAnalysis extends App.AppBase {
 
     // The device type
 	var mDeviceType;
+	//var customFont; // load in init if low res. saves load in every view
+	
 	//var mApp;
 	var mSensor;
 	var mAntID;
@@ -390,6 +392,9 @@ class HRVAnalysis extends App.AppBase {
     	Sys.println("HRVApp INITIALISATION called");
         
         $._mApp = App.getApp();
+        
+        // Retrieve device type
+		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
          
         mStorage = new HRVStorageHandler();
         // ensure we have all parameters setup before needed
@@ -437,7 +442,7 @@ class HRVAnalysis extends App.AppBase {
     //! onStart() is called on application start up
     function onStart(state) {
 		// Retrieve device type
-		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
+		//mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
 
    		// Start up HR sensor. Create the sensor object and open it
 	   	mSensor = new SensorHandler(mAntID, mSensorTypeExt);
