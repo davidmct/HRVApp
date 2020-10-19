@@ -43,5 +43,5 @@ Future ..
 8. Disallow menu's when testing
 9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats
 10. On interval plot do points every 2 pixels so half amount of data
-   
+11. Need to review all variables and ensure unique names eg in functions - add m prefix seems to fix scope   
 	

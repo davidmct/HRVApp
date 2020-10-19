@@ -17,6 +17,9 @@ using Toybox.ActivityRecording;
 // when test ends then save() or discard() test
 // session var to null when done ready to go round again!
 
+//0.4.9
+// Seems a bug in fit. Limit on number of fields you can add.
+
 class HRVFitContributor {
 
 	var mSession;
@@ -25,8 +28,8 @@ class HRVFitContributor {
 
 	hidden var mSessionMinIntervalFound_Field;
 	hidden var mSessionMaxIntervalFound_Field;
-	hidden var mSessionMinDiffFound_Field;
-	hidden var mSessionMaxDiffFound_Field;
+	//hidden var mSessionMinDiffFound_Field;
+	//hidden var mSessionMaxDiffFound_Field;
 
 	hidden var mSessionAvgPulse_Field;
 	hidden var mSessionmRMSSD_Field;
@@ -76,7 +79,7 @@ class HRVFitContributor {
 		mRecordmpNN20_Field = mSession.createField("pNN20", 8, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
        	mRecordLONG_Field = mSession.createField("Long", 9, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        	mRecordSHORT_Field = mSession.createField("Short", 10, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-       	mRecordECTOPIC_Field = mSession.createField("Ectopic", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        			
         mSessionAvgPulse_Field = mSession.createField("AvgPulse", 20, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });		
  	   	mSessionMinIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
@@ -89,18 +92,17 @@ class HRVFitContributor {
        	mSessionmpNN50_Field = mSession.createField("pNN50", 28, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
        	mSessionmNN20_Field = mSession.createField("NN20", 29, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
        	mSessionmpNN20_Field = mSession.createField("pNN20", 30, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
-       	mSessionMinDiffFound_Field = mSession.createField("MinDiffII", 31, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionMaxDiffFound_Field = mSession.createField("MaxDiffII", 32, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	//mSessionMinDiffFound_Field = mSession.createField("MinDiffII", 31, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	//mSessionMaxDiffFound_Field = mSession.createField("MaxDiffII", 32, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionLONG_Field = mSession.createField("Long",       33, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
        	mSessionSHORT_Field = mSession.createField("Short",     34, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-       	mSessionECTOPIC_Field = mSession.createField("Ectopic", 35, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-        
-        mSessionSource_Field = mSession.createField("Source",   36, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
+       	mSessionECTOPIC_Field = mSession.createField("Ectopic-S", 35, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+        mSessionSource_Field = mSession.createField("Src",   36, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
        			 
 		mSessionMinIntervalFound_Field.setData(0);
 		mSessionMaxIntervalFound_Field.setData(0);
-		mSessionMinDiffFound_Field.setData(0);
-		mSessionMaxDiffFound_Field.setData(0);
+		//mSessionMinDiffFound_Field.setData(0);
+		//mSessionMaxDiffFound_Field.setData(0);
 		
 		mSessionAvgPulse_Field.setData(0);
 		mSessionmRMSSD_Field.setData(0.0);
@@ -187,8 +189,8 @@ class HRVFitContributor {
 	
 		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
 		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
-		mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
-		mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
+		//mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
+		//mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
 		
 		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
 		mSessionmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
@@ -209,7 +211,7 @@ class HRVFitContributor {
 		} else {
 			str = "Internal";
 		}
-		mSessionSource_Field.setData(str);		
+		//mSessionSource_Field.setData(str);		
 
 		//Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);		
 	}
