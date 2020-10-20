@@ -94,8 +94,9 @@ using Toybox.Lang as Lang;
 // OK L -> wait
 // L S -> inc ectopic, missed beat
 // L L -> inc, heart slowing down?
-// S L -> inc, double beat
+// S L -> inc, double beat, no stats update, no avg update
 // S S -> inc, ??? maybe change of rate up
+// S, OK or L, OK then add both samples to stats but inc respective counters
 
 // Init
 //	Setup thresholds being used setup (settings need a pick list), status all OK
@@ -155,10 +156,10 @@ class SampleProcessing {
 	var vRunningAvg;
 	
 	// keep a record of averages calculated in circular buffer
-	var aAvgStore;
+	var aAvgStore = new [MAX_NUMBERBEATSGRAPH];
 	// associated value of II to make beat graph simpler
 	// NOTE need to write current avg into this buffer when ectopic and not update avg
-	var aIIValue;
+	var aIIValue = new [MAX_NUMBERBEATSGRAPH];
 	//var aAvgStoreIndex;
 
 	// bit flags for samples exceeding limits
@@ -173,8 +174,9 @@ class SampleProcessing {
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
 		$._mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
-		aAvgStore = new [MAX_NUMBERBEATSGRAPH];
-		aIIValue = new [MAX_NUMBERBEATSGRAPH];		
+		//aAvgStore = new [MAX_NUMBERBEATSGRAPH];
+		//aIIValue = new [MAX_NUMBERBEATSGRAPH];
+		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();
 	}
@@ -190,6 +192,7 @@ class SampleProcessing {
 	
 	function resetHRVData() {
 		resetSampleBuffer();
+		clearAvgBuffer();
 		minDiffFound = 2000;
 		maxDiffFound = 0;
 		devMs = 0;
@@ -254,7 +257,7 @@ class SampleProcessing {
 	// move buffers to right so slot 0 free for new entry
 	function shiftAvgBuffer() {
 		var length = aAvgStore.size();
-		for (var i = 1; i < length; i++) {
+		for (var i = length-1; i > 0; i--) {
 			aAvgStore[i] = aAvgStore[i-1];
 			aIIValue[i] = aIIValue[i-1];	
 		}			
@@ -278,40 +281,76 @@ class SampleProcessing {
 	// USE aAVGStore. See if modify AddAverage to replicate if this handled ectopic beats (by just adding unadjusted average
 	// would have to use differential average then avg(n) = (a0+ ...+a4)/5 = avg(n-1) + (a5-a0)/5
 	// a0 calculated after 5 samples
-    function fCalcAvgValues( sampleIn, NumSamples) {  
-    	// sampleIn - latest 
-    	// NumSamples = number in main buffer
-    	// mFlag (global) - flag showing ecoptic beats to ignore in average
+	
+	// Actual imp. We have a known running average which only has good known beats in it
+	// mNumSamples points to next free slot, this intMs (sampleIn) would go in there
+	// mRAvg is current running average before this sample is added
+	// use differential average then avg(n) = (a0+ ...+a4)/5 = avg(n-1) + (a5-a0)/5
+	// we need to look back through buffer finding II(n-x) where x gives us the 5th non ectopic sample
+	// II(mNumSamples-1) = a(1) if not ectopic etc. Find a(5)
+	// a(0) = sampleIn
+	// keep samples found just in case less than 5 which is filter length 
+	
+	// may have to change to use S, OK; L, OK ie brief fluctuation 
+	
+    function fCalcAvgValues( mRAvg, sampleIn, mNumSamples) {  
+    	var mIIVal = new [5]; // found II sample for samples average 
+    	var mFoundCount = 0;
+    	// Assume we have shifted bits already before average called.
+    	var mFlagOffset = 1; // most recent entry is low bit
+    	var newAvg = 0.0;
+    	var mFound = false;
     	
-		// iterate through samples of interest
-		for(var i = 0;  i < mNumSamples; i++ ) {
-			// now we have to construct averages
-			var tSum = 0;
-			var tCnt = 0;
-			if (mFlag[i] == true ) {
-				// delta is from running average ignoring these values
-				// PROBLEM THIS IS NOT CORRECT - RunningAvg is at current point in time and flags may have moved down pipeline
-				aAvgPointValue[i] = $._mApp.mSampleProc.vRunningAvg;
-				aAvgPointDelta[i] = $._mApp.mIntervalSampleBuffer[mIndex+i] - aAvgPointValue[i];	
-			} 
-			else {  
-				// look back 5 samples NOT including this one 				
-				for( var j = -5; j < 0; j++ ) {
-					// have to make sure in array!!
-					if ((mIndex + j ) > 0 ) {
-						// within buffer so add to sum and inc cnt
-						tCnt++;
-						tSum += $._mApp.mIntervalSampleBuffer[mIndex+j];					
-					}
-					// break;
-				}
-				Sys.println("fCalcAvgValues tCnt: "+tCnt); 
-				
-				aAvgPointValue[i] = (tCnt == 0? 0.0: tSum.toFloat() / tCnt); 
-			}		
-		}
-		Sys.println("fCalcAvgValues : "+ aAvgPointValue);   
-    }
+    	//Sys.println("fCalcAvgValues: called with Avg"+mRAvg+", sampleIn "+sampleIn+", mNumSamples "+mNumSamples);
+    	
+    	// for case when we find insufficient data
+    	mIIVal[0] = sampleIn;
+    	
+    	// Limited to either bottom of buffer or 32 bits of flag
+    	// All we need to do is from mNumberSamples -1 look for II's that are not flagged going back in time
+    	// however as this range might include ectopci beats need to skip those
+    	var i = mNumSamples-1;
+    	while (!mFound && i >= 0 && mFlagOffset < 32) {
+    		if ( ((1 << mFlagOffset) & vLowerFlag) or 
+    		     ((1 << mFlagOffset) & vUpperFlag) ) {
+    			// bad entry so need to move on further back
+    			//Sys.println("fCalcAvgValues: skip sample # :"+i+", mFlagOffset: "+mFlagOffset);
+    			i--;
+    			mFlagOffset++;    		
+    		} else {
+    			// Good sample	
+    			mFoundCount++;
+    			mIIVal[mFoundCount] = $._mApp.mIntervalSampleBuffer[i];
+    			
+    			//Sys.println("fCalcAvgValues: Add sample # :"+i+", mFlagOffset: "+mFlagOffset+", mFoundCount: "+mFoundCount+", mIIVal[]:"+mIIVal);
+    			
+    			i--;
+    			mFlagOffset++;
+    		}
+    		if (mFoundCount == 4) {
+    			mFound = true;   		
+    		}    	
+    	}   	
+    	
+    	// work out new avg
+    	var sum = 0;
+     	if (mFoundCount == 0) {
+    			newAvg = sampleIn;
+    	}    	
+    	else {
+    		// average samples we have
+    		for (i = 0; i <= mFoundCount; i++) {
+    			sum += mIIVal[i];
+    		}
+    		newAvg = sum.toFloat() / (mFoundCount+1);   	
+    	}
+    	
+    	//Sys.println("fCalcAvgValues: samples found = "+mIIVal+" sum = "+sum+", new avg = "+newAvg);
+    	
+    	mIIVal = null;
+    	return newAvg;
+    	
+    } // end function fCalcAvgValues()
 
 (:discard)
 	// function to return average of N samples from buffer starting at index
@@ -343,23 +382,24 @@ class SampleProcessing {
 		
 		Sys.println("Running Average of "+iterations+" samples gives "+avg+" starting from "+start);
 		return avg;	
-	}	
-
-			//var mLowerTrue = (1 << mFlagOffset) & vLowerFlag;
-			//var mUpperTrue = (1 << mFlagOffset) & vUpperFlag;	
-				
-(:newSampleProcessing)
-	// function to threshold data and set flags on interval status
-	function fThresholdSample() {
-	
-	
-	
-	
 	}
 
 (:newSampleProcessing) 	
+	function fNormalCase(_vRunningAvg, _previousIntMs, _intMs, _mSampleIndex, _livePulse) {
+		// add sample to II and stats, update running avg add this and II to avg buffers
+		// update running avg ... mSampleIndex points to next free slot, this intMs would go in there
+		vRunningAvg = fCalcAvgValues( _vRunningAvg, _intMs, _mSampleIndex);	
+		// add sample to II store
+		addSample(_intMs, 1); 
+		// add and shift avg buffer and II store
+		addAverage( _vRunningAvg, _intMs);
+		// Update stats!
+		updateRunningStats( _previousIntMs, _intMs, _livePulse);	
+	}
+			
+(:newSampleProcessing) 	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
-		Sys.println("v0.4.7 rawSampleProcessing called");
+		//Sys.println("v0.4.7 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
 		
 		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0)) {
@@ -387,8 +427,7 @@ class SampleProcessing {
 				vUpperFlag = 0;
 				vLowerFlag = 0;
 				// oldest sample for average!
-				aIIValue[4] = intMs;
-				aAvgStore[4] = intMs;
+				addAverage( intMs, intMs);
 				vRunningAvg = intMs;
 			}
 			return;
@@ -402,18 +441,26 @@ class SampleProcessing {
 
 		var previousIntMs = getSample(mSampleIndex-1);			
 		if (mSampleIndex < 5) {
-			if ( maxMs > intMs && minMs < intMs) { 				
+			Sys.println("mSampleIndex less than 5");
+			if ( maxMs > intMs && minMs < intMs) { 
+			
+				Sys.println("avgStore index ="+mSampleIndex);
+				addAverage( vRunningAvg / (mSampleIndex+1), intMs);	
+				
+				// add sample an inc pointer!!			
 				addSample(intMs, null); 
 				// No need to update vLower and vUpper flags as not testing
 				updateRunningStats(previousIntMs, intMs, livePulse);
 				vRunningAvg += intMs;
-				aAvgStore[4-mSampleIndex] = vRunningAvg / (mSampleIndex+1) ;
-				aIIValue[4-mSampleIndex] = intMs;
 			}
+			Sys.println("<5 return");
 			return;
 		} else if (mSampleIndex == 5) {
-			vRunningAvg = aAvgStore[0];			
+			vRunningAvg = aAvgStore[0];	
+			Sys.println("Initial average from store ="+vRunningAvg+", store is "+aAvgStore);		
 		}
+		
+		//Sys.println("Should only get here on 5 or more");
 		
 		// now should have pipeline of averages and values of II
 		
@@ -432,23 +479,195 @@ class SampleProcessing {
 		// need to increment counts of ectopic beats
 
 		// will only get here if more than 5 samples arrived
-		var mLatestAvg;
 		if (!mStartThreshold) {
 			mStartThreshold = true; 
-			vRunningAvg = aAvgStore[0];
-			mLatestAvg = fCalcAvgValues( intMs, mSampleIndex);	
-			addAverage( mLatestAvg, intMs);
-			addSample(intMs, null); 
-			updateRunningStats(previousIntMs, intMs, livePulse);	
+			//// update avg cal based on last 5 samples ignoring ectopic
+			//vRunningAvg = fCalcAvgValues( vRunningAvg, intMs, mSampleIndex);	
+			//// add and shift avg buffer and II store
+			//addAverage( vRunningAvg, intMs);
+			//// add sample to II store
+			//addSample(intMs, null); 
+			//// Update stats!
+			//updateRunningStats(previousIntMs, intMs, livePulse);	
+			fNormalCase(vRunningAvg, previousIntMs, intMs, mSampleIndex, livePulse);
 		} else {
+			// fall through here on 7th sample
+			
+			// 		Add sample??
+			//		Test against threshold
+			//		Set status of sample
+			//		check this and last sample against status combinations and take action
+			//		if not OK then rtn else ???
+			
+			// Test sample against runningAvg and threshold	
+			var lowFlag  = 0;
+			var highFlag = 0;
 		
+			// test against over threshold. Note these are % but factional ie < 1
+			// updated values in JSON not to be integers. Could do x100 here
+			var mDelta = (intMs.toFloat() - vRunningAvg) / vRunningAvg;
+			if ((mDelta > 0) && (mDelta > $._mApp.vUpperThresholdSet)) {
+				highFlag = 1;						
+			} else if ((mDelta < 0) && (mDelta.abs() > $._mApp.vLowerThresholdSet)) {
+				lowFlag = 1;
+			}
+			
+			// status combinations and action
+			// OK, OK -> add latest sample to stats
+			// OK S -> wait
+			// OK L -> wait
+			// L S -> inc ectopic, missed beat
+			// L L -> inc, heart slowing down?
+			// S L -> inc, double beat
+			// S S -> inc, ??? maybe change of rate up	
+						// update this samples state
+			vUpperFlag = vUpperFlag << 1 | highFlag;
+			vLowerFlag = vLowerFlag << 1 | lowFlag;
+			
+			var mUp = vUpperFlag & 0x3;
+			var mDown = vLowerFlag & 0x3;
+						
+			// may have to change to use S, OK; L, OK ie brief fluctuation
+			// would need to pull in previous sample 
+			
+			// create switch selector
+			var mUD = mUp << 2 | mDown;
+			Sys.println("SampleProc: mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+" flags U and D: "+mUp+", "+mDown+" switch = "+mUD+" avg="+vRunningAvg);
+			
+			switch (mUD) { //Up, down value = order of samples with most recent on left
+				case 0 : // 00,00 = Ok, OK
+				case 2 : // 00,10 = OK, S 
+				case 8 : // 10,00 = OK, L
+					fNormalCase(vRunningAvg, previousIntMs, intMs, mSampleIndex, livePulse);
+				break;
+				case 3: // Odd case S, S OR
+				case 12: // Odd case L, L 
+					// We have had two long beats or two short beats in a row
+					// we ignore case that if we find LL or SS that the other flag could have data - shouldn't happen though as can't
+					// exceed both thresholds :-)
+					// Assume this maybe a trend
+					// Update running average with current II (need to think of correcting previous avg's running and store
+					// don't update stats and save avg and II into both buffers
+					Sys.println("SampleProc: TWO LONG OR TWO SHORT beats!!!!");						
+					// TBD could add both samples into buffer, clear lower 2 bits of flags and redo average 					
+				break;	
+				case 4:	// 01,00 = L, OK
+					vLongBeatCnt++;
+					Sys.println("SampleProcessing: LONG BEAT FOUND");	
+					// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+					// add sample to II store
+					addSample(intMs, 1); 
+					// add and shift avg buffer and II store
+					addAverage( vRunningAvg, intMs);	
+				case 1: // OK, S = 0001
+					vShortBeatCnt++;
+					Sys.println("SampleProcessing: SHORT BEAT FOUND");	
+					// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+					// add sample to II store
+					addSample(intMs, 1); 
+					// add and shift avg buffer and II store
+					addAverage( vRunningAvg, intMs);						
+				break;
+				case 6: // L, S = 0110 inc long as well
+					vLongBeatCnt++;
+					// inc missed beat, no stats update, save current avg and II to avgstore
+					addSample(intMs, 1); 
+					// add and shift avg buffer and II store
+					addAverage( vRunningAvg, intMs);
+					vEBeatCnt++;
+						
+					Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");				
+				break;
+				case 9: // S, L = 1001 inc short as well
+					vShortBeatCnt++;
+					// inc missed beat, no stats update, save current avg and II to avgstore
+					addSample(intMs, 1); 
+					// add and shift avg buffer and II store
+					addAverage( vRunningAvg, intMs);
+					vEBeatCnt++;	
+					Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");
+				break;
+				default: //5, 7 10, 11, 13, 14, 15	
+					// 5 = 0101= simultaneous L, S
+					// 7 = 0111 = SS and a Ok, L not possible
+					// 11 = 1011 = L, OK and S, S 
+					// 13 = 1101 = LL, ok,S
+					// 14 = 1110
+					// 15 == 1111					
+					// shouldn't be here
+					addSample(intMs, 1); 
+					Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");			
+				break;
+			}	// end switch
+			
+			//Sys.println("mUp and mDown are "+mUp+", "+mDown);	
 		
-		
-		
-		} // end threshold test
+		} // end thresholding process
+				
+		//Sys.println("Sample end: new avgStore: "+aAvgStore+" aIIValue = "+aIIValue);
 
 	// end new rawSampleProcessing
 	}
+	
+(:discard)	
+	function oldTestCases() {
+				// OK OK or L,OK or S, OK. Last two shouldn't happen in real case
+			if ( (( mUp + mDown) == 0) or  // 0
+				 (mUp == 0 && mDown == 2) or // 2
+				 (mUp == 2 && mDown == 0) ) { // 8
+				// add sample to II and stats, update running avg add this and II to avg buffers
+				// update running avg ... mSampleIndex points to next free slot, this intMs would go in there
+				vRunningAvg = fCalcAvgValues( vRunningAvg, intMs, mSampleIndex);	
+				// add sample to II store
+				addSample(intMs, 1); 
+				// add and shift avg buffer and II store
+				addAverage( vRunningAvg, intMs);
+				// Update stats!
+				updateRunningStats(previousIntMs, intMs, livePulse);				
+			} else
+			// Odd case L, L or S, S
+			if (mUp == 3 or mDown == 3) { // 12 or 3
+				// We have had two long beats or two short beats in a row
+				// we ignore case that if we find LL or SS that the other flag could have data - shouldn't happen though as can't
+				// exceed both thresholds :-)
+				// Assume this maybe a trend
+				// Update running average with current II (need to think of correcting previous avg's running and store
+				// don't update stats and save avg and II into both buffers
+				Sys.println("SampleProc: TWO LONG OR TWO SHORT beats!!!!");
+			} else
+			// OK, L or OK, S
+			if ((mUp == 1 && mDown == 0) or (mUp == 0 && mDown == 1)) { // 4 or 1
+				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+				// add sample to II store
+				addSample(intMs, 1); 
+				// add and shift avg buffer and II store
+				addAverage( vRunningAvg, intMs);
+			} else
+			// L, S
+			if (mUp == 2 && mDown == 1) { // 9
+				// inc missed beat, no stats update, save current avg and II to avgstore
+				addSample(intMs, 1); 
+				// add and shift avg buffer and II store
+				addAverage( vRunningAvg, intMs);
+				vLongBeatCnt++;
+			} else 
+			// S, L
+			if (mUp == 1 && mDown == 2) { // 6
+				// inc double beat, no stats update
+				// save current avg and II to avgstore			
+				addSample(intMs, 1); 
+				// add and shift avg buffer and II store
+				addAverage( vRunningAvg, intMs);			
+				vDoubleBeatCnt++;
+			} else {
+				// shouldn't be here
+				addSample(intMs, 1); 
+				Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");
+				
+				// have S, OK and L, OK in test case. In real life unlikely!
+			}
+	}
+	
 
 (:oldSampleProcessing)	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {

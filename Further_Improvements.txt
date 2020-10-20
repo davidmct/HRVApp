@@ -1,6 +1,6 @@
 Future ..
 
-1. Add another screen maybe based on poincare or HISTORY showing plot of rMSSD, NNX against sample number
+1. Add another screen maybe based on IntervalChart showing plot of rMSSD, NNX against sample number
 	X axis would be scaled buffer length
 	Y-axis selectable statistic selected by menu like current history graph
 	
@@ -15,8 +15,8 @@ Future ..
 	Could require HRV analysis app to pass history if we want to use this using change of context
 	Would be limited to 2 min by watchdog
 	Could capture it's own history and do screen similar to (2)
-	use this widget reading to compare it against the 30 day avg baseline and use a color coding on the widget ? To see if you should be able to train or not. 
-	At best color coded and easy to interpret
+	use this widget reading to compare it against the 30 day avg baseline and use a colour coding on the widget ? To see if you should be able to train or not. 
+	At best colour coded and easy to interpret
 	
 4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
 
@@ -47,5 +47,5 @@ Future ..
 12. Shorten strings - watch search / replace does all workspace not just project 
 13. Set variables to null when finished
 14. Unload custom fonts when done
-15. Note when a view is hidden onHide gets called. I fthis nulls variables then may need to call onLayout() again.
-    In onUpdate() cehck if variables are null before calling onLayout
+15. Note when a view is hidden onHide gets called. If this nulls variables then may need to call onLayout() again.
+    In onUpdate() check if variables are null before calling onLayout
