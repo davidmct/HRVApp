@@ -8,6 +8,10 @@ using Toybox.System as Sys;
 //Add in future ecoptic status etc
 // We need value on Y axis of range which maybe dynamic (based on datastream or fixed)
 
+// what to increment X by on point plot AND also defines number of points to plot
+// always power of 2
+const X_INC_VALUE = 4;
+
 class IntervalView extends Ui.View {
 
 	hidden var startTimeP;
@@ -38,6 +42,9 @@ class IntervalView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
+	
+	// points to plot
+	hidden var cNumPoints = null;
 
 	function initialize() { 
 		View.initialize();
@@ -51,10 +58,9 @@ class IntervalView extends Ui.View {
 		
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
+		a = null;
 		
 		// chartHeight defines height of chart and sets scale
-		// needs to divide by 6 for horizontal lines
-		// impacts all layout numbers!
 		chartHeight = cGridWith;
     	ctrX = dc.getWidth() / 2;
 		ctrY = dc.getHeight() / 2;
@@ -70,6 +76,9 @@ class IntervalView extends Ui.View {
 		
 		// convert % to numbers based on screen size
 		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+		
+		// Decide how many samples to plot across
+		cNumPoints = chartHeight / X_INC_VALUE;
 										
 		return true;
 	}
@@ -124,17 +133,18 @@ class IntervalView extends Ui.View {
     	
     	// where to read buffer from
     	var mStartIndex = null;
-    	if ( mNumberEntries < chartHeight) {
+    	if ( mNumberEntries < cNumPoints) {
     		mSampleNum = mNumberEntries-1;
     		mStartIndex = 0; // start of buffer
     	} else {
-    		mSampleNum = chartHeight;
+    		mSampleNum = cNumPoints;
     		mStartIndex = mNumberEntries - mSampleNum - 1;
     	}
     	
-    	Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex);
+    	Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	// scan array looking for min and max
+    	// scan entire array looking for min and max
+    	// Could reduce to viewed portion
     	var value;
     	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point	
@@ -182,10 +192,10 @@ class IntervalView extends Ui.View {
 			
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
-			dc.drawLine(mX0, mY0, mX0+1, mY1);
-			Sys.println("IntervalPlot: sample, "+sample+" line from : mX0, mY0 "+mX0+", "+mY0+" to "+mX0+"+1, "+mY1);
+			dc.drawLine(mX0, mY0, mX0+X_INC_VALUE, mY1);
+			//Sys.println("IntervalPlot: sample, "+sample+" line from : mX0, mY0 "+mX0+", "+mY0+" to "+mX0+"+1, "+mY1);
 			
-			mX0++;
+			mX0 = mX0+ X_INC_VALUE;
 			mY0 = mY1;
 						
 		} // end sample loop
