@@ -144,7 +144,7 @@ class IntervalView extends Ui.View {
     	
     	Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	// scan entire array looking for min and max
+    	// scan array to be plotted looking for min and max
     	// Could reduce to viewed portion
     	var value;
     	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
