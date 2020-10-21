@@ -16,10 +16,10 @@ base.resourcePath=$(resBase)
 #preCIQ24 storage handling excluded or #storageMethod for post 2.4 version
 # :HistoryViaDictionary - used old dictionary method of looking up labels for chart
 # :MemDebug or ConsoleDebug
-base.excludeAnnotations = $(base.excludeAnnotations);newSampleProcessing;preCIQ24;discard;HistoryViaDictionary;ConsoleDebug
+base.excludeAnnotations = $(base.excludeAnnotations);oldSampleProcessing;preCIQ24;discard;HistoryViaDictionary;ConsoleDebug
 # exTrialParamProperty: specific code change in HRVApp.mc for trial mode from properties to storage
 # oldResults - removes code setting results array as permanent global. Now loaded as needed
-base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold;oldResults
+base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold;oldResults;TestVersion
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!
