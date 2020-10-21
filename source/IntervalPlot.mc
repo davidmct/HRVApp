@@ -133,7 +133,8 @@ class IntervalView extends Ui.View {
     	
     	// where to read buffer from
     	var mStartIndex = null;
-    	if ( mNumberEntries < cNumPoints) {
+    	// use <= to avoid Index=-1 when equal to each other
+    	if ( mNumberEntries <= cNumPoints) {
     		mSampleNum = mNumberEntries-1;
     		mStartIndex = 0; // start of buffer
     	} else {
