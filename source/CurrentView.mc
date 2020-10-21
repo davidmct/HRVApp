@@ -49,9 +49,44 @@ class CurrentValueView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-	
+
+(:discard)	
 	function initialize() { View.initialize();}
 	
+	function initialize() { 
+		mScaleY = dc.getHeight();
+		mScaleX = dc.getWidth();
+		
+		// convert % to numbers based on screen size
+		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+		
+		mMesssgeLocS[0] = (mMessageLoc[0] *mScaleX)/100;
+		mMesssgeLocS[2] = (mMessageLoc[2] *mScaleX)/100;
+		mMesssgeLocS[1] = (mMessageLoc[1] *mScaleY)/100;
+		mMesssgeLocS[3] = (mMessageLoc[3] *mScaleY)/100;	
+		
+		for( var i=0; i < mLabelSetXS.size(); i++) {
+			mLabelSetXS[i] = (mLabelSetX[i] * mScaleX)/100;	
+			mLabelSetYS[i] = (mLabelSetY[i] * mScaleY)/100;
+		}
+				
+		for( var i=0; i < mLabelValueLocXS.size(); i++) {
+			mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
+			mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
+		}
+		
+		mMessageLoc = null;	
+		mLabelValueLocX = null;
+		mLabelValueLocY = null;
+		mTitleLoc = null;
+		
+		View.initialize();
+	}	
+	
+	function onLayout(dc) {	
+	}
+
+(:discard)
 	function onLayout(dc) {
 		mScaleY = dc.getHeight();
 		mScaleX = dc.getWidth();

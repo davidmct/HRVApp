@@ -58,10 +58,13 @@ class HistoryView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-    
+   
 	function initialize() { View.initialize();}
 	
 	function onLayout(dc) {
+		
+		// variables already set
+		if (mLabelValueLocX == null) {return;}
 
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
@@ -98,6 +101,11 @@ class HistoryView extends Ui.View {
 		}	
 		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
 		mRectHorizXS = (mRectHorizX * mScaleX)/100;
+		
+		mLabelValueLocX = null;
+		mLabelValueLocY = null;
+		mTitleLoc = null;	
+		mRectHorizY = null;
 			
 		return true;
 	}

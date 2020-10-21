@@ -20,7 +20,7 @@ Future ..
 	
 4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
 
-5. Another graph (DONE) - could modify to do #2 or #1
+5. DONE Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
 	Plot X as interval number segment [n..m] with m being current
 	Plot Y is scaled II range: either min max or 30bpm (2000) to 150bpm (400ms) (130 bpm = 500ms)
@@ -41,11 +41,11 @@ Future ..
 	
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
 8. Disallow menu's when testing
-9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats
-10. On interval plot do points every 2 pixels so half amount of data
+9. DONE Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats DONE
+10. DONE On interval plot do points every 2 pixels so half amount of data
 11. Need to review all variables and ensure unique names eg in functions - add m prefix seems to fix scope  
 12. Shorten strings - watch search / replace does all workspace not just project 
 13. Set variables to null when finished
-14. Unload custom fonts when done
+14. DONE Unload custom fonts when done
 15. Note when a view is hidden onHide gets called. If this nulls variables then may need to call onLayout() again.
     In onUpdate() check if variables are null before calling onLayout
