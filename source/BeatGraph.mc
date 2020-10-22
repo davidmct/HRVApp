@@ -265,24 +265,53 @@ class BeatView extends Ui.View {
 						
 			mXcoord = ((sample - floor) * scaleX).toNumber();
 						
-			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vShortFlag;
-			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLongFlag;	
+			//var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vShortFlag;
+			//var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLongFlag;	
 			//Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
+
+			// want to use pairs of values as per sampleproc			
+			var mLong = ( $._mApp.mSampleProc.vShortFlag >> mFlagOffset) & 0x3;
+			var mShort = ( $._mApp.mSampleProc.vLongFlag >> mFlagOffset) & 0x3;			
+			// create selector
+			var mLS = mLong << 2 | mShort;
 			
 			mIgnoreSample[mXDataIndex] = true;
-							 
-			if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
-				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );	
-				mPulseWidth = 6;	
-			} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
+			
+			if (mLS == 4) {
+				// LONG BEAT FOUND
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
 				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );	
-				mPulseWidth = 6;			
+				mPulseWidth = 6;
+			} 
+			else if (mLS == 1) {
+				// SHORT BEAT FOUND
+				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
+				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				mPulseWidth = 6;	
+			}
+			else if ( mLS == 6 || mLS == 9) {
+				//case 6: Long and ECTOPIC BEAT FOUND				
+				// case 9: SHORT and ECTOPIC BEAT FOUND
+				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				mPulseWidth = 6;	
 			} else {
 				// default is sample is OK
 				mIgnoreSample[mXDataIndex] = false;	
-			}
+			}	// end colour choice						
+							 
+			//if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
+			//	dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
+			//	Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );	
+			//	mPulseWidth = 6;	
+			//} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
+			//	dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+			//	Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );	
+			//	mPulseWidth = 6;			
+			//} else {
+			//	// default is sample is OK
+			//	mIgnoreSample[mXDataIndex] = false;	
+			//}
 			
 			// save X co-coord for avg plot and labels
 			mXdata[mXDataIndex] = leftX+mXcoord+xBase;

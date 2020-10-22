@@ -542,17 +542,14 @@ class SampleProcessing {
 			vLongFlag = vLongFlag << 1 | highFlag;
 			vShortFlag = vShortFlag << 1 | lowFlag;
 			
-			var mUp = vLongFlag & 0x3;
-			var mDown = vShortFlag & 0x3;
-						
-			// may have to change to use S, OK; L, OK ie brief fluctuation
-			// would need to pull in previous sample 
+			var mLong = vLongFlag & 0x3;
+			var mShort = vShortFlag & 0x3;
 			
 			// create switch selector
-			var mUD = mUp << 2 | mDown;
-			Sys.println("SampleProc: mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+" flags U and D: "+mUp+", "+mDown+" switch = "+mUD+" avg="+vRunningAvg);
+			var mLS = mLong << 2 | mShort;
+			Sys.println("SampleProc: mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+" flags L and S: "+mLong+", "+mShort+" switch = "+mLS+" avg="+vRunningAvg);
 			
-			switch (mUD) { //Up, down value = order of samples with most recent on left
+			switch (mLS) { //Up, down value = order of samples with most recent on left
 				case 0 : // 00,00 = Ok, OK
 				case 2 : // 00,10 = OK, S 
 				case 8 : // 10,00 = OK, L
