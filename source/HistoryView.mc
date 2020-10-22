@@ -166,7 +166,7 @@ class HistoryView extends Ui.View {
 		
 		$._mApp.mStorage.retrieveResults();
 		
-		Sys.println("Retrieved results ="+$._mApp.results);
+		//Sys.println("Retrieved results ="+$._mApp.results);
 	}
 	
 (:oldResults)
@@ -191,7 +191,7 @@ class HistoryView extends Ui.View {
 		
 		prepResults();
 		
-		Sys.println("Results = "+$._mApp.results);
+		//Sys.println("Results = "+$._mApp.results);
 		
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $._mApp.resultsIndex;
@@ -240,6 +240,7 @@ class HistoryView extends Ui.View {
 		//0.4.3 - Now have list available to match label and colour!
 		// resultsIndexList to null if no data to display
 		if ( $._mApp.mHistoryLabel1 == 0 && $._mApp.mHistoryLabel2 == 0 && $._mApp.mHistoryLabel3 == 0) {
+			mHistoryLabelList = null;
 			return;
 		}	
 		 
@@ -249,6 +250,8 @@ class HistoryView extends Ui.View {
         resultsIndexList[1] = ( $._mApp.mHistoryLabel2 == 0 ? null : $._mApp.mHistoryLabel2);
 		labelList[2] = mHistoryLabelList[$._mApp.mHistoryLabel3];
         resultsIndexList[2] = ( $._mApp.mHistoryLabel3 == 0 ? null : $._mApp.mHistoryLabel3);   
+        
+        mHistoryLabelList = null;
                         	
         // hard to tie menu on selection order to this list-> fixed 0.4.3
         // draw the data being drawn labels
@@ -395,7 +398,6 @@ class HistoryView extends Ui.View {
 			//", "+System.getSystemStats().freeMemory.toString()+
 			//", "+System.getSystemStats().totalMemory.toString()			
 			//);							
-		
 			return;
 		}
 				
