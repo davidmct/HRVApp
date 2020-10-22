@@ -60,4 +60,5 @@ DONE
 9. Ectopic beat is not same as long or short (it's LS or LS). Need to use terms long and short beat and then ectopic so 3 fields in stats DONE
 10. On interval plot do points every 2 pixels so half amount of data
 14. Unload custom fonts when done
+19. Moved BeatGraph to show ectopic of either case
 

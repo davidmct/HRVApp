@@ -70,6 +70,9 @@ class BeatView extends Ui.View {
 	hidden var mScaleY;
 	hidden var mScaleX;
 
+	hidden var vLongFlagTmp;
+	hidden var vShortFlagTmp;
+	
 	function initialize() { 
 		View.initialize();
 	}
@@ -147,6 +150,10 @@ class BeatView extends Ui.View {
     	
     	// reduce entries by 1 as points to next free slot    	
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
+		// Sample processing is async so we need to capture state of flags at moment we get entry index
+		vLongFlagTmp = $._mApp.mSampleProc.vLongFlag;
+		vShortFlagTmp = $._mApp.mSampleProc.vShortFlag;
+		
 		// how many points to plot
     	var mSampleNum = 0;
     	
@@ -270,8 +277,8 @@ class BeatView extends Ui.View {
 			//Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
 
 			// want to use pairs of values as per sampleproc			
-			var mLong = ( $._mApp.mSampleProc.vShortFlag >> mFlagOffset) & 0x3;
-			var mShort = ( $._mApp.mSampleProc.vLongFlag >> mFlagOffset) & 0x3;			
+			var mLong = ( vShortFlagTmp >> mFlagOffset) & 0x3;
+			var mShort = ( vLongFlagTmp >> mFlagOffset) & 0x3;		
 			// create selector
 			var mLS = mLong << 2 | mShort;
 			
@@ -293,11 +300,12 @@ class BeatView extends Ui.View {
 				//case 6: Long and ECTOPIC BEAT FOUND				
 				// case 9: SHORT and ECTOPIC BEAT FOUND
 				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				Sys.println("YELLOW index i = "+i+" mFlagOffset  = "+mFlagOffset );
 				mPulseWidth = 6;	
 			} else {
 				// default is sample is OK
 				mIgnoreSample[mXDataIndex] = false;	
+				mPulseWidth = 4;
 			}	// end colour choice						
 							 
 			//if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
