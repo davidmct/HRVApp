@@ -439,6 +439,34 @@ class HRVAnalysis extends App.AppBase {
 		return [ new TestView(), new HRVBehaviourDelegate() ];
     }
     
+(:discard) // for now while building
+// DC is not available but are fixed numbers any way!!
+    function set() {
+  		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
+		cGridWith = a.toNumber();
+		
+		//if ($._mApp.mDeviceType == RES_240x240) {		
+		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
+		//}
+		
+		// chartHeight defines height of chart and sets scale
+		// needs to divide by 6 for horizontal lines
+		// impacts all layout numbers!
+		chartHeight = cGridWith;
+    	ctrX = dc.getWidth() / 2;
+		ctrY = dc.getHeight() / 2;
+		// define box about centre
+		leftX = ctrX - cGridWith/2;
+		rightX = ctrX + cGridWith/2;
+		// 45 *2 is height of chart
+		ceilY = ctrY - chartHeight/2;
+		floorY = ctrY + chartHeight/2;
+		
+		mScaleY = dc.getHeight();
+		mScaleX = dc.getWidth();  
+		   
+    }
+    
     //! onStart() is called on application start up
     function onStart(state) {
 		// Retrieve device type

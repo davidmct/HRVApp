@@ -163,8 +163,8 @@ class SampleProcessing {
 	//var aAvgStoreIndex;
 
 	// bit flags for samples exceeding limits
-	var vUpperFlag;
-	var vLowerFlag;
+	var vLongFlag;
+	var vShortFlag;
 	
 	// index always points to next available slot
 	hidden var mSampleIndex;
@@ -216,8 +216,8 @@ class SampleProcessing {
 		vRunningAvg = 0.0;
 
 		// need to be int
-		vUpperFlag = 0;
-		vLowerFlag = 0;
+		vLongFlag = 0;
+		vShortFlag = 0;
 	}
 	
 	function clearAvgBuffer() {
@@ -323,8 +323,8 @@ class SampleProcessing {
     	// however as this range might include ectopci beats need to skip those
     	var i = mNumSamples-1;
     	while (!mFound && i >= 0 && mFlagOffset < 32) {
-    		if ( ((1 << mFlagOffset) & vLowerFlag) or 
-    		     ((1 << mFlagOffset) & vUpperFlag) ) {
+    		if ( ((1 << mFlagOffset) & vShortFlag) or 
+    		     ((1 << mFlagOffset) & vLongFlag) ) {
     			// bad entry so need to move on further back
     			//Sys.println("fCalcAvgValues: skip sample # :"+i+", mFlagOffset: "+mFlagOffset);
     			i--;
@@ -438,8 +438,8 @@ class SampleProcessing {
 		if (mSampleIndex == 0) {
 			if ( maxMs > intMs && minMs < intMs) { 				
 				addSample(intMs, null); 
-				vUpperFlag = 0;
-				vLowerFlag = 0;
+				vLongFlag = 0;
+				vShortFlag = 0;
 				// oldest sample for average!
 				addAverage( intMs, intMs);
 				vRunningAvg = intMs;
@@ -539,11 +539,11 @@ class SampleProcessing {
 			// S L -> inc, double beat
 			// S S -> inc, ??? maybe change of rate up	
 						// update this samples state
-			vUpperFlag = vUpperFlag << 1 | highFlag;
-			vLowerFlag = vLowerFlag << 1 | lowFlag;
+			vLongFlag = vLongFlag << 1 | highFlag;
+			vShortFlag = vShortFlag << 1 | lowFlag;
 			
-			var mUp = vUpperFlag & 0x3;
-			var mDown = vLowerFlag & 0x3;
+			var mUp = vLongFlag & 0x3;
+			var mDown = vShortFlag & 0x3;
 						
 			// may have to change to use S, OK; L, OK ie brief fluctuation
 			// would need to pull in previous sample 

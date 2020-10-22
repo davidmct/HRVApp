@@ -207,8 +207,8 @@ class BeatView extends Ui.View {
     	}
     	
     	// expand Y but make sure +ve
-    	Ymin = (Ymin-100 >= 0? Ymin-100: Ymin); 
-    	Ymax += 100;
+    	Ymin = (Ymin-50 >= 0? Ymin-50: Ymin); 
+    	Ymax += 50;
  
 		// Y scale could be very narrow if all values the same so add 50 to top and bottom
 		var scaleY = chartHeight / (Ymax - Ymin).toFloat();
@@ -258,19 +258,16 @@ class BeatView extends Ui.View {
 			//	    Lower threshold exceeded = Pink
 			//	    Upper threshold exceeded = Purple
 			//	    Add text showing % delta from average
-			// vUpperFlag - assume that bit 0 equals current sample
-			// vLowerFlag;
+			// vLongFlag - assume that bit 0 equals current sample
+			// vShortFlag;
 			// i starts at mNumberEntries-1-mSampleNum which is earliest pulse
-			
-			// TEST
-			//$._mApp.mSampleProc.vLowerFlag = 0x1;
-			//$._mApp.mSampleProc.vUpperFlag = 0x2;
+
 						
 			mXcoord = ((sample - floor) * scaleX).toNumber();
 						
-			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLowerFlag;
-			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vUpperFlag;	
-			Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
+			var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vShortFlag;
+			var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLongFlag;	
+			//Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
 			
 			mIgnoreSample[mXDataIndex] = true;
 							 
@@ -352,10 +349,10 @@ class BeatView extends Ui.View {
 				// bigger II means higher on screen = negative offset
 				// correct Y for widening YMin value eearlier on min/max search
 				mDeltaAvg = a0 - mAvgOffset;
-				y2 = ctrY - scaleY * mDeltaAvg; //(floorY - scaleY * (a0 - Ymin.toFloat())).toNumber()+20;
+				y2 = (ctrY - scaleY * mDeltaAvg).toNumber(); //(floorY - scaleY * (a0 - Ymin.toFloat())).toNumber()+20;
 			}
 			
-			Sys.println("mDelatPc = "+ mDeltaPc+", ctrY: "+ctrY+", a0 "+a0+", y1:y2= ["+y1+","+y2+"]");
+			//Sys.println("mDelatPc = "+ mDeltaPc+", ctrY: "+ctrY+", a0 "+a0+", y1:y2= ["+y1+","+y2+"]");
 			
 			// no % symbol as not in custom font yet
 			mStr = format("$1$",[mDeltaPc.format("%d")]);
