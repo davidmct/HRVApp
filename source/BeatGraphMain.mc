@@ -82,6 +82,7 @@ class BeatView extends Ui.View {
 		
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
+		a = null;
 		
 		//if ($._mApp.mDeviceType == RES_240x240) {		
 		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
@@ -166,7 +167,7 @@ class BeatView extends Ui.View {
     	// work out X range covered
     	var sumII = 0;
     	for (var i=0; i < mSampleNum; i++) {
-    		sumII += ($._mApp.mIntervalSampleBuffer[mNumberEntries-i-1] & 0xF000); 		
+    		sumII += ($._mApp.mIntervalSampleBuffer[mNumberEntries-i-1] & 0x0FFF); 		
     	}
     	
     	// We'll offset the x-axis by half the first sample so we can see final one
@@ -178,7 +179,7 @@ class BeatView extends Ui.View {
     	min = 0;
     	max = sumII;
     			
-		//Sys.println("Beatview: max, min "+max+" , "+min);
+		Sys.println("Beatview: sumII, max, min "+sumII+", "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);

@@ -171,8 +171,9 @@ class StatsView extends Ui.View {
 			for (var i=0; i < mLabelSetXS.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel3Labels[i], mJust);			
 			}
+			var mTmp = $._mApp.mSampleProc.getCurrentEntry(); 
 			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);				
-			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.getCurrentEntry().format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, mTmp[0].format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
 		}		
