@@ -69,9 +69,6 @@ class BeatView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-
-	hidden var vLongFlagTmp;
-	hidden var vShortFlagTmp;
 	
 	function initialize() { 
 		View.initialize();
@@ -150,9 +147,6 @@ class BeatView extends Ui.View {
     	
     	// reduce entries by 1 as points to next free slot    	
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
-		// Sample processing is async so we need to capture state of flags at moment we get entry index
-		vLongFlagTmp = $._mApp.mSampleProc.vLongFlag;
-		vShortFlagTmp = $._mApp.mSampleProc.vShortFlag;
 		
 		// how many points to plot
     	var mSampleNum = 0;
@@ -172,7 +166,7 @@ class BeatView extends Ui.View {
     	// work out X range covered
     	var sumII = 0;
     	for (var i=0; i < mSampleNum; i++) {
-    		sumII += $._mApp.mIntervalSampleBuffer[mNumberEntries-i-1]; 		
+    		sumII += ($._mApp.mIntervalSampleBuffer[mNumberEntries-i-1] & 0xF000); 		
     	}
     	
     	// We'll offset the x-axis by half the first sample so we can see final one
@@ -233,19 +227,13 @@ class BeatView extends Ui.View {
 		var xBase = ((StartX_unscaled-floor) * scaleX).toNumber();
 		var mXcoord = 0;
 		
-		// beat width
-		var mPulseWidth = 4;
-		
-		// index from 0 to determine state of particular beat
-		var mFlagOffset = mSampleNum-1;
-		
 		// -1 on end test as showing one more than neede
 		
 		// Going to plot labels as another loop to make logic easier as averages need to skill excoptic beats!
 		var mXdata = new [mSampleNum];
-		// market as ectopic so use sample processing average
+		// mark as ectopic so use sample processing average
 		var mIgnoreSample = new [mSampleNum];
-		var mXDataIndex = 0; // could have done using mFlagOffset and reverse but more complex
+		var mXDataIndex = 0; 
 		var mSampleStartIndex = mNumberEntries-1-mSampleNum;
 		
 		// Setup Y structure of bar plots and text
@@ -253,73 +241,53 @@ class BeatView extends Ui.View {
 		var cBorder = ((chartHeight * 20) / 100).toNumber();
 		var mColStart = ceilY+cBorder;
 		var mColHeight = chartHeight - 2 * cBorder;
+		var mIIState = SAMP_OK;
+		// beat width
+		var mPulseWidth = 4;
 		
 		for( var i = mSampleStartIndex; i < mNumberEntries-1; i++ ){		
 			sample = $._mApp.mIntervalSampleBuffer[i];
+			mIIState = (sample >> 12) & 0x000F;
+			sample = sample & 0x0FFF;
 			
 			// default line colour is red		
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 			
 			//Spike colour is dependent on the status
 			// 1. Colour pulses
-			//	    Lower threshold exceeded = Pink
-			//	    Upper threshold exceeded = Purple
+			//	    Short threshold exceeded = Pink
+			//	    Long threshold exceeded = Purple
+			//		Ectopic YELLOW
 			//	    Add text showing % delta from average
-			// vLongFlag - assume that bit 0 equals current sample
-			// vShortFlag;
 			// i starts at mNumberEntries-1-mSampleNum which is earliest pulse
-
 						
 			mXcoord = ((sample - floor) * scaleX).toNumber();
-						
-			//var mLowerTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vShortFlag;
-			//var mUpperTrue = (1 << mFlagOffset) & $._mApp.mSampleProc.vLongFlag;	
-			//Sys.println("Values of flag -Upper/Lower : "+mUpperTrue+"/"+mLowerTrue);
-
-			// want to use pairs of values as per sampleproc			
-			var mLong = ( vShortFlagTmp >> mFlagOffset) & 0x3;
-			var mShort = ( vLongFlagTmp >> mFlagOffset) & 0x3;		
-			// create selector
-			var mLS = mLong << 2 | mShort;
 			
 			mIgnoreSample[mXDataIndex] = true;
 			
-			if (mLS == 4) {
+			if (mIIState == SAMP_L) {
 				// LONG BEAT FOUND
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );	
+				Sys.println("PURPLE index i = "+i );	
 				mPulseWidth = 6;
 			} 
-			else if (mLS == 1) {
+			else if (mIIState == SAMP_S) {
 				// SHORT BEAT FOUND
 				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				Sys.println("PINK index i = "+i);
 				mPulseWidth = 6;	
 			}
-			else if ( mLS == 6 || mLS == 9) {
+			else if ( mIIState == SAMP_LS|| mIIState == SAMP_SL) {
 				//case 6: Long and ECTOPIC BEAT FOUND				
 				// case 9: SHORT and ECTOPIC BEAT FOUND
 				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
-				Sys.println("YELLOW index i = "+i+" mFlagOffset  = "+mFlagOffset );
+				Sys.println("YELLOW index i = "+i );
 				mPulseWidth = 6;	
 			} else {
 				// default is sample is OK
 				mIgnoreSample[mXDataIndex] = false;	
 				mPulseWidth = 4;
 			}	// end colour choice						
-							 
-			//if ((mLowerTrue != 0) && (mUpperTrue == 0)) {
-			//	dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
-			//	Sys.println("PINK index i = "+i+" mFlagOffset  = "+mFlagOffset );	
-			//	mPulseWidth = 6;	
-			//} else if ((mUpperTrue != 0) && (mLowerTrue == 0)) {
-			//	dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
-			//	Sys.println("PURPLE index i = "+i+" mFlagOffset  = "+mFlagOffset );	
-			//	mPulseWidth = 6;			
-			//} else {
-			//	// default is sample is OK
-			//	mIgnoreSample[mXDataIndex] = false;	
-			//}
 			
 			// save X co-coord for avg plot and labels
 			mXdata[mXDataIndex] = leftX+mXcoord+xBase;
@@ -330,9 +298,6 @@ class BeatView extends Ui.View {
 			
 			// move base
 			xBase += mXcoord;
-						
-			// move to next flag
-			mFlagOffset--;
 						
 		} // end sample loop
 				

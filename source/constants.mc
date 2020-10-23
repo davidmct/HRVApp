@@ -106,7 +106,7 @@ const LOG_SCALE = 50; // scales ln(RMSSD)
 enum {
 	SAMP_OK = 0,
 	SAMP_S = 1, // Short
-	SAMP_L = 2 // long
+	SAMP_L = 2, // long
 	SAMP_LS = 3, // Ectopic case 1
 	SAMP_SL = 4 // Ectopic case 2
 }

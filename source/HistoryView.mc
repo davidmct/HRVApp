@@ -64,7 +64,7 @@ class HistoryView extends Ui.View {
 	function onLayout(dc) {
 		
 		// variables already set
-		if (mLabelValueLocX == null) {return;}
+		if (mLabelValueLocX == null) {return true;}
 
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
