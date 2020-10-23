@@ -641,9 +641,10 @@ class HRVAnalysis extends App.AppBase {
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
-		var mString = "";
+		var mString = "II:, ";
 		var i;
 		var base;
+		var mSp;
 		
 		mStorage.PrintStats();
 		
@@ -654,13 +655,13 @@ class HRVAnalysis extends App.AppBase {
 		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
 		//}
 		
-		// should propably use getSample(index) if using circular buffer
 		var separator = ",";
 		for (i=0; i < mNumBlocks; i++) {
 			base = i*BLOCK_SIZE;
 			var j;
 			for (j=0; j< BLOCK_SIZE; j++) {
-				mString += mIntervalSampleBuffer[base+j].toString()+separator;			
+				mSp = mIntervalSampleBuffer[base+j];
+				mString += (mSp & 0x0FFF).toString()+separator;				
 			}
 			Sys.println(mString);
 			mString = "";		
@@ -669,9 +670,32 @@ class HRVAnalysis extends App.AppBase {
 		// Write tail end of buffer
 		base = BLOCK_SIZE * mNumBlocks;
 		for (i=0; i < mRemainder; i++) {	
-			mString += mIntervalSampleBuffer[base+i].toString()+separator;				
+			mSp = mIntervalSampleBuffer[base+i];
+			mString += (mSp & 0x0FFF).toString()+separator;						
 		}	
 		Sys.println(mString);
+		
+		mString = "Flags:, ";
+		
+		for (i=0; i < mNumBlocks; i++) {
+			base = i*BLOCK_SIZE;
+			var j;
+			for (j=0; j< BLOCK_SIZE; j++) {
+				mSp = mIntervalSampleBuffer[base+j];
+				mString += (mSp >> 12 & 0x0F).toString()+separator;			
+			}
+			Sys.println(mString);
+			mString = "";		
+		}
+		mString = "";
+		// Write tail end of buffer
+		base = BLOCK_SIZE * mNumBlocks;
+		for (i=0; i < mRemainder; i++) {	
+			mSp = mIntervalSampleBuffer[base+i];
+			mString += (mSp >> 12 & 0x0F).toString()+separator;					
+		}	
+		Sys.println(mString);
+		mString = "";
 	}
 	
 }
