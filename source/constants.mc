@@ -102,6 +102,16 @@ const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
 const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)
 
+// sample types
+enum {
+	SAMP_OK = 0,
+	SAMP_S = 1, // Short
+	SAMP_L = 2 // long
+	SAMP_LS = 3, // Ectopic case 1
+	SAMP_SL = 4 // Ectopic case 2
+}
+
+
 // STORAGE PROPERTIES
 
 // Results memory locations. (X) <> (X + 29)
