@@ -49,6 +49,8 @@ Future ..
 
 18. Use setting to determine whether interval Y axis is fixed or floating scale
 
+19. Use interval buffer to store pulse type and dump separately at end. Need to update Beatgraph to match and remove flags version
+
 DONE
 5. Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
