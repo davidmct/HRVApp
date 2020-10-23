@@ -514,7 +514,6 @@ class HRVAnalysis extends App.AppBase {
 		//mPoincare_view = new PoincareView();	
 		//mStatsView = new StatsView();
 		//mHistoryView = new HistoryView();
-		//mCurrentView = new CurrentValueView();
 		//mTestView = new TestView();
     }
     
@@ -612,9 +611,6 @@ class HRVAnalysis extends App.AppBase {
 		else if (HISTORY_VIEW == viewNum) {
 			return new HistoryView();
 		}
-		//else if (CURRENT_VIEW == viewNum) {
-		//	return new CurrentValueView();
-		//}
 		else if (POINCARE_VIEW == viewNum) {
 			return new PoincareView(1);
 		}

@@ -289,7 +289,7 @@ class SampleProcessing {
 		aIIValue[0] = mSample;
 		$._mApp.mTestAvgBuffer[$._mApp.mTestBufferIndex] = mAvg;
 		$._mApp.mTestBufferIndex++;		
-		Sys.println("addAverage(test) :"+mAvg);
+		//Sys.println("addAverage(test) :"+mAvg);
 	}
 	
 (:notTestVersion)
@@ -506,8 +506,8 @@ class SampleProcessing {
 			// L L -> inc, heart slowing down?
 			// S L -> inc, double beat
 			// S S -> inc, ??? maybe change of rate up	
-			Sys.println("SampleProc: Sample# "+mSampleIndex+", mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+
-				" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
+			//Sys.println("SampleProc: Sample# "+mSampleIndex+", mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+
+			//	" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
 			
 			
 			if 	(( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_OK) ||
@@ -517,7 +517,7 @@ class SampleProcessing {
 			} 
 			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_S) {
 				vShortBeatCnt++;
-				Sys.println("SampleProcessing: SHORT BEAT FOUND");	
+				//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
 				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
 				// add sample to II store
 				addSample(intMs, 1, SAMP_S); 
@@ -526,7 +526,7 @@ class SampleProcessing {
 			} 
 			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_L) {
 				vLongBeatCnt++;
-				Sys.println("SampleProcessing: LONG BEAT FOUND");	
+				//Sys.println("SampleProcessing: LONG BEAT FOUND");	
 				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
 				// add sample to II store
 				addSample(intMs, 1, SAMP_L); 
@@ -540,7 +540,7 @@ class SampleProcessing {
 				// add and shift avg buffer and II store
 				addAverage( vRunningAvg, intMs);
 				vEBeatCnt++;	
-				Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");		
+				//Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");		
 			}
 			else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_L) {
 				vLongBeatCnt++;
@@ -550,7 +550,7 @@ class SampleProcessing {
 				addAverage( vRunningAvg, intMs);
 				vEBeatCnt++;
 					
-				Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");
+				//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");
 			}
 			else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_L) {
 				addSample(intMs, 1, SAMP_L); 
@@ -561,7 +561,7 @@ class SampleProcessing {
 				Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");							
 			} else {
 				addSample(intMs, 1, SAMP_OK); 
-				Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");				
+				//Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");				
 			}
 		
 		} // end thresholding process

@@ -96,14 +96,6 @@ class IntervalView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
-		if ($._mApp.mDeviceType == RES_240x240) {
-			if (mLabelFont == null) {
-				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
-			}
-		} else {
-			mLabelFont = Gfx.FONT_XTINY;
-		}
-		
 		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
@@ -142,14 +134,14 @@ class IntervalView extends Ui.View {
     		mStartIndex = mNumberEntries - mSampleNum - 1;
     	}
     	
-    	Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
+    	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
     	// scan array to be plotted looking for min and max
     	// Could reduce to viewed portion
     	var value;
     	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point	
-			value = $._mApp.mIntervalSampleBuffer[i];
+			value = $._mApp.mIntervalSampleBuffer[i] & 0x0FFF;
 			if(Ymin > value) {
 				Ymin = value;
 			}
@@ -178,21 +170,46 @@ class IntervalView extends Ui.View {
 		//var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
 		
 		// now draw graph
-		var sample = $._mApp.mIntervalSampleBuffer[mStartIndex];
+		var sample = $._mApp.mIntervalSampleBuffer[mStartIndex] & 0x0FFF;
+		var mIIState = 0;
 		var mY0 = floorY - ((sample-floor) * scaleY).toNumber();
 		var mX0 = leftX;
 		var mY1;
 		
-		dc.setPenWidth(2);
-		
 		// we go from mStartIndex until used all mSampleNum		
 		for( var i = mStartIndex+1; i < mNumberEntries-1; i++ ){	
-			// first iteration this is end point	
+			// first iteration this is end point				
 			sample = $._mApp.mIntervalSampleBuffer[i];
+			mIIState = (sample >> 12) & 0x000F;
+			sample = sample & 0x0FFF;
+			
+			dc.setPenWidth(2);
+			
+			if (mIIState == SAMP_L) {
+				// LONG BEAT FOUND
+				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+				//Sys.println("PURPLE index i = "+i );	
+				dc.setPenWidth(4);
+			} 
+			else if (mIIState == SAMP_S) {
+				// SHORT BEAT FOUND
+				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
+				//Sys.println("PINK index i = "+i);
+				dc.setPenWidth(4);
+			}
+			else if ( mIIState == SAMP_LS|| mIIState == SAMP_SL) {
+				//case 6: Long and ECTOPIC BEAT FOUND				
+				// case 9: SHORT and ECTOPIC BEAT FOUND
+				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+				//Sys.println("YELLOW index i = "+i );
+				dc.setPenWidth(4);	
+			} else {
+				// default line colour is red		
+				dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
+			}	// end colour choice	
+						
 			mY1 = floorY - ((sample-floor) * scaleY).toNumber();
 			
-			// default line colour is red		
-			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(mX0, mY0, mX0+X_INC_VALUE, mY1);
 			//Sys.println("IntervalPlot: sample, "+sample+" line from : mX0, mY0 "+mX0+", "+mY0+" to "+mX0+"+1, "+mY1);
 			

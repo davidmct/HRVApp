@@ -20,17 +20,6 @@ Future ..
 	
 4. Is there also a possibility to trigger a reading 2-3 minutes before you actually wake up ? Some kind of automatic stuff
 	
-6. New buffer for flag...
-	Sample number is < 1208 so need 11 bits (2048) leaving 4 bits for flag
-	Flag = OK, S, L, LS(E), SL(E)
-	Buffer is circular of length N (say 20) which stores index number of sample and flag added using OR
-	Could use this for rest of processing as well as graphs
-	Using average this way would work ...
-	
-	We want to look back ignoring any samples which are SL, LS - others are OK
-	Either scan entire list everytime for match (needing SL, LS to be contiguous OR
-	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
-	
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
 
 8. Memory optimisations 
@@ -50,7 +39,6 @@ Future ..
 18. Use setting to determine whether interval Y axis is fixed or floating scale
 
 
-
 DONE
 5. Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
@@ -64,3 +52,12 @@ DONE
 14. Unload custom fonts when done
 19. Moved BeatGraph to show ectopic of either case
 20. Use interval buffer to store pulse type and dump separately at end. Need to update Beatgraph to match and remove flags version
+6. New buffer for flag...
+	Sample number is < 1208 so need 11 bits (2048) leaving 4 bits for flag
+	Flag = OK, S, L, LS(E), SL(E)
+	Buffer is circular of length N (say 20) which stores index number of sample and flag added using OR
+	Could use this for rest of processing as well as graphs
+	Using average this way would work ...
+	We want to look back ignoring any samples which are SL, LS - others are OK
+	Either scan entire list everytime for match (needing SL, LS to be contiguous OR
+	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK

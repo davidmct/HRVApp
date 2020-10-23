@@ -162,7 +162,7 @@ class BeatView extends Ui.View {
     		mSampleNum = $._mApp.mNumberBeatsGraph;
     	}
     	
-    	Sys.println("BeatView: mNumberEntries, mSampleNum: "+mNumberEntries+" "+mSampleNum);
+    	//Sys.println("BeatView: mNumberEntries, mSampleNum: "+mNumberEntries+" "+mSampleNum);
     	
     	// work out X range covered
     	var sumII = 0;
@@ -216,8 +216,8 @@ class BeatView extends Ui.View {
 		var scaleY = chartHeight / (Ymax - Ymin).toFloat();
 		scaleY = scaleY / 1.5; // compress scale as don't want to overflow pulse rectangle area
 		
-		Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
-		Sys.println("BeatView: chartHeight: "+chartHeight+" scale factor X: "+scaleX+" scale Y = "+scaleY);
+		//Sys.println("Beatview: Ymin:Ymax = "+Ymin+" : "+Ymax);
+		//Sys.println("BeatView: chartHeight: "+chartHeight+" scale factor X: "+scaleX+" scale Y = "+scaleY);
 
 		// now draw graph
 		var sample;
@@ -269,20 +269,20 @@ class BeatView extends Ui.View {
 			if (mIIState == SAMP_L) {
 				// LONG BEAT FOUND
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PURPLE index i = "+i );	
+				//Sys.println("PURPLE index i = "+i );	
 				mPulseWidth = 6;
 			} 
 			else if (mIIState == SAMP_S) {
 				// SHORT BEAT FOUND
 				dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
-				Sys.println("PINK index i = "+i);
+				//Sys.println("PINK index i = "+i);
 				mPulseWidth = 6;	
 			}
 			else if ( mIIState == SAMP_LS|| mIIState == SAMP_SL) {
 				//case 6: Long and ECTOPIC BEAT FOUND				
 				// case 9: SHORT and ECTOPIC BEAT FOUND
 				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
-				Sys.println("YELLOW index i = "+i );
+				//Sys.println("YELLOW index i = "+i );
 				mPulseWidth = 6;	
 			} else {
 				// default is sample is OK
@@ -338,7 +338,7 @@ class BeatView extends Ui.View {
 			// a[0] can be used to plot avg line but need to scale across all of them
 			// a[1] is II sample
 			
-			Sys.println("Beatgraph plot samples: "+a0+" ,"+a1);
+			//Sys.println("Beatgraph plot samples: "+a0+" ,"+a1);
 			
 			// check we have this number of entries - shouldn't happen once code complete
 			// force average for line to sensible value
