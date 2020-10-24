@@ -43,3 +43,31 @@ class NumberPicker extends WatchUi.Picker {
     }
 
 }
+
+class NumberPicker2Digit extends WatchUi.Picker {
+
+    function initialize(Llimit_v, initial_v, Ulimit_v, inc_v) {
+
+        var title = new WatchUi.Text({:text=>"Select", :locX=>WatchUi.LAYOUT_HALIGN_CENTER, :locY=>WatchUi.LAYOUT_VALIGN_BOTTOM, :color=>Graphics.COLOR_WHITE});
+        // allow for one 2 digit field
+        var factories = new [1];
+        // need to split initial number over four digits
+        if (Ulimit_v > 40) { throw new myException( "Number picker input > 40"); }
+        if (Llimit_v < 10) { throw new myException( "Number picker input < 10"); }
+      
+        factories[0] = new NumberFactory(Llimit_v, Ulimit_v, inc_v, {:format=>DOUBLEDIGIT_FORMAT});
+      
+        // now fill in initial values of each factory
+        var defaults = new [factories.size()];
+        defaults[0] = initial_v;
+
+        Picker.initialize({:title=>title, :pattern=>factories, :defaults=>defaults});
+    }
+
+    function onUpdate(dc) {
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        Picker.onUpdate(dc);
+    }
+
+}

@@ -93,9 +93,11 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
         Sys.println("Threshold onselect id "+id);
                   
      	if( id.equals("u"))  {
-            var menu = new Ui.Menu2({:title=>"Upper"});
-            AddThresholdItems( menu);
-	        Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
+            //var menu = new Ui.Menu2({:title=>"Upper"});
+            //AddThresholdItems( menu);
+	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
+	        Sys.println("Threshold upper before = "+$._mApp.vUpperThresholdSet);
+	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
         } else if( id.equals("l"))  {
             var menu = new Ui.Menu2({:title=>"Lower"});
             AddThresholdItems( menu);
@@ -116,5 +118,18 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
     
 }
 
+class ThresholdPickerDelegate extends Ui.PickerDelegate {
+	hidden var mFunc;
+	
+    function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
 
+    function onCancel() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
+    function onAccept(values) {
+		mFunc.invoke( values[0].toFloat()/100 );
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+}
 
