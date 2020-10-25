@@ -3,6 +3,89 @@ using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
 
 
+class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
+     
+	function initialize() { Menu2InputDelegate.initialize(); }  
+	
+	//(:oldThreshold)
+	(:discard)
+	function AddThresholdItems( menu) {
+		// get labels for thresholds ie key 
+		// as both thresholds have the same name then can use just one for labels
+        var mKeys = $.mLongThresholdMap.keys();
+        var i;
+        for (i = 0; i < $.mLongThresholdMap.size() ; i++) {
+        	var mColName = mKeys[i].toString();
+        	Sys.println("Add threshold menu item "+mColName+" index "+i);
+        	menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+    	}
+	}
+	
+    //(:newThreshold)
+    (:discard)
+	function AddThresholdItems( menu) {
+		// get labels for thresholds ie key 
+		// as both thresholds have the same name then can use just one for labels
+        var mThresholdStrings = Ui.loadResource(Rez.JsonData.jsonThresholdStrings);
+        var i;
+        for (i = 0; i < mThresholdStrings.size() ; i++) {
+        	var mColName = mThresholdStrings[i];
+        	Sys.println("Add threshold menu item "+mColName+" index "+i);
+        	menu.addItem(new Ui.MenuItem(mColName, null, i.toString(), null));
+    	}
+	}    
+    
+    
+   	function onSelect(item) {
+        var id = item.getId();
+        
+        Sys.println("Threshold onselect id "+id);
+                  
+     	if( id.equals("u"))  {
+            //var menu = new Ui.Menu2({:title=>"Upper"});
+            //AddThresholdItems( menu);
+	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
+	        Sys.println("Threshold upper before = "+$._mApp.vUpperThresholdSet);
+	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
+        } else if( id.equals("l"))  {
+            //var menu = new Ui.Menu2({:title=>"Lower"});
+            //AddThresholdItems( menu);
+	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE ); 
+	        Sys.println("Threshold lower before = "+$._mApp.vLowerThresholdSet);
+	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vLowerThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
+        }
+    }
+    
+    function onBack() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+ 
+    function onDone() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+	
+	// delegate scales to % already
+    function setUpper(value) { $._mApp.vUpperThresholdSet = value; Sys.println("Upper threshold set to "+$._mApp.vUpperThresholdSet); }
+    function setLower(value) { $._mApp.vLowerThresholdSet = value; Sys.println("Lower threshold set to "+$._mApp.vLowerThresholdSet); }
+    
+}
+
+class ThresholdPickerDelegate extends Ui.PickerDelegate {
+	hidden var mFunc;
+	
+    function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
+
+    function onCancel() {
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+
+    function onAccept(values) {
+		mFunc.invoke( values[0].toFloat()/100 );
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
+    }
+}
+
+(:discard)
 class ThresholdListMenuDelegate extends Ui.Menu2InputDelegate {
 
 	hidden var mFunc;
@@ -55,81 +138,3 @@ class ThresholdListMenuDelegate extends Ui.Menu2InputDelegate {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
 }
-
-class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
-     
-	function initialize() { Menu2InputDelegate.initialize(); }  
-	
-	(:oldThreshold)
-	function AddThresholdItems( menu) {
-		// get labels for thresholds ie key 
-		// as both thresholds have the same name then can use just one for labels
-        var mKeys = $.mLongThresholdMap.keys();
-        var i;
-        for (i = 0; i < $.mLongThresholdMap.size() ; i++) {
-        	var mColName = mKeys[i].toString();
-        	Sys.println("Add threshold menu item "+mColName+" index "+i);
-        	menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
-    	}
-	}
-	
-    (:newThreshold)
-	function AddThresholdItems( menu) {
-		// get labels for thresholds ie key 
-		// as both thresholds have the same name then can use just one for labels
-        var mThresholdStrings = Ui.loadResource(Rez.JsonData.jsonThresholdStrings);
-        var i;
-        for (i = 0; i < mThresholdStrings.size() ; i++) {
-        	var mColName = mThresholdStrings[i];
-        	Sys.println("Add threshold menu item "+mColName+" index "+i);
-        	menu.addItem(new Ui.MenuItem(mColName, null, i.toString(), null));
-    	}
-	}    
-    
-    
-   	function onSelect(item) {
-        var id = item.getId();
-        
-        Sys.println("Threshold onselect id "+id);
-                  
-     	if( id.equals("u"))  {
-            //var menu = new Ui.Menu2({:title=>"Upper"});
-            //AddThresholdItems( menu);
-	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
-	        Sys.println("Threshold upper before = "+$._mApp.vUpperThresholdSet);
-	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
-        } else if( id.equals("l"))  {
-            var menu = new Ui.Menu2({:title=>"Lower"});
-            AddThresholdItems( menu);
-	        Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE );         	
-        }
-    }
-    
-    function onBack() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
- 
-    function onDone() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-	
-    function setUpper(value) { $._mApp.vUpperThresholdSet = value; Sys.println("Upper threshold set to "+value); }
-    function setLower(value) { $._mApp.vLowerThresholdSet = value; Sys.println("Lower threshold set to "+value);}
-    
-}
-
-class ThresholdPickerDelegate extends Ui.PickerDelegate {
-	hidden var mFunc;
-	
-    function initialize(func) { mFunc = func; PickerDelegate.initialize();  }
-
-    function onCancel() {
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-
-    function onAccept(values) {
-		mFunc.invoke( values[0].toFloat()/100 );
-        Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    }
-}
-

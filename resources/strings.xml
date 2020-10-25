@@ -46,6 +46,8 @@
 	<string id="lSourceUnits"> </string> 	
 	<string id="pSensorSelectT">Use unregistered HRM</string> 
 	<string id="pSensorSelectP">True for unregistered/disabled strap</string>
+	<string id="pIIScaleT">Auto Scale II</string>
+	<string id="pIIScaleP">On or Off</string>
 	<string id="soundSetT">Sound?</string>
 	<string id="soundSetP">On or Off</string>
 	<string id="vibeSetT">Vibrate?</string>
@@ -89,15 +91,17 @@
 	<string id="LabelHistTitle3">History Entry 3</string> 
 	<string id="LabelHistTitleP">Select History Entry</string> 	
 	
-	<string id="LongThresholdtT">Missing Pulse Threshold</string>
-	<string id="ShortThresholdtT">Double Pulse Threshold</string> 
+	<string id="LongThresholdT">Long Pulse Threshold</string>
+	<string id="ShortThresholdT">Short Pulse Threshold</string> 
 	<string id="ThresholdP">Select Threshold</string> 
-
+	<string id="ThresholdErrorT">Range 0.1-0.4</string>
+<!-- 
 	<string id="VTIGHT">Very tight</string> 
 	<string id="TIGHT">Tight</string> 
 	<string id="NOMINAL">Nominal</string>
 	<string id="LOOSE">Loose</string>
 	<string id="VLOOSE">Very Loose</string>
+-->
 	
 	<string id="PayURLT">Please support</string> 
 	<!-- <string id="PayURLString">xxxxx</string> -->

@@ -101,6 +101,12 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        menu.addItem(new Ui.MenuItem("History 3", null, "h3", null));	               
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
+		else if ( id.equals("sc"))  { // scale intervals
+            var menu = new Ui.Menu2({:title=>"Scale II"});
+	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
+ 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setScale)), Ui.SLIDE_IMMEDIATE );     
+        }       
         else if ( id.equals("so"))  {
             var menu = new Ui.Menu2({:title=>"Sound"});
 	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
@@ -135,6 +141,10 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     
     function setSound(value) {
 		if (value == 1) { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
+    }
+    
+    function setScale(value) {
+		if (value == 1) { $._mApp.mBoolScaleII = true;} else { $._mApp.mBoolScaleII = false;}
     }
 
     function setVibe(value) {

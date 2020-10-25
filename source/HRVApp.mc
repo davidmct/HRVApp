@@ -123,12 +123,8 @@ class HRVAnalysis extends App.AppBase {
 	// 1 = true, 0 = false and INTERNAL_SENSOR
 	var mSensorTypeExt;
 	
-	// try only one creation of a view - consumes more memory as multiple views saved
-	//hidden var mPoincare_view;
-	//hidden var mStatsView;
-	//hidden var mHistoryView;
-	//hidden var mCurrentView;
-	//hidden var mTestView;
+	// Auto scale when true otherwise fixed range
+	var mBoolScaleII;
 	
 	// Trial mode variables!!
 	hidden var mTrialMode;
@@ -439,34 +435,6 @@ class HRVAnalysis extends App.AppBase {
 		return [ new TestView(), new HRVBehaviourDelegate() ];
     }
     
-(:discard) // for now while building
-// DC is not available but are fixed numbers any way!!
-    function set() {
-  		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
-		cGridWith = a.toNumber();
-		
-		//if ($._mApp.mDeviceType == RES_240x240) {		
-		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
-		//}
-		
-		// chartHeight defines height of chart and sets scale
-		// needs to divide by 6 for horizontal lines
-		// impacts all layout numbers!
-		chartHeight = cGridWith;
-    	ctrX = dc.getWidth() / 2;
-		ctrY = dc.getHeight() / 2;
-		// define box about centre
-		leftX = ctrX - cGridWith/2;
-		rightX = ctrX + cGridWith/2;
-		// 45 *2 is height of chart
-		ceilY = ctrY - chartHeight/2;
-		floorY = ctrY + chartHeight/2;
-		
-		mScaleY = dc.getHeight();
-		mScaleX = dc.getWidth();  
-		   
-    }
-    
     //! onStart() is called on application start up
     function onStart(state) {
 		// Retrieve device type
@@ -542,6 +510,8 @@ class HRVAnalysis extends App.AppBase {
 		
 		// Dump all interval data to txt file on device
 		if (mDumpIntervals == true) {DumpIntervals();}
+		
+		mStorage.saveIntervalStrings();
 		
 		Sys.println("Closing sensors");
 		if (mSensor != null) {
@@ -631,6 +601,37 @@ class HRVAnalysis extends App.AppBase {
 		}
 	}
 	
+	function writeStrings(_type, _mNumEntries, _mNumBlocks, _mRemainder) {
+		var mString;
+		var base;
+		var mSp;
+		var separator = ",";
+	
+		mString = ( _type == 0 ? "II:," : "Flags:,");
+
+		for (var i=0; i < _mNumBlocks; i++) {
+			base = i*BLOCK_SIZE;
+			var j;
+			for (j=0; j< BLOCK_SIZE; j++) {
+				mSp = mIntervalSampleBuffer[base+j];
+				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+				mString += mSp.toString()+separator;				
+			}
+			Sys.println(mString);
+			mString = "";		
+		}
+		mString = "";
+		// Write tail end of buffer
+		base = BLOCK_SIZE * _mNumBlocks;
+		for (var i=0; i < _mRemainder; i++) {	
+				mSp = mIntervalSampleBuffer[base+i];
+				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+				mString += mSp.toString()+separator;						
+		}	
+		Sys.println(mString);
+	
+	}
+	
 	function DumpIntervals() {
 		// to reduce write time group up the data
 		
@@ -650,6 +651,16 @@ class HRVAnalysis extends App.AppBase {
 		//if (mDebugging == true) {
 		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
 		//}
+		
+		// save memory by removing code lines
+		// type 0 = II, 1 = flags
+		writeStrings(0, mNumEntries, mNumBlocks, mRemainder);
+		
+		writeStrings(1, mNumEntries, mNumBlocks, mRemainder);
+	}		
+	
+	(:discard)	
+	function OLDXXX () {
 		
 		var separator = ",";
 		for (i=0; i < mNumBlocks; i++) {

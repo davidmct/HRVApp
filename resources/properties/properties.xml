@@ -18,6 +18,7 @@
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
 	<!-- pSensorSelect true is external search -->
 	<property id="pSensorSelect" type="boolean">true</property>
+	<property id="pIIScale" type="boolean">false</property>
 	<property id="soundSet" type="boolean">true</property>
 	<property id="vibeSet" type="boolean">false</property>
 	<!--  testTypeSet true = Timer -->
@@ -39,7 +40,7 @@
 	<property id="pHistLabel2" type="number">6</property> 
 	<property id="pHistLabel3" type="number">7</property> 	
 	
-	<property id="pLongThresholdIndex"  type="number">2</property>
-	<property id="pShortThresholdIndex" type="number">2</property>
-	<property id="pPaypalRef" type="string">www.google.com</property>
+	<property id="pLongThresholdIndex"  type="float">0.2</property>
+	<property id="pShortThresholdIndex" type="float">0.2</property>
+	<property id="pPaypalRef" type="string">PayPal.me/hrvapp</property>
 </properties>

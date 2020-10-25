@@ -135,21 +135,27 @@ class IntervalView extends Ui.View {
     	}
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
-    	
-    	// scan array to be plotted looking for min and max
-    	// Could reduce to viewed portion
-    	var value;
-    	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
-			// first iteration this is end point	
-			value = $._mApp.mIntervalSampleBuffer[i] & 0x0FFF;
-			if(Ymin > value) {
-				Ymin = value;
+    			
+		// True if auto scaling on 
+		if ($._mApp.mBoolScaleII) {
+			Ymax = 1800; // 33bpm
+			Ymin = 430; // 140 bpm
+		} else {
+	    	// scan array to be plotted looking for min and max
+	    	// Could reduce to viewed portion
+	    	var value;
+	    	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
+				// first iteration this is end point	
+				value = $._mApp.mIntervalSampleBuffer[i] & 0x0FFF;
+				if(Ymin > value) {
+					Ymin = value;
+				}
+				if(Ymax < value) {
+					Ymax = value;
+				}
 			}
-			if(Ymax < value) {
-				Ymax = value;
-			}
+			value = null;				
 		}
-		value = null;
     	
     	// Create the range in blocks of 5
 		var ceil = (Ymax + 5) - (Ymax % 5);

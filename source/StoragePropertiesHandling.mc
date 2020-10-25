@@ -33,6 +33,8 @@ class HRVStorageHandler {
 		Storage.setValue("firstLoadEver", true);
 		$._mApp.Properties.setValue("pFitWriteEnabled", false);
 		$._mApp.Properties.setValue("pSensorSelect", SENSOR_SEARCH);
+		// Auto scale if true
+		$._mApp.Properties.setValue("pIIScale", false);
 		$._mApp.Properties.setValue("soundSet", true);
 		$._mApp.Properties.setValue("vibeSet", false);
 		$._mApp.Properties.setValue("testTypeSet", TYPE_TIMER);
@@ -54,8 +56,8 @@ class HRVStorageHandler {
 		
 		//0.4.6
 		$._mApp.Properties.setValue("pNumberBeatsGraph", 10);	
-		$._mApp.Properties.setValue("pLongThresholdIndex", 2); // nominal
-		$._mApp.Properties.setValue("pShortThresholdIndex", 2); // nominal	
+		$._mApp.Properties.setValue("pLongThresholdIndex", 0.2); // nominal
+		$._mApp.Properties.setValue("pShortThresholdIndex", 0.2); // nominal	
 	
 	}
 
@@ -65,6 +67,7 @@ class HRVStorageHandler {
 		//$._mApp.setProperty("firstLoadEver", true);
 		$._mApp.setProperty("pFitWriteEnabled", false);
 		$._mApp.setProperty("pSensorSelect", SENSOR_SEARCH);
+		$._mApp.setProperty("pIIScale", false);
 		$._mApp.setProperty("soundSet", true);
 		$._mApp.setProperty("vibeSet", false);
 		$._mApp.setProperty("testTypeSet", TYPE_TIMER);
@@ -86,8 +89,8 @@ class HRVStorageHandler {
 		
 		//0.4.6
 		$._mApp.setProperty("pNumberBeatsGraph", 10);	
-		$._mApp.setProperty("pLongThresholdIndex", 2); // nominal
-		$._mApp.setProperty("pShortThresholdIndex", 2); // nominal	
+		$._mApp.setProperty("pLongThresholdIndex", 0.2); // nominal
+		$._mApp.setProperty("pShortThresholdIndex", 0.2); // nominal	
 	
 	}
 	
@@ -253,6 +256,7 @@ class HRVStorageHandler {
 		$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
 		$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
+		$._mApp.mBoolScaleII = $._mApp.getProperty("pIIScale");
 		$._mApp.soundSet = $._mApp.getProperty("soundSet");
 		$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
 		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet");
@@ -287,13 +291,14 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
 		
-		var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
-		var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
-        var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
-		$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
-		index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
-		$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
-
+		//var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
+		//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
+        //var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
+		//$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
+		//index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
+		//$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
+		$._mApp.vUpperThresholdSet = $._mApp.getProperty("pLongThresholdIndex").toFloat();
+		$._mApp.vLowerThresholdSet = $._mApp.getProperty("pShortThresholdIndex").toFloat();
 	}
 
 (:storageMethod)	
@@ -305,6 +310,7 @@ class HRVStorageHandler {
 			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
 			$._mApp.mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");
+			$._mApp.mBoolScaleII = $._mApp.Properties.getValue("pIIScale");
 			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
 			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
 			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet");
@@ -334,15 +340,17 @@ class HRVStorageHandler {
 		//}
 			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();	
 			
-			var index = $._mApp.Properties.getValue("pLongThresholdIndex").toNumber();
-			var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
-            var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
-			$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
-			index = $._mApp.Properties.getValue("pShortThresholdIndex").toNumber();	
-			$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
-
+			//var index = $._mApp.Properties.getValue("pLongThresholdIndex").toNumber();
+			//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
+            //var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
+			//$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
+			//index = $._mApp.Properties.getValue("pShortThresholdIndex").toNumber();	
+			//$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
+		$._mApp.vUpperThresholdSet = $._mApp.getProperty("pLongThresholdIndex").toFloat();
+		$._mApp.vLowerThresholdSet = $._mApp.getProperty("pShortThresholdIndex").toFloat();
 	}
-	
+
+(:discard)	
 	function fFindThresholdIndex() {
 		var long = 0;
 		var short = 0;
@@ -388,6 +396,7 @@ class HRVStorageHandler {
 		$._mApp.Properties.setValue("pSensorSelect", $._mApp.mSensorTypeExt);
 		
 		// user changable
+		$._mApp.Properties.setValue("pIIScale", $._mApp.mBoolScaleII);
 		$._mApp.Properties.setValue("soundSet", $._mApp.soundSet);
 		$._mApp.Properties.setValue("vibeSet", $._mApp.vibeSet);
 		$._mApp.Properties.setValue("testTypeSet", $._mApp.testTypeSet);
@@ -415,11 +424,14 @@ class HRVStorageHandler {
 		
 		//0.4.7
 		// move code to function
-		var res = new [2];
-		res = fFindThresholdIndex();
+		//var res = new [2];
+		//res = fFindThresholdIndex();
 		
-		$._mApp.Properties.setValue("pLongThresholdIndex", res[0]);		
-		$._mApp.Properties.setValue("pShortThresholdIndex", res[1]);	
+		//$._mApp.Properties.setValue("pLongThresholdIndex", res[0]);		
+		//$._mApp.Properties.setValue("pShortThresholdIndex", res[1]);
+		
+		$._mApp.Properties.setValue("pLongThresholdIndex", $._mApp.vUpperThresholdSet );		
+		$._mApp.Properties.setValue("pShortThresholdIndex", $._mApp.vLowerThresholdSet);
 			
 	}
 
@@ -429,6 +441,7 @@ class HRVStorageHandler {
 		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
 		$._mApp.setProperty("pSensorSelect", $._mApp.mFitWriteEnabled);
 
+		$._mApp.setProperty("pIIScale", $._mApp.mBoolScaleII);
 		$._mApp.setProperty("soundSet", $._mApp.soundSet);
 		$._mApp.setProperty("vibeSet", $._mApp.vibeSet);
 		$._mApp.setProperty("testTypeSet", $._mApp.testTypeSet);
@@ -453,11 +466,14 @@ class HRVStorageHandler {
 		//0.4.6
 		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);	
 		
-		var res = new [2];
-		res = fFindThresholdIndex();
+		//var res = new [2];
+		//res = fFindThresholdIndex();
 		
-		$._mApp.setProperty("pLongThresholdIndex", res[0]);		
-		$._mApp.setProperty("pShortThresholdIndex", res[1]);	
+		//$._mApp.setProperty("pLongThresholdIndex", res[0]);		
+		//$._mApp.setProperty("pShortThresholdIndex", res[1]);	
+		
+		$._mApp.setProperty("pLongThresholdIndex", $._mApp.vUpperThresholdSet );		
+		$._mApp.setProperty("pShortThresholdIndex", $._mApp.vLowerThresholdSet);
 		
 	}
 
@@ -687,6 +703,13 @@ class HRVStorageHandler {
     	$._mApp.results = null;
     	
 	} // end prepareResults 
+	
+	// save intervals and flags as strings to storage to see if we can find them!!
+	function saveIntervalStrings() {
+	
+	
+	
+	}
 	
 }
 

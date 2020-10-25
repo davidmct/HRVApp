@@ -13,6 +13,9 @@
 	</setting>	
 	<setting propertyKey="@Properties.pSensorSelect" title="@Strings.pSensorSelectT" prompt="@Strings.pSensorSelectP">
 		<settingConfig type="boolean" />
+	</setting>	
+	<setting propertyKey="@Properties.pIIScale" title="@Strings.pIIScaleT" prompt="@Strings.pIIScaleP">
+		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetT" prompt="@Strings.soundSetP">
 		<settingConfig type="boolean" />
@@ -198,6 +201,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
+	<!--
 	<setting propertyKey="@Properties.pLongThresholdIndex" title="@Strings.LongThresholdtT" prompt="@Strings.ThresholdP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.VTIGHT</listEntry>
@@ -214,8 +218,17 @@
 			<listEntry value="2">@Strings.NOMINAL</listEntry>
 			<listEntry value="3">@Strings.LOOSE</listEntry>
 			<listEntry value="4">@Strings.VLOOSE</listEntry>
-		</settingConfig>					
+		</settingConfig>
 	</setting>	
+	-->					
+
+	<setting propertyKey="@Properties.pLongThresholdIndex" title="@Strings.LongThresholdT" prompt="@Strings.ThresholdP">	
+		<settingConfig type="numeric" min="0.1" max="0.4" errorMessage="@Strings.ThresholdErrorT" />
+	</setting>	
+	<setting propertyKey="@Properties.pShortThresholdIndex" title="@Strings.ShortThresholdT" prompt="@Strings.ThresholdP">	
+		<settingConfig type="numeric" min="0.1" max="0.4" errorMessage="@Strings.ThresholdErrorT" />
+	</setting>	
+	
 	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLT"> <!--helpUrl="@Strings.PayURLString">-->
 	<settingConfig type="url"  readonly="true" />	
 	</setting>
