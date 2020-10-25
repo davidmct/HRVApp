@@ -135,6 +135,8 @@ class IntervalView extends Ui.View {
     	}
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
+    	
+    	Sys.println("IntervalPlot: mBoolScaleII = "+$._mApp.mBoolScaleII);
     			
 		// True if auto scaling on 
 		if ($._mApp.mBoolScaleII) {
