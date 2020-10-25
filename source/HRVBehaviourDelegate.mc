@@ -90,7 +90,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
        	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
         menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
         menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
-        menu.addItem(new Ui.MenuItem("Scaling", null, "sc", null));
+        menu.addItem(new Ui.MenuItem("Auto Scaling", null, "sc", null));
         menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
         menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
         menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    

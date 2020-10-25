@@ -179,7 +179,7 @@ class BeatView extends Ui.View {
     	min = 0;
     	max = sumII;
     			
-		Sys.println("Beatview: sumII, max, min "+sumII+", "+max+" , "+min);
+		//Sys.println("Beatview: sumII, max, min "+sumII+", "+max+" , "+min);
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);

@@ -703,12 +703,44 @@ class HRVStorageHandler {
     	$._mApp.results = null;
     	
 	} // end prepareResults 
+
+	function saveStrings(_type) {
+		var mString;
+		var base;
+		var mSp;
+		var separator = ",";
+		var mNumEntries = $._mApp.mSampleProc.getNumberOfSamples();
+
+		if (mNumEntries <= 0) { return;}
+			
+		mString = ( _type == 0 ? "II:," : "Flags:,");
+
+		for (var i=0; i < mNumEntries; i++) {
+				mSp = $._mApp.mIntervalSampleBuffer[i];
+				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+				mString += mSp.toString()+separator;				
+		}
+	
+		// write to storage
+		if (_type == 0) { // interval string
+			Storage.setValue("SavedIntervalArray", mString);
+		} else {
+			Storage.setValue("SavedFlagArray", mString);				
+		}
+		mString = "";			
+	}
+
 	
 	// save intervals and flags as strings to storage to see if we can find them!!
+	// on close of app so data doesn't matter
 	function saveIntervalStrings() {
-	
-	
-	
+		
+		Sys.println("Storing intervals and flags");
+		
+		// save memory by removing code lines
+		// type 0 = II, 1 = flags
+		saveStrings(0);		
+		saveStrings(1);	
 	}
 	
 }
