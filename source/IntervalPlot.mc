@@ -32,7 +32,7 @@ class IntervalView extends Ui.View {
 	hidden var mTitleLocS = [0, 0];	
 	hidden var mTitleLabels = ["II Plot"];
 		
-	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mLabelFont = null;
 	hidden var mValueFont = Gfx.FONT_XTINY;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_BLUE;
@@ -227,8 +227,8 @@ class IntervalView extends Ui.View {
 		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
-		dc.drawText( leftX+15, ceilY, mLabelFont, format("$1$",[ceil.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( leftX+15, floorY, mLabelFont, format("$1$",[floor.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		dc.drawText( leftX+20, ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
 		// performance check only on real devices

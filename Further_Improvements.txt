@@ -34,9 +34,7 @@ Future ..
 	Maybe use JSON for each display type. Tie to font selection
 	Challenge is grid varies on view being used (could make new variables) and DC not available (however is fixed by type of device which we know
 	
-17. Use NumberPicker of two entries for each threshold???
 
-18. Use setting to determine whether interval Y axis is fixed or floating scale
 
 
 DONE
@@ -61,3 +59,8 @@ DONE
 	We want to look back ignoring any samples which are SL, LS - others are OK
 	Either scan entire list everytime for match (needing SL, LS to be contiguous OR
 	Scan but stop if entry that is SL LS is further in past than current sample index -1 then OK
+	
+17. Use NumberPicker of two entries for each threshold???
+
+18. Use setting to determine whether interval Y axis is fixed or floating scale
+21. Need to tweak location of axis labels on different watches. II needs small font on fenix 5

@@ -63,15 +63,15 @@ class PoincareView extends Ui.View {
 	hidden var ceilY;
 	hidden var floorY;
     
-    hidden var mTitleLoc = [50, 11]; // %
+    hidden var mTitleLoc = [52, 9]; // was 11%
 	hidden var mTitleLocS = [0,0];	
 	hidden var mTitleLabels = ["Poincare", "Full range"];
 	
 	// coordinates of set of labels as %
 	// split to 1D array to save memory
 	// RR ms, TopValY, MidValY, LowerValY, TopValX, MidValX, LowerValX, 
-	hidden var mLabelValueLocX = [ 50, 11, 11, 11, 75, 50, 29];
-	hidden var mLabelValueLocY = [ 95, 82, 50, 18, 86, 86, 86];
+	hidden var mLabelValueLocX = [ 50, 11, 9, 11, 75, 50, 29]; // [2] from 11
+	hidden var mLabelValueLocY = [ 95, 82, 50, 18, 86, 86, 86]; // [2] from 50
 	hidden var mLabelInterval = "RR ms";
 		
 	// x%, y%, width/height. 
