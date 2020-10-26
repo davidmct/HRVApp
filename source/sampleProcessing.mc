@@ -152,6 +152,13 @@ class SampleProcessing {
 	var mNN20;
 	var mpNN20;
 	
+	//0.5.0
+	// add stats on deviation so can be tuned!! Difference from AVG
+	var mpLongMax; // % by which long
+	var mpShortMax; // % by which short
+	var mLongMax; // ms by which long
+	var mShortMax; // ms by which short	
+	
 	// 0.4.6 variables for ectopic beats
 	var vLongBeatCnt;
 	var vShortBeatCnt;
@@ -185,6 +192,10 @@ class SampleProcessing {
 		mStartThreshold = false;
 		minIntervalFound = 2000; // around 30 BPM
 		maxIntervalFound = 0;
+		mpLongMax = 0.0;
+		mpShortMax = 0.0; 
+		mLongMax = 0; 
+		mShortMax = 0;
 	}
 	
 	function resetHRVData() {
@@ -488,16 +499,24 @@ class SampleProcessing {
 			
 			// what type is current sample?
 			var c_mFlag = SAMP_OK;
-		
-			// test against over threshold. Note these are % but factional ie < 1
-			// updated values in JSON not to be integers. Could do x100 here
-			var mDelta = (intMs.toFloat() - vRunningAvg) / vRunningAvg;
-			if ((mDelta > 0) && (mDelta > $._mApp.vUpperThresholdSet)) {
-				c_mFlag = SAMP_L;						
-			} else if ((mDelta < 0) && (mDelta.abs() > $._mApp.vLowerThresholdSet)) {
-				c_mFlag = SAMP_S;
-			}
 			
+			// test against over threshold. Note these are % but factional ie < 1
+			// Could do x100 here
+			var mDiff = (intMs.toFloat() - vRunningAvg);
+			if (mDiff > mLongMax) { mLongMax = mDiff;}
+			if (mDiff < 0 && mDiff.abs() > mShortMax) { mShortMax = mDiff.abs();}
+			
+			var mDelta = mDiff / vRunningAvg;
+			if (mDelta >= 0) {
+				if (mDelta > $._mApp.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
+				if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
+			} 
+			else {
+				var mDa = mDelta.abs();
+				if (mDa > $._mApp.vLowerThresholdSet) { c_mFlag = SAMP_S;}
+				if (mDa > mpShortMax ) { mpShortMax = mDa;}				
+			}
+				
 			// status combinations and action
 			// OK, OK -> add latest sample to stats
 			// OK S -> wait

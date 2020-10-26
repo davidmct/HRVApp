@@ -24,7 +24,7 @@ class StatsView extends Ui.View {
 	// label values
 	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "Ectopic" ];
 	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Long", "Short" ];
-	hidden var mLabel3Labels = [ "II","Min II", "Max II", "", "", "" ];
+	hidden var mLabel3Labels = [ "II","", "L_%", "L-ms", "S_%", "S-ms" ];
 
 	// x%, y%, width/height
 	hidden var mRectHorizWH = 64;
@@ -174,8 +174,13 @@ class StatsView extends Ui.View {
 			var mTmp = $._mApp.mSampleProc.getCurrentEntry(); 
 			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);				
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, mTmp[0].format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
+			//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
+			//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mpLongMax.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mLongMax.format("%d"), mJust);	
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.mpShortMax.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.mShortMax.format("%d"), mJust);				
+
 		}		
 		// change every 6 seconds
     	//viewToShow = (viewToShow + 1) % 6;
