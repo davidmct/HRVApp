@@ -504,6 +504,7 @@ class SampleProcessing {
 			// Could do x100 here
 			var mDiff = (intMs.toFloat() - vRunningAvg);
 			if (mDiff > mLongMax) { mLongMax = mDiff;}
+			
 			if (mDiff < 0 && mDiff.abs() > mShortMax) { mShortMax = mDiff.abs();}
 			
 			var mDelta = mDiff / vRunningAvg;
@@ -516,6 +517,8 @@ class SampleProcessing {
 				if (mDa > $._mApp.vLowerThresholdSet) { c_mFlag = SAMP_S;}
 				if (mDa > mpShortMax ) { mpShortMax = mDa;}				
 			}
+			
+			//Sys.println(" delta %, L : "+mpLongMax+", "+mLongMax+": %,S : "+mpShortMax+", "+mShortMax); 
 				
 			// status combinations and action
 			// OK, OK -> add latest sample to stats

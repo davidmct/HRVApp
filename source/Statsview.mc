@@ -176,9 +176,9 @@ class StatsView extends Ui.View {
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, mTmp[0].format("%d"), mJust);
 			//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
 			//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
-			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mpLongMax.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, ($._mApp.mSampleProc.mpLongMax*100).format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mLongMax.format("%d"), mJust);	
-			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.mpShortMax.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, ($._mApp.mSampleProc.mpShortMax*100).format("%d"), mJust);
 			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.mShortMax.format("%d"), mJust);				
 
 		}		
