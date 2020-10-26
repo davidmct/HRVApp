@@ -66,6 +66,18 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Write)).setSelected(false);  
             $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
+        }        
+        else if( mId == :autoS)  {
+            $._mApp.mBoolScaleII = true;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:fixedS)).setSelected(false);  
+            Sys.println("Interval Auto ON");  
+        }
+        else if( mId == :fixedS)  {       
+            $._mApp.mBoolScaleII = false;
+            item.setSelected(true);
+            mSrcMenu.getItem(mSrcMenu.findItemById(:autoS)).setSelected(false);   
+            Sys.println("Interval Auto OFF");  
         }
         
         // this should turn item blue...

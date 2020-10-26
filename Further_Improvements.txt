@@ -34,7 +34,7 @@ Future ..
 	Maybe use JSON for each display type. Tie to font selection
 	Challenge is grid varies on view being used (could make new variables) and DC not available (however is fixed by type of device which we know
 	
-
+17. Show entire II range and marked II L,S,E and average as calculated? - only ~ every 10 samples per point OR show E area in centre of +-50 beats?
 
 
 DONE

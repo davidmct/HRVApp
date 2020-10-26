@@ -136,10 +136,10 @@ class IntervalView extends Ui.View {
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	Sys.println("IntervalPlot: mBoolScaleII = "+$._mApp.mBoolScaleII);
+    	//Sys.println("IntervalPlot: mBoolScaleII = "+$._mApp.mBoolScaleII);
     			
 		// True if auto scaling on 
-		if ($._mApp.mBoolScaleII) {
+		if (!$._mApp.mBoolScaleII) {
 			Ymax = 1800; // 33bpm
 			Ymin = 430; // 140 bpm
 		} else {
@@ -243,10 +243,10 @@ class IntervalView extends Ui.View {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
 		Sys.println("IntervalPlot executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
-		Sys.println("IntervalPlot memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	 
+		//Sys.println("IntervalPlot memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	 
 		mLabelFont = null;  
     
     }

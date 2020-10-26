@@ -55,7 +55,7 @@
 	<string id="testTypeSetT">Use timer based test</string>
 	<string id="testTypeSetP">set for timer, unset for manual</string>
 	<string id="timerTimeSetT">Timer based test time</string>
-	<string id="timerTimeSetP">Length of test in seconds - should be 300 (5mins)</string>
+	<string id="timerTimeSetP">Length of test (secs) - should be 300 (5mins)</string>
 	<!--v0.4.2: 480 = MAX_TIME * MAX_BPM -->
 	<string id="TimeTooLargeError">Maximum value is 480 seconds</string>
 	<string id="ManualTimeSetT">Manual test time</string> 

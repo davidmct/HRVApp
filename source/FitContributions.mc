@@ -82,8 +82,8 @@ class HRVFitContributor {
        	mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        			
         mSessionAvgPulse_Field = mSession.createField("AvgPulse", 20, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });		
- 	   	mSessionMinIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionMaxIntervalFound_Field = mSession.createField("MaxInterval", 22, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+ 	   	//mSessionMinIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	//mSessionMaxIntervalFound_Field = mSession.createField("MaxInterval", 22, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmRMSSD_Field = mSession.createField("RMSSD", 23, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmLnRMSSD_Field = mSession.createField("LnRMSSD", 24, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
        	mSessionmSDNN_Field = mSession.createField("SDNN", 25, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
@@ -99,8 +99,8 @@ class HRVFitContributor {
        	mSessionECTOPIC_Field = mSession.createField("Ectopic-S", 35, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
         mSessionSource_Field = mSession.createField("Src",   36, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
        			 
-		mSessionMinIntervalFound_Field.setData(0);
-		mSessionMaxIntervalFound_Field.setData(0);
+		//mSessionMinIntervalFound_Field.setData(0);
+		//mSessionMaxIntervalFound_Field.setData(0);
 		//mSessionMinDiffFound_Field.setData(0);
 		//mSessionMaxDiffFound_Field.setData(0);
 		
@@ -187,8 +187,8 @@ class HRVFitContributor {
 	
 	function updateSessionStats() {
 	
-		mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
-		mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
+		//mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
+		//mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
 		//mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
 		//mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
 		

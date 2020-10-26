@@ -102,10 +102,21 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        Ui.pushView(menu, new ColourMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
 		else if ( id.equals("sc"))  { // scale intervals
-            var menu = new Ui.Menu2({:title=>"Scale II"});
-	        menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
-	        menu.addItem(new Ui.MenuItem("No", null, "2", null));
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setScale)), Ui.SLIDE_IMMEDIATE );     
+            //var menu = new Ui.Menu2({:title=>"Scale II"});
+	        //menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
+	        //menu.addItem(new Ui.MenuItem("No", null, "2", null));
+ 	        //Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setScale)), Ui.SLIDE_IMMEDIATE );  
+ 	        var mAutoState = $._mApp.mBoolScaleII;		
+		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
+		    	{
+		        :focusItemHeight=>45,
+		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
+		        :title=>new DrawableMenuTitle("Auto scale", false),
+		        :footer=>new DrawableMenuFooter()
+		    	});
+		    customMenu.addItem(new CustomItem(:autoS, "Auto", mAutoState == true) );
+		    customMenu.addItem(new CustomItem(:fixedS, "Fixed", mAutoState == false) );				
+     		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		   
         }       
         else if ( id.equals("so"))  {
             var menu = new Ui.Menu2({:title=>"Sound"});

@@ -467,10 +467,10 @@ class HistoryView extends Ui.View {
 		while ( day != today);
 		
 		// TEST CODE		
-		Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);
+		//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);
 		
     }
     

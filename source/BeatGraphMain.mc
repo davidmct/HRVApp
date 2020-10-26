@@ -387,10 +387,10 @@ class BeatView extends Ui.View {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
 		Sys.println("BeatGraph executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
-		Sys.println("BeatGraph memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
-			", "+System.getSystemStats().freeMemory.toString()+
-			", "+System.getSystemStats().totalMemory.toString()			
-			);	
+		//Sys.println("BeatGraph memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 	
 		mLabelFont = null;   
     

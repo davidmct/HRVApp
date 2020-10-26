@@ -588,11 +588,11 @@ class HRVAnalysis extends App.AppBase {
 			return new PoincareView(2);
 		}	
 		else if (BEATS_VIEW == viewNum) {
-			Sys.println("Beats view setup");
+			//Sys.println("Beats view setup");
 			return new BeatView();
 		}	
 		else if (INTERVAL_VIEW == viewNum) {
-			Sys.println("Interval view setup");
+			//Sys.println("Interval view setup");
 			return new IntervalView();
 		}		
 			
