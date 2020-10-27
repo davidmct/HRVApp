@@ -260,6 +260,8 @@ class SampleProcessing {
 		// 1st sample needs to by pass processing
 		//if (beatsInGap == null) { }
 		
+		$.DebugMsg( true, "A0");
+		
 		// pre process bounds for poincare plot of RR interval
 		// first sample will have null beatsInGap so ignore as 
 		if (beatsInGap != null && intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
@@ -410,6 +412,8 @@ class SampleProcessing {
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		//Sys.println("v0.4.7 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
 		
+		$.DebugMsg( true, "S0");
+		
 		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0)) {
 			// Don't capture data if not testing OR
@@ -418,6 +422,8 @@ class SampleProcessing {
 			// Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
 			return;
 		}
+		
+		$.DebugMsg( true, "S1");
 						
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
 		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
@@ -440,6 +446,8 @@ class SampleProcessing {
 			return;
 		}
 		
+		$.DebugMsg( true, "S2");
+
 		// If n=0 then as now
 		// if n < filter length
 		//		status  = oK for current sample
@@ -576,14 +584,14 @@ class SampleProcessing {
 			}
 			else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_L) {
 				addSample(intMs, 1, SAMP_L); 
-				Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");							
+				//Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");							
 			}
 			else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S)	{
 				addSample(intMs, 1, SAMP_S); 
-				Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");							
+				//Sys.println("SampleProc: UNHANDLED BEAT CASE -  SS!!!!");							
 			} else {
 				addSample(intMs, 1, SAMP_OK); 
-				//Sys.println("SampleProc: UNHANDLED BEAT CASE!!!!");				
+				//Sys.println("SampleProc: UNHANDLED BEAT CASE -- ?!!!!");				
 			}
 		
 		} // end thresholding process

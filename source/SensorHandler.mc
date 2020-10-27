@@ -532,6 +532,8 @@ class InternalSensor {
 	function onHeartRateData( sensorData) {
 		//var mSize = 0; 
 		var heartBeatIntervals = [];
+		
+		$.DebugMsg( true, "H0");
 	
 		//Sys.println("sensorData "+sensorData);
 		
@@ -557,7 +559,9 @@ class InternalSensor {
 					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true, false]);
 				}
 			}
-		}	
+		}
+		
+		$.DebugMsg( true, "H1");	
 		
 		// now feed machine...
 		//Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
@@ -565,6 +569,7 @@ class InternalSensor {
 		if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 		for ( var i=0; i< heartBeatIntervals.size(); i++) {
 			var intMs = heartBeatIntervals[i];
+			$.DebugMsg( true, "H2");
 			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 		}	
 						

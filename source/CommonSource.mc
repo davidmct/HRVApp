@@ -7,9 +7,8 @@ using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Lang;
 
-
 var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics.FONT_MEDIUM,Graphics.FONT_LARGE];
-
+    
 //0.4.4 - in memory debug
 var mDebugString ="";
 const MAX_DEBUG_STRING = 1000;
@@ -36,6 +35,7 @@ function DebugMsg( flag, Msg) {
 
 function selectFont(dc, string, width, height) {
     var testString = string; //Dummy string to test data width
+
     //testString = "a very long test string to see if we can get to a zero result or not";
     var fontIdx;
     var dimensions;
@@ -51,6 +51,7 @@ function selectFont(dc, string, width, height) {
         // does it ever go to zero! falls out of bottom with zero 
     }
 	//Sys.println("Font Index = "+fontIdx);
+	fonts = null;
     return fontIdx;
 }    
 
