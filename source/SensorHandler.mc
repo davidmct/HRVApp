@@ -567,7 +567,7 @@ class InternalSensor {
 			var isTesting = false;
 			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			
-			$.DebugMsg( true, "H-"+heartBeatIntervals.size().toString());
+			//$.DebugMsg( true, "H-"+heartBeatIntervals.size().toString());
 			
 			for ( var i=0; i< heartBeatIntervals.size(); i++) {
 				var intMs = heartBeatIntervals[i];

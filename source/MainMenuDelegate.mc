@@ -66,7 +66,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         		$._mApp.mTestControl.alert(TONE_ERROR);
         		return;
         	} else {
-	        	Sys.println("MainMenuDelegate: loading old intervals + stats and switching to Poincare");
+	        	//Sys.println("MainMenuDelegate: loading old intervals + stats and switching to Poincare");
 	        	var success = $._mApp.mStorage.loadIntervalsFromStore();
 	        	success = success && $._mApp.mStorage.loadStatsFromStore();
 	        	if (success) {	        	
