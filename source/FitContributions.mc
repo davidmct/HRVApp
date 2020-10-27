@@ -186,54 +186,56 @@ class HRVFitContributor {
 	}
 	
 	function updateSessionStats() {
+		var gg = $._mApp;
 	
-		//mSessionMinIntervalFound_Field.setData($._mApp.mSampleProc.minIntervalFound);
-		//mSessionMaxIntervalFound_Field.setData($._mApp.mSampleProc.maxIntervalFound);
-		//mSessionMinDiffFound_Field.setData($._mApp.mSampleProc.minDiffFound);
-		//mSessionMaxDiffFound_Field.setData($._mApp.mSampleProc.maxDiffFound);
+		//mSessionMinIntervalFound_Field.setData(gg.mSampleProc.minIntervalFound);
+		//mSessionMaxIntervalFound_Field.setData(gg.mSampleProc.maxIntervalFound);
+		//mSessionMinDiffFound_Field.setData(gg.mSampleProc.minDiffFound);
+		//mSessionMaxDiffFound_Field.setData(gg.mSampleProc.maxDiffFound);
 		
-		mSessionAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
-		mSessionmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
-		mSessionmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
-		mSessionmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
-		mSessionmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
-		mSessionmNN50_Field.setData($._mApp.mSampleProc.mNN50);
-		mSessionmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
-		mSessionmNN20_Field.setData($._mApp.mSampleProc.mNN20);
-		mSessionmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
-		mSessionLONG_Field.setData($._mApp.mSampleProc.vLongBeatCnt.toFloat());
-		mSessionSHORT_Field.setData($._mApp.mSampleProc.vShortBeatCnt.toFloat());
-		mSessionECTOPIC_Field.setData($._mApp.mSampleProc.vEBeatCnt.toFloat());
+		mSessionAvgPulse_Field.setData(gg.mSampleProc.avgPulse);
+		mSessionmRMSSD_Field.setData(gg.mSampleProc.mRMSSD);
+		mSessionmLnRMSSD_Field.setData(gg.mSampleProc.mLnRMSSD);
+		mSessionmSDNN_Field.setData(gg.mSampleProc.mSDNN);
+		mSessionmSDSD_Field.setData(gg.mSampleProc.mSDSD); 
+		mSessionmNN50_Field.setData(gg.mSampleProc.mNN50);
+		mSessionmpNN50_Field.setData(gg.mSampleProc.mpNN50); 
+		mSessionmNN20_Field.setData(gg.mSampleProc.mNN20);
+		mSessionmpNN20_Field.setData(gg.mSampleProc.mpNN20);	
+		mSessionLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
+		mSessionSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
+		mSessionECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
 					
 		var str;
-		if ($._mApp.mSensorTypeExt == SENSOR_SEARCH) {
-			str = "External";
+		if (gg.mSensorTypeExt == SENSOR_SEARCH) {
+			str = "Ext";
 		} else {
-			str = "Internal";
+			str = "Int";
 		}
 		//mSessionSource_Field.setData(str);		
 
-		//Sys.println("FIT Session: "+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);		
+		//Sys.println("FIT Session: "+gg.mSampleProc.avgPulse+","+gg.mSampleProc.mNN50+","+gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20);		
 	}
 	
 	function updateRecordStats() {
 		//Sys.println("Updating FIT records");
+		var gg = $._mApp;
 				
-		mRecordAvgPulse_Field.setData($._mApp.mSampleProc.avgPulse);
-		mRecordmRMSSD_Field.setData($._mApp.mSampleProc.mRMSSD);
-		mRecordmLnRMSSD_Field.setData($._mApp.mSampleProc.mLnRMSSD);
-		mRecordmSDNN_Field.setData($._mApp.mSampleProc.mSDNN);
-		mRecordmSDSD_Field.setData($._mApp.mSampleProc.mSDSD); 
+		mRecordAvgPulse_Field.setData(gg.mSampleProc.avgPulse);
+		mRecordmRMSSD_Field.setData(gg.mSampleProc.mRMSSD);
+		mRecordmLnRMSSD_Field.setData(gg.mSampleProc.mLnRMSSD);
+		mRecordmSDNN_Field.setData(gg.mSampleProc.mSDNN);
+		mRecordmSDSD_Field.setData(gg.mSampleProc.mSDSD); 
 		
-		//Sys.println("FIT record: "+$._mApp.mSampleProc.mNN50+","+$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20);
+		//Sys.println("FIT record: "+gg.mSampleProc.mNN50+","+gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20);
 
-		mRecordmNN50_Field.setData($._mApp.mSampleProc.mNN50);
-		mRecordmpNN50_Field.setData($._mApp.mSampleProc.mpNN50); 
-		mRecordmNN20_Field.setData($._mApp.mSampleProc.mNN20);
-		mRecordmpNN20_Field.setData($._mApp.mSampleProc.mpNN20);	
-		mRecordLONG_Field.setData($._mApp.mSampleProc.vLongBeatCnt.toFloat());
-		mRecordSHORT_Field.setData($._mApp.mSampleProc.vShortBeatCnt.toFloat());
-		mRecordECTOPIC_Field.setData($._mApp.mSampleProc.vEBeatCnt.toFloat());
+		mRecordmNN50_Field.setData(gg.mSampleProc.mNN50);
+		mRecordmpNN50_Field.setData(gg.mSampleProc.mpNN50); 
+		mRecordmNN20_Field.setData(gg.mSampleProc.mNN20);
+		mRecordmpNN20_Field.setData(gg.mSampleProc.mpNN20);	
+		mRecordLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
+		mRecordSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
+		mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
 	}
 	
 	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}

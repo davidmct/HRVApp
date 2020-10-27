@@ -59,9 +59,11 @@ class StatsView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
+	hidden var gg;
 
 	function initialize(viewNum) { 
 		viewToShow = viewNum;
+		gg = $._mApp;
 		View.initialize();
 	}
 	
@@ -108,7 +110,7 @@ class StatsView extends Ui.View {
     function onUpdate(dc) { 
     	//Sys.println("StatsView: onUpdate() called");
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -124,63 +126,63 @@ class StatsView extends Ui.View {
 		if (viewToShow == 1 ) {
 			// draw 1st set of labels and values
 			// x, y, font, text, just
-			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 			for (var i=0; i < mLabelSetX.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel1Labels[i], mJust);			
 			}
-			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);	
+			dc.setColor( gg.mValueColour, Gfx.COLOR_TRANSPARENT);	
 			//0.4.3 set to 0.1f from %d for rMSSD - does it fit?		
-			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mRMSSD.format("%.1f"), mJust);
-			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.avgPulse.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, gg.mSampleProc.mRMSSD.format("%.1f"), mJust);
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, gg.mSampleProc.mLnRMSSD.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, gg.mSampleProc.avgPulse.format("%d"), mJust);
 			
 			// next two are floats
-			var trunc = ($._mApp.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+			var trunc = (gg.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			var str = "";
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}
 			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, str, mJust);			
 			
-			trunc = ($._mApp.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+			trunc = (gg.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
 			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
 			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, str, mJust);		
 			
-			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vEBeatCnt.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, gg.mSampleProc.vEBeatCnt.format("%d"), mJust);
 											
 		} else if (viewToShow == 2) {
 			// draw second set of labels and values
 			// x, y, font, text, just
-			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[1], mJust);
 			for (var i=0; i < mLabelSetXS.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel2Labels[i], mJust);			
 			}
 			
-			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, $._mApp.mSampleProc.mNN50.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.mpNN50.format("%.0f"), mJust);
-			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.mNN20.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mpNN20.format("%.0f"), mJust);	
-			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, $._mApp.mSampleProc.vLongBeatCnt.format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.vShortBeatCnt.format("%d"), mJust);									
+			dc.setColor( gg.mValueColour, Gfx.COLOR_TRANSPARENT);			
+			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, gg.mSampleProc.mNN50.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, gg.mSampleProc.mpNN50.format("%.0f"), mJust);
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, gg.mSampleProc.mNN20.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, gg.mSampleProc.mpNN20.format("%.0f"), mJust);	
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, gg.mSampleProc.vLongBeatCnt.format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, gg.mSampleProc.vShortBeatCnt.format("%d"), mJust);									
 		} else if (viewToShow == 3) {
 			// draw third set of labels and values
 			// x, y, font, text, just
-			dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 			dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[2], mJust);
 			for (var i=0; i < mLabelSetXS.size(); i++) {
 				dc.drawText( mLabelSetXS[i], mLabelSetYS[i], mLabelFont, mLabel3Labels[i], mJust);			
 			}
-			var mTmp = $._mApp.mSampleProc.getCurrentEntry(); 
-			dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);				
+			var mTmp = gg.mSampleProc.getCurrentEntry(); 
+			dc.setColor( gg.mValueColour, Gfx.COLOR_TRANSPARENT);				
 			dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mValueFont, mTmp[0].format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.getNumberOfSamples().format("%d"), mJust);
-			//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, $._mApp.mSampleProc.minDiffFound.format("%d"), mJust);
-			//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSampleProc.maxDiffFound.format("%d"), mJust);	
-			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, ($._mApp.mSampleProc.mpLongMax*100).format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, $._mApp.mSampleProc.mLongMax.format("%d"), mJust);	
-			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, ($._mApp.mSampleProc.mpShortMax*100).format("%d"), mJust);
-			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, $._mApp.mSampleProc.mShortMax.format("%d"), mJust);				
+			dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, gg.mSampleProc.getNumberOfSamples().format("%d"), mJust);
+			//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mValueFont, gg.mSampleProc.minDiffFound.format("%d"), mJust);
+			//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, gg.mSampleProc.maxDiffFound.format("%d"), mJust);	
+			dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, (gg.mSampleProc.mpLongMax*100).format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mValueFont, gg.mSampleProc.mLongMax.format("%d"), mJust);	
+			dc.drawText( mLabelValueLocXS[4], mLabelValueLocYS[4], mValueFont, (gg.mSampleProc.mpShortMax*100).format("%d"), mJust);
+			dc.drawText( mLabelValueLocXS[5], mLabelValueLocYS[5], mValueFont, gg.mSampleProc.mShortMax.format("%d"), mJust);				
 
 		}		
 		// change every 6 seconds

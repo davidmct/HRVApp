@@ -71,10 +71,10 @@ class TestController {
 		mHRmsgTxt = params[0]; // used in view
 		mSensorReady = params[1];	
 		stateInit = params[2];
-		$.DebugMsg(false, "TestControl: onNotify : "+params);
+		//$.DebugMsg(false, "TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
 		if (stateInit) { 
-			Sys.println("TC:OnNotify: statemachine forced INIT");
+			Sys.println("TC:OnNotify: S/M forced INIT");
 			mTestState = TS_INIT;
 			StateMachine(:RestartControl);
 		}	
@@ -91,11 +91,11 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
-		if (mDebugging == true) {Sys.println("TestControl: StateMachine() entered in state "+mTestState); }
+		if (mDebugging == true) {Sys.println("TC: SM() satrt state "+mTestState); }
 
 		// request to restart		
 		if (caller == :RestartControl) { 
-			Sys.println("TestControl(): Restart issued"); 
+			Sys.println("TC(): Restart issued"); 
 			mTestState = TS_INIT; 
 			discardTest();
 		}

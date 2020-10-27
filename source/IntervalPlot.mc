@@ -45,8 +45,10 @@ class IntervalView extends Ui.View {
 	
 	// points to plot
 	hidden var cNumPoints = null;
+	hidden var gg;
 
 	function initialize() { 
+		gg = $._mApp;
 		View.initialize();
 	}
 	
@@ -88,7 +90,7 @@ class IntervalView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		if ($._mApp.mDeviceType == RES_240x240) {
+		if (gg.mDeviceType == RES_240x240) {
 			if (mLabelFont == null) {
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
 			}
@@ -98,11 +100,11 @@ class IntervalView extends Ui.View {
 		
 		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
 		dc.clear();
 		
 		// draw lines
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
 		// X range is unscaled and just point number out of range
@@ -112,10 +114,10 @@ class IntervalView extends Ui.View {
     	var Ymax = 0;
    	
 		// if no sample processing then exit 
-    	if ($._mApp.mSampleProc == null ) { return true;}
+    	if (gg.mSampleProc == null ) { return true;}
     	
     	// reduce entries by 1 as points to next free slot    	
-		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
+		var mNumberEntries = gg.mSampleProc.getNumberOfSamples();
 		// how many points to plot
     	var mSampleNum = 0;
     	
@@ -136,10 +138,10 @@ class IntervalView extends Ui.View {
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	//Sys.println("IntervalPlot: mBoolScaleII = "+$._mApp.mBoolScaleII);
+    	//Sys.println("IntervalPlot: mBoolScaleII = "+gg.mBoolScaleII);
     			
 		// True if auto scaling on 
-		if (!$._mApp.mBoolScaleII) {
+		if (!gg.mBoolScaleII) {
 			Ymax = 1800; // 33bpm
 			Ymin = 430; // 140 bpm
 		} else {
@@ -148,7 +150,7 @@ class IntervalView extends Ui.View {
 	    	var value;
 	    	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
 				// first iteration this is end point	
-				value = $._mApp.mIntervalSampleBuffer[i] & 0x0FFF;
+				value = gg.mIntervalSampleBuffer[i] & 0x0FFF;
 				if(Ymin > value) {
 					Ymin = value;
 				}
@@ -178,7 +180,7 @@ class IntervalView extends Ui.View {
 		//var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
 		
 		// now draw graph
-		var sample = $._mApp.mIntervalSampleBuffer[mStartIndex] & 0x0FFF;
+		var sample = gg.mIntervalSampleBuffer[mStartIndex] & 0x0FFF;
 		var mIIState = 0;
 		var mY0 = floorY - ((sample-floor) * scaleY).toNumber();
 		var mX0 = leftX;
@@ -187,7 +189,7 @@ class IntervalView extends Ui.View {
 		// we go from mStartIndex until used all mSampleNum		
 		for( var i = mStartIndex+1; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point				
-			sample = $._mApp.mIntervalSampleBuffer[i];
+			sample = gg.mIntervalSampleBuffer[i];
 			mIIState = (sample >> 12) & 0x000F;
 			sample = sample & 0x0FFF;
 			
@@ -226,7 +228,7 @@ class IntervalView extends Ui.View {
 						
 		} // end sample loop
 		
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
 		dc.drawText( leftX+20, ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
@@ -242,7 +244,7 @@ class IntervalView extends Ui.View {
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
-		Sys.println("IntervalPlot executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
+		Sys.println("IntervalPlot executes in "+mProcessingTime+"ms for "+gg.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("IntervalPlot memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			

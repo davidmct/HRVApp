@@ -11,9 +11,12 @@ using Toybox.Lang;
 
 class HRVStorageHandler {
 
+	var gg; //$._ mApp to make global more local!
+
 	// setup storage functions	
     function initialize() {
-    	// create buffers here? use function so external can call parts   	
+    	// create buffers here? use function so external can call parts   
+    	gg = $._mApp;	
     }
 
 	// message from Garmin that settings have been changed on mobile - called from main app
@@ -29,68 +32,68 @@ class HRVStorageHandler {
 (:storageMethod)
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
-		$._mApp.Properties.setValue("pAuxHRAntID", 0);
+		gg.Properties.setValue("pAuxHRAntID", 0);
 		Storage.setValue("firstLoadEver", true);
-		$._mApp.Properties.setValue("pFitWriteEnabled", false);
-		$._mApp.Properties.setValue("pSensorSelect", SENSOR_SEARCH);
+		gg.Properties.setValue("pFitWriteEnabled", false);
+		gg.Properties.setValue("pSensorSelect", SENSOR_SEARCH);
 		// Auto scale if true
-		$._mApp.Properties.setValue("pIIScale", false);
-		$._mApp.Properties.setValue("soundSet", true);
-		$._mApp.Properties.setValue("vibeSet", false);
-		$._mApp.Properties.setValue("testTypeSet", TYPE_TIMER);
-		$._mApp.Properties.setValue("timerTimeSet", 300);
+		gg.Properties.setValue("pIIScale", false);
+		gg.Properties.setValue("soundSet", true);
+		gg.Properties.setValue("vibeSet", false);
+		gg.Properties.setValue("testTypeSet", TYPE_TIMER);
+		gg.Properties.setValue("timerTimeSet", 300);
 		// 0.4.2
-		//$._mApp.Properties.setValue("MaxTimerTimeSet", 300);
-		$._mApp.Properties.setValue("ManualTimeSet", 300);
-		$._mApp.Properties.setValue("bgColSet", 3);
-		$._mApp.Properties.setValue("lblColSet", 10);
-		$._mApp.Properties.setValue("txtColSet", 9);
-		$._mApp.Properties.setValue("Label1ColSet", 10);
-		$._mApp.Properties.setValue("Label3ColSet", 12);
-		$._mApp.Properties.setValue("Label2ColSet", 6);		
+		//gg.Properties.setValue("MaxTimerTimeSet", 300);
+		gg.Properties.setValue("ManualTimeSet", 300);
+		gg.Properties.setValue("bgColSet", 3);
+		gg.Properties.setValue("lblColSet", 10);
+		gg.Properties.setValue("txtColSet", 9);
+		gg.Properties.setValue("Label1ColSet", 10);
+		gg.Properties.setValue("Label3ColSet", 12);
+		gg.Properties.setValue("Label2ColSet", 6);		
 		
 		//0.4.3
-		$._mApp.Properties.setValue("pHistLabel1", 1);	
-		$._mApp.Properties.setValue("pHistLabel2", 6);	
-		$._mApp.Properties.setValue("pHistLabel3", 7);	
+		gg.Properties.setValue("pHistLabel1", 1);	
+		gg.Properties.setValue("pHistLabel2", 6);	
+		gg.Properties.setValue("pHistLabel3", 7);	
 		
 		//0.4.6
-		$._mApp.Properties.setValue("pNumberBeatsGraph", 10);	
-		$._mApp.Properties.setValue("pLongThresholdIndex", 0.2); // nominal
-		$._mApp.Properties.setValue("pShortThresholdIndex", 0.2); // nominal	
+		gg.Properties.setValue("pNumberBeatsGraph", 10);	
+		gg.Properties.setValue("pLongThresholdIndex", 0.2); // nominal
+		gg.Properties.setValue("pShortThresholdIndex", 0.2); // nominal	
 	
 	}
 
 (:preCIQ24)	
 	function fresetPropertiesPreCIQ24() {		
-		$._mApp.setProperty("pAuxHRAntID", 0);
-		//$._mApp.setProperty("firstLoadEver", true);
-		$._mApp.setProperty("pFitWriteEnabled", false);
-		$._mApp.setProperty("pSensorSelect", SENSOR_SEARCH);
-		$._mApp.setProperty("pIIScale", false);
-		$._mApp.setProperty("soundSet", true);
-		$._mApp.setProperty("vibeSet", false);
-		$._mApp.setProperty("testTypeSet", TYPE_TIMER);
-		$._mApp.setProperty("timerTimeSet", 300);
+		gg.setProperty("pAuxHRAntID", 0);
+		//gg.setProperty("firstLoadEver", true);
+		gg.setProperty("pFitWriteEnabled", false);
+		gg.setProperty("pSensorSelect", SENSOR_SEARCH);
+		gg.setProperty("pIIScale", false);
+		gg.setProperty("soundSet", true);
+		gg.setProperty("vibeSet", false);
+		gg.setProperty("testTypeSet", TYPE_TIMER);
+		gg.setProperty("timerTimeSet", 300);
 		//0.4.2
-		//$._mApp.setProperty("MaxTimerTimeSet", 300);
-		$._mApp.setProperty("ManualTimeSet", 300);
-		$._mApp.setProperty("bgColSet", 3);
-		$._mApp.setProperty("lblColSet", 10);
-		$._mApp.setProperty("txtColSet", 13);
-		$._mApp.setProperty("Label1ColSet", 10);
-		$._mApp.setProperty("Label3ColSet", 12);
-		$._mApp.setProperty("Label2ColSet", 6);	
+		//gg.setProperty("MaxTimerTimeSet", 300);
+		gg.setProperty("ManualTimeSet", 300);
+		gg.setProperty("bgColSet", 3);
+		gg.setProperty("lblColSet", 10);
+		gg.setProperty("txtColSet", 13);
+		gg.setProperty("Label1ColSet", 10);
+		gg.setProperty("Label3ColSet", 12);
+		gg.setProperty("Label2ColSet", 6);	
 		
 		//0.4.3
-		$._mApp.setProperty("pHistLabel1", 1);	
-		$._mApp.setProperty("pHistLabel2", 6);	
-		$._mApp.setProperty("pHistLabel3", 7);		
+		gg.setProperty("pHistLabel1", 1);	
+		gg.setProperty("pHistLabel2", 6);	
+		gg.setProperty("pHistLabel3", 7);		
 		
 		//0.4.6
-		$._mApp.setProperty("pNumberBeatsGraph", 10);	
-		$._mApp.setProperty("pLongThresholdIndex", 0.2); // nominal
-		$._mApp.setProperty("pShortThresholdIndex", 0.2); // nominal	
+		gg.setProperty("pNumberBeatsGraph", 10);	
+		gg.setProperty("pLongThresholdIndex", 0.2); // nominal
+		gg.setProperty("pShortThresholdIndex", 0.2); // nominal	
 	
 	}
 	
@@ -132,9 +135,9 @@ class HRVStorageHandler {
 		
 		str = "Dumping stats:\n";
 		str = str+"avgPulse, mRMSSD, mLnRMSSD, mSDNN, mSDSD, mNN50, mpNN50, mNN20, mpNN20\n";
-		str = str+$._mApp.mSampleProc.avgPulse+","+$._mApp.mSampleProc.mRMSSD+","+$._mApp.mSampleProc.mLnRMSSD+","+
-			$._mApp.mSampleProc.mSDNN+","+$._mApp.mSampleProc.mSDSD+","+$._mApp.mSampleProc.mNN50+","+
-			$._mApp.mSampleProc.mpNN50+","+$._mApp.mSampleProc.mNN20+","+$._mApp.mSampleProc.mpNN20;
+		str = str+gg.mSampleProc.avgPulse+","+gg.mSampleProc.mRMSSD+","+gg.mSampleProc.mLnRMSSD+","+
+			gg.mSampleProc.mSDNN+","+gg.mSampleProc.mSDSD+","+gg.mSampleProc.mNN50+","+
+			gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20;
 	
 		Sys.println(str);
 	}
@@ -142,22 +145,22 @@ class HRVStorageHandler {
 	function saveStatsToStore() {
 		Sys.println("saveStatsToStore() called");	
 		var stats = new [11];
-		stats[0] = $._mApp.mSampleProc.avgPulse;
-		stats[1] = $._mApp.mSampleProc.mRMSSD;
-		stats[2] = $._mApp.mSampleProc.mLnRMSSD;
-		stats[3] = $._mApp.mSampleProc.mSDNN;
-		stats[4] = $._mApp.mSampleProc.mSDSD; 
-		stats[5] = $._mApp.mSampleProc.mNN50;
-		stats[6] = $._mApp.mSampleProc.mpNN50; 
-		stats[7] = $._mApp.mSampleProc.mNN20;
-		stats[8] = $._mApp.mSampleProc.mpNN20;
-		stats[9] = $._mApp.mSampleProc.minDiffFound;
-		stats[10] = $._mApp.mSampleProc.maxDiffFound;
+		stats[0] = gg.mSampleProc.avgPulse;
+		stats[1] = gg.mSampleProc.mRMSSD;
+		stats[2] = gg.mSampleProc.mLnRMSSD;
+		stats[3] = gg.mSampleProc.mSDNN;
+		stats[4] = gg.mSampleProc.mSDSD; 
+		stats[5] = gg.mSampleProc.mNN50;
+		stats[6] = gg.mSampleProc.mpNN50; 
+		stats[7] = gg.mSampleProc.mNN20;
+		stats[8] = gg.mSampleProc.mpNN20;
+		stats[9] = gg.mSampleProc.minDiffFound;
+		stats[10] = gg.mSampleProc.maxDiffFound;
 		
 		if (Toybox.Application has :Storage) {
 			Storage.setValue("runstats", stats);				
 		} else {
-			$._mApp.setProperty("runstats", stats);			
+			gg.setProperty("runstats", stats);			
 		}			
 	}
 	
@@ -169,7 +172,7 @@ class HRVStorageHandler {
 			if (Toybox.Application has :Storage) {	
 				stats = Storage.getValue("runstats");		
 			} else {
-				stats = $._mApp.getProperty("runstats");			
+				stats = gg.getProperty("runstats");			
 			}
 		} catch (ex) {
 			// storage error - most likely not written
@@ -181,17 +184,17 @@ class HRVStorageHandler {
 				// not been written yet
 				return false;
 			} else {
-				$._mApp.mSampleProc.avgPulse = stats[0];
-				$._mApp.mSampleProc.mRMSSD = stats[1];
-				$._mApp.mSampleProc.mLnRMSSD = stats[2];
-				$._mApp.mSampleProc.mSDNN = stats[3];
-				$._mApp.mSampleProc.mSDSD = stats[4]; 
-				$._mApp.mSampleProc.mNN50 = stats[5];
-				$._mApp.mSampleProc.mpNN50 = stats[6]; 
-				$._mApp.mSampleProc.mNN20 = stats[7];
-				$._mApp.mSampleProc.mpNN20 = stats[8];	
-				$._mApp.mSampleProc.minDiffFound = stats[9];
-				$._mApp.mSampleProc.maxDiffFound = stats[10];			
+				gg.mSampleProc.avgPulse = stats[0];
+				gg.mSampleProc.mRMSSD = stats[1];
+				gg.mSampleProc.mLnRMSSD = stats[2];
+				gg.mSampleProc.mSDNN = stats[3];
+				gg.mSampleProc.mSDSD = stats[4]; 
+				gg.mSampleProc.mNN50 = stats[5];
+				gg.mSampleProc.mpNN50 = stats[6]; 
+				gg.mSampleProc.mNN20 = stats[7];
+				gg.mSampleProc.mpNN20 = stats[8];	
+				gg.mSampleProc.minDiffFound = stats[9];
+				gg.mSampleProc.maxDiffFound = stats[10];			
 				return true;
 			}
 		}	
@@ -202,15 +205,15 @@ class HRVStorageHandler {
 		Sys.println("saveIntervalsToStore() called");
 		
 		if (Toybox.Application has :Storage) {
-			Storage.setValue("IntervalStoreData", $._mApp.mIntervalSampleBuffer);	
-			Storage.setValue("IntervalStoreMin", $._mApp.mSampleProc.minIntervalFound);	
-			Storage.setValue("IntervalStoreMax", $._mApp.mSampleProc.maxIntervalFound);	
-			Storage.setValue("IntervalStoreIndex", $._mApp.mSampleProc.getNumberOfSamples());				
+			Storage.setValue("IntervalStoreData", gg.mIntervalSampleBuffer);	
+			Storage.setValue("IntervalStoreMin", gg.mSampleProc.minIntervalFound);	
+			Storage.setValue("IntervalStoreMax", gg.mSampleProc.maxIntervalFound);	
+			Storage.setValue("IntervalStoreIndex", gg.mSampleProc.getNumberOfSamples());				
 		} else {
-			$._mApp.setProperty("IntervalStoreData", $._mApp.mIntervalSampleBuffer);	
-			$._mApp.setProperty("IntervalStoreMin", $._mApp.mSampleProc.minIntervalFound);	
-			$._mApp.setProperty("IntervalStoreMax", $._mApp.mSampleProc.maxIntervalFound);	
-			$._mApp.setProperty("IntervalStoreIndex", $._mApp.mSampleProc.getNumberOfSamples());			
+			gg.setProperty("IntervalStoreData", gg.mIntervalSampleBuffer);	
+			gg.setProperty("IntervalStoreMin", gg.mSampleProc.minIntervalFound);	
+			gg.setProperty("IntervalStoreMax", gg.mSampleProc.maxIntervalFound);	
+			gg.setProperty("IntervalStoreIndex", gg.mSampleProc.getNumberOfSamples());			
 		}	
 	}
 	
@@ -219,15 +222,15 @@ class HRVStorageHandler {
 		
 		try {
 			if (Toybox.Application has :Storage) {	
-				$._mApp.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
-				$._mApp.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
-				$._mApp.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
-				$._mApp.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
+				gg.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
+				gg.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
+				gg.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
+				gg.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
 			} else {
-				$._mApp.mIntervalSampleBuffer = $._mApp.getProperty("IntervalStoreData");	
-				$._mApp.mSampleProc.minIntervalFound = $._mApp.getProperty("IntervalStoreMin");	
-				$._mApp.mSampleProc.maxIntervalFound = $._mApp.getProperty("IntervalStoreMax");	
-				$._mApp.mSampleProc.setNumberOfSamples( $._mApp.getProperty("IntervalStoreIndex"));			
+				gg.mIntervalSampleBuffer = gg.getProperty("IntervalStoreData");	
+				gg.mSampleProc.minIntervalFound = gg.getProperty("IntervalStoreMin");	
+				gg.mSampleProc.maxIntervalFound = gg.getProperty("IntervalStoreMax");	
+				gg.mSampleProc.setNumberOfSamples( gg.getProperty("IntervalStoreIndex"));			
 			}
 		} catch (ex) {
 			// storage error - most likely not written
@@ -236,12 +239,12 @@ class HRVStorageHandler {
 		}
 		finally {
 			// any null entries means we haven't written anything yet
-			if ($._mApp.mIntervalSampleBuffer == null) {
+			if (gg.mIntervalSampleBuffer == null) {
 				// we have now written over the sample buffer
 				// reinitialise the sample buffer!!
 				// we should recreate the class but this runs risk of overflowing memory available during heap clear up
-				//$._mApp.mSampleProc = new SampleProcessing();
-				$._mApp.mSampleProc.initialize();			
+				//gg.mSampleProc = new SampleProcessing();
+				gg.mSampleProc.initialize();			
 				return false;
 			} else {
 				return true;
@@ -252,31 +255,31 @@ class HRVStorageHandler {
 (:preCIQ24)	
 	function _CallReadPropProperty() {	
 		// assumes all these values exist
-		//$._mApp.timestampSet = $._mApp.getProperty("timestampSet");
-		$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		$._mApp.mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
-		$._mApp.mSensorTypeExt = $._mApp.getProperty("pSensorSelect");	
-		$._mApp.mBoolScaleII = $._mApp.getProperty("pIIScale");
-		$._mApp.soundSet = $._mApp.getProperty("soundSet");
-		$._mApp.vibeSet = $._mApp.getProperty("vibeSet");
-		$._mApp.testTypeSet = $._mApp.getProperty("testTypeSet");
-		$._mApp.timerTimeSet = $._mApp.getProperty("timerTimeSet").toNumber();
+		//gg.timestampSet = gg.getProperty("timestampSet");
+		gg.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+		gg.mFitWriteEnabled = gg.getProperty("pFitWriteEnabled");
+		gg.mSensorTypeExt = gg.getProperty("pSensorSelect");	
+		gg.mBoolScaleII = gg.getProperty("pIIScale");
+		gg.soundSet = gg.getProperty("soundSet");
+		gg.vibeSet = gg.getProperty("vibeSet");
+		gg.testTypeSet = gg.getProperty("testTypeSet");
+		gg.timerTimeSet = gg.getProperty("timerTimeSet").toNumber();
 		// 0.4.2
-		$._mApp.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;		
-		//$._mApp.mMaxTimerTimeSet = $._mApp.getProperty("MaxTimerTimeSet").toNumber();
-		$._mApp.mManualTimeSet = $._mApp.getProperty("ManualTimeSet").toNumber();	      
+		gg.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;		
+		//gg.mMaxTimerTimeSet = gg.getProperty("MaxTimerTimeSet").toNumber();
+		gg.mManualTimeSet = gg.getProperty("ManualTimeSet").toNumber();	      
 		// ColSet are index into colour map
-		$._mApp.bgColSet = $._mApp.getProperty("bgColSet").toNumber();
-		$._mApp.lblColSet = $._mApp.getProperty("lblColSet").toNumber();
-		$._mApp.txtColSet = $._mApp.getProperty("txtColSet").toNumber();
-		$._mApp.Label1ColSet = $._mApp.getProperty("Label1ColSet").toNumber();
-		$._mApp.Label3ColSet = $._mApp.getProperty("Label3ColSet").toNumber();
-		$._mApp.Label2ColSet = $._mApp.getProperty("Label2ColSet").toNumber();
+		gg.bgColSet = gg.getProperty("bgColSet").toNumber();
+		gg.lblColSet = gg.getProperty("lblColSet").toNumber();
+		gg.txtColSet = gg.getProperty("txtColSet").toNumber();
+		gg.Label1ColSet = gg.getProperty("Label1ColSet").toNumber();
+		gg.Label3ColSet = gg.getProperty("Label3ColSet").toNumber();
+		gg.Label2ColSet = gg.getProperty("Label2ColSet").toNumber();
 		
 		//0.4.3
-		$._mApp.mHistoryLabel1 = $._mApp.getProperty("pHistLabel1").toNumber();	
-		$._mApp.mHistoryLabel2 = $._mApp.getProperty("pHistLabel2").toNumber();	
-		$._mApp.mHistoryLabel3 = $._mApp.getProperty("pHistLabel3").toNumber();	
+		gg.mHistoryLabel1 = gg.getProperty("pHistLabel1").toNumber();	
+		gg.mHistoryLabel2 = gg.getProperty("pHistLabel2").toNumber();	
+		gg.mHistoryLabel3 = gg.getProperty("pHistLabel3").toNumber();	
 		
 		mapIndexToColours();
 		
@@ -284,21 +287,21 @@ class HRVStorageHandler {
 		// set default selection
 		// Used in menu creation
 		// Note array 0 entry is time stamp but use for null case
-		//$._mApp.mHistorySelectFlags = (1 << $._mApp.mHistoryLabel1);
-		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel2);
-		//$._mApp.mHistorySelectFlags |= (1 << $._mApp.mHistoryLabel3);	
+		//gg.mHistorySelectFlags = (1 << gg.mHistoryLabel1);
+		//gg.mHistorySelectFlags |= (1 << gg.mHistoryLabel2);
+		//gg.mHistorySelectFlags |= (1 << gg.mHistoryLabel3);	
 		
 		//0.4.6
-		$._mApp.mNumberBeatsGraph = $._mApp.getProperty("pNumberBeatsGraph").toNumber();	
+		gg.mNumberBeatsGraph = gg.getProperty("pNumberBeatsGraph").toNumber();	
 		
-		//var index = $._mApp.getProperty("pLongThresholdIndex").toNumber();
+		//var index = gg.getProperty("pLongThresholdIndex").toNumber();
 		//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
         //var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
-		//$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
-		//index = $._mApp.getProperty("pShortThresholdIndex").toNumber();	
-		//$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
-		$._mApp.vUpperThresholdSet = $._mApp.getProperty("pLongThresholdIndex").toFloat();
-		$._mApp.vLowerThresholdSet = $._mApp.getProperty("pShortThresholdIndex").toFloat();
+		//gg.vUpperThresholdSet = mLongThresholdMap[index];
+		//index = gg.getProperty("pShortThresholdIndex").toNumber();	
+		//gg.vLowerThresholdSet = mShortThresholdMap[index];	
+		gg.vUpperThresholdSet = gg.getProperty("pLongThresholdIndex").toFloat();
+		gg.vLowerThresholdSet = gg.getProperty("pShortThresholdIndex").toFloat();
 	}
 
 (:storageMethod)	
@@ -306,48 +309,48 @@ class HRVStorageHandler {
 		//Property.getValue(name as string);
 		// On very first use of app don't read in properties!
 		//try {
-			//$._mApp.timestampSet = Storage.getValue("timestampSet");
-			$._mApp.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			$._mApp.mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled");
-			$._mApp.mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");
-			$._mApp.mBoolScaleII = $._mApp.Properties.getValue("pIIScale");
-			$._mApp.soundSet = $._mApp.Properties.getValue("soundSet");
-			$._mApp.vibeSet = $._mApp.Properties.getValue("vibeSet");
-			$._mApp.testTypeSet = $._mApp.Properties.getValue("testTypeSet");
-			$._mApp.timerTimeSet = $._mApp.Properties.getValue("timerTimeSet").toNumber();
+			//gg.timestampSet = Storage.getValue("timestampSet");
+			gg.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+			gg.mFitWriteEnabled = gg.Properties.getValue("pFitWriteEnabled");
+			gg.mSensorTypeExt = gg.Properties.getValue("pSensorSelect");
+			gg.mBoolScaleII = gg.Properties.getValue("pIIScale");
+			gg.soundSet = gg.Properties.getValue("soundSet");
+			gg.vibeSet = gg.Properties.getValue("vibeSet");
+			gg.testTypeSet = gg.Properties.getValue("testTypeSet");
+			gg.timerTimeSet = gg.Properties.getValue("timerTimeSet").toNumber();
 			// 0.4.2
-			$._mApp.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
-			//$._mApp.mMaxTimerTimeSet = $._mApp.Properties.getValue("MaxTimerTimeSet").toNumber();
-			$._mApp.mManualTimeSet = $._mApp.Properties.getValue("ManualTimeSet").toNumber();
+			gg.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
+			//gg.mMaxTimerTimeSet = gg.Properties.getValue("MaxTimerTimeSet").toNumber();
+			gg.mManualTimeSet = gg.Properties.getValue("ManualTimeSet").toNumber();
 	      
 			// ColSet are index into colour map
-			$._mApp.bgColSet = $._mApp.Properties.getValue("bgColSet").toNumber();
-			$._mApp.lblColSet = $._mApp.Properties.getValue("lblColSet").toNumber();
-			$._mApp.txtColSet = $._mApp.Properties.getValue("txtColSet").toNumber();
-			$._mApp.Label1ColSet = $._mApp.Properties.getValue("Label1ColSet").toNumber();
-			$._mApp.Label3ColSet = $._mApp.Properties.getValue("Label3ColSet").toNumber();
-			$._mApp.Label2ColSet = $._mApp.Properties.getValue("Label2ColSet").toNumber();	
+			gg.bgColSet = gg.Properties.getValue("bgColSet").toNumber();
+			gg.lblColSet = gg.Properties.getValue("lblColSet").toNumber();
+			gg.txtColSet = gg.Properties.getValue("txtColSet").toNumber();
+			gg.Label1ColSet = gg.Properties.getValue("Label1ColSet").toNumber();
+			gg.Label3ColSet = gg.Properties.getValue("Label3ColSet").toNumber();
+			gg.Label2ColSet = gg.Properties.getValue("Label2ColSet").toNumber();	
 			
 			//0.4.3
-			$._mApp.mHistoryLabel1 = $._mApp.Properties.getValue("pHistLabel1").toNumber();	
-			$._mApp.mHistoryLabel2 = $._mApp.Properties.getValue("pHistLabel2").toNumber();	
-			$._mApp.mHistoryLabel3 = $._mApp.Properties.getValue("pHistLabel3").toNumber();	
+			gg.mHistoryLabel1 = gg.Properties.getValue("pHistLabel1").toNumber();	
+			gg.mHistoryLabel2 = gg.Properties.getValue("pHistLabel2").toNumber();	
+			gg.mHistoryLabel3 = gg.Properties.getValue("pHistLabel3").toNumber();	
 			
 			mapIndexToColours();
 			
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}
-			$._mApp.mNumberBeatsGraph = $._mApp.Properties.getValue("pNumberBeatsGraph").toNumber();	
+			gg.mNumberBeatsGraph = gg.Properties.getValue("pNumberBeatsGraph").toNumber();	
 			
-			//var index = $._mApp.Properties.getValue("pLongThresholdIndex").toNumber();
+			//var index = gg.Properties.getValue("pLongThresholdIndex").toNumber();
 			//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
             //var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
-			//$._mApp.vUpperThresholdSet = mLongThresholdMap[index];
-			//index = $._mApp.Properties.getValue("pShortThresholdIndex").toNumber();	
-			//$._mApp.vLowerThresholdSet = mShortThresholdMap[index];	
-		$._mApp.vUpperThresholdSet = $._mApp.getProperty("pLongThresholdIndex").toFloat();
-		$._mApp.vLowerThresholdSet = $._mApp.getProperty("pShortThresholdIndex").toFloat();
+			//gg.vUpperThresholdSet = mLongThresholdMap[index];
+			//index = gg.Properties.getValue("pShortThresholdIndex").toNumber();	
+			//gg.vLowerThresholdSet = mShortThresholdMap[index];	
+		gg.vUpperThresholdSet = gg.getProperty("pLongThresholdIndex").toFloat();
+		gg.vLowerThresholdSet = gg.getProperty("pShortThresholdIndex").toFloat();
 	}
 
 (:discard)	
@@ -359,7 +362,7 @@ class HRVStorageHandler {
 		var mThreshold;
 		var value;
 		// need to reverse lookup current threshold string from value then index in array
-		mThreshold = $._mApp.vUpperThresholdSet; 
+		mThreshold = gg.vUpperThresholdSet; 
 		
 		var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
 		// get actual thresholds
@@ -373,7 +376,7 @@ class HRVStorageHandler {
 		Sys.println("Upper threshold property save : "+index);	
 		long = index;
 		
-		mThreshold = $._mApp.vLowerThresholdSet; 
+		mThreshold = gg.vLowerThresholdSet; 
 		var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);	
 		// get actual thresholds
 		i = 0;
@@ -391,35 +394,35 @@ class HRVStorageHandler {
 
 (:storageMethod)	
 	function _CallSavePropStorage() {
-		//Storage.setValue("timestampSet", $._mApp.timestampSet);
-		$._mApp.Properties.setValue("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
-		$._mApp.Properties.setValue("pSensorSelect", $._mApp.mSensorTypeExt);
+		//Storage.setValue("timestampSet", gg.timestampSet);
+		gg.Properties.setValue("pFitWriteEnabled", gg.mFitWriteEnabled);
+		gg.Properties.setValue("pSensorSelect", gg.mSensorTypeExt);
 		
 		// user changable
-		$._mApp.Properties.setValue("pIIScale", $._mApp.mBoolScaleII);
-		$._mApp.Properties.setValue("soundSet", $._mApp.soundSet);
-		$._mApp.Properties.setValue("vibeSet", $._mApp.vibeSet);
-		$._mApp.Properties.setValue("testTypeSet", $._mApp.testTypeSet);
-		$._mApp.Properties.setValue("timerTimeSet", $._mApp.timerTimeSet);
+		gg.Properties.setValue("pIIScale", gg.mBoolScaleII);
+		gg.Properties.setValue("soundSet", gg.soundSet);
+		gg.Properties.setValue("vibeSet", gg.vibeSet);
+		gg.Properties.setValue("testTypeSet", gg.testTypeSet);
+		gg.Properties.setValue("timerTimeSet", gg.timerTimeSet);
 		// 0.4.2
-		//$._mApp.Properties.setValue("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
-		$._mApp.Properties.setValue("ManualTimeSet", $._mApp.mManualTimeSet);
+		//gg.Properties.setValue("MaxTimerTimeSet", gg.mMaxTimerTimeSet);
+		gg.Properties.setValue("ManualTimeSet", gg.mManualTimeSet);
       
 		// ColSet are index into colour map
-		$._mApp.Properties.setValue("bgColSet", $._mApp.bgColSet);
-		$._mApp.Properties.setValue("lblColSet", $._mApp.lblColSet);
-		$._mApp.Properties.setValue("txtColSet", $._mApp.txtColSet);
-		$._mApp.Properties.setValue("Label1ColSet", $._mApp.Label1ColSet);
-		$._mApp.Properties.setValue("Label3ColSet", $._mApp.Label3ColSet);
-		$._mApp.Properties.setValue("Label2ColSet", $._mApp.Label2ColSet);	
+		gg.Properties.setValue("bgColSet", gg.bgColSet);
+		gg.Properties.setValue("lblColSet", gg.lblColSet);
+		gg.Properties.setValue("txtColSet", gg.txtColSet);
+		gg.Properties.setValue("Label1ColSet", gg.Label1ColSet);
+		gg.Properties.setValue("Label3ColSet", gg.Label3ColSet);
+		gg.Properties.setValue("Label2ColSet", gg.Label2ColSet);	
 		
 		//0.4.3
-		$._mApp.Properties.setValue("pHistLabel1", $._mApp.mHistoryLabel1);
-		$._mApp.Properties.setValue("pHistLabel2", $._mApp.mHistoryLabel2);
-		$._mApp.Properties.setValue("pHistLabel3", $._mApp.mHistoryLabel3);
+		gg.Properties.setValue("pHistLabel1", gg.mHistoryLabel1);
+		gg.Properties.setValue("pHistLabel2", gg.mHistoryLabel2);
+		gg.Properties.setValue("pHistLabel3", gg.mHistoryLabel3);
 		
 		//0.4.6
-		$._mApp.Properties.setValue("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);
+		gg.Properties.setValue("pNumberBeatsGraph", gg.mNumberBeatsGraph);
 		
 		
 		//0.4.7
@@ -427,110 +430,110 @@ class HRVStorageHandler {
 		//var res = new [2];
 		//res = fFindThresholdIndex();
 		
-		//$._mApp.Properties.setValue("pLongThresholdIndex", res[0]);		
-		//$._mApp.Properties.setValue("pShortThresholdIndex", res[1]);
+		//gg.Properties.setValue("pLongThresholdIndex", res[0]);		
+		//gg.Properties.setValue("pShortThresholdIndex", res[1]);
 		
-		$._mApp.Properties.setValue("pLongThresholdIndex", $._mApp.vUpperThresholdSet );		
-		$._mApp.Properties.setValue("pShortThresholdIndex", $._mApp.vLowerThresholdSet);
+		gg.Properties.setValue("pLongThresholdIndex", gg.vUpperThresholdSet );		
+		gg.Properties.setValue("pShortThresholdIndex", gg.vLowerThresholdSet);
 			
 	}
 
 (:preCIQ24)	
 	function _CallSavePropProperty() {
-		//$._mApp.setProperty("timestampSet", $._mApp.timestampSet);
-		$._mApp.setProperty("pFitWriteEnabled", $._mApp.mFitWriteEnabled);
-		$._mApp.setProperty("pSensorSelect", $._mApp.mFitWriteEnabled);
+		//gg.setProperty("timestampSet", gg.timestampSet);
+		gg.setProperty("pFitWriteEnabled", gg.mFitWriteEnabled);
+		gg.setProperty("pSensorSelect", gg.mFitWriteEnabled);
 
-		$._mApp.setProperty("pIIScale", $._mApp.mBoolScaleII);
-		$._mApp.setProperty("soundSet", $._mApp.soundSet);
-		$._mApp.setProperty("vibeSet", $._mApp.vibeSet);
-		$._mApp.setProperty("testTypeSet", $._mApp.testTypeSet);
-		$._mApp.setProperty("timerTimeSet", $._mApp.timerTimeSet);
+		gg.setProperty("pIIScale", gg.mBoolScaleII);
+		gg.setProperty("soundSet", gg.soundSet);
+		gg.setProperty("vibeSet", gg.vibeSet);
+		gg.setProperty("testTypeSet", gg.testTypeSet);
+		gg.setProperty("timerTimeSet", gg.timerTimeSet);
 		// 0.4.2	
-		//$._mApp.setProperty("MaxTimerTimeSet", $._mApp.mMaxTimerTimeSet);
-		$._mApp.setProperty("ManualTimeSet", $._mApp.mManualTimeSet);
+		//gg.setProperty("MaxTimerTimeSet", gg.mMaxTimerTimeSet);
+		gg.setProperty("ManualTimeSet", gg.mManualTimeSet);
       
 		// ColSet are index into colour map
-		$._mApp.setProperty("bgColSet", $._mApp.bgColSet);
-		$._mApp.setProperty("lblColSet", $._mApp.lblColSet);
-		$._mApp.setProperty("txtColSet", $._mApp.txtColSet);
-		$._mApp.setProperty("Label1ColSet", $._mApp.Label1ColSet);
-		$._mApp.setProperty("Label3ColSet", $._mApp.Label3ColSet);
-		$._mApp.setProperty("Label2ColSet", $._mApp.Label2ColSet);	
+		gg.setProperty("bgColSet", gg.bgColSet);
+		gg.setProperty("lblColSet", gg.lblColSet);
+		gg.setProperty("txtColSet", gg.txtColSet);
+		gg.setProperty("Label1ColSet", gg.Label1ColSet);
+		gg.setProperty("Label3ColSet", gg.Label3ColSet);
+		gg.setProperty("Label2ColSet", gg.Label2ColSet);	
 
 		//0.4.3
-		$._mApp.setProperty("pHistLabel1", $._mApp.mHistoryLabel1);
-		$._mApp.setProperty("pHistLabel2", $._mApp.mHistoryLabel2);
-		$._mApp.setProperty("pHistLabel3", $._mApp.mHistoryLabel3);
+		gg.setProperty("pHistLabel1", gg.mHistoryLabel1);
+		gg.setProperty("pHistLabel2", gg.mHistoryLabel2);
+		gg.setProperty("pHistLabel3", gg.mHistoryLabel3);
 		
 		//0.4.6
-		$._mApp.setProperty("pNumberBeatsGraph", $._mApp.mNumberBeatsGraph);	
+		gg.setProperty("pNumberBeatsGraph", gg.mNumberBeatsGraph);	
 		
 		//var res = new [2];
 		//res = fFindThresholdIndex();
 		
-		//$._mApp.setProperty("pLongThresholdIndex", res[0]);		
-		//$._mApp.setProperty("pShortThresholdIndex", res[1]);	
+		//gg.setProperty("pLongThresholdIndex", res[0]);		
+		//gg.setProperty("pShortThresholdIndex", res[1]);	
 		
-		$._mApp.setProperty("pLongThresholdIndex", $._mApp.vUpperThresholdSet );		
-		$._mApp.setProperty("pShortThresholdIndex", $._mApp.vLowerThresholdSet);
+		gg.setProperty("pLongThresholdIndex", gg.vUpperThresholdSet );		
+		gg.setProperty("pShortThresholdIndex", gg.vLowerThresholdSet);
 		
 	}
 
 (:oldResults)
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
-		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		gg.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		Sys.println("resetResults() array created");
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			$._mApp.results[i] = 0;
+			gg.results[i] = 0;
 		}
 		// this will be overridden if we load results
-		$._mApp.resultsIndex = 0;
+		gg.resultsIndex = 0;
 	}
 	
 (:newResults)
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
-		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		gg.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		Sys.println("resetResults() array created");
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			$._mApp.results[i] = 0;
+			gg.results[i] = 0;
 		}
-		$._mApp.resultsIndex = 0;
+		gg.resultsIndex = 0;
 		
 		// force history to empty
 		storeResults();
 		 
-		$._mApp.results = null;
+		gg.results = null;
 	}
 
 (:preCIQ24)
 	function retrieveResultsProp() {
-		var tmp = $._mApp.getProperty("resultIndex");
+		var tmp = gg.getProperty("resultIndex");
 		if (tmp == null) { tmp = 0;}
-		$._mApp.resultsIndex = tmp;
+		gg.resultsIndex = tmp;
 		
 		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-			var result = $._mApp.getProperty(RESULTS + i);
+			var result = gg.getProperty(RESULTS + i);
 			var ii = i * DATA_SET_SIZE;
 			if(null != result) {
-				$._mApp.results[ii + 0] = result[0];
-				$._mApp.results[ii + 1] = result[1];
-				$._mApp.results[ii + 2] = result[2];
-				$._mApp.results[ii + 3] = result[3];
-				$._mApp.results[ii + 4] = result[4];
-				$._mApp.results[ii + 5] = result[5];
-				$._mApp.results[ii + 6] = result[6];
-				$._mApp.results[ii + 7] = result[7];
-				$._mApp.results[ii + 8] = result[8];
-				$._mApp.results[ii + 9] = result[9];
-				$._mApp.results[ii + 10] = result[10];
-				$._mApp.results[ii + 11] = result[11];
-				$._mApp.results[ii + 12] = result[12];
-				$._mApp.results[ii + 13] = result[13];
+				gg.results[ii + 0] = result[0];
+				gg.results[ii + 1] = result[1];
+				gg.results[ii + 2] = result[2];
+				gg.results[ii + 3] = result[3];
+				gg.results[ii + 4] = result[4];
+				gg.results[ii + 5] = result[5];
+				gg.results[ii + 6] = result[6];
+				gg.results[ii + 7] = result[7];
+				gg.results[ii + 8] = result[8];
+				gg.results[ii + 9] = result[9];
+				gg.results[ii + 10] = result[10];
+				gg.results[ii + 11] = result[11];
+				gg.results[ii + 12] = result[12];
+				gg.results[ii + 13] = result[13];
 			}
 		}	
 	}
@@ -541,17 +544,17 @@ class HRVStorageHandler {
 		if (Toybox.Application has :Storage) {
 			try {
 				mCheck = Storage.getValue("resultsArray");
-				$._mApp.resultsIndex = Storage.getValue("resultIndex");
+				gg.resultsIndex = Storage.getValue("resultIndex");
 			}
 			catch (ex) {
 				Sys.println("ERROR: retrieveResults: no results array");
-				$._mApp.resultsIndex = 0;
+				gg.resultsIndex = 0;
 				return false;
 			}				
 			
-			if (mCheck != null) { $._mApp.results = mCheck; } 
+			if (mCheck != null) { gg.results = mCheck; } 
 			// have a null if not saved 1st time
-			if ($._mApp.resultsIndex == null) {$._mApp.resultsIndex = 0;}
+			if (gg.resultsIndex == null) {gg.resultsIndex = 0;}
 			return true;			
 		} else {
 			retrieveResultsProp();	
@@ -567,11 +570,11 @@ class HRVStorageHandler {
 		if (Toybox.Application has :Storage) {
 			try {
 				mCheck = Storage.getValue("resultsArray");
-				$._mApp.resultsIndex = Storage.getValue("resultIndex");
+				gg.resultsIndex = Storage.getValue("resultIndex");
 			}
 			catch (ex) {
 				Sys.println("ERROR: retrieveResults: no results array");
-				$._mApp.resultsIndex = 0;
+				gg.resultsIndex = 0;
 				return false;
 			}				
 			
@@ -579,7 +582,7 @@ class HRVStorageHandler {
 			
 			Sys.println("retrievefunc:\n mCheck ="+mCheck+"\nbuffer ="+buffer);
 			// have a null if not saved 1st time
-			if ($._mApp.resultsIndex == null) {$._mApp.resultsIndex = 0;}
+			if (gg.resultsIndex == null) {gg.resultsIndex = 0;}
 			return true;			
 		} else {
 			retrieveResultsProp();	
@@ -590,26 +593,26 @@ class HRVStorageHandler {
 
 (:preCIQ24)
 	function storeResultsProp() {
-		$._mApp.setProperty("resultIndex", $._mApp.resultsIndex);
+		gg.setProperty("resultIndex", gg.resultsIndex);
     	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
 			var ii = i * DATA_SET_SIZE;
-			var result = $._mApp.getProperty(RESULTS + i);
-			if(null == result || $._mApp.results[ii] != result[0]) {
-				$._mApp.setProperty(RESULTS + i, [
-					$._mApp.results[ii + 0],
-					$._mApp.results[ii + 1],
-					$._mApp.results[ii + 2],
-					$._mApp.results[ii + 3],
-					$._mApp.results[ii + 4],
-					$._mApp.results[ii + 5],
-					$._mApp.results[ii + 6],
-					$._mApp.results[ii + 7],
-					$._mApp.results[ii + 8],
-					$._mApp.results[ii + 9],
-					$._mApp.results[ii + 10],
-					$._mApp.results[ii + 11],						
-					$._mApp.results[ii + 12],
-					$._mApp.results[ii + 13]						
+			var result = gg.getProperty(RESULTS + i);
+			if(null == result || gg.results[ii] != result[0]) {
+				gg.setProperty(RESULTS + i, [
+					gg.results[ii + 0],
+					gg.results[ii + 1],
+					gg.results[ii + 2],
+					gg.results[ii + 3],
+					gg.results[ii + 4],
+					gg.results[ii + 5],
+					gg.results[ii + 6],
+					gg.results[ii + 7],
+					gg.results[ii + 8],
+					gg.results[ii + 9],
+					gg.results[ii + 10],
+					gg.results[ii + 11],						
+					gg.results[ii + 12],
+					gg.results[ii + 13]						
 					]);
 			}
 		}	
@@ -618,8 +621,8 @@ class HRVStorageHandler {
 	function storeResults() {
 	    // Save results to memory
 	    if (Toybox.Application has :Storage) {
-			Storage.setValue("resultsArray", $._mApp.results);
-			Storage.setValue("resultIndex", $._mApp.resultsIndex);
+			Storage.setValue("resultsArray", gg.results);
+			Storage.setValue("resultIndex", gg.resultsIndex);
 		} else {
 			storeResultsProp();
 		}
@@ -631,14 +634,14 @@ class HRVStorageHandler {
 	function prepareSaveResults( utcStart) {
 		// need to load results array fill and then save
 		// assume pointer still valid
-		$._mApp.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		gg.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		
 		// if retrieve returns null i eno storage then we will have all 0's
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			$._mApp.results[i] = 0;
+			gg.results[i] = 0;
 		}
 		// this will be overridden if we load results
-		$._mApp.resultsIndex = 0;
+		gg.resultsIndex = 0;
 		
 		retrieveResults(); 
 
@@ -650,14 +653,14 @@ class HRVStorageHandler {
 		
 		// next slot in cycle, can overwrite multiple times in a day and keep last ones
 		// Check whether we are creating another set of results on the same day by inspecting previous entry
-		var previousEntry = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		var previousEntry = (gg.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
 		var previousIndex = previousEntry * DATA_SET_SIZE;
-		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
+		var currentIndex = gg.resultsIndex * DATA_SET_SIZE;	
 		
-		var x = $._mApp.results[previousIndex + TIME_STAMP_INDEX];
+		var x = gg.results[previousIndex + TIME_STAMP_INDEX];
 		// convery to day units
 		var previousSavedutc = 	x - (x % 86400);
-		x = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		x = gg.results[currentIndex + TIME_STAMP_INDEX];
 		var currentSavedutc = x - (x % 86400);
 		var index;
 		
@@ -669,29 +672,29 @@ class HRVStorageHandler {
 			index = currentIndex;			
 			// written a new entry so move pointer
    			// increment write pointer to circular buffer
-   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
-   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   			gg.resultsIndex = (gg.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+gg.resultsIndex);
    		}
 			
 		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
-		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
-		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
-		$._mApp.results[index + MIN_II_INDEX] = $._mApp.mSampleProc.minIntervalFound;
-		$._mApp.results[index + MAX_II_INDEX] = $._mApp.mSampleProc.maxIntervalFound;		
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.minDiffFound;
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.maxDiffFound;				
-		$._mApp.results[index + RMSSD_INDEX] = $._mApp.mSampleProc.mRMSSD;
-		$._mApp.results[index + LNRMSSD_INDEX] = $._mApp.mSampleProc.mLnRMSSD;
+		gg.results[index + TIME_STAMP_INDEX] = utcStart;
+		gg.results[index + AVG_PULSE_INDEX] = gg.mSampleProc.avgPulse;
+		gg.results[index + MIN_II_INDEX] = gg.mSampleProc.minIntervalFound;
+		gg.results[index + MAX_II_INDEX] = gg.mSampleProc.maxIntervalFound;		
+		gg.results[index + MAX_DIFF_INDEX] = gg.mSampleProc.minDiffFound;
+		gg.results[index + MAX_DIFF_INDEX] = gg.mSampleProc.maxDiffFound;				
+		gg.results[index + RMSSD_INDEX] = gg.mSampleProc.mRMSSD;
+		gg.results[index + LNRMSSD_INDEX] = gg.mSampleProc.mLnRMSSD;
 
-		$._mApp.results[index + SDNN_INDEX] = $._mApp.mSampleProc.mSDNN;
-		$._mApp.results[index + SDSD_INDEX] = $._mApp.mSampleProc.mSDSD; 
-		$._mApp.results[index + NN50_INDEX] = $._mApp.mSampleProc.mNN50;
-		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
-		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
-		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
+		gg.results[index + SDNN_INDEX] = gg.mSampleProc.mSDNN;
+		gg.results[index + SDSD_INDEX] = gg.mSampleProc.mSDSD; 
+		gg.results[index + NN50_INDEX] = gg.mSampleProc.mNN50;
+		gg.results[index + PNN50_INDEX] = gg.mSampleProc.mpNN50; 
+		gg.results[index + NN20_INDEX] = gg.mSampleProc.mNN20;
+		gg.results[index + PNN20_INDEX] = gg.mSampleProc.mpNN20;
    		
-   		Sys.println("storing results ... ="+$._mApp.results);
+   		Sys.println("storing results ... ="+gg.results);
    		
     	// better write results to memory!!
     	storeResults(); 
@@ -700,7 +703,7 @@ class HRVStorageHandler {
     	saveStatsToStore();   	
     	
     	// discard results buffer as large
-    	$._mApp.results = null;
+    	gg.results = null;
     	
 	} // end prepareResults 
 
@@ -709,14 +712,14 @@ class HRVStorageHandler {
 		var base;
 		var mSp;
 		var separator = ",";
-		var mNumEntries = $._mApp.mSampleProc.getNumberOfSamples();
+		var mNumEntries = gg.mSampleProc.getNumberOfSamples();
 
 		if (mNumEntries <= 0) { return;}
 			
 		mString = ( _type == 0 ? "II:," : "Flags:,");
 
 		for (var i=0; i < mNumEntries; i++) {
-				mSp = $._mApp.mIntervalSampleBuffer[i];
+				mSp = gg.mIntervalSampleBuffer[i];
 				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
 				mString += mSp.toString()+separator;				
 		}

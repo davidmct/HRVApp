@@ -103,10 +103,12 @@ class PoincareView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
+	hidden var gg;
 
 	// >0.4.1 add alternate view 
 	function initialize(viewNum) { 
 		viewToShow = viewNum;
+		gg = $._mApp;
 		View.initialize();
 	}
 	
@@ -120,7 +122,7 @@ class PoincareView extends Ui.View {
 		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
 		cGridWith = a.toNumber();
 		
-		//if ($._mApp.mDeviceType == RES_240x240) {		
+		//if (gg.mDeviceType == RES_240x240) {		
 		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
 		//}
 		
@@ -170,7 +172,7 @@ class PoincareView extends Ui.View {
     	
     	mShowCount++;
 		
-		if ($._mApp.mDeviceType == RES_240x240) {
+		if (gg.mDeviceType == RES_240x240) {
 			if (mLabelFont == null) {
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
 			}
@@ -178,7 +180,7 @@ class PoincareView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -191,7 +193,7 @@ class PoincareView extends Ui.View {
 			dc.drawRectangle(mRectVertXS[i], mRectVertYS, 2, mRectVertWHS);
 		}
 		
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[viewToShow-1], mJust);
 		// draw "RR ms"
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, mLabelInterval, mJust);
@@ -200,8 +202,8 @@ class PoincareView extends Ui.View {
     	var max;
     	var min;
     	if ( viewToShow == 1) {
-			max = $._mApp.mSampleProc.maxIntervalFound;
-			min = $._mApp.mSampleProc.minIntervalFound;
+			max = gg.mSampleProc.maxIntervalFound;
+			min = gg.mSampleProc.minIntervalFound;
 		} else {
 			max = 60000/MIN_BPM; // 35 BPM in ms
 			min = 60000/MAX_BPM; // 150 BPM
@@ -233,7 +235,7 @@ class PoincareView extends Ui.View {
 		var mid = floor + (ceil - floor) / 2;
 		// as display area is tight on Y axis ONLY draw mid value
 		
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);			
+		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);			
 		//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
 		//dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mLabelFont, format(" $1$ ",[floor.format("%d")]), mJust);		
@@ -244,21 +246,21 @@ class PoincareView extends Ui.View {
 		// Draw the data
 		
 		// set colour of rectangles. can't see white on white :-)
-		if ($._mApp.bgColSet == 3) { // BLACK
-			dc.setColor(Gfx.COLOR_WHITE, $._mApp.mBgColour);
+		if (gg.bgColSet == 3) { // BLACK
+			dc.setColor(Gfx.COLOR_WHITE, gg.mBgColour);
 		} else {
-			dc.setColor(Gfx.COLOR_BLACK, $._mApp.mBgColour);
+			dc.setColor(Gfx.COLOR_BLACK, gg.mBgColour);
 		}
 		
 		// reduce entries by 1 as points to next free slot
-		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
+		var mNumberEntries = gg.mSampleProc.getNumberOfSamples();
 		
 		// need two entries before we start!
 		if ( mNumberEntries < 2) { return true;}
 		
 		// iterate through available data drawing rectangles as less expensive than circles
 		// reduce number of array accesses
-		var previousSample = $._mApp.mIntervalSampleBuffer[0];
+		var previousSample = gg.mIntervalSampleBuffer[0];
 		// can't do same with x value as maybe different scale factors
 		
 		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
@@ -274,15 +276,19 @@ class PoincareView extends Ui.View {
 		//Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
 		
 		//var debugPlot = "x, y: ";
+		var sampleN1;
+		var x;
+		var y;
+		var mgg = gg;
 
 		// buffer starts from zero
 		for( var i=1; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
-			var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
+			sampleN1 = mgg.mIntervalSampleBuffer[i]; // y axis value to plot
 			// work out x and y from numbers and scales
-			var x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
-			var y = ((sampleN1 - floor) * scaleY).toNumber(); 
+			x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
+			y = ((sampleN1 - floor) * scaleY).toNumber(); 
 			
 			// Ranging issue as rectangles drawn downwards and hence go over axis
 			//if ( y <= 0) {
@@ -308,7 +314,7 @@ class PoincareView extends Ui.View {
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
-		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$._mApp.mSampleProc.getNumberOfSamples()+" dots");			
+		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+gg.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("Poincare memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			
@@ -324,7 +330,7 @@ class PoincareView extends Ui.View {
 		
 		// iterate through available data drawing rectangles as less expensive than circles
 		// reduce number of array accesses
-		//var previousSample = $._mApp.mIntervalSampleBuffer[1];
+		//var previousSample = gg.mIntervalSampleBuffer[1];
 		// can't do same with x value as maybe different scale factors
 		
 
@@ -333,8 +339,8 @@ class PoincareView extends Ui.View {
 		//for( var i=2; i < mNumberEntries; i++ ){
 			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
 			// should use getSample() in case of circular buffer implemented
-			//var sampleN = $._mApp.mIntervalSampleBuffer[i]; // x axis value to plot
-			//var sampleN1 = $._mApp.mIntervalSampleBuffer[i]; // y axis value to plot
+			//var sampleN = gg.mIntervalSampleBuffer[i]; // x axis value to plot
+			//var sampleN1 = gg.mIntervalSampleBuffer[i]; // y axis value to plot
 			// work out x and y from numbers and scales
 			//var x = ((previousSample - floor) * scaleX).toNumber();
 			//var y = ((sampleN1 - floor) * scaleY).toNumber(); 
