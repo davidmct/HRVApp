@@ -23,6 +23,7 @@ Future ..
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
 
 8. Memory optimisations 
+	- cache global access eg xx= $; xx.varX = 9; is cheaper than $.varX
 	- Disallow menu's when testing to save memory
 	- Shorten strings - watch search / replace does all workspace not just project
 	- Set variables to null when finished 
