@@ -2,17 +2,23 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
+using Toybox.UserProfile;
 
 //0.4.9
 //This file draws a graph of a Interval against sample number
 //Add in future ecoptic status etc
 // We need value on Y axis of range which maybe dynamic (based on datastream or fixed)
 
+// NOTE: The interval plot is the inverse of the BPM plot. the top of the graph is the slowest/longest beat
+
 // what to increment X by on point plot AND also defines number of points to plot
 // always power of 2
 const X_INC_VALUE = 4;
 
 class IntervalView extends Ui.View {
+	// INTERVAL PLOT
+	const FAST_II = 430; // 140 bpm 
+	const SLOW_II = 1800; // 33bpm - move to one based on resting HR
 
 	hidden var startTimeP;
 	hidden var mProcessingTime;
@@ -46,6 +52,9 @@ class IntervalView extends Ui.View {
 	// points to plot
 	hidden var cNumPoints = null;
 	hidden var gg;
+	
+	hidden var mRestingHR_II;
+	hidden var mZone1TopHR_II;
 
 	function initialize() { 
 		gg = $._mApp;
@@ -81,6 +90,21 @@ class IntervalView extends Ui.View {
 		
 		// Decide how many samples to plot across
 		cNumPoints = chartHeight / X_INC_VALUE;
+		
+		// get resting heart rate
+		var profile = UserProfile.getProfile();
+		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+		
+		Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
+		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
+		mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
+		mZone1TopHR_II = ( zones[1] == null ? FAST_II : (60000 / (zones[1] * 1.05)).toNumber());
+		
+		profile = null;
+		zones = null;
+				
+		Sys.println("Floor HR ms = "+mRestingHR_II+" BPM: "+60000/mRestingHR_II);
+		Sys.println("Top HR ms = "+mZone1TopHR_II+" BPM: "+60000/mZone1TopHR_II);
 										
 		return true;
 	}
@@ -142,8 +166,8 @@ class IntervalView extends Ui.View {
     			
 		// True if auto scaling on 
 		if (!gg.mBoolScaleII) {
-			Ymax = 1800; // 33bpm
-			Ymin = 430; // 140 bpm
+			Ymax = mRestingHR_II;
+			Ymin = mZone1TopHR_II;
 		} else {
 	    	// scan array to be plotted looking for min and max
 	    	// Could reduce to viewed portion

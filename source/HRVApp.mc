@@ -8,7 +8,6 @@ using Toybox.Sensor;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 
-
 // Things still to fix
 // Check old textArea code has right font size in Current and test views
 //8. sample processing check skipped or double beats
@@ -198,9 +197,6 @@ class HRVAnalysis extends App.AppBase {
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
-    
-    // Block size for dump to debug of intervals
-    const BLOCK_SIZE = 40;
 
 (:storageMethod) 
     function initializeWithStorage() {
@@ -419,7 +415,7 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
 		
 		UpdateTrialState();
-				
+		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();		
 						
@@ -602,6 +598,8 @@ class HRVAnalysis extends App.AppBase {
 	}
 	
 	function writeStrings(_type, _mNumEntries, _mNumBlocks, _mRemainder) {
+	    // Block size for dump to debug of intervals
+  		var BLOCK_SIZE = 40;
 		var mString;
 		var base;
 		var mSp;
@@ -634,6 +632,7 @@ class HRVAnalysis extends App.AppBase {
 	
 	function DumpIntervals() {
 		// to reduce write time group up the data
+		var BLOCK_SIZE = 40;
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;

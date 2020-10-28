@@ -101,6 +101,7 @@ const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
 const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50; // scales ln(RMSSD)
 
+
 // sample types
 enum {
 	SAMP_OK = 0,
