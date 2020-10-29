@@ -19,7 +19,7 @@ using Toybox.Time.Gregorian;
 
 
 
-//0.4.7
+//0.4.7 
 // Added plot of beats over last N sammples
 // Added missed and skipped beat detection
 // Can I add payment link to settings???
