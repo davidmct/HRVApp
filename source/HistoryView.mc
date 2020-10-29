@@ -50,7 +50,7 @@ class HistoryView extends Ui.View {
 	hidden var mRectHorizXS = 0;
 	hidden var mRectHorizYS = new [mRectHorizY.size() ];
 		
-	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mLabelFont = null; //Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_RED;
@@ -159,6 +159,9 @@ class HistoryView extends Ui.View {
 	
 (:newResults)
 	function prepResults() {
+	
+		//Sys.println("prepResults()");
+		
 		gg.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		
 		// if retrieve returns null i eno storage then we will have all 0's
@@ -186,14 +189,18 @@ class HistoryView extends Ui.View {
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
 		
 		if (gg.mDeviceType == RES_240x240) {
+			//Sys.println("device is 240x240");
 			if (mLabelFont == null) {	
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+				//Sys.println("smallFont loaded");
 			}
 		} else {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
 		prepResults();
+		
+		//Sys.println("DeviceType = "+gg.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);
 		
 		//Sys.println("Results = "+gg.results);
 		

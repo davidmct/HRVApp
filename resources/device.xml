@@ -1,5 +1,6 @@
-<resources>    
-    <string id="Device">0</string>
+<resources>   
+	<!--  280x280 device as default -->   
+    <string id="Device">2</string>
     <string id="MenuTitleSize">2</string>
     <string id="PoincareGridWidth">180</string>
     <string id="HistoryGridWidth">180</string>

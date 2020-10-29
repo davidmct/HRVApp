@@ -33,7 +33,7 @@ function DebugMsg( flag, Msg) {
 	if (flag) { Sys.println("Msg");}
 }
 
-function selectFont(dc, string, width, height) {
+function selectFont(dc, string, width, height, _fonts) {
     var testString = string; //Dummy string to test data width
 
     //testString = "a very long test string to see if we can get to a zero result or not";
@@ -41,8 +41,8 @@ function selectFont(dc, string, width, height) {
     var dimensions;
 
     //Search through fonts from biggest to smallest
-    for (fontIdx = (fonts.size() - 1); fontIdx > 0; fontIdx--) {
-        dimensions = dc.getTextDimensions(testString, fonts[fontIdx]);
+    for (fontIdx = (_fonts.size() - 1); fontIdx > 0; fontIdx--) {
+        dimensions = dc.getTextDimensions(testString, _fonts[fontIdx]);
         if ((dimensions[0] <= width) && (dimensions[1] <= height)) {
             //If this font fits, it is the biggest one that does
             break;
@@ -75,6 +75,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 	var myTextArea;
 	var mFont = Graphics.FONT_MEDIUM;
 	var mFontID;
+	var fonts = [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY];
 			
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
@@ -104,7 +105,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // need to check if string fits in width then ok
     
     // Does text fit in first line?
-    mFontID = selectFont(dc, msgTxt, width, height/2);
+    mFontID = selectFont(dc, msgTxt, width, height/2, fonts);
     var mTextWidth = dc.getTextWidthInPixels(msgTxt, fonts[mFontID]);
 	// tested whether a font is available that fits string so check within width 
 	// font is possibly 0 the smallest so may not be ideal
@@ -125,7 +126,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 		return;
 	}
     
-    mFontID = selectFont(dc, msgTxt, width*2, height/2);
+    mFontID = selectFont(dc, msgTxt, width*2, height/2, fonts);
     
     var mMidCharIdx = msgTxt.length()/2;
     var mSpaceIdx = null;
@@ -150,7 +151,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
  		// check longer string fits still
      	mString2 = msgTxt.substring(mSpaceIdx+1, msgTxt.length());
     	mString1 = msgTxt.substring(0, mSpaceIdx);		
- 		mFontID = selectFont(dc, mString2, width, height/2);   
+ 		mFontID = selectFont(dc, mString2, width, height/2, fonts);   
     	//Sys.println("Space found @ "+mSpaceIdx+", String 1 and 2 = '"+mString1+"', '"+mString2+"'"); 		   
     }
     
@@ -201,11 +202,11 @@ function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width,
     });	
     myTextArea.draw(dc);
     
-    if (mDebugging) {
-    	// show text box around area
-    	dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_BLACK);
-    	dc.drawRectangle( LocX, LocY, width, height);
-    }
+    //if (mDebugging) {
+    //	// show text box around area
+    //	dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_BLACK);
+    //	dc.drawRectangle( LocX, LocY, width, height);
+    //}
 }
     
 function timerFormat(time) {
