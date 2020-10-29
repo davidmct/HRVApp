@@ -35,7 +35,7 @@ class HRVStorageHandler {
 		gg.Properties.setValue("pAuxHRAntID", 0);
 		Storage.setValue("firstLoadEver", true);
 		gg.Properties.setValue("pFitWriteEnabled", false);
-		gg.Properties.setValue("pSensorSelect", SENSOR_SEARCH);
+		gg.Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
 		gg.Properties.setValue("pIIScale", false);
 		gg.Properties.setValue("soundSet", true);

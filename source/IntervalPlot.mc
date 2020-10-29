@@ -95,7 +95,9 @@ class IntervalView extends Ui.View {
 		var profile = UserProfile.getProfile();
 		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
 		
-		Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
+		// average resting is 3.2.0 feature so remove
+		//Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
+		
 		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
 		mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
 		mZone1TopHR_II = ( zones[1] == null ? FAST_II : (60000 / (zones[1] * 1.05)).toNumber());
@@ -255,7 +257,8 @@ class IntervalView extends Ui.View {
 		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
-		dc.drawText( leftX+20, ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		//var mXoffset = ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+20);
+		dc.drawText( ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+22), ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
 		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
