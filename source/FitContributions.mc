@@ -117,6 +117,7 @@ class HRVFitContributor {
 		mSessionLONG_Field.setData(0.0);
 		mSessionSHORT_Field.setData(0.0);
 		mSessionECTOPIC_Field.setData(0.0);
+		mSessionSource_Field.setData("");
 			
 		mRecordAvgPulse_Field.setData(0);
 		mRecordmRMSSD_Field.setData(0.0);
@@ -212,7 +213,7 @@ class HRVFitContributor {
 		} else {
 			str = "Int";
 		}
-		//mSessionSource_Field.setData(str);		
+		mSessionSource_Field.setData(str);		
 
 		//Sys.println("FIT Session: "+gg.mSampleProc.avgPulse+","+gg.mSampleProc.mNN50+","+gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20);		
 	}

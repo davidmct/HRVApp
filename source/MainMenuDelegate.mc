@@ -86,8 +86,8 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         }
         else if ( id.equals("th"))   {
  			var menu = new Ui.Menu2({:title=>"Threshold"});
-	        menu.addItem(new Ui.MenuItem("Upper", null, "u", null));     
-	        menu.addItem(new Ui.MenuItem("Lower", null, "l", null));   	          
+	        menu.addItem(new Ui.MenuItem("Long", null, "u", null));     
+	        menu.addItem(new Ui.MenuItem("Short", null, "l", null));   	          
  	        Ui.pushView(menu, new ThresholdMenuDelegate(), Ui.SLIDE_IMMEDIATE );       
         }
         else if ( id.equals("c"))   {
