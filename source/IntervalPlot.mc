@@ -92,17 +92,25 @@ class IntervalView extends Ui.View {
 		cNumPoints = chartHeight / X_INC_VALUE;
 		
 		// get resting heart rate
-		var profile = UserProfile.getProfile();
+		var restingHR = UserProfile.getProfile().restingHeartRate;
 		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
 		
 		// average resting is 3.2.0 feature so remove
 		//Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
 		
 		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
-		mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
-		mZone1TopHR_II = ( zones[1] == null ? FAST_II : (60000 / (zones[1] * 1.05)).toNumber());
 		
-		profile = null;
+		// RANGE CHECK restingHeart rate and zone 1 to make sure sensible		
+		//mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
+		mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR * 0.95)).toNumber());
+		if (zones != null && zones[1] != null) {
+			mZone1TopHR_II = (60000 / (zones[1] * 1.05)).toNumber();
+		} else {		
+			mZone1TopHR_II = FAST_II;
+		}
+		
+		//profile = null;
+		restingHR = null;
 		zones = null;
 				
 		Sys.println("Floor HR ms = "+mRestingHR_II+" BPM: "+60000/mRestingHR_II);
