@@ -11,15 +11,19 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function onBack() {
+    	//Sys.println("onBack() TestType");
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
+    	//Sys.println("onDone() TestType");
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }   
  
     function onSelect(item) {
 		var mId = item.getId();
+		
+		//Sys.println("onSlect() TestType");
 		
 		// if the test type or source changes then we need to reset state machine
 		// in FIT case will need to discard any open sessions - this is done on start so OK
