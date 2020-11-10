@@ -32,6 +32,7 @@
             <iq:product id="marqdriver"/>
             <iq:product id="marqexpedition"/>
             <iq:product id="marqgolfer"/>
+            <iq:product id="vivoactive3"/>
             <iq:product id="vivoactive4"/>
             <iq:product id="vivoactive4s"/>
         </iq:products>
