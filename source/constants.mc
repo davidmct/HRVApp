@@ -9,6 +9,7 @@ enum {
 	RES_240x240 = 0,
 	RES_260x260 = 1,
 	RES_280x280 = 2,
+	RES_218x218 = 3,
 	
 	// Views
 	TEST_VIEW = 0,
