@@ -24,6 +24,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
     }  
 	
 	function onNextPage() {
+		//Sys.println("onNextPage()");
 		// down or swipe UP
 		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
@@ -37,6 +38,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     // handle other key presses
     function onKey(event) {
+    	//Sys.println("onKey()");
 
     	if(Ui.KEY_ENTER == event.getKey()) {
 			// menu key
@@ -56,6 +58,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
     function onEnter() {
+    	//Sys.println("onEnter()");
 		if($._mApp.viewNum != TEST_VIEW) {
 			//Sys.println("HRVBehaviour onEnter() - switch to test view");
 			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
@@ -78,7 +81,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onMenu() {
-		
+		//Sys.println("onMenu()");		
 		// Generate a new Menu for mainmenu
         var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
         // add items
@@ -96,10 +99,12 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
         menu.addItem(new Ui.MenuItem("About", null, "a", null));
         Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+        //Sys.println("onMenu()- end");
 		return true;
     }
 
 	function onEscape() {
+		//Sys.println("onEscape()");
 		if(TEST_VIEW == $._mApp.viewNum) {
 			var res = $._mApp.mTestControl.StateMachine(:escapePressed);	
 			// true means we need to check to save	
@@ -159,6 +164,7 @@ class DrawableMenuTitle extends Ui.Drawable {
 
     // Draw the application icon and main menu title
     function draw(dc) {
+    	//Sys.println("Draw Menu Title draw?"+drawTrue);
         var spacing = 2;
         var appIcon = null;
         var bitmapWidth = 0;
@@ -188,5 +194,6 @@ class DrawableMenuTitle extends Ui.Drawable {
         } else {        
         	dc.drawText(dc.getWidth()/2, labelY, Gfx.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
+        //Sys.println("Draw Menu Title end");
     }
 }
