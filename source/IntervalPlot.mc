@@ -266,7 +266,15 @@ class IntervalView extends Ui.View {
 				
 		// label avg axis
 		//var mXoffset = ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+20);
-		dc.drawText( ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+22), ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		
+		var mOffText = leftX+22;
+		if (gg.mDeviceType == RES_218x218) {
+			mOffText = leftX+35;
+		} else if ( gg.mDeviceType == RES_240x240) {		
+			mOffText = leftX+25;
+		}
+		
+		dc.drawText( mOffText, ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
 		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			

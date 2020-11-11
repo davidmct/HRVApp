@@ -1,5 +1,5 @@
 <resources>    
-    <!--  240x240 device -->  
+    <!--  218x218 device -->  
     <string id="Device">3</string>
     <string id="MenuTitleSize">2</string>
     <string id="PoincareGridWidth">160</string>
