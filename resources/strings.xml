@@ -20,7 +20,7 @@
 	<string id="lpNN20CT">NN20 as % of samples</string>
 	<string id="lLongT">Count of Long beats</string>
 	<string id="lShortT">Count of Short beats</string>	
-	<string id="lET">Count of Ectopic beats</string>	
+	<string id="lET">Type of beat</string>        <!--Count of Ectopic beats</string>	-->
 	<string id="lHistoryNull">None</string>
 	<string id="lHeartRate">Average bpm</string>
 	<string id="lMinInterval">Minimum II</string>
