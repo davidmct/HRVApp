@@ -164,6 +164,8 @@ class SampleProcessing {
 	var vShortBeatCnt;
 	var vEBeatCnt;
 	var vRunningAvg;
+	// use a set of 3 bits to record when events happened which is cleared on FIT compute
+	var vEBeatFlag;
 	
 	// keep a record of averages calculated in shifting buffer
 	var aAvgStore = new [MAX_NUMBERBEATSGRAPH];
@@ -222,6 +224,7 @@ class SampleProcessing {
 		vShortBeatCnt = 0;
 		vEBeatCnt = 0;
 		vRunningAvg = 0.0;
+		vEBeatFlag = 0;
 
 	}
 	
@@ -549,6 +552,7 @@ class SampleProcessing {
 			} 
 			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_S) {
 				vShortBeatCnt++;
+				vEBeatFlag = vEBeatFlag | 0x1;
 				//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
 				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
 				// add sample to II store
@@ -558,6 +562,7 @@ class SampleProcessing {
 			} 
 			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_L) {
 				vLongBeatCnt++;
+				vEBeatFlag = vEBeatFlag | 0x2;
 				//Sys.println("SampleProcessing: LONG BEAT FOUND");	
 				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
 				// add sample to II store
@@ -567,6 +572,7 @@ class SampleProcessing {
 			}
 			else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_S) {
 				vShortBeatCnt++;
+				vEBeatFlag = vEBeatFlag | 0x5;
 				// inc missed beat, no stats update, save current avg and II to avgstore
 				addSample(intMs, 1, SAMP_SL); 
 				// add and shift avg buffer and II store
@@ -576,6 +582,7 @@ class SampleProcessing {
 			}
 			else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_L) {
 				vLongBeatCnt++;
+				vEBeatFlag = vEBeatFlag | 0x6;
 				// inc missed beat, no stats update, save current avg and II to avgstore
 				addSample(intMs, 1, SAMP_LS); 
 				// add and shift avg buffer and II store
