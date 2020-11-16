@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.5.3</string>
+	<string id="AppVersion">0.5.5</string>
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
 	<string id="pAuthIDT">Licence String</string> 

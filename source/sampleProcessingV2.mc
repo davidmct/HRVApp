@@ -75,6 +75,13 @@ using Toybox.Lang as Lang;
 
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
+// 0.5.5
+// Rewrite sample processing to use window 5 back and forward average filter
+// detects spikes more reliably and much simpler!
+// Change way capture works
+// - incoming samples are put straight in buffer
+// - processing runs a number of samples behind and this is used in getSample etc
+
 // 0.5.0
 // Added new implementation of L,S,E saving and some code optimisations
 
@@ -125,6 +132,7 @@ using Toybox.Lang as Lang;
 // last two sample values should be in buffer
 // need to increment counts of ectopic beats
 
+(:sampProcV2)
 class SampleProcessing {
 
 	// these need to be moved from ANThandler and references changed
@@ -136,6 +144,8 @@ class SampleProcessing {
 	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
 	hidden var mStartThreshold = false;
+	
+	hidden var gg; //$._ mApp to make global more local!
 	
 	var dataCount;
 	var avgPulse;
@@ -174,14 +184,17 @@ class SampleProcessing {
 	var aIIValue = new [MAX_NUMBERBEATSGRAPH];
 	//var aAvgStoreIndex;
 	
-	// index always points to next available slot
+	// index always points to next available slot to save new entries
 	hidden var mSampleIndex;
+	hidden var mSampleProc;
+	hidden var mFILTER_D = 4;
 	
 	function initialize() {
 		// do we keep big buffer of intervals here?
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
-		$._mApp.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		gg = $._mApp;
+		gg.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
 		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();
@@ -189,7 +202,8 @@ class SampleProcessing {
 	
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
-		$._mApp.mIntervalSampleBuffer[0] = 0;
+		mSampleProc = 0; // delayed version of above
+		gg.mIntervalSampleBuffer[0] = 0;
 		clearAvgBuffer();
 		mStartThreshold = false;
 		minIntervalFound = 2000; // around 30 BPM
@@ -239,11 +253,13 @@ class SampleProcessing {
 	
 	function getNumberOfSamples() {
 		// starts at zero
-		return mSampleIndex;
+		//return mSampleIndex;
+		return mSampleProc;
 	}
 	
 	function setNumberOfSamples(index) {
-		mSampleIndex = index;
+		mSampleIndex = index+mFILTER_D; // writing ahead of processing
+		mSampleProc = index;
 	}
 	
 	function getCurrentEntry() {
@@ -259,11 +275,6 @@ class SampleProcessing {
 	function addSample( intervalMs, beatsInGap, mFlag) {
 		// input is an interval time in ms
 		// mFlag is status of interval
-				
-		// 1st sample needs to by pass processing
-		//if (beatsInGap == null) { }
-		
-		//$.DebugMsg( true, "A0");
 		
 		// pre process bounds for poincare plot of RR interval
 		// first sample will have null beatsInGap so ignore as 
@@ -272,17 +283,17 @@ class SampleProcessing {
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
-		if ( mSampleIndex > $._mApp.mIntervalSampleBuffer.size()) {
-			new $._mApp.myException("Buffer limit reached in sample Processing");
+		if ( mSampleIndex > gg.mIntervalSampleBuffer.size()) {
+			new gg.myException("Buffer limit reached in sample Processing");
 		}
-		$._mApp.mIntervalSampleBuffer[mSampleIndex] = intervalMs | (mFlag << 12);	
+		gg.mIntervalSampleBuffer[mSampleIndex] = intervalMs | (mFlag << 12);	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 		//Sys.println("Sample count: "+mSampleIndex);
 	}
 	
 	function getSample(index) {
-		var mSamp = $._mApp.mIntervalSampleBuffer[index];
+		var mSamp = gg.mIntervalSampleBuffer[index];
 		var mFlag = (mSamp) >> 12 & 0xF;
 		mSamp = mSamp & 0x0FFF;		
 		return [mSamp, mFlag];
@@ -303,8 +314,8 @@ class SampleProcessing {
 		shiftAvgBuffer();
 		aAvgStore[0] =	mAvg;
 		aIIValue[0] = mSample;
-		$._mApp.mTestAvgBuffer[$._mApp.mTestBufferIndex] = mAvg;
-		$._mApp.mTestBufferIndex++;		
+		gg.mTestAvgBuffer[$._mApp.mTestBufferIndex] = mAvg;
+		gg.mTestBufferIndex++;		
 		//Sys.println("addAverage(test) :"+mAvg);
 	}
 	
@@ -318,7 +329,6 @@ class SampleProcessing {
 	}
 
     // Work out for each sample what the average value of previous 5 points is
-(:newSampleProcessing)
 	// function to return average of N samples from buffer starting at current sample
 	// Need to skip ectopic beats in past and if we run out of buffer do best we can!
 	// Would need two episodes in last 10 beats to fail
@@ -358,14 +368,14 @@ class SampleProcessing {
     	// however as this range might include ectopci beats need to skip those
     	var i = mNumSamples-1;
     	while (!mFound && i >= 0 ) {
-    		if ( ($._mApp.mIntervalSampleBuffer[i]) & 0xF000 !=0 ) {
+    		if ( (gg.mIntervalSampleBuffer[i]) & 0xF000 !=0 ) {
     			// bad entry so need to move on further back
     			//Sys.println("fCalcAvgValues: skip sample # :"+i+", mFlagOffset: "+mFlagOffset);
     			i--;    		
     		} else {
     			// Good sample	
     			mFoundCount++;
-    			mIIVal[mFoundCount] = $._mApp.mIntervalSampleBuffer[i] & 0x0FFF;
+    			mIIVal[mFoundCount] = gg.mIntervalSampleBuffer[i] & 0x0FFF;
     			
     			//Sys.println("fCalcAvgValues: Add sample: "+i+", mFoundCount: "+mFoundCount+", mIIVal[]:"+mIIVal);
     			
@@ -396,7 +406,6 @@ class SampleProcessing {
     	
     } // end function fCalcAvgValues()
 
-(:newSampleProcessing) 	
 	function fNormalCase(_vRunningAvg, _previousIntMs, _intMs, _mSampleIndex, _livePulse, _mFlag) {
 		// add sample to II and stats, update running avg add this and II to avg buffers
 		// update running avg ... mSampleIndex points to next free slot, this intMs would go in there
@@ -411,11 +420,8 @@ class SampleProcessing {
 		return; 	
 	}
 			
-(:newSampleProcessing) 	
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
-		//Sys.println("v0.4.7 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
-		
-		//$.DebugMsg( true, "S0");
+		//Sys.println("v0.5.5 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
 		
 		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0)) {
@@ -425,8 +431,6 @@ class SampleProcessing {
 			// Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
 			return;
 		}
-		
-		//$.DebugMsg( true, "S1");
 						
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
 		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
@@ -436,20 +440,30 @@ class SampleProcessing {
 		// Calculate estimated ranges for reliable data based on current pulse
 		var maxMs = 60000 / (livePulse * 0.7);
 		var minMs = 60000 / (livePulse * 1.4);
+		
+		// Put sample in buffer with average of samples available. We know top bits clear until we reach enough to start processing
+		// Start incrementing processing pointer when mSampleIndex >= FILTER_D (post index increment)
+		// when pointer free slot on input = 7 ie sample 6
+		// when pointer free slot on input >= 7 ie sample 6 is current one ... 0, 1, 2, 3, 4, 5, 6, 7 then we can start processing
+		// ... Calculate average around middle one of filter ie sample mSampleIndex-FILTER_D or mSampleProc
+		// ... Threshold and set flag
+		// ... Compare this and previous one for flag setting 
 	
 		// special case of 1st sample as previous will be zero!
 		// make sure not stupid number
 		if (mSampleIndex == 0) {
 			if ( maxMs > intMs && minMs < intMs) { 				
-				addSample(intMs, null, SAMP_OK); 
-				// oldest sample for average!
-				addAverage( intMs, intMs);
+				addSample(intMs, 1, SAMP_OK); // increments mSampleIndex, was null but want to use for min max
 				vRunningAvg = intMs;
 			}
 			return;
 		}
 		
-		//$.DebugMsg( true, "S2");
+		// Setup the first few averages which are ignored
+		if (mSampleIndex < mFILTER_D) {
+				vRunningAvg += intMs;
+				addAverage( vRunningAvg / (mSampleIndex+1), intMs);	
+		}
 
 		// If n=0 then as now
 		// if n < filter length
@@ -520,12 +534,12 @@ class SampleProcessing {
 			
 			var mDelta = mDiff / vRunningAvg;
 			if (mDelta >= 0) {
-				if (mDelta > $._mApp.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
+				if (mDelta > gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
 				if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
 			} 
 			else {
 				var mDa = mDelta.abs();
-				if (mDa > $._mApp.vLowerThresholdSet) { c_mFlag = SAMP_S;}
+				if (mDa > gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
 				if (mDa > mpShortMax ) { mpShortMax = mDa;}				
 			}
 			
@@ -612,51 +626,6 @@ class SampleProcessing {
 	// end new rawSampleProcessing
 	}	
 
-(:oldSampleProcessing)	
-	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
-		// shouldn't capture data
-		if (!isTesting) {return;}
-		
-		if (livePulse == 0) {
-			// could happen on first loop - avoids divide by 0
-			// If we still have an interval could create BPM from that...
-			//Sys.println("rawSampleProcessing(): livePulse 0 - discarding");
-			return;
-		}
-		
-		// Calculate estimated ranges for reliable data
-		var maxMs = 60000 / (livePulse * 0.7);
-		var minMs = 60000 / (livePulse * 1.4);
-		
-		// Given ANT sensor only provides one interval then we should probably ignore this sample
-		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
-		
-		// need to check whether long gap is caused by multiple beats in gap and handle
-		// eg missed beats ie beatsInGap > 1
-					
-		// Only update hrv data if testing started, & values look to be error free	
-		
-		// special case of 1st sample as previous will be zero!
-		// make sure not stupid number
-		if (mSampleIndex == 0) {
-			if ( maxMs > intMs && minMs < intMs) { 				
-				addSample(intMs, null); 
-			}
-			return;
-		}
-		
-		var previousIntMs = getSample(mSampleIndex-1);	
-		//Sys.println("S p "+ previousIntMs + " i " +intMs);
-		// 0.4.3 remove check of previous as should be OK by defintion!!	
-		if (maxMs > intMs && minMs < intMs ){ // && 
-			//maxMs > previousIntMs && minMs < previousIntMs) {		
-			addSample(intMs, beatsInGap);				
-			updateRunningStats(previousIntMs, intMs, livePulse);			
-		} else {
-			// debug
-			$.DebugMsg( true, "C-"+mSampleIndex+" R "+intMs+" H "+maxMs+" L "+minMs );
-		}				
-	}
 
 	// passed an array [sample, A_k, A_k1, Q_k, Q_k1] 
 	//					[0, 	1, 	   2,   3,    4]
