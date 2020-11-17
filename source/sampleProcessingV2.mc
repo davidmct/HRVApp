@@ -75,13 +75,6 @@ using Toybox.Lang as Lang;
 
 // RMSSD = sqrt( sum squares: (NN(i)-NN(i-1))^2 / Number of samples)
 
-// 0.5.5
-// Rewrite sample processing to use window 5 back and forward average filter
-// detects spikes more reliably and much simpler!
-// Change way capture works
-// - incoming samples are put straight in buffer
-// - processing runs a number of samples behind and this is used in getSample etc
-
 // 0.5.0
 // Added new implementation of L,S,E saving and some code optimisations
 
@@ -144,7 +137,6 @@ class SampleProcessing {
 	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
 	hidden var mStartThreshold = false;
-	
 	hidden var gg; //$._ mApp to make global more local!
 	
 	var dataCount;
@@ -173,7 +165,7 @@ class SampleProcessing {
 	var vLongBeatCnt;
 	var vShortBeatCnt;
 	var vEBeatCnt;
-	var vRunningAvg;
+	//var vRunningAvg;
 	// use a set of 3 bits to record when events happened which is cleared on FIT compute
 	var vEBeatFlag;
 	
@@ -237,7 +229,7 @@ class SampleProcessing {
 		vLongBeatCnt = 0;
 		vShortBeatCnt = 0;
 		vEBeatCnt = 0;
-		vRunningAvg = 0.0;
+		//vRunningAvg = 0.0;
 		vEBeatFlag = 0;
 
 	}
@@ -272,7 +264,7 @@ class SampleProcessing {
 		}
 	}
 	
-	function addSample( intervalMs, beatsInGap, mFlag) {
+	function addSample( intervalMs, beatsInGap ) { //, mFlag) {
 		// input is an interval time in ms
 		// mFlag is status of interval
 		
@@ -286,10 +278,16 @@ class SampleProcessing {
 		if ( mSampleIndex > gg.mIntervalSampleBuffer.size()) {
 			new gg.myException("Buffer limit reached in sample Processing");
 		}
-		gg.mIntervalSampleBuffer[mSampleIndex] = intervalMs | (mFlag << 12);	
+		gg.mIntervalSampleBuffer[mSampleIndex] = intervalMs; // | (mFlag << 12);	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 		//Sys.println("Sample count: "+mSampleIndex);
+	}
+	
+	// updates flag at mSampleProc and increments pointer
+	function addFlagProc( mFlag) {
+		gg.mIntervalSampleBuffer[mSampleProc] |= (mFlag << 12);	
+		mSampleProc++;
 	}
 	
 	function getSample(index) {
@@ -314,7 +312,7 @@ class SampleProcessing {
 		shiftAvgBuffer();
 		aAvgStore[0] =	mAvg;
 		aIIValue[0] = mSample;
-		gg.mTestAvgBuffer[$._mApp.mTestBufferIndex] = mAvg;
+		gg.mTestAvgBuffer[gg.mTestBufferIndex] = mAvg;
 		gg.mTestBufferIndex++;		
 		//Sys.println("addAverage(test) :"+mAvg);
 	}
@@ -323,7 +321,7 @@ class SampleProcessing {
 	function addAverage( mAvg, mSample) {
 		// Might choose to add complexity to this depending how ectopic algo works out
 		shiftAvgBuffer();
-		aAvgStore[0] =	mAvg;
+		aAvgStore[0] = mAvg;
 		aIIValue[0] = mSample;
 		//Sys.println("addAverage(not test) :"+mAvg);
 	}
@@ -350,7 +348,7 @@ class SampleProcessing {
 	// keep samples found just in case less than 5 which is filter length 
 	
 	// may have to change to use S, OK; L, OK ie brief fluctuation 
-	
+(:discard)	
     function fCalcAvgValues( mRAvg, sampleIn, mNumSamples) {  
     	var mIIVal = new [5]; // found II sample for samples average 
     	var mFoundCount = 0;
@@ -406,18 +404,31 @@ class SampleProcessing {
     	
     } // end function fCalcAvgValues()
 
-	function fNormalCase(_vRunningAvg, _previousIntMs, _intMs, _mSampleIndex, _livePulse, _mFlag) {
-		// add sample to II and stats, update running avg add this and II to avg buffers
-		// update running avg ... mSampleIndex points to next free slot, this intMs would go in there
-		vRunningAvg = fCalcAvgValues( _vRunningAvg, _intMs, _mSampleIndex);	
-		// add sample to II store
-		addSample(_intMs, 1, _mFlag); 
+	function fNormalCase( _vAvg, _previousIntMs, _intMs, _livePulse, _mFlag) {
+		// add sample to II and stats, update running avg add this and II to avg buffers		
+		// flag corresponds to _mSampleProc value	
+		addFlagProc( _mFlag); 				
 		// add and shift avg buffer and II store
-		addAverage( vRunningAvg, _intMs);
+		//addAverage( _vAvg, _intMs); // done in mainline now as always update
 		// Update stats!
 		updateRunningStats( _previousIntMs, _intMs, _livePulse);
 		
 		return; 	
+	}
+	
+	// filter of length 7 around _mSampleProc including latest intMs
+	function mFilter7( _mSampleProc, _intMs) {
+		var i = _mSampleProc - 3;
+		var mSum = 0;
+		var mII;
+		for (var j = 0; j<6; j++) {
+			// clear flag just in case
+			mII = getSample(i);
+			mSum += mII[0] & 0x0FFF;
+			i++;		
+		}
+		mSum += _intMs;
+		return  mSum.toFloat() / 7.0;
 	}
 			
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
@@ -453,174 +464,153 @@ class SampleProcessing {
 		// make sure not stupid number
 		if (mSampleIndex == 0) {
 			if ( maxMs > intMs && minMs < intMs) { 				
-				addSample(intMs, 1, SAMP_OK); // increments mSampleIndex, was null but want to use for min max
-				vRunningAvg = intMs;
+				addSample(intMs, 1); // increments mSampleIndex, was null but want to use for min max
 			}
 			return;
 		}
 		
 		// Setup the first few averages which are ignored
-		if (mSampleIndex < mFILTER_D) {
-				vRunningAvg += intMs;
-				addAverage( vRunningAvg / (mSampleIndex+1), intMs);	
-		}
-
-		// If n=0 then as now
-		// if n < filter length
-		//		status  = oK for current sample
-		//		add sample
-		//		update stats and rtn
+		//if (mSampleIndex < mFILTER_D) {
+		//		vRunningAvg += intMs;
+		//		addAverage( vRunningAvg / (mSampleIndex+1), intMs);	
+		//}
 		
-		// getSample returns [Interval, flag]
-		var previousIntMs = getSample(mSampleIndex-1);			
-		if (mSampleIndex < 5) {
-			//Sys.println("mSampleIndex less than 5");
+		// always add sample - come here from sample 2 onwards 
+		//addSample(intMs, 1, SAMP_OK); // increments mSampleIndex
+		
+		// For first 6 samples just update stats and add sample (write of 5th makes ptr = 6)
+		// filter length = 7 
+		if (mSampleIndex < 6 ) {
 			if ( maxMs > intMs && minMs < intMs) { 
-			
-				//Sys.println("avgStore index ="+mSampleIndex);
-				vRunningAvg += intMs;
-				addAverage( vRunningAvg / (mSampleIndex+1), intMs);	
-				
+				// getSample returns [Interval, flag]
+				var previousIntMs = getSample(mSampleIndex-1);		
 				// add sample and inc pointer!!	Flag = 0 		
-				addSample(intMs, null, SAMP_OK); 
-				// No need to update vLower and vUpper flags as not testing
-				updateRunningStats(previousIntMs[0], intMs, livePulse);
+				addSample(intMs, 1); 
+				// No need to update vLower and vUpper flags as not testing and 0 = OK
+				// Stats only updated when we have done sample testing!!
+				if (mSampleIndex < 3) {
+					updateRunningStats(previousIntMs[0], intMs, livePulse);
+				}		
 			}
-			//Sys.println("<5 return");
 			return;
+		}
+		
+		// special sample as we now have enough data to start processing
+		if (mSampleIndex == 6 ) {		
+			mSampleProc = 3; // as length 7 filter
+			
+			// complete first 3 samples average
+			var mSP0 = getSample(0);
+			var mSP1 = getSample(1);
+			var mSP2 = getSample(2);
+			addAverage( mSP0[0], mSP0[0]);
+			addAverage( (mSP0[0]+mSP1[0])/2, mSP1[0]);
+			addAverage( (mSP0[0]+mSP1[0]+mSP2[0])/3, mSP2[0]);
+		}
+		
+		// Now main handling of samples
+		var newAvg = mFilter7( mSampleProc, intMs);
+		// always add sample to II buffer
+		addSample(intMs, 1);
+		
+		// look back at previous samples to process	
+		var previousIntMs = getSample(mSampleProc-1);
+		var currentIntMs = getSample(mSampleProc);
+				
+		// add and shift avg buffer and II store
+		addAverage( newAvg, currentIntMs[0]);	
+				
+		// Now we can threshold
+		// what type is current sample?
+		var c_mFlag = SAMP_OK;
+		
+		// test against over threshold. Note these are % but factional ie < 1
+		// Could do x100 here
+				
+		var mDiff = (currentIntMs[0].toFloat() - newAvg);
+		if (mDiff > mLongMax) { mLongMax = mDiff;}
+		
+		if (mDiff < 0 && mDiff.abs() > mShortMax) { mShortMax = mDiff.abs();}
+		
+		var mDelta = mDiff / newAvg;
+		if (mDelta >= 0) {
+			if (mDelta > gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
+			if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
 		} 
+		else {
+			var mDa = mDelta.abs();
+			if (mDa > gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
+			if (mDa > mpShortMax ) { mpShortMax = mDa;}				
+		}
 		
-		//Sys.println("Should only get here on 5 or more");
-		
-		// now should have pipeline of averages and values of II
-		
-		// if n >= filter length AND not (StartThresholding)
-		//		StartThresholding = true
-		//		Add sample
-		//		Work out average of previous 5 samples
-		// else
-		// 		Add sample??
-		//		Test against threshold
-		//		Set status of sample
-		//		check this and last sample against status combinations and take action
-		//		if not OK then rtn else ???
-		
-		// last two sample values should be in buffer
-		// need to increment counts of ectopic beats
-
-		// will only get here if more than 5 samples arrived
-		if (!mStartThreshold) {
-			mStartThreshold = true; 
-			//Sys.println("Start Thresholding next sample: "+mSampleIndex+", vRunningAvg="+vRunningAvg);
-			fNormalCase(vRunningAvg, previousIntMs[0], intMs, mSampleIndex, livePulse, SAMP_OK);
-		} else {
-			// fall through here on 7th sample
+		// need to remember to update flag and do stats if needed 
+		Sys.println("SampleProc: "+mSampleProc+", delta %, L : "+mpLongMax+", "+mLongMax+": %,S : "+mpShortMax+", "+mShortMax); 
 			
-			// 		Add sample??
-			//		Test against threshold
-			//		Set status of sample
-			//		check this and last sample against status combinations and take action
-			//		if not OK then rtn else ???
-			
-			// what type is current sample?
-			var c_mFlag = SAMP_OK;
-			
-			// test against over threshold. Note these are % but factional ie < 1
-			// Could do x100 here
-			var mDiff = (intMs.toFloat() - vRunningAvg);
-			if (mDiff > mLongMax) { mLongMax = mDiff;}
-			
-			if (mDiff < 0 && mDiff.abs() > mShortMax) { mShortMax = mDiff.abs();}
-			
-			var mDelta = mDiff / vRunningAvg;
-			if (mDelta >= 0) {
-				if (mDelta > gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
-				if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
-			} 
-			else {
-				var mDa = mDelta.abs();
-				if (mDa > gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
-				if (mDa > mpShortMax ) { mpShortMax = mDa;}				
-			}
-			
-			//Sys.println(" delta %, L : "+mpLongMax+", "+mLongMax+": %,S : "+mpShortMax+", "+mShortMax); 
-				
-			// status combinations and action
-			// OK, OK -> add latest sample to stats
-			// OK S -> wait
-			// OK L -> wait
-			// L S -> inc ectopic, missed beat
-			// L L -> inc, heart slowing down?
-			// S L -> inc, double beat
-			// S S -> inc, ??? maybe change of rate up	
-			//Sys.println("SampleProc: Sample# "+mSampleIndex+", mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+
-			//	" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
-			
-			
-			if 	( (c_mFlag == SAMP_OK) && 
-					(
-				    	( previousIntMs[1] == SAMP_OK ) || ( previousIntMs[1] == SAMP_L ) || ( previousIntMs[1] == SAMP_S ) 
-				  	)    
-				) {
-				fNormalCase(vRunningAvg, previousIntMs[0], intMs, mSampleIndex, livePulse, SAMP_OK);
-			} 
-			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_S) {
-				vShortBeatCnt++;
-				vEBeatFlag = vEBeatFlag | 0x1;
-				//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
-				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
-				// add sample to II store
-				addSample(intMs, 1, SAMP_S); 
-				// add and shift avg buffer and II store
-				addAverage( vRunningAvg, intMs);	
-			} 
-			else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_L) {
-				vLongBeatCnt++;
-				vEBeatFlag = vEBeatFlag | 0x2;
-				//Sys.println("SampleProcessing: LONG BEAT FOUND");	
-				// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
-				// add sample to II store
-				addSample(intMs, 1, SAMP_L); 
-				// add and shift avg buffer and II store
-				addAverage( vRunningAvg, intMs);			
-			}
-			else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_S) {
-				vShortBeatCnt++;
-				vEBeatFlag = vEBeatFlag | 0x5;
-				// inc missed beat, no stats update, save current avg and II to avgstore
-				addSample(intMs, 1, SAMP_SL); 
-				// add and shift avg buffer and II store
-				addAverage( vRunningAvg, intMs);
-				vEBeatCnt++;	
-				//Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");		
-			}
-			else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_L) {
-				vLongBeatCnt++;
-				vEBeatFlag = vEBeatFlag | 0x6;
-				// inc missed beat, no stats update, save current avg and II to avgstore
-				addSample(intMs, 1, SAMP_LS); 
-				// add and shift avg buffer and II store
-				addAverage( vRunningAvg, intMs);
-				vEBeatCnt++;
+		// status combinations and action
+		// OK, OK -> add latest sample to stats
+		// OK S -> wait
+		// OK L -> wait
+		// L S -> inc ectopic, missed beat
+		// L L -> inc, heart slowing down?
+		// S L -> inc, double beat
+		// S S -> inc, ??? maybe change of rate up	
+		//Sys.println("SampleProc: Sample# "+mSampleIndex+", mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+
+		//	" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
 					
-				//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");
-			}
-			else if ( ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_L) || 
-					  ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S) ) 	 {
-				// heart rate is possibly slowing down or increasing as consecutive change in direction
-				// ideally would redoo avg and stats with previous sample
-				fNormalCase(vRunningAvg, previousIntMs[0], intMs, mSampleIndex, livePulse, c_mFlag); 					
-			//}
-			//else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S)	{
-			//	addSample(intMs, 1, SAMP_S); 
-			//	//Sys.println("SampleProc: UNHANDLED BEAT CASE -  SS!!!!");							
-			} else {
-				addSample(intMs, 1, SAMP_OK); 
-				//Sys.println("SampleProc: UNHANDLED BEAT CASE -- ?!!!!");				
-			}
-		
-		} // end thresholding process
+		if 	( (c_mFlag == SAMP_OK) && 
+				(
+			    	( previousIntMs[1] == SAMP_OK ) || ( previousIntMs[1] == SAMP_L ) || ( previousIntMs[1] == SAMP_S ) 
+			  	)    
+			) {
+			fNormalCase(newAvg, previousIntMs[0], currentIntMs[0], livePulse, SAMP_OK); // flag and stats
+		} 
+		else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_S) {
+			vShortBeatCnt++;
+			vEBeatFlag = vEBeatFlag | 0x1;
+			//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
+			// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+			addFlagProc(SAMP_S); 
+		} 
+		else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_L) {
+			vLongBeatCnt++;
+			vEBeatFlag = vEBeatFlag | 0x2;
+			//Sys.println("SampleProcessing: LONG BEAT FOUND");	
+			// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+			addFlagProc(SAMP_L);		
+		}
+		else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_S) {
+			vShortBeatCnt++;
+			vEBeatFlag = vEBeatFlag | 0x5;
+			// inc missed beat, no stats update, save current avg and II to avgstore
+			addFlagProc(SAMP_SL);
+			vEBeatCnt++;	
+			//Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");		
+		}
+		else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_L) {
+			vLongBeatCnt++;
+			vEBeatFlag = vEBeatFlag | 0x6;
+			// inc missed beat, no stats update, save current avg and II to avgstore
+			addFlagProc( SAMP_LS);
+			vEBeatCnt++;
 				
+			//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");
+		}
+		else if ( ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_L) || 
+				  ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S) ) 	 {
+			// heart rate is possibly slowing down or increasing as consecutive change in direction
+			// ideally would redoo avg and stats with previous sample
+			fNormalCase(newAvg, previousIntMs[0], currentIntMs[0], livePulse, c_mFlag); 					
+		//}
+		//else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S)	{
+		//	addSample(intMs, 1, SAMP_S); 
+		//	//Sys.println("SampleProc: UNHANDLED BEAT CASE -  SS!!!!");							
+		} else {
+			addFlagProc( SAMP_OK);
+			Sys.println("SampleProc: UNHANDLED BEAT CASE -- ?!!!!");				
+		}
+	
+		// end thresholding process
+			
 		//Sys.println("Sample end: new avgStore: "+aAvgStore+" aIIValue = "+aIIValue);
 
 	// end new rawSampleProcessing
@@ -726,5 +716,3 @@ class SampleProcessing {
 	}
 
 }
-
-
