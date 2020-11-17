@@ -45,6 +45,11 @@ Future ..
 		
 24. When CIQ 3.2.x out on devices can check for optical v strap
 
+25. Move to new ectopic beat processing
+	- Update threshold to 0.15 as default in settings and storage module
+	- Keep old version disabled via jungle
+	
+
 DONE
 5. Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
