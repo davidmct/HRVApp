@@ -10,14 +10,13 @@ using Toybox.Time.Gregorian;
 
 // Things still to fix
 // Check old textArea code has right font size in Current and test views
-//8. sample processing check skipped or double beats
 //8b. Look at frequency domain processing
 //9. Trial mode currently disabled
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-
-
+// 0.5.5
+// New algorithm for threshold detection using forward and backward average make group delay 0
 
 //0.4.7 
 // Added plot of beats over last N sammples

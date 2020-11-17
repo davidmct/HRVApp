@@ -543,8 +543,10 @@ class SampleProcessing {
 			if (mDa > mpShortMax ) { mpShortMax = mDa;}				
 		}
 		
+		//Sys.println("SampleProc: "+mSampleProc+", mDiff="+mDiff+", mDelta (frac)="+mDelta);
+		
 		// need to remember to update flag and do stats if needed 
-		Sys.println("SampleProc: "+mSampleProc+", delta %, L : "+mpLongMax+", "+mLongMax+": %,S : "+mpShortMax+", "+mShortMax); 
+		//Sys.println("SampleProc: "+mSampleProc+", delta %, L : "+mpLongMax+", "+mLongMax+": %,S : "+mpShortMax+", "+mShortMax); 
 			
 		// status combinations and action
 		// OK, OK -> add latest sample to stats
