@@ -435,8 +435,8 @@ class SampleProcessing {
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		//Sys.println("v0.5.5 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
 		var newAvg;
-		
-		$.DebugMsg( true, livePulse);
+
+		$.DebugMsg( true, "["+livePulse+","+intMs+","+beatsInGap+"]");
 		
 		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0) || (beatsInGap == null)) {
@@ -448,7 +448,7 @@ class SampleProcessing {
 		}
 						
 		// Given ANT sensor only provides one interval then we should probably ignore this sample
-		if (beatsInGap != null && beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
+		if (beatsInGap != 1) {$.DebugMsg( true, "C-"+mSampleIndex+"B:"+beatsInGap+" t:"+intMs);}
 				
 		// Sample #n arrived
 		
@@ -569,6 +569,91 @@ class SampleProcessing {
 		//	" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
 		
 		var mFlagToSet = SAMP_OK;
+		
+		// We can have SL, LS as a previous flag state. 0.5.5 missed this rare event and caught in error message
+		
+		switch (previousIntMs[1]) {
+			case SAMP_OK:
+				if (c_mFlag == SAMP_OK) {
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);
+				} 
+				else if (c_mFlag == SAMP_S) {
+					vShortBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x1;
+					//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
+					// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+					mFlagToSet = c_mFlag; //SAMP_S; 			
+				}
+				else if (c_mFlag == SAMP_L) {
+					vLongBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x2;
+					//Sys.println("SampleProcessing: LONG BEAT FOUND");	
+					// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
+					mFlagToSet = c_mFlag; //SAMP_L;									
+				}			
+			break;
+			case SAMP_L:
+				if (c_mFlag == SAMP_OK) {
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);
+				} 
+				else if (c_mFlag == SAMP_S) {
+					vShortBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x5;
+					// inc missed beat, no stats update, save current avg and II to avgstore
+					mFlagToSet = SAMP_SL;
+					vEBeatCnt++;	
+					//Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");				
+				}
+				else if (c_mFlag == SAMP_L) { // LL maybe shouldn't update stats
+					// heart rate is possibly slowing down or increasing as consecutive change in direction	
+					mFlagToSet = c_mFlag;
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);									
+				}				
+			break;		
+			case SAMP_S:
+				if (c_mFlag == SAMP_OK) {
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);
+				} 
+				else if (c_mFlag == SAMP_S) { // SS maybe shouldn't update stats
+					// heart rate is possibly slowing down or increasing as consecutive change in direction	
+					mFlagToSet = c_mFlag;
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);					
+				}
+				else if (c_mFlag == SAMP_L) {
+					vLongBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x6;
+					// inc missed beat, no stats update, save current avg and II to avgstore
+					mFlagToSet = SAMP_LS;
+					vEBeatCnt++;
+						
+					//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");								
+				}				
+			break;		
+			case SAMP_LS: // short followed by long previously
+			case SAMP_SL: // long followed by short
+				// not sure how to handle sequence of 3 samples over thresholds
+				updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);				
+				// cases are OK, L and S
+				mFlagToSet = c_mFlag;			
+			break;
+			default:
+				Sys.println("SampleProc: UNHANDLED BEAT CASE -- flags prev:"+previousIntMs[1]+" current:"+c_mFlag);
+			break;
+		} // end switch previous		
+		
+		// set flag and inc ptr
+		addFlagProc(mFlagToSet);
+	
+		// end thresholding process
+			
+		//Sys.println("Sample end: new avgStore: "+aAvgStore+" aIIValue = "+aIIValue);
+
+	// end new rawSampleProcessing
+	}	
+
+(:discard)
+	function dummy() {
+		// OLD CODE OLD CODE	 
 					
 		if 	( (c_mFlag == SAMP_OK) && 
 				(
@@ -620,20 +705,12 @@ class SampleProcessing {
 		//	//Sys.println("SampleProc: UNHANDLED BEAT CASE -  SS!!!!");							
 		} else {
 			mFlagToSet = SAMP_OK;
-			Sys.println("SampleProc: UNHANDLED BEAT CASE -- ?!!!!");				
-		}
-		
-		// set flag and inc ptr
-		addFlagProc(mFlagToSet);
-	
-		// end thresholding process
+			// we have previous flag as LS or SL
+			Sys.println("SampleProc: UNHANDLED BEAT CASE -- flags prev:"+previousIntMs[1]+" current:"+c_mFlag);
 			
-		//Sys.println("Sample end: new avgStore: "+aAvgStore+" aIIValue = "+aIIValue);
-
-	// end new rawSampleProcessing
-	}	
-
-
+		}	
+	}
+	
 	// passed an array [sample, A_k, A_k1, Q_k, Q_k1] 
 	//					[0, 	1, 	   2,   3,    4]
 	// must start at dataCount = 1 otherwise large offset in calc!
