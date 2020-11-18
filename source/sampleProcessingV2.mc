@@ -404,6 +404,7 @@ class SampleProcessing {
     	
     } // end function fCalcAvgValues()
 
+(:discard)
 	function fNormalCase( _vAvg, _previousIntMs, _intMs, _livePulse, _mFlag) {
 		// add sample to II and stats, update running avg add this and II to avg buffers		
 		// flag corresponds to _mSampleProc value	
@@ -433,9 +434,12 @@ class SampleProcessing {
 			
 	function rawSampleProcessing (isTesting, livePulse, intMs, beatsInGap ) {
 		//Sys.println("v0.5.5 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
+		var newAvg;
+		
+		$.DebugMsg( true, livePulse);
 		
 		// Only update hrv data if testing started, & values look to be error free	
-		if ((!isTesting) || (livePulse == 0)) {
+		if ((!isTesting) || (livePulse == 0) || (beatsInGap == null)) {
 			// Don't capture data if not testing OR
 			// livePulse== 0 could happen on first loop - avoids divide by 0
 			// If we still have an interval could create BPM from that...
@@ -508,10 +512,15 @@ class SampleProcessing {
 			addAverage( (mSP0[0]+mSP1[0]+mSP2[0])/3, mSP2[0]);
 		}
 		
-		// Now main handling of samples
-		var newAvg = mFilter7( mSampleProc, intMs);
-		// always add sample to II buffer
-		addSample(intMs, 1);
+		if ( maxMs > intMs && minMs < intMs) { 				
+			// Now main handling of samples
+			newAvg = mFilter7( mSampleProc, intMs);
+			// always add sample to II buffer
+			addSample(intMs, 1);
+		} else {
+			Sys.println(" Sample out of nominal range: "+intMs+" at index:"+mSampleIndex);
+			return;		
+		}
 		
 		// look back at previous samples to process	
 		var previousIntMs = getSample(mSampleProc-1);
@@ -558,33 +567,35 @@ class SampleProcessing {
 		// S S -> inc, ??? maybe change of rate up	
 		//Sys.println("SampleProc: Sample# "+mSampleIndex+", mDelta :"+format("$1$%",[(100*mDelta).format("%d")])+
 		//	" flags old and new: "+previousIntMs[1]+", "+c_mFlag+" avg="+vRunningAvg);
+		
+		var mFlagToSet = SAMP_OK;
 					
 		if 	( (c_mFlag == SAMP_OK) && 
 				(
 			    	( previousIntMs[1] == SAMP_OK ) || ( previousIntMs[1] == SAMP_L ) || ( previousIntMs[1] == SAMP_S ) 
 			  	)    
 			) {
-			fNormalCase(newAvg, previousIntMs[0], currentIntMs[0], livePulse, SAMP_OK); // flag and stats
+			updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);
 		} 
 		else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_S) {
 			vShortBeatCnt++;
 			vEBeatFlag = vEBeatFlag | 0x1;
 			//Sys.println("SampleProcessing: SHORT BEAT FOUND");	
 			// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
-			addFlagProc(SAMP_S); 
+			mFlagToSet = SAMP_S; 
 		} 
 		else if ( previousIntMs[1] == SAMP_OK && c_mFlag == SAMP_L) {
 			vLongBeatCnt++;
 			vEBeatFlag = vEBeatFlag | 0x2;
 			//Sys.println("SampleProcessing: LONG BEAT FOUND");	
 			// wait for next sample and don't update running avg, save current avg and II into avgstore, add II to main buffer
-			addFlagProc(SAMP_L);		
+			mFlagToSet = SAMP_L;		
 		}
 		else if ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_S) {
 			vShortBeatCnt++;
 			vEBeatFlag = vEBeatFlag | 0x5;
 			// inc missed beat, no stats update, save current avg and II to avgstore
-			addFlagProc(SAMP_SL);
+			mFlagToSet = SAMP_SL;
 			vEBeatCnt++;	
 			//Sys.println("SampleProcessing: SHORT and ECTOPIC BEAT FOUND");		
 		}
@@ -592,7 +603,7 @@ class SampleProcessing {
 			vLongBeatCnt++;
 			vEBeatFlag = vEBeatFlag | 0x6;
 			// inc missed beat, no stats update, save current avg and II to avgstore
-			addFlagProc( SAMP_LS);
+			mFlagToSet = SAMP_LS;
 			vEBeatCnt++;
 				
 			//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");
@@ -600,16 +611,20 @@ class SampleProcessing {
 		else if ( ( previousIntMs[1] == SAMP_L && c_mFlag == SAMP_L) || 
 				  ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S) ) 	 {
 			// heart rate is possibly slowing down or increasing as consecutive change in direction
-			// ideally would redoo avg and stats with previous sample
-			fNormalCase(newAvg, previousIntMs[0], currentIntMs[0], livePulse, c_mFlag); 					
+			// ideally would redoo avg and stats with previous sample	
+			mFlagToSet = c_mFlag;
+			updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);				
 		//}
 		//else if ( previousIntMs[1] == SAMP_S && c_mFlag == SAMP_S)	{
 		//	addSample(intMs, 1, SAMP_S); 
 		//	//Sys.println("SampleProc: UNHANDLED BEAT CASE -  SS!!!!");							
 		} else {
-			addFlagProc( SAMP_OK);
+			mFlagToSet = SAMP_OK;
 			Sys.println("SampleProc: UNHANDLED BEAT CASE -- ?!!!!");				
 		}
+		
+		// set flag and inc ptr
+		addFlagProc(mFlagToSet);
 	
 		// end thresholding process
 			
