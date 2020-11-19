@@ -327,6 +327,8 @@ class BeatView extends Ui.View {
 		dc.drawText( leftX+5, mColHeight+mColStart, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 		
+		dc.drawText( leftX-3, ctrY-mColHeight/4, mLabelFont, "avg", Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );	
+		
 		dc.setPenWidth(3);
 				
 		for ( var i = 0; i < mSampleNum; i++) {

@@ -27,14 +27,16 @@
     <fitField id="8" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
       sortOrder="8" precision="1" chartTitle="@Strings.lpNN20CT" 
       dataLabel="@Strings.lpNN20" unitLabel="@Strings.lPercentUnits" fillColor="#AA00FF" />       
-     <fitField id="9" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
+<!-- 
+    <fitField id="9" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
       sortOrder="9" precision="1" chartTitle="@Strings.lLongT" 
       dataLabel="@Strings.lLong" unitLabel="@Strings.lNoUnits" fillColor="#AA00FF" />  
     <fitField id="10" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
       sortOrder="10" precision="1" chartTitle="@Strings.lShortT" 
-      dataLabel="@Strings.lShort" unitLabel="@Strings.lNoUnits" fillColor="#AA00FF" />    
+      dataLabel="@Strings.lShort" unitLabel="@Strings.lNoUnits" fillColor="#AA00FF" />  
+-->  
     <fitField id="11" displayInChart="true" displayInActivityLaps="false" displayInActivitySummary="false"
-      sortOrder="11" precision="1" chartTitle="@Strings.lET" 
+      sortOrder="11" precision="0" chartTitle="@Strings.lET" 
       dataLabel="@Strings.lE" unitLabel="@Strings.lNoUnits" fillColor="#AA00FF" />           
         
     <fitField id="20" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"

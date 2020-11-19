@@ -54,8 +54,8 @@ class HRVFitContributor {
 	hidden var mRecordmpNN50_Field; 
 	hidden var mRecordmNN20_Field;
 	hidden var mRecordmpNN20_Field;
-	hidden var mRecordLONG_Field;
-	hidden var mRecordSHORT_Field;
+	//hidden var mRecordLONG_Field;
+	//hidden var mRecordSHORT_Field;
 	hidden var mRecordECTOPIC_Field;
 
     // Constructor ... 
@@ -77,9 +77,10 @@ class HRVFitContributor {
        	mRecordmpNN50_Field = mSession.createField("pNN50", 6, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
        	mRecordmNN20_Field = mSession.createField("NN20", 7, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
 		mRecordmpNN20_Field = mSession.createField("pNN20", 8, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
-       	mRecordLONG_Field = mSession.createField("Long", 9, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-       	mRecordSHORT_Field = mSession.createField("Short", 10, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-       	mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	//mRecordLONG_Field = mSession.createField("Long", 9, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	//mRecordSHORT_Field = mSession.createField("Short", 10, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	//mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        			
         mSessionAvgPulse_Field = mSession.createField("AvgPulse", 20, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });		
  	   	//mSessionMinIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
@@ -128,9 +129,10 @@ class HRVFitContributor {
 		mRecordmpNN50_Field.setData(0.0); 
 		mRecordmNN20_Field.setData(0);
 		mRecordmpNN20_Field.setData(0.0);
-		mRecordLONG_Field.setData(0.0);
-		mRecordSHORT_Field.setData(0.0);
-		mRecordECTOPIC_Field.setData(0.0);
+		//mRecordLONG_Field.setData(0.0);
+		//mRecordSHORT_Field.setData(0.0);
+		//mRecordECTOPIC_Field.setData(0.0);
+		mRecordECTOPIC_Field.setData(0);
     }
     
 	function createSession() {
@@ -234,9 +236,12 @@ class HRVFitContributor {
 		mRecordmpNN50_Field.setData(gg.mSampleProc.mpNN50); 
 		mRecordmNN20_Field.setData(gg.mSampleProc.mNN20);
 		mRecordmpNN20_Field.setData(gg.mSampleProc.mpNN20);	
-		mRecordLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
-		mRecordSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
-		mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
+		//mRecordLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
+		//mRecordSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
+		//mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
+		mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatFlag);
+		// reset for next sample
+		gg.mSampleProc.vEBeatFlag = 0;
 	}
 	
 	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
