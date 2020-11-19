@@ -59,8 +59,8 @@ class HRVStorageHandler {
 		
 		//0.4.6
 		gg.Properties.setValue("pNumberBeatsGraph", 10);	
-		gg.Properties.setValue("pLongThresholdIndex", 0.2); // nominal
-		gg.Properties.setValue("pShortThresholdIndex", 0.2); // nominal	
+		gg.Properties.setValue("pLongThresholdIndex", 0.15); // nominal
+		gg.Properties.setValue("pShortThresholdIndex", 0.15); // nominal	
 	
 	}
 
@@ -92,8 +92,8 @@ class HRVStorageHandler {
 		
 		//0.4.6
 		gg.setProperty("pNumberBeatsGraph", 10);	
-		gg.setProperty("pLongThresholdIndex", 0.2); // nominal
-		gg.setProperty("pShortThresholdIndex", 0.2); // nominal	
+		gg.setProperty("pLongThresholdIndex", 0.15); // nominal
+		gg.setProperty("pShortThresholdIndex", 0.15); // nominal	
 	
 	}
 	
