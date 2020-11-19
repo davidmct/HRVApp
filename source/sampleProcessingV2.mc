@@ -436,7 +436,7 @@ class SampleProcessing {
 		//Sys.println("v0.5.5 rawSampleProcessing called. mSampleIndex is = "+mSampleIndex);
 		var newAvg;
 
-		$.DebugMsg( true, "["+livePulse+","+intMs+","+beatsInGap+"]");
+		//$.DebugMsg( true, "["+livePulse+","+intMs+","+beatsInGap+"]");
 		
 		// Only update hrv data if testing started, & values look to be error free	
 		if ((!isTesting) || (livePulse == 0) || (beatsInGap == null)) {
@@ -543,12 +543,12 @@ class SampleProcessing {
 		
 		var mDelta = mDiff / newAvg;
 		if (mDelta >= 0) {
-			if (mDelta > gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
+			if (mDelta >= gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
 			if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
 		} 
 		else {
 			var mDa = mDelta.abs();
-			if (mDa > gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
+			if (mDa >= gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
 			if (mDa > mpShortMax ) { mpShortMax = mDa;}				
 		}
 		
