@@ -419,14 +419,14 @@ class SampleProcessing {
 	
 	// filter of length 7 around _mSampleProc including latest intMs
 	function mFilter7( _mSampleProc, _intMs) {
-		var i = _mSampleProc - 3;
+		//var i = _mSampleProc - 3;
 		var mSum = 0;
 		var mII;
-		for (var j = 0; j<6; j++) {
+		for (var j = _mSampleProc - 3; j < _mSampleProc + 3; j++) {
 			// clear flag just in case
-			mII = getSample(i);
+			mII = getSample(j);
 			mSum += mII[0] & 0x0FFF;
-			i++;		
+			//i++;		
 		}
 		mSum += _intMs;
 		return  mSum.toFloat() / 7.0;
@@ -624,16 +624,22 @@ class SampleProcessing {
 					vEBeatFlag = vEBeatFlag | 0x6;
 					// inc missed beat, no stats update, save current avg and II to avgstore
 					mFlagToSet = SAMP_LS;
-					vEBeatCnt++;
-						
+					vEBeatCnt++;						
 					//Sys.println("SampleProcessing: Long and ECTOPIC BEAT FOUND");								
 				}				
 			break;		
 			case SAMP_LS: // short followed by long previously
 			case SAMP_SL: // long followed by short
 				// not sure how to handle sequence of 3 samples over thresholds
-				updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);				
-				// cases are OK, L and S
+				if (c_mFlag == SAMP_OK) {				
+					updateRunningStats( previousIntMs[0], currentIntMs[0], livePulse);		
+				} else if (c_mFlag == SAMP_L) {
+					vLongBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x6;				
+				} else {
+					vShortBeatCnt++;
+					vEBeatFlag = vEBeatFlag | 0x5;				
+				}
 				mFlagToSet = c_mFlag;			
 			break;
 			default:
