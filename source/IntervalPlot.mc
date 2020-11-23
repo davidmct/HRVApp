@@ -157,7 +157,10 @@ class IntervalView extends Ui.View {
     	
      	// check we have enough samples   	   			
 		// need two entries before we start!
-		if ( mNumberEntries < 2) { return true;}
+		if ( mNumberEntries < 2) { 
+    		dc.drawText( ctrX, ctrY, mTitleFont, "No data yet", mJust);  
+    		return true;
+    	}
     	
     	// where to read buffer from
     	var mStartIndex = null;
