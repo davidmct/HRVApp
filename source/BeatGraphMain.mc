@@ -80,7 +80,7 @@ class BeatView extends Ui.View {
 	
 	function onLayout(dc) {
 		
-		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
+		var a = Ui.loadResource(Rez.Strings.BeatGridWidth);
 		cGridWith = a.toNumber();
 		a = null;
 		
