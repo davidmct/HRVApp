@@ -275,7 +275,7 @@ class SampleProcessing {
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
-		if ( mSampleIndex > gg.mIntervalSampleBuffer.size()) {
+		if ( mSampleIndex > gg.mIntervalSampleBuffer.size()-1) {
 			new gg.myException("Buffer limit reached in sample Processing");
 		}
 		gg.mIntervalSampleBuffer[mSampleIndex] = intervalMs; // | (mFlag << 12);	
