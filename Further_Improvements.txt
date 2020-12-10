@@ -23,7 +23,7 @@ Future ..
 7. On interval buffer full force escape and save of buffer menu. Needs to stop testing etc see HRDelegate
 
 8. Memory optimisations 
-	- cache global access eg xx= $; xx.varX = 9; is cheaper than $.varX
+	- cache global access eg xx= $; xx.varX = 9; is cheaper than $.varX -- worked well
 	- Disallow menu's when testing to save memory
 	- Shorten strings - watch search / replace does all workspace not just project
 	- Set variables to null when finished 
@@ -36,7 +36,8 @@ Future ..
 	Challenge is grid varies on view being used (could make new variables) and DC not available (however is fixed by type of device which we know
 	
 17. Show entire II range and marked II L,S,E and average as calculated? - only ~ every 10 samples per point OR show E area in centre of +-50 beats?
-23. Could use statis in a class to set layout default params.
+
+23. Could use statics in a class to set layout default params.
 			class baseLayout () {
 				static var1: ...
 				
@@ -45,12 +46,26 @@ Future ..
 		
 24. When CIQ 3.2.x out on devices can check for optical v strap
 
+
+
+27. New version of app as glance/widget
+- Measures rMSSD and SDNN for less than 2 mins (Garmin times out)
+- saves a 3 month history for analysis
+- Use connected strap only not external
+- provide summary guidance/state based on how HRV changed over N days (inc saying not enough measurements)
+- Saves all results not just todays latest
+- Reduced configurability
+- No FIT write (at start at least)
+
+DONE
+26. minor tweaks
+- Add text to II and Beat plots if not enough data yet. Also label bottom of beats chart
+- Is history label correct? looks like newest sample is on left of chart
+
 25. Move to new ectopic beat processing
 	- Update threshold to 0.15 as default in settings and storage module
 	- Keep old version disabled via jungle
 	
-
-DONE
 5. Another graph (DONE) - could modify to do #2 or #1
 	Maybe should create a class to do this more generically!!
 	Plot X as interval number segment [n..m] with m being current

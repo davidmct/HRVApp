@@ -80,7 +80,7 @@ class BeatView extends Ui.View {
 	
 	function onLayout(dc) {
 		
-		var a = Ui.loadResource(Rez.Strings.PoincareGridWidth);
+		var a = Ui.loadResource(Rez.Strings.BeatGridWidth);
 		cGridWith = a.toNumber();
 		a = null;
 		
@@ -144,7 +144,9 @@ class BeatView extends Ui.View {
     	var a = new[2];
    	
 		// if no sample processing then exit 
-    	if ($._mApp.mSampleProc == null ) { return true;}
+    	if ($._mApp.mSampleProc == null ) { 	
+    		return true;
+    	}
     	
     	// reduce entries by 1 as points to next free slot    	
 		var mNumberEntries = $._mApp.mSampleProc.getNumberOfSamples();
@@ -154,7 +156,10 @@ class BeatView extends Ui.View {
     	
      	// check we have enough samples   	   			
 		// need two entries before we start!
-		if ( mNumberEntries < 2) { return true;}
+		if ( mNumberEntries < 2) { 
+    		dc.drawText( ctrX, ctrY, mTitleFont, "No data yet", mJust);  
+    		return true;
+    	}
     	
     	if ( mNumberEntries <= $._mApp.mNumberBeatsGraph) {
     		mSampleNum = mNumberEntries-1;
@@ -327,7 +332,8 @@ class BeatView extends Ui.View {
 		dc.drawText( leftX+5, mColHeight+mColStart, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 		
-		dc.drawText( leftX-3, ctrY-mColHeight/4, mLabelFont, "avg", Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );	
+		dc.drawText( leftX-3, ctrY-mColHeight/4, mLabelFont, "Avg", Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );	
+		dc.drawText( ctrX+15, floorY+5, mLabelFont, "percent diff", Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );	
 		
 		dc.setPenWidth(3);
 				
