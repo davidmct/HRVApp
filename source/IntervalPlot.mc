@@ -102,9 +102,19 @@ class IntervalView extends Ui.View {
 		
 		// RANGE CHECK restingHeart rate and zone 1 to make sure sensible		
 		//mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
-		mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR * 0.95)).toNumber());
+		var mTemp = 60000;
+		if (restingHR == null) {
+			mRestingHR_II = SLOW_II;
+		} else if (restingHR == 0) {
+			mRestingHR_II = SLOW_II;
+		} else {
+			mRestingHR_II = (mTemp.toFloat() / (restingHR.toFloat() * 0.95)).toNumber();
+		}
+		
+		//mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR.toFloat() * 0.95)).toNumber());
+		
 		if (zones != null && zones[1] != null) {
-			mZone1TopHR_II = (60000 / (zones[1] * 1.05)).toNumber();
+			mZone1TopHR_II = (mTemp.toFloat() / (zones[1] * 1.05)).toNumber();
 		} else {		
 			mZone1TopHR_II = FAST_II;
 		}
@@ -112,6 +122,7 @@ class IntervalView extends Ui.View {
 		//profile = null;
 		restingHR = null;
 		zones = null;
+		mTemp = null;
 				
 		Sys.println("Floor HR ms = "+mRestingHR_II+" BPM: "+60000/mRestingHR_II);
 		Sys.println("Top HR ms = "+mZone1TopHR_II+" BPM: "+60000/mZone1TopHR_II);
