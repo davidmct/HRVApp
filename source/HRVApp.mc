@@ -169,6 +169,9 @@ class HRVAnalysis extends App.AppBase {
 	//0.4.6
 	var mNumberBeatsGraph;
 	
+	//0.6.0
+	var mLogScale = LOG_SCALE;
+	
 	var mMenuTitleSize;
 	var mDeviceID;
 

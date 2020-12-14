@@ -95,6 +95,9 @@
 	<string id="ShortThresholdT">Short Pulse Threshold</string> 
 	<string id="ThresholdP">Select Threshold</string> 
 	<string id="ThresholdErrorT">Range 0.1-0.4</string>
+	<string id="LogT">Ln(RMSSD) scale</string> 
+	<string id="LogP">Select scale factor</string> 
+	<string id="LogErrorT">Range 1.0-50.0</string>
 <!-- 
 	<string id="VTIGHT">Very tight</string> 
 	<string id="TIGHT">Tight</string> 
