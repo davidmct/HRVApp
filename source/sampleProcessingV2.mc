@@ -190,6 +190,8 @@ class SampleProcessing {
 		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();
+		
+		Sys.println("ln(rMSSD) scale factor is "+gg.mLogScale);
 	}
 	
 	function resetSampleBuffer() { 
