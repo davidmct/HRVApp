@@ -43,5 +43,5 @@
 	<property id="pLongThresholdIndex"  type="float">0.15</property>
 	<property id="pShortThresholdIndex" type="float">0.15</property>
 	<property id="pLogScale" type="float">50.0</property>
-	<property id="pPaypalRef" type="string">PayPal.me/hrvapp</property>
+	<property id="pPaypalRef" type="string">https://www.paypal.com/paypalme/hrvapp</property>
 </properties>

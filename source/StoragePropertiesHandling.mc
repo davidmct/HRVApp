@@ -64,6 +64,8 @@ class HRVStorageHandler {
 		
 		//0.6.0
 		gg.Properties.setValue("pLogScale", 50.0);
+		
+		gg.Properties.setValue("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	}
 
 (:preCIQ24)	
@@ -99,6 +101,7 @@ class HRVStorageHandler {
 		
 		//0.6.0
 		gg.setProperty("pLogScale", 50.0);
+		gg.setProperty("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	
 	}
 	
