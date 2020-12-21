@@ -3,6 +3,7 @@
     <string id="Device">3</string>
     <string id="MenuTitleSize">2</string>
     <string id="PoincareGridWidth">160</string>
+    <string id="BeatGridWidth">140</string>
     <string id="HistoryGridWidth">140</string>
     <string id="HistoryGridHeight">100</string>
 </resources>
