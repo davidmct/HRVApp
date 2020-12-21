@@ -61,7 +61,11 @@ class HRVStorageHandler {
 		gg.Properties.setValue("pNumberBeatsGraph", 10);	
 		gg.Properties.setValue("pLongThresholdIndex", 0.15); // nominal
 		gg.Properties.setValue("pShortThresholdIndex", 0.15); // nominal	
-	
+		
+		//0.6.0
+		gg.Properties.setValue("pLogScale", 50.0);
+		
+		gg.Properties.setValue("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	}
 
 (:preCIQ24)	
@@ -94,6 +98,10 @@ class HRVStorageHandler {
 		gg.setProperty("pNumberBeatsGraph", 10);	
 		gg.setProperty("pLongThresholdIndex", 0.15); // nominal
 		gg.setProperty("pShortThresholdIndex", 0.15); // nominal	
+		
+		//0.6.0
+		gg.setProperty("pLogScale", 50.0);
+		gg.setProperty("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	
 	}
 	
@@ -221,7 +229,7 @@ class HRVStorageHandler {
 		Sys.println("loadIntervalsFromStore() called");
 		
 		try {
-			if (Toybox.Application has :Storage) {	
+			if (Toybox.Application has :Storage) {				
 				gg.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
 				gg.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
 				gg.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
@@ -302,6 +310,9 @@ class HRVStorageHandler {
 		//gg.vLowerThresholdSet = mShortThresholdMap[index];	
 		gg.vUpperThresholdSet = gg.getProperty("pLongThresholdIndex").toFloat();
 		gg.vLowerThresholdSet = gg.getProperty("pShortThresholdIndex").toFloat();
+		
+		//0.6.0
+		gg.mLogScale = gg.getProperty("pLogScale").toFloat();
 	}
 
 (:storageMethod)	
@@ -351,6 +362,9 @@ class HRVStorageHandler {
 			//gg.vLowerThresholdSet = mShortThresholdMap[index];	
 		gg.vUpperThresholdSet = gg.getProperty("pLongThresholdIndex").toFloat();
 		gg.vLowerThresholdSet = gg.getProperty("pShortThresholdIndex").toFloat();
+		
+		//0.6.0
+		gg.mLogScale = gg.getProperty("pLogScale").toFloat();
 	}
 
 (:discard)	
@@ -435,6 +449,9 @@ class HRVStorageHandler {
 		
 		gg.Properties.setValue("pLongThresholdIndex", gg.vUpperThresholdSet );		
 		gg.Properties.setValue("pShortThresholdIndex", gg.vLowerThresholdSet);
+		
+		//0.6.0
+		gg.Properties.setValue("pLogScale", gg.mLogScale);
 			
 	}
 
@@ -477,6 +494,9 @@ class HRVStorageHandler {
 		
 		gg.setProperty("pLongThresholdIndex", gg.vUpperThresholdSet );		
 		gg.setProperty("pShortThresholdIndex", gg.vLowerThresholdSet);
+		
+		//0.6.0
+		gg.Properties.setValue("pLogScale", gg.mLogScale);
 		
 	}
 

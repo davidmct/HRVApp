@@ -88,8 +88,12 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
         menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
         menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
-        menu.addItem(new Ui.MenuItem("History view", null, "h", null));       
-        menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
+        menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
+        //0.6.0 check low memory device
+        if (System.getSystemStats().totalMemory > 128000) { 
+        	//Sys.println("System memory > 128k");
+        	menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
+        }
        	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
         menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
         menu.addItem(new Ui.MenuItem("Colours", null, "c", null));

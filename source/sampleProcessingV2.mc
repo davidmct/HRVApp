@@ -190,6 +190,8 @@ class SampleProcessing {
 		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();
+		
+		Sys.println("ln(rMSSD) scale factor is "+gg.mLogScale);
 	}
 	
 	function resetSampleBuffer() { 
@@ -782,7 +784,7 @@ class SampleProcessing {
 			// HRV is actually RMSSD. Use (N-1)
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
-			mLnRMSSD = (LOG_SCALE * (Math.ln(mRMSSD)+0.5)).toNumber();
+			mLnRMSSD = (gg.mLogScale * (Math.ln(mRMSSD)+0.5)).toNumber();
 			// 0.4.3
 			if (mLnRMSSD < 0) {mLnRMSSD = 0;}
 		}
