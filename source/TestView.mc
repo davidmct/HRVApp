@@ -9,7 +9,7 @@ class TestView extends Ui.View {
 	var msgTxt = "";
 	var timer = timerFormat(0);	
 	hidden var mBitMap = null;
-	hidden var mBitMapLoc = [32,4];
+	hidden var mBitMapLoc = [32, 6]; //4];
 
 	hidden var mTitleLoc = [61, 12]; // %
 	hidden var mTitleLocS = [0,0];	
@@ -28,8 +28,8 @@ class TestView extends Ui.View {
 	
 	// coordinates of  value cordinates as %
 	// strapStatus - no label!, Ln, BPM, Timer, Int/Ext	 
-	hidden var mLabelValueLocX = [ 28, 75, 82, 27, 50];
-	hidden var mLabelValueLocY = [ 53, 78, 53, 78, 66];
+	hidden var mLabelValueLocX = [ 28, 75, 82, 29, 50]; // timer was 27. now 29 0.6.0
+	hidden var mLabelValueLocY = [ 53, 78, 53, 78, 66]; 
 	
 	// label values
 	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
@@ -215,6 +215,14 @@ class TestView extends Ui.View {
 		dc.drawText( mLabelSetXS[2], mLabelSetYS[2], mStrapFont, mLabels[2], mJust);
 		
 		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
+		
+		//0.6.0 ring showing colour of sensor status
+		//drawArc(x, y, r, attr, degreeStart, degreeEnd)
+		dc.setPenWidth(2);
+		//Sys.println("Draw arc: "+$._mApp.mSensor.mHRData.mHRMStatusCol);
+		dc.drawArc(mScaleX/2, mScaleY/2, dc.getWidth()/2-2, Gfx.ARC_COUNTER_CLOCKWISE, 0, 360);
+		dc.setPenWidth(1);
+		
 		var str;
 		//0.4.00
 		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";		

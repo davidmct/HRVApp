@@ -135,7 +135,8 @@ class IntervalView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		if (gg.mDeviceType == RES_240x240) {
+		var mDevType = gg.mDeviceType;
+		if ((mDevType == RES_240x240) || (mDevType == RES_218x218)) {
 			if (mLabelFont == null) {
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
 			}
@@ -282,13 +283,15 @@ class IntervalView extends Ui.View {
 		//var mXoffset = ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+20);
 		
 		var mOffText = leftX+22;
+		var mOffTextY = ceilY;
 		if (gg.mDeviceType == RES_218x218) {
-			mOffText = leftX+35;
+			mOffText = leftX+38;
+			mOffTextY += 5;
 		} else if ( gg.mDeviceType == RES_240x240) {		
 			mOffText = leftX+25;
 		}
 		
-		dc.drawText( mOffText, ceilY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
+		dc.drawText( mOffText, mOffTextY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
 		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			

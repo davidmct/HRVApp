@@ -229,7 +229,7 @@ class HRVStorageHandler {
 		Sys.println("loadIntervalsFromStore() called");
 		
 		try {
-			if (Toybox.Application has :Storage) {	
+			if (Toybox.Application has :Storage) {				
 				gg.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
 				gg.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
 				gg.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
