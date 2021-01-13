@@ -7,7 +7,7 @@ using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Lang;
 
-var fonts = [Graphics.FONT_XTINY,Graphics.FONT_TINY,Graphics.FONT_SMALL,Graphics.FONT_MEDIUM,Graphics.FONT_LARGE];
+var vFonts = [Graphics.FONT_LARGE, Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY];
     
 //0.4.4 - in memory debug
 var mDebugString ="";
@@ -51,7 +51,7 @@ function selectFont(dc, string, width, height, _fonts) {
         // does it ever go to zero! falls out of bottom with zero 
     }
 	//Sys.println("Font Index = "+fontIdx);
-	fonts = null;
+	//fonts = null;
     return fontIdx;
 }    
 
@@ -75,7 +75,6 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 	var myTextArea;
 	var mFont = Graphics.FONT_MEDIUM;
 	var mFontID;
-	var fonts = [Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY];
 			
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
@@ -105,8 +104,8 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // need to check if string fits in width then ok
     
     // Does text fit in first line?
-    mFontID = selectFont(dc, msgTxt, width, height/2, fonts);
-    var mTextWidth = dc.getTextWidthInPixels(msgTxt, fonts[mFontID]);
+    mFontID = selectFont(dc, msgTxt, width, height/2, $.vFonts);
+    var mTextWidth = dc.getTextWidthInPixels(msgTxt, $.vFonts[mFontID]);
 	// tested whether a font is available that fits string so check within width 
 	// font is possibly 0 the smallest so may not be ideal
 	if (mTextWidth < width && mFontID != 0) {
@@ -114,7 +113,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 	        :text=>msgTxt,
 	        :color=>mValueColour,
 	        :backgroundColor=>backColour,
-	        :font=>fonts[mFontID],
+	        :font=>$.vFonts[mFontID],
 	        :locX=>LocX+width/2,
 	        :locY=>LocY,
 	        :width=>width,
@@ -126,7 +125,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 		return;
 	}
     
-    mFontID = selectFont(dc, msgTxt, width*2, height/2, fonts);
+    mFontID = selectFont(dc, msgTxt, width*2, height/2, $.vFonts);
     
     var mMidCharIdx = msgTxt.length()/2;
     var mSpaceIdx = null;
@@ -151,11 +150,11 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
  		// check longer string fits still
      	mString2 = msgTxt.substring(mSpaceIdx+1, msgTxt.length());
     	mString1 = msgTxt.substring(0, mSpaceIdx);		
- 		mFontID = selectFont(dc, mString2, width, height/2, fonts);   
+ 		mFontID = selectFont(dc, mString2, width, height/2, $.vFonts);   
     	//Sys.println("Space found @ "+mSpaceIdx+", String 1 and 2 = '"+mString1+"', '"+mString2+"'"); 		   
     }
     
-    mFont = fonts[mFontID];
+    mFont = $.vFonts[mFontID];
 		
 	myTextArea = new Ui.Text({
         :text=>mString1,
@@ -193,20 +192,14 @@ function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width,
         :text=>msgTxt,
         :color=>mValueColour,
         :backgroundColor=>backColour,
-        :font=>[Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY],
+        :font=>$.vFonts,
         :locX=>LocX,
         :locY=>LocY,
         :width=>width,
         :height=>height,
         :justification=>Graphics.TEXT_JUSTIFY_CENTER
     });	
-    myTextArea.draw(dc);
-    
-    //if (mDebugging) {
-    //	// show text box around area
-    //	dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_BLACK);
-    //	dc.drawRectangle( LocX, LocY, width, height);
-    //}
+    myTextArea.draw(dc);    
 }
     
 function timerFormat(time) {
