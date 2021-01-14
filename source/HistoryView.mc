@@ -198,7 +198,9 @@ class HistoryView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
-		prepResults();
+		if ( gg.results == null) {
+			prepResults();
+		}
 		
 		//Sys.println("DeviceType = "+gg.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);
 		
