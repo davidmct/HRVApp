@@ -21,6 +21,8 @@ using Toybox.Timer;
 using Toybox.Attention;
 using Toybox.System as Sys;	
 
+using HRVStorageHandler as mStorage;
+
 class TestController {
 
 	var timerTime;	
@@ -102,15 +104,15 @@ class TestController {
 					
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
-		var setSensorStr = ($._mApp.mSensorTypeExt ? "external" : "registered");
+		var setSensorStr = ($.mSensorTypeExt ? "external" : "registered");
 		
 		// Timer information for view
 		timerTime = 0; 
-		var testType = $._mApp.testTypeSet;
+		var testType = $.testTypeSet;
 		
 		// set default time display and adjust below
 		if(TYPE_TIMER == testType) {
-			timerTime = $._mApp.timerTimeSet;
+			timerTime = $.timerTimeSet;
 		}
 		else if(TYPE_MANUAL == testType) {
 			// driven by user stopping or hitting limit
@@ -125,7 +127,7 @@ class TestController {
 				resetTest();
 				mTestState = TS_WAITING; 
 				// Sensor status update method
-				$._mApp.mSensor.setObserver(self.method(:onNotify));
+				$.mSensor.setObserver(self.method(:onNotify));
 			break;
 			case TS_WAITING:
 				// we are waiting for the HR strap to be ready
@@ -146,7 +148,7 @@ class TestController {
 			case TS_READY:
 				//0.4.4
 				// Print ID to see if we can display for external or known!
-				//$.DebugMsg( true, "Found ANT ID = "+$._mApp.mAuxHRAntID);
+				//$.DebugMsg( true, "Found ANT ID = "+$.mAuxHRAntID);
 				
 				// we know ANT ID is now available
 				
@@ -167,7 +169,7 @@ class TestController {
 					// now we can setup test ready to go
 					// KEEP OLD data until actually starting the test!
 					Sys.println("TS_READY - enter pressed");	
-					$._mApp.mSensor.mHRData.initForTest();
+					$.mSensor.mHRData.initForTest();
 					startTest();
 					mTestState = TS_TESTING; 	
 	
@@ -187,7 +189,7 @@ class TestController {
 				//mTestMessage = "Breathe regularly and stay still";
 				mTestMessage = "Testing HRV";
 				
-				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
+				if (MIN_SAMPLES < $.mSampleProc.dataCount) {enoughSamples = true;}
 				
 				switch (caller) {
 					case :timerExpired:
@@ -209,8 +211,8 @@ class TestController {
 						if (enoughSamples) {
 							mResponse = true;
 						} else { // we don't have enough samples so close FIT
-							if ($._mApp.mFitControl.mSession != null) {
-    							$._mApp.mFitControl.discardFITrec();
+							if ($.mFitControl.mSession != null) {
+    							$.mFitControl.discardFITrec();
     						}		
 						}		
 						mTestState = TS_ABORT; 	
@@ -278,7 +280,7 @@ class TestController {
     	
     	// update Current  View data  
     	if (mFuncCurrent != null) {
-    		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
+    		var limit = TYPE_MANUAL == testType ? $.mManualTimeSet : $.timerTimeSet;
     		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
     	}
 
@@ -288,16 +290,16 @@ class TestController {
 	
 	function fCheckSwitchType( caller, value) {
 		if (caller == :FitType) {
-			if (value != $._mApp.mFitWriteEnabled) {
+			if (value != $.mFitWriteEnabled) {
 				discardTest();
 				StateMachine(:RestartControl); 	
 			}	
 		}
 		else if (caller == :SensorType) {
 			// this also restarts state machine and discard FIT data
-			$._mApp.mSensor.fSwitchSensor( value);		
+			$.mSensor.fSwitchSensor( value);		
 		} else if (caller == :TestType) {	
-	 		if (value != $._mApp.testTypeSet) {             
+	 		if (value != $.testTypeSet) {             
 	        	StateMachine(:RestartControl); 
 	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
 	        }
@@ -311,9 +313,9 @@ class TestController {
 		// make sure no old FIT open
 		discardTest();
 		// set up FIT to write data if enabled
-		$._mApp.mFitControl.createSession();
+		$.mFitControl.createSession();
 		// now start recording
-		$._mApp.mFitControl.startFITrec(); 
+		$.mFitControl.startFITrec(); 
 		
     	alert(TONE_START);
     	start();
@@ -331,7 +333,7 @@ class TestController {
     	// 0.4.04 changed to mSession not class as mSession is null if no FIT created
     	// test maybe unnecessary as in discard aleady
     	// previous version called mFitControl.discardTest() which doesn't exist
-    	//if ($._mApp.mFitControl.mSession != null) { discardTest(); }
+    	//if ($.mFitControl.mSession != null) { discardTest(); }
     	discardTest();
     	endTest();
     	alert(TONE_SUCCESS);
@@ -353,17 +355,17 @@ class TestController {
     function alert(type)
 	{
 		if( Attention has :playTone ) {
-    		if($._mApp.soundSet) { Attention.playTone(type);  }
+    		if($.soundSet) { Attention.playTone(type);  }
     	}
     	if (Attention has :vibrate) {
-    		if($._mApp.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
+    		if($.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
     	}
     }
 
     function resetTest() {
     	Sys.println("TestControl: resetTest() called");
     	// don't call this as useful to see old data before starting a new test
-    	//$._mApp.mSensor.mHRData.initForTest();
+    	//$.mSensor.mHRData.initForTest();
     	testTimer.stop();
     	// reseting utcStart here overwrites when we about test but have enough samples
 		//utcStart = 0;
@@ -374,8 +376,8 @@ class TestController {
     	Sys.println("discardTest() called");
     	resetTest(); // may not be necessary as handled by state machine
     	//0.4.04 test mSession not mFitControl for null
-    	//if ($._mApp.mFitControl.mSession != null) {
-    	$._mApp.mFitControl.discardFITrec();
+    	//if ($.mFitControl.mSession != null) {
+    	$.mFitControl.discardFITrec();
     	//}
     }
 
@@ -391,14 +393,14 @@ class TestController {
 		
 		// next slot in cycle, can overwrite multiple times in a day and keep last ones
 		// Check whether we are creating another set of results on the same day by inspecting previous entry
-		var previousEntry = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		var previousEntry = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
 		var previousIndex = previousEntry * DATA_SET_SIZE;
-		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
+		var currentIndex = $.resultsIndex * DATA_SET_SIZE;	
 		
-		var x = $._mApp.results[previousIndex + TIME_STAMP_INDEX];
+		var x = $.results[previousIndex + TIME_STAMP_INDEX];
 		// convery to day units
 		var previousSavedutc = 	x - (x % 86400);
-		x = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		x = $.results[currentIndex + TIME_STAMP_INDEX];
 		var currentSavedutc = x - (x % 86400);
 		var index;
 		
@@ -410,36 +412,36 @@ class TestController {
 			index = currentIndex;			
 			// written a new entry so move pointer
    			// increment write pointer to circular buffer
-   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
-   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   			$.resultsIndex = ($.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+$.resultsIndex);
    		}
 			
 		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
-		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
-		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
-		$._mApp.results[index + MIN_II_INDEX] = $._mApp.mSampleProc.minIntervalFound;
-		$._mApp.results[index + MAX_II_INDEX] = $._mApp.mSampleProc.maxIntervalFound;		
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.minDiffFound;
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.maxDiffFound;				
-		$._mApp.results[index + RMSSD_INDEX] = $._mApp.mSampleProc.mRMSSD;
-		$._mApp.results[index + LNRMSSD_INDEX] = $._mApp.mSampleProc.mLnRMSSD;
+		$.results[index + TIME_STAMP_INDEX] = utcStart;
+		$.results[index + AVG_PULSE_INDEX] = $.mSampleProc.avgPulse;
+		$.results[index + MIN_II_INDEX] = $.mSampleProc.minIntervalFound;
+		$.results[index + MAX_II_INDEX] = $.mSampleProc.maxIntervalFound;		
+		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.minDiffFound;
+		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.maxDiffFound;				
+		$.results[index + RMSSD_INDEX] = $.mSampleProc.mRMSSD;
+		$.results[index + LNRMSSD_INDEX] = $.mSampleProc.mLnRMSSD;
 
-		$._mApp.results[index + SDNN_INDEX] = $._mApp.mSampleProc.mSDNN;
-		$._mApp.results[index + SDSD_INDEX] = $._mApp.mSampleProc.mSDSD; 
-		$._mApp.results[index + NN50_INDEX] = $._mApp.mSampleProc.mNN50;
-		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
-		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
-		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
+		$.results[index + SDNN_INDEX] = $.mSampleProc.mSDNN;
+		$.results[index + SDSD_INDEX] = $.mSampleProc.mSDSD; 
+		$.results[index + NN50_INDEX] = $.mSampleProc.mNN50;
+		$.results[index + PNN50_INDEX] = $.mSampleProc.mpNN50; 
+		$.results[index + NN20_INDEX] = $.mSampleProc.mNN20;
+		$.results[index + PNN20_INDEX] = $.mSampleProc.mpNN20;
    		
     	// better write results to memory!!
-    	$._mApp.mStorage.storeResults(); 
+    	mStorage.storeResults(); 
     	// save intervals as well so we can reload and display
-    	$._mApp.mStorage.saveIntervalsToStore();
-    	$._mApp.mStorage.saveStatsToStore();    
+    	mStorage.saveIntervalsToStore();
+    	mStorage.saveStatsToStore();    
     		
     	// FIT FILE SESSION RESULTS HERE
-    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null
+    	$.mFitControl.saveFITrec(); // also sets mSession to null
 
     }
  
@@ -449,10 +451,10 @@ class TestController {
     	Sys.println("TestControl: saveTest() called");
     	
     	// prepare results and save
-    	$._mApp.mStorage.prepareSaveResults( utcStart); 
+    	mStorage.prepareSaveResults( utcStart); 
     	
      	// FIT FILE SESSION RESULTS HERE
-    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null   	
+    	$.mFitControl.saveFITrec(); // also sets mSession to null   	
     	
     } // end save test
     
@@ -463,23 +465,23 @@ class TestController {
 		
 		resetTest();
 		//Sys.println("TestControl: start() - clearing stats and interval buffer");
-    	//$._mApp.mSampleProc.resetSampleBuffer();
-		$._mApp.mSensor.mHRData.initForTest();
+    	//$.mSampleProc.resetSampleBuffer();
+		$.mSensor.mHRData.initForTest();
 		
 		mManualTestStopTime = 0;
 		testTimer.stop();	// This is in case user has changed test type while waiting
     	
-    	var testType = $._mApp.testTypeSet;
+    	var testType = $.testTypeSet;
     				
     	if(TYPE_MANUAL == testType){
  			// kick off a timer for max period of testing allowed
  			// going to stop a manual test at the time set by user OR when Start pressed again
  			// note value here is in elapsed seconds
- 			mManualTestStopTime = $._mApp.mManualTimeSet;	 			
-			testTimer.start(method(:timerEnded),$._mApp.mMaxTimerTimeSet*1000,false); // false   	
+ 			mManualTestStopTime = $.mManualTimeSet;	 			
+			testTimer.start(method(:timerEnded),$.mMaxTimerTimeSet*1000,false); // false   	
     	} else {
     		// kick off a timer for period of test
-    		timerTime = $._mApp.timerTimeSet;
+    		timerTime = $.timerTimeSet;
     		//Sys.println("timerTime in timed test = "+timerTime);
 			testTimer.start(method(:timerEnded),timerTime*1000,false); // false
 		}

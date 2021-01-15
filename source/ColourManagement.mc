@@ -7,14 +7,14 @@ function mapIndexToColours() {
 		
 	var mColours = Ui.loadResource(Rez.JsonData.jsonColourList); 
     
-    $._mApp.mLabelColour = mColours[$._mApp.lblColSet];
-    $._mApp.mValueColour = mColours[$._mApp.txtColSet];
-	$._mApp.mBgColour = mColours[$._mApp.bgColSet];
+    $.mLabelColour = mColours[$.lblColSet];
+    $.mValueColour = mColours[$.txtColSet];
+	$.mBgColour = mColours[$.bgColSet];
 	// This colour is dynamic
-	//$._mApp.mHRColour = mColours[$._mApp.mSensor.mHRData.mHRMStatusCol];
-	$._mApp.Label1Colour = mColours[$._mApp.Label1ColSet];		
-	$._mApp.Label2Colour = mColours[$._mApp.Label2ColSet];
-	$._mApp.Label3Colour = mColours[$._mApp.Label3ColSet];
+	//$.mHRColour = mColours[$.mSensor.mHRData.mHRMStatusCol];
+	$.Label1Colour = mColours[$.Label1ColSet];		
+	$.Label2Colour = mColours[$.Label2ColSet];
+	$.Label3Colour = mColours[$.Label3ColSet];
 
 	mColours = null;
 	return;		

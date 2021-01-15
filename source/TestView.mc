@@ -113,7 +113,7 @@ class TestView extends Ui.View {
 		mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
 		mRectHorizXS = (mRectHorizX * mScaleX)/100;
 	
-		$._mApp.mTestControl.setObserver(self.method(:onNotify));	
+		$.mTestControl.setObserver(self.method(:onNotify));	
 		
 		//var mLocX = (mBitMapLoc[0] * mScaleX)/100;
 		//var mLocY = (mBitMapLoc[1] * mScaleY)/100;		
@@ -131,7 +131,7 @@ class TestView extends Ui.View {
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {  				
     	// might need to go in test controller
-    	if($._mApp.mTestControl.mTestState == TS_CLOSE) {
+    	if($.mTestControl.mTestState == TS_CLOSE) {
 			popView(SLIDE_IMMEDIATE);
 		}
     }
@@ -141,11 +141,11 @@ class TestView extends Ui.View {
     function onUpdate(dc) {
 		if(mDebugging) {
 			Sys.println("TestView:onUpdate() called");
-			//Sys.println("Test View live pulse: " + $._mApp.mSensor.mHRData.livePulse.toString());
-			//Sys.println("Test state = "+ $._mApp.mTestControl.mTestState);
+			//Sys.println("Test View live pulse: " + $.mSensor.mHRData.livePulse.toString());
+			//Sys.println("Test state = "+ $.mTestControl.mTestState);
 		}
 		
-		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($._mApp.bgColSet));
+		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($.bgColSet));
 
 		var mLocX = (mBitMapLoc[0] * mScaleX)/100;
 		var mLocY = (mBitMapLoc[1] * mScaleY)/100;	
@@ -157,7 +157,7 @@ class TestView extends Ui.View {
 	        });
 	    }
         
-		dc.setColor( Gfx.COLOR_TRANSPARENT, $._mApp.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
 		
 		// draw lines
@@ -167,7 +167,7 @@ class TestView extends Ui.View {
 			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 2);
 		}
 
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		mBitMap.draw(dc);
 		
@@ -175,12 +175,12 @@ class TestView extends Ui.View {
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
 			if (mDebugging) { Sys.println("UI has TextArea");}
-			$.f_drawTextArea(dc, msgTxt, $._mApp.mValueColour, $._mApp.mBgColour, 
+			$.f_drawTextArea(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
 			if (mDebugging) {Sys.println("UI has Text not area");}
-			$.f_drawText(dc, msgTxt, $._mApp.mValueColour, $._mApp.mBgColour, 
+			$.f_drawText(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		}
@@ -190,7 +190,7 @@ class TestView extends Ui.View {
 		//var myTextArea = new Ui.TextArea({
         //    :text=>msgTxt,
         //    :color=>mValueColour,
-        //    :backgroundColor=>mapColour($._mApp.bgColSet),
+        //    :backgroundColor=>mapColour($.bgColSet),
         //    :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
         //    :locX=>mMesssgeLocS[0],
         //    :locY=>mMesssgeLocS[1],
@@ -200,7 +200,7 @@ class TestView extends Ui.View {
         //});
         //myTextArea.draw(dc);	
 		
-		dc.setColor( $._mApp.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		// Specical case in [0] of HRM status
 		// 0.4.00
 		//for (var i=1; i < mLabelSetX.size(); i++) {
@@ -214,37 +214,37 @@ class TestView extends Ui.View {
 		//0.4.01 - draw BPM in strapFont to make larger
 		dc.drawText( mLabelSetXS[2], mLabelSetYS[2], mStrapFont, mLabels[2], mJust);
 		
-		dc.setColor( mapColour($._mApp.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
+		dc.setColor( mapColour($.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
 		
 		//0.6.0 ring showing colour of sensor status
 		//drawArc(x, y, r, attr, degreeStart, degreeEnd)
 		dc.setPenWidth(2);
-		//Sys.println("Draw arc: "+$._mApp.mSensor.mHRData.mHRMStatusCol);
+		//Sys.println("Draw arc: "+$.mSensor.mHRData.mHRMStatusCol);
 		dc.drawArc(mScaleX/2, mScaleY/2, dc.getWidth()/2-2, Gfx.ARC_COUNTER_CLOCKWISE, 0, 360);
 		dc.setPenWidth(1);
 		
 		var str;
 		//0.4.00
-		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";		
+		//str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I) " : "(E) ";		
 		//0.4.01
-		//str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "I_" : "E_";
-		//str = str+$._mApp.mSensor.mHRData.mHRMStatus;
+		//str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "I_" : "E_";
+		//str = str+$.mSensor.mHRData.mHRMStatus;
 		//0.4.4
-		str = $._mApp.mSensor.mHRData.mHRMStatus;
+		str = $.mSensor.mHRData.mHRMStatus;
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mStrapFont, str, mJust);
 		
 		//0.4.4 - Separate field for I/E
-		str = ($._mApp.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
-		dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);	
+		str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
+		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
 		dc.drawText( mLabelSetXS[4], mLabelSetYS[4], mLabelFont, str, mJust);		
 		
 		// now show values		
-		dc.setColor( $._mApp.mValueColour, Gfx.COLOR_TRANSPARENT);			
-		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $._mApp.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);			
+		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
 		// 0.4.00 release for approval
-		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $._mApp.mSensor.mHRData.livePulse.format("%d"), mJust);
+		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $.mSensor.mHRData.livePulse.format("%d"), mJust);
 		// 0.4.01
-		var mPulse = $._mApp.mSensor.mHRData.livePulse;
+		var mPulse = $.mSensor.mHRData.livePulse;
 		var mPulseStr;
 		if ( mPulse == 0 || mPulse == null) {
 			mPulseStr = "--";
@@ -255,7 +255,7 @@ class TestView extends Ui.View {
 		dc.drawText( mLabelValueLocXS[3], mLabelValueLocYS[3], mTimerFont, timer, mJust);
 		
 		// now draw circle based on FIT status
-		var mCircleCol = $._mApp.mBgColour;
+		var mCircleCol = $.mBgColour;
 		if ( mCircleCol == Gfx.COLOR_WHITE) {
 			// background is white so make black!
 			mCircleCol = Gfx.COLOR_BLACK;
@@ -268,20 +268,20 @@ class TestView extends Ui.View {
 		// else don't draw	
 		// 0.4.1
 		if (mDebugging) {
-			var strDBG = $._mApp.mFitWriteEnabled + ", ";
-			if ( $._mApp.mFitControl.mSession == null) { 
+			var strDBG = $.mFitWriteEnabled + ", ";
+			if ( $.mFitControl.mSession == null) { 
 				strDBG = strDBG+"null"+" not recording";
 			}
-			if ($._mApp.mFitControl.mSession != null ) {
-				strDBG = strDBG + "Session, "+$._mApp.mFitControl.mSession.isRecording();
+			if ($.mFitControl.mSession != null ) {
+				strDBG = strDBG + "Session, "+$.mFitControl.mSession.isRecording();
 			}
 			Sys.println("FIT enabled, mSession, recording: "+strDBG);
 		}
 					
-		if ($._mApp.mFitWriteEnabled && $._mApp.mFitControl.mSession != null && $._mApp.mFitControl.mSession.isRecording()) {
+		if ($.mFitWriteEnabled && $.mFitControl.mSession != null && $.mFitControl.mSession.isRecording()) {
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
 			dc.fillCircle( mFitIconLocXS, mFitIconLocYS, 10);		
-		} else if ($._mApp.mFitWriteEnabled) {
+		} else if ($.mFitWriteEnabled) {
 			dc.setColor( mCircleCol, Gfx.COLOR_TRANSPARENT);	
 			dc.fillCircle( mFitIconLocXS, mFitIconLocYS, 10);			
 		}
@@ -297,7 +297,7 @@ class TestView extends Ui.View {
     //! state of your app here.
     function onHide() {
     	// don't want to send null as state machine still running
-    	//$._mApp.mTestControl.setObserver(null);
+    	//$.mTestControl.setObserver(null);
     	// free up all the arrays - NO as maybe switches without a new ...
     	mBitMap = null;
     }

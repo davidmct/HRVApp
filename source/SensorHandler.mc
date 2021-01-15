@@ -55,7 +55,7 @@ class SensorHandler {
 		}
 		
 		function resetTestVariables() {
-			$._mApp.mSampleProc.resetHRVData();
+			$.mSampleProc.resetHRVData();
 		} 
     }
 	
@@ -80,10 +80,10 @@ class SensorHandler {
 	// can now use same function names
 (:discard)
 	function _callSampleProcessing(isTesting, livePulse, intMs, N ) {
-		if ( $._mApp.mSampleProc has :rawSampleProcessingUpdated ) {
-			$._mApp.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
+		if ( $.mSampleProc has :rawSampleProcessingUpdated ) {
+			$.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
 		} else {
-			$._mApp.mSampleProc.rawSampleProcessing(isTesting, livePulse, intMs, N );
+			$.mSampleProc.rawSampleProcessing(isTesting, livePulse, intMs, N );
     	}
     }
     
@@ -100,9 +100,9 @@ class SensorHandler {
     }
     
     function fSwitchSensor( oldSensor) {
-    	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
+    	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$.mSensorTypeExt);
 
-    	if (oldSensor != $._mApp.mSensorTypeExt) {
+    	if (oldSensor != $.mSensorTypeExt) {
     		// firstly close down original sensor   
     		
     		//0.4.5 optimisation 
@@ -126,12 +126,12 @@ class SensorHandler {
     		
     		// discard FIT session if active
     		// we should always have a mFitControl
-    		if ($._mApp.mFitControl != null) {
-    			$._mApp.mFitControl.discardFITrec();
+    		if ($.mFitControl != null) {
+    			$.mFitControl.discardFITrec();
     		}
   	
 	    	// now we can change local sensor type
-	    	mSensorType = $._mApp.mSensorTypeExt;
+	    	mSensorType = $.mSensorTypeExt;
 
 	    	// reset local variables
 	    	mHRData.initialize();
@@ -148,7 +148,7 @@ class SensorHandler {
 			//	}				
 			//	// sending above message causes restart anyway !!				
 			//	// kill any running test
-			//	$._mApp.mTestControl.StateMachine(:RestartControl); 
+			//	$.mTestControl.StateMachine(:RestartControl); 
 			//}
 			
 			Sys.println("Sensor switched");
@@ -279,9 +279,9 @@ class AntHandler extends Ant.GenericChannel {
        	mHRDataLnk.isChOpen = GenericChannel.open();
        	
     	// update Test controller data  
-		if ($._mApp.mSensor.mFunc != null) {
+		if ($.mSensor.mFunc != null) {
 			// no message and not ready, no state change -> 0.4.5 force reset
-			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, true]);
+			$.mSensor.mFunc.invoke(:Update, [ "Sensor setup", false, true]);
 		}       	
        	
 		// will now be searching for strap after openCh()
@@ -294,7 +294,7 @@ class AntHandler extends Ant.GenericChannel {
     		GenericChannel.close();
     		GenericChannel.release();
     		//0.4.5
-    		$._mApp.mSensor.mSearching = true;
+    		$.mSensor.mSearching = true;
     	}
 	}
 
@@ -302,7 +302,7 @@ class AntHandler extends Ant.GenericChannel {
     {
 		var payload = msg.getPayload();	
 		
-		//$.DebugMsg( true, "m.dt="+msg.messageId+"mS="+$._mApp.mSensor.mSearching);
+		//$.DebugMsg( true, "m.dt="+msg.messageId+"mS="+$.mSensor.mSearching);
 
 		//if ( msg.messageId == 64) { $.DebugMsg( true, "type="+msg.deviceType+" TT="+msg.transmissionType);}
 			
@@ -314,8 +314,8 @@ class AntHandler extends Ant.GenericChannel {
 		//$.DebugMsg( mDebuggingANT, "A - "+mMessageCount);
 		
         if( Ant.MSG_ID_BROADCAST_DATA == msg.messageId  ) {
-        	if ($._mApp.mSensor.mSearching) {
-                $._mApp.mSensor.mSearching = false;
+        	if ($.mSensor.mSearching) {
+                $.mSensor.mSearching = false;
                 // Update our device configuration primarily to see the device number of the sensor we paired to
                 deviceCfg = GenericChannel.getDeviceConfig();
                 
@@ -323,9 +323,9 @@ class AntHandler extends Ant.GenericChannel {
 	            // This may be too early as may need a number of messages
 				// using deviceCfg just gives value for setup!!!
 				//$.DebugMsg( true, " msg.deviceNumber ="+msg.deviceNumber);
-	            $._mApp.mAuxHRAntID = msg.deviceNumber;
+	            $.mAuxHRAntID = msg.deviceNumber;
 	           
-                $.DebugMsg( true, "Ant ID found = "+$._mApp.mAuxHRAntID+". mSearching = false");
+                $.DebugMsg( true, "Ant ID found = "+$.mAuxHRAntID+". mSearching = false");
             }
 			// not sure this handles all page types and 65th special page correctly
     		      
@@ -339,8 +339,8 @@ class AntHandler extends Ant.GenericChannel {
     		
     		// this is also called in sample processing but conditional
     		//0.4.4 - can't see reason for this!!
-    		//if ($._mApp.mSensor.mFunc != null) {
-			//	$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
+    		//if ($.mSensor.mFunc != null) {
+			//	$.mSensor.mFunc.invoke(:Update, [ "Re-opening", true, false]);
 			//}	
 	
 			//if (mDebuggingANT == true) {
@@ -362,7 +362,7 @@ class AntHandler extends Ant.GenericChannel {
 	            	case Ant.MSG_CODE_EVENT_CHANNEL_CLOSED:
 	            		//Sys.println("ANT:EVENT: closed");
 	            		//$.DebugMsg( true, "e.c");
-	            		//$._mApp.mSensor.openCh();
+	            		//$.mSensor.openCh();
 	            		// open channel again
 	            		mHRDataLnk.isChOpen = GenericChannel.open();
 	            		// initialise again
@@ -371,12 +371,12 @@ class AntHandler extends Ant.GenericChannel {
 						mHRDataLnk.mHRMStatusCol = 4; //RED;
     					mHRDataLnk.mHRMStatus = "Lost strap";
 	    				mHRDataLnk.livePulse = 0;
-						//$._mApp.mSensor.mSearching = true;
+						//$.mSensor.mSearching = true;
 						// update Test controller data  
 						//$.DebugMsg(true, "CL.O."+mHRDataLnk.isChOpen);
-    					if ($._mApp.mSensor.mFunc != null) {
+    					if ($.mSensor.mFunc != null) {
 							// no message and not ready, no state change
-							$._mApp.mSensor.mFunc.invoke(:Update, [ "Re-opening", false, false]);
+							$.mSensor.mFunc.invoke(:Update, [ "Re-opening", false, false]);
 						}	            			            		
 	            		break;
 	            	case Ant.MSG_CODE_EVENT_RX_FAIL:
@@ -388,18 +388,18 @@ class AntHandler extends Ant.GenericChannel {
 						//mHRDataLnk.mHRMStatusCol = RED;
     					//mHRDataLnk.mHRMStatus = "Lost strap";
 	    				//mHRDataLnk.livePulse = 0;
-						////$._mApp.mSensor.mSearching = true;
+						////$.mSensor.mSearching = true;
 						//// update Test controller data  
-    					//if ($._mApp.mSensor.mFunc != null) {
+    					//if ($.mSensor.mFunc != null) {
 						//	// no message and not ready, no state change
-						//	$._mApp.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
+						//	$.mSensor.mFunc.invoke(:Update, [ "RX fail", false, false]);
 						//}
 						// wait for another message?
 						break;
 					case Ant.MSG_CODE_EVENT_RX_FAIL_GO_TO_SEARCH:
 						//Sys.println( "ANT:RX_FAIL, search/wait");
 						//$.DebugMsg( true, "e.s");
-						$._mApp.mSensor.mSearching = true;	
+						$.mSensor.mSearching = true;	
 						break;
 					case Ant.MSG_CODE_EVENT_RX_SEARCH_TIMEOUT:
 						//Sys.println( "ANT: EVENT timeout");
@@ -436,9 +436,9 @@ class AntHandler extends Ant.GenericChannel {
 			mHRDataLnk.mNoPulseCount = 0;
 			
 			// update Test controller data  
-			if ($._mApp.mSensor.mFunc != null) {
+			if ($.mSensor.mFunc != null) {
 				// no message and not ready, no state change
-				$._mApp.mSensor.mFunc.invoke(:Update, [ "HR data incoming", true, false]);
+				$.mSensor.mFunc.invoke(:Update, [ "HR data incoming", true, false]);
 			}
   					
 			// Get interval
@@ -462,9 +462,9 @@ class AntHandler extends Ant.GenericChannel {
 			
 			//var beatsInGap = beatCount - mHRDataLnk.mPrevBeatCount;	
 			var isTesting = false;
-			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
+			if ( $.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			
-			$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
+			$.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, beatsInGap );
 		
 		} else {
 			// either no longer have a pulse or Count not changing
@@ -475,9 +475,9 @@ class AntHandler extends Ant.GenericChannel {
 					mHRDataLnk.mHRMStatusCol = 4; //RED;
     				mHRDataLnk.mHRMStatus = "Lost Pulse";
     				// update Test controller data  
-					if ($._mApp.mSensor.mFunc != null) {
+					if ($.mSensor.mFunc != null) {
 						// no message and not ready, see if reacquire
-						$._mApp.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, false]);
+						$.mSensor.mFunc.invoke(:Update, [ "Lost pulse", false, false]);
 					}
 				}
 			}
@@ -500,7 +500,7 @@ class InternalSensor {
 		Sys.println("Stopping internal sensors");
 		Sensor.unregisterSensorDataListener( );
 		//0.4.5
-    	$._mApp.mSensor.mSearching = true;
+    	$.mSensor.mSearching = true;
     	// suspicion that having no sensors kills optical after testing until long timeout
     	// Note CIQ ignores off state of ANT HRM. See if this line of code releases it.
 		Sensor.setEnabledSensors( [] );
@@ -519,12 +519,12 @@ class InternalSensor {
 		Sys.println("Internal SensorSetup()");
 		
 		mHRDataLnk.isChOpen = true;
-		$._mApp.mSensor.mSearching = false;
+		$.mSensor.mSearching = false;
 	    
     	// update Test controller data  
-		if ($._mApp.mSensor.mFunc != null) {
+		if ($.mSensor.mFunc != null) {
 			// no message and not ready, no state change -> 0.4.5 force reset of controller
-			$._mApp.mSensor.mFunc.invoke(:Update, [ "Sensor setup: Int", false, true]);
+			$.mSensor.mFunc.invoke(:Update, [ "Sensor setup: Int", false, true]);
 		}
 	}
 	
@@ -547,16 +547,16 @@ class InternalSensor {
 				mHRDataLnk.mHRMStatusCol = 4; //RED;
 				mHRDataLnk.mHRMStatus = "Lost Pulse";
 				// update Test controller data  
-				if ($._mApp.mSensor.mFunc != null) {
-					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false, false]);
+				if ($.mSensor.mFunc != null) {
+					$.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, false, false]);
 				}
 			} else {
 				mHRDataLnk.livePulse = sensorInfo.heartRate;
 				mHRDataLnk.mHRMStatusCol = 8; //GREEN;
 				mHRDataLnk.mHRMStatus = "HR data";
 				// update Test controller data  
-				if ($._mApp.mSensor.mFunc != null) {
-					$._mApp.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true, false]);
+				if ($.mSensor.mFunc != null) {
+					$.mSensor.mFunc.invoke(:Update, [ mHRDataLnk.mHRMStatus, true, false]);
 				}
 			}
 			
@@ -565,14 +565,14 @@ class InternalSensor {
 			// now feed machine...
 			//Sys.println("heartBeatIntervals.size() "+heartBeatIntervals.size());
 			var isTesting = false;
-			if ( $._mApp.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
+			if ( $.mTestControl.mTestState == TS_TESTING) {isTesting = true;}	
 			
 			//$.DebugMsg( true, "H-"+heartBeatIntervals.size().toString());
 			
 			for ( var i=0; i< heartBeatIntervals.size(); i++) {
 				var intMs = heartBeatIntervals[i];
 				//$.DebugMsg( true, "H2");
-				$._mApp.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
+				$.mSampleProc.rawSampleProcessing(isTesting, mHRDataLnk.livePulse, intMs, 1 );
 			}
 		} 
 		//else {

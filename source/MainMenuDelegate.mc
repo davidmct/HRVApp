@@ -3,6 +3,8 @@ using Toybox.System as Sys;
 using Toybox.Application as App;
 using Toybox.Graphics;
 
+using HRVStorageHandler as mStorage;
+
 class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	
     function initialize() {
@@ -13,7 +15,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         var id = item.getId();
     
      	if( id.equals("t")) {
-  			var mTestSelected = $._mApp.testTypeSet;		
+  			var mTestSelected = $.testTypeSet;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -27,7 +29,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         }
      	else if( id.equals("s")) {
 			// optical/registered strap or unknown/disabled
-  			var mExtStrap = $._mApp.mSensorTypeExt;		
+  			var mExtStrap = $.mSensorTypeExt;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -41,7 +43,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         }
         else if( id.equals("f")) {
 			// want to set FIT file creation
-  			var mFitWrite = $._mApp.mFitWriteEnabled;		
+  			var mFitWrite = $.mFitWriteEnabled;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -62,19 +64,19 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         }
         else if ( id.equals("l") ) {
         	// you can't do this whilst testing! Otherwise screws data
-        	if ( $._mApp.mTestControl.mTestState >= TS_TESTING) {
-        		$._mApp.mTestControl.alert(TONE_ERROR);
+        	if ( $.mTestControl.mTestState >= TS_TESTING) {
+        		$.mTestControl.alert(TONE_ERROR);
         		return;
         	} else {
 	        	//Sys.println("MainMenuDelegate: loading old intervals + stats and switching to Poincare");
-	        	var success = $._mApp.mStorage.loadIntervalsFromStore();
-	        	success = success && $._mApp.mStorage.loadStatsFromStore();
+	        	var success = mStorage.loadIntervalsFromStore();
+	        	success = success && mStorage.loadStatsFromStore();
 	        	if (success) {	        	
-			  		if( $._mApp.viewNum != POINCARE_VIEW) {
-						Ui.switchToView($._mApp.getView(POINCARE_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+			  		if( $.viewNum != POINCARE_VIEW) {
+						Ui.switchToView($.getView(POINCARE_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 					}
 				} else { // failed to load data
-	        		$._mApp.mTestControl.alert(TONE_ERROR);
+	        		$.mTestControl.alert(TONE_ERROR);
 	        		return;				
 				}				
 			}          
@@ -106,7 +108,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        //menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 	        //menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        //Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setScale)), Ui.SLIDE_IMMEDIATE );  
- 	        var mAutoState = $._mApp.mBoolScaleII;		
+ 	        var mAutoState = $.mBoolScaleII;		
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -141,7 +143,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>"About"});
 	       	var mAppVer = Ui.loadResource(Rez.Strings.AppVersion);
-	        var mID = $._mApp.mDeviceID;
+	        var mID = $.mDeviceID;
 	        if (mID == null) {mID = "No device ID";}
 	        //Sys.println("Device indentifier = "+mID);
 	        menu.addItem(new Ui.MenuItem(mAppVer, null, "t", null));
@@ -151,31 +153,31 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     }
     
     function setSound(value) {
-		if (value == 1) { $._mApp.soundSet = true;} else { $._mApp.soundSet = false;}
+		if (value == 1) { $.soundSet = true;} else { $.soundSet = false;}
     }
     
     function setScale(value) {
-		if (value == 1) { $._mApp.mBoolScaleII = true;} else { $._mApp.mBoolScaleII = false;}
+		if (value == 1) { $.mBoolScaleII = true;} else { $.mBoolScaleII = false;}
     }
 
     function setVibe(value) {
-		if (value == 1) { $._mApp.vibeSet = true; } else { $._mApp.vibeSet = false;}
+		if (value == 1) { $.vibeSet = true; } else { $.vibeSet = false;}
     } 
     
     function onBack() {
     	//Sys.println("onBack() Main");
     	//0.4.3 - should save changes to any properties
-    	$._mApp.mStorage.saveProperties();
+    	mStorage.saveProperties();
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-        Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+        Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }
  
     function onDone() {
         //0.4.3 - should save changes to any properties
         //Sys.println("onDone() Main");
-    	$._mApp.mStorage.saveProperties();
+    	mStorage.saveProperties();
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-        Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+        Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
     }   
     
     function onWrap(key) {

@@ -1,12 +1,14 @@
 using Toybox.Application as App;
 using Toybox.Application.Storage as Store;
-using Toybox.Application.Properties as Property;
+using Toybox.Application.Properties;
 using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
+
+using HRVStorageHandler as mStorage;
 
 // Things still to fix
 // Check old textArea code has right font size in Current and test views
@@ -107,32 +109,6 @@ class myException extends Lang.Exception {
     }
 }
 
-class HRVAnalysis extends App.AppBase {
-
-    // The device type
-	var mDeviceType;
-	//var customFont; // load in init if low res. saves load in every view
-	
-	//var mApp;
-	var mSensor;
-	var mAntID;
-	var mAuxHRAntID; // found sensor ID
-	// true if external unknown strap ie not enabled in watch
-	// 1 = true, 0 = false and INTERNAL_SENSOR
-	var mSensorTypeExt;
-	
-	// Auto scale when true otherwise fixed range
-	var mBoolScaleII;
-	
-	// Trial mode variables!!
-	hidden var mTrialMode;
-	hidden var mTrialStarted;
-	hidden var mAuthorised;
-	hidden var mTrailPeriod;
-	hidden var mTrialStartDate; 
-	hidden var mAuthID;
-	hidden var mTrialMessage;
-
 	// Settings variables
     //var timestampSet;
 	var appNameSet;
@@ -186,7 +162,7 @@ class HRVAnalysis extends App.AppBase {
 	var lastViewNum;
 
 	var mFitWriteEnabled;   
-    var mStorage;
+    //var mStorage;
     var mTestControl;
     var mIntervalSampleBuffer; // buffer in app space for intervals
     var mSampleProc; // instance of sample processor
@@ -195,18 +171,44 @@ class HRVAnalysis extends App.AppBase {
     // % permitted deviation from average for ectopic beats
 	var vUpperThresholdSet; // long % over
 	var vLowerThresholdSet; // short period under %
-    
+	
+	// The device type
+	var mDeviceType;
+	//var customFont; // load in init if low res. saves load in every view
+	
+	//var mApp;
+	var mSensor;
+	var mAntID;
+	var mAuxHRAntID; // found sensor ID
+	// true if external unknown strap ie not enabled in watch
+	// 1 = true, 0 = false and INTERNAL_SENSOR
+	var mSensorTypeExt;
+	
+	// Auto scale when true otherwise fixed range
+	var mBoolScaleII;
+		
+class HRVAnalysis extends App.AppBase {
+	
+	// Trial mode variables!!
+	hidden var mTrialMode;
+	hidden var mTrialStarted;
+	hidden var mAuthorised;
+	hidden var mTrailPeriod;
+	hidden var mTrialStartDate; 
+	hidden var mAuthID;
+	hidden var mTrialMessage;
+  
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
 
 (:storageMethod) 
     function initializeWithStorage() {
-		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
+		mAntID = Properties.getValue("pAuxHRAntID");
 		mAuxHRAntID = mAntID; // default
 		
-		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
-		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
+		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
 		//Modification for 0.4.4 - remove properties which are not settings and use storage
 		// load trial variables
@@ -229,45 +231,33 @@ class HRVAnalysis extends App.AppBase {
 		mTrailPeriod = Store.getValue("pTrailPeriod");
 		mTrialStartDate = Store.getValue("pTrialStartDate");
 		
-		$._mApp.Properties.setValue("pDeviceID", mDeviceID);
+		Properties.setValue("pDeviceID", mDeviceID);
 		// code to authenticate device with given DeviceID
-		mAuthID = $._mApp.Properties.getValue("pAuthID");       
+		mAuthID = Properties.getValue("pAuthID");       
     }
     
 (:exTrialParamProperty)   
 // pre 0.4.4 code
     function initializeWithStorage() {
-		mAntID = $._mApp.Properties.getValue("pAuxHRAntID");
-		mFitWriteEnabled = $._mApp.Properties.getValue("pFitWriteEnabled"); 
-		mSensorTypeExt = $._mApp.Properties.getValue("pSensorSelect");	
+		mAntID = Properties.getValue("pAuxHRAntID");
+		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
 		// load trial variables
-		mTrialMode = $._mApp.Properties.getValue("pTrialMode");
-		mTrialStarted = $._mApp.Properties.getValue("pTrialStarted");
-		mAuthorised = $._mApp.Properties.getValue("pAuthorised");
-		mTrailPeriod = $._mApp.Properties.getValue("pTrailPeriod");
-		mTrialStartDate = $._mApp.Properties.getValue("pTrialStartDate");
+		mTrialMode = Properties.getValue("pTrialMode");
+		mTrialStarted = Properties.getValue("pTrialStarted");
+		mAuthorised = Properties.getValue("pAuthorised");
+		mTrailPeriod = Properties.getValue("pTrailPeriod");
+		mTrialStartDate = Properties.getValue("pTrialStartDate");
 		
-		$._mApp.Properties.setValue("pDeviceID", mDeviceID);
+		Properties.setValue("pDeviceID", mDeviceID);
 		// code to authenticate device with given DeviceID
-		mAuthID = $._mApp.Properties.getValue("pAuthID");       
+		mAuthID = Properties.getValue("pAuthID");       
     }
  
  (:preCIQ24)   
     function initializeNoStorage() {
- 		mAntID = $._mApp.getProperty("pAuxHRAntID");
-		mFitWriteEnabled = $._mApp.getProperty("pFitWriteEnabled");
-		mSensorTypeExt = $._mApp.getProperty("pSensorSelect");
-		
-		// load trial variables
-		mTrialMode = $._mApp.getProperty("pTrialMode");
-		mTrialStarted = $._mApp.getProperty("pTrialStarted");
-		mAuthorised = $._mApp.getProperty("pAuthorised");
-		mTrailPeriod = $._mApp.getProperty("pTrailPeriod");
-		mTrialStartDate = $._mApp.getProperty("pTrialStartDate");
-		
-		$._mApp.Properties.setProperty("pDeviceID", mDeviceID);
-		mAuthID = $._mApp.getProperty("pAuthID");   
+  
     
     }
     
@@ -285,19 +275,16 @@ class HRVAnalysis extends App.AppBase {
 // pre 0.4.4 code 
     function saveTrialWithStorage() {		
 		// save trial variables
-		$._mApp.Properties.setValue("pTrialMode", mTrialMode);
-		$._mApp.Properties.setValue("pTrialStarted", mTrialStarted);
-		$._mApp.Properties.setValue("pAuthorised", mAuthorised );
-		$._mApp.Properties.setValue("pTrialStartDate", mTrialStartDate);
+		Properties.setValue("pTrialMode", mTrialMode);
+		Properties.setValue("pTrialStarted", mTrialStarted);
+		Properties.setValue("pAuthorised", mAuthorised );
+		Properties.setValue("pTrialStartDate", mTrialStartDate);
 		      
     }
  
  (:preCIQ24)   
     function saveTrialNoStorage() {
-    	$._mApp.SetProperty("pTrialMode", mTrialMode);
-		$._mApp.setProperty("pTrialStarted", mTrialStarted);
-		$._mApp.setProperty("pAuthorised", mAuthorised );
-		$._mApp.setProperty("pTrialStartDate", mTrialStartDate );   
+ 
     }    
  
  	function checkAuth(AuthorisationID, DeviceIdentification) {		
@@ -385,12 +372,12 @@ class HRVAnalysis extends App.AppBase {
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
         
-        $._mApp = App.getApp();
+        //$._m$.pp.getApp();
         
         // Retrieve device type
 		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
          
-        mStorage = new HRVStorageHandler();
+        //mStorage = new HRVStorageHandler(self);
         // ensure we have all parameters setup before needed
         mStorage.readProperties();  
                 
@@ -531,17 +518,17 @@ class HRVAnalysis extends App.AppBase {
 		// check old state of sensor and test type
 		var oldSensor = mSensorTypeExt;
 		var oldTestType = testTypeSet;
-		var oldFitWrite = $._mApp.mFitWriteEnabled;
+		var oldFitWrite = $.mFitWriteEnabled;
  
 		// reload properties
 		mStorage.onSettingsChangedStore();
 		
 		// check whether we need to switch
-		mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
+		$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
         // if type has changed then force restart of state machine  
-        mTestControl.fCheckSwitchType( :TestType, oldTestType); 
+        $.mTestControl.fCheckSwitchType( :TestType, oldTestType); 
         // and if write state has changed!!
-        $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite); 
+        $.mTestControl.fCheckSwitchType( :FitType, oldFitWrite); 
         			
 		// restart start machine
 		mTestControl.StateMachine(:RestartControl);
@@ -549,55 +536,6 @@ class HRVAnalysis extends App.AppBase {
 		Ui.requestUpdate();
 	}
 
-    function plusView() {
-    	var plusView = (viewNum + 1) % NUM_VIEWS;
-    	return getView(plusView);
-    }
-
-    function lastView() { return getView(lastViewNum); }
-
-    function subView() {
-    	var subView = (viewNum + NUM_VIEWS - 1) % NUM_VIEWS;
-    	return getView(subView);
-    }
-
-    function getView(newViewNum) {
-    	lastViewNum = viewNum;
-		viewNum = newViewNum;
-		
-		//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
-		if (STATS1_VIEW == viewNum) {
-			return new StatsView(1);
-		}
-		else if (STATS2_VIEW == viewNum) {
-			return new StatsView(2);
-		}
-		//0.4.4 - removing current view as no extra info and 
-		else if (STATS3_VIEW == viewNum) {
-			return new StatsView(3);
-		}				
-		else if (HISTORY_VIEW == viewNum) {
-			return new HistoryView();
-		}
-		else if (POINCARE_VIEW == viewNum) {
-			return new PoincareView(1);
-		}
-		else if (POINCARE_VIEW2 == viewNum) {
-			return new PoincareView(2);
-		}	
-		else if (BEATS_VIEW == viewNum) {
-			//Sys.println("Beats view setup");
-			return new BeatView();
-		}	
-		else if (INTERVAL_VIEW == viewNum) {
-			//Sys.println("Interval view setup");
-			return new IntervalView();
-		}		
-			
-		else {
-			return new TestView();
-		}
-	}
 	
 	function writeStrings(_type, _mNumEntries, _mNumBlocks, _mRemainder) {
 	    // Block size for dump to debug of intervals

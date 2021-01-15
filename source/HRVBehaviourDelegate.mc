@@ -26,13 +26,13 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onNextPage() {
 		//Sys.println("onNextPage()");
 		// down or swipe UP
-		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+		Ui.switchToView($.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
     function onPreviousPage() {
 		// Up or swipe down
-		Ui.switchToView($._mApp.subView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+		Ui.switchToView($.subView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
@@ -59,14 +59,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     function onEnter() {
     	//Sys.println("onEnter()");
-		if($._mApp.viewNum != TEST_VIEW) {
+		if($.viewNum != TEST_VIEW) {
 			//Sys.println("HRVBehaviour onEnter() - switch to test view");
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+			Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 			return true;
 		}
 		else {
 			// in test view so means stop or start test
-			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
+			var res = $.mTestControl.StateMachine(:enterPressed);
 			// true if enough samples to save but we have to be in testing state
 			if (res == true) {
 				var menu = new Ui.Menu2({:title=>"Save?"});
@@ -109,8 +109,8 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
 	function onEscape() {
 		//Sys.println("onEscape()");
-		if(TEST_VIEW == $._mApp.viewNum) {
-			var res = $._mApp.mTestControl.StateMachine(:escapePressed);	
+		if(TEST_VIEW == $.viewNum) {
+			var res = $.mTestControl.StateMachine(:escapePressed);	
 			// true means we need to check to save	
 			if (res == true) {		
 				var menu = new Ui.Menu2({:title=>"Save test"});
@@ -120,14 +120,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			} 	
 		
 			// in TEST_VIEW. If we ended a test we fall back to test view otherwise Pop
-			if ($._mApp.mTestControl.mTestState < TS_TESTING) {
-				//Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+			if ($.mTestControl.mTestState < TS_TESTING) {
+				//Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 				Ui.popView(Ui.SLIDE_IMMEDIATE);
 				return true;
 			} 
 		} else {
 			// move back to test view
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);				
+			Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);				
 		}
 		return true;
 	}
@@ -140,11 +140,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		//Sys.println("setSave() called with "+value);
 		if (value == 1) { 
 			//Sys.println("saveTest() called");
-            $._mApp.mTestControl.saveTest();
+            $.mTestControl.saveTest();
         }
         else {
         	//Sys.println("discardTest() called");
-        	$._mApp.mTestControl.discardTest();
+        	$.mTestControl.discardTest();
         }		
     }
 	
@@ -174,7 +174,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         var bitmapWidth = 0;
         var bitmapX = 0;
         var bitmapY = 0;              
-        var labelWidth = dc.getTextWidthInPixels(mTitle, $._mApp.mMenuTitleSize);
+        var labelWidth = dc.getTextWidthInPixels(mTitle, $.mMenuTitleSize);
         
         if ( drawTrue) { 
         	appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
@@ -194,7 +194,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         
         if (drawTrue) {
-        	dc.drawText(labelX, labelY, $._mApp.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        	dc.drawText(labelX, labelY, $.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         } else {        
         	dc.drawText(dc.getWidth()/2, labelY, Gfx.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }

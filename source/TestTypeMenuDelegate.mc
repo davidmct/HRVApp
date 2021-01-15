@@ -29,56 +29,56 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
 		// in FIT case will need to discard any open sessions - this is done on start so OK
 		
 		if( mId == :Manual) {
-			var oldTestType = $._mApp.testTypeSet;
-            $._mApp.testTypeSet = TYPE_MANUAL;
+			var oldTestType = $.testTypeSet;
+            $.testTypeSet = TYPE_MANUAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Timer)).setSelected(false);    
             // if type has changed then force restart of state machine  
-            $._mApp.mTestControl.fCheckSwitchType( :TestType, oldTestType);            
+            $.mTestControl.fCheckSwitchType( :TestType, oldTestType);            
         }
         else if( mId == :Timer)  {
-        	var oldTestType = $._mApp.testTypeSet;
-            $._mApp.testTypeSet = TYPE_TIMER;
+        	var oldTestType = $.testTypeSet;
+            $.testTypeSet = TYPE_TIMER;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Manual)).setSelected(false);     
-            $._mApp.mTestControl.fCheckSwitchType( :TestType, oldTestType);   
+            $.mTestControl.fCheckSwitchType( :TestType, oldTestType);   
         }
         else if( mId == :Internal)  {
-        	var oldSensor = $._mApp.mSensorTypeExt;
-            $._mApp.mSensorTypeExt = SENSOR_INTERNAL;
+        	var oldSensor = $.mSensorTypeExt;
+            $.mSensorTypeExt = SENSOR_INTERNAL;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Search)).setSelected(false);
-            $._mApp.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
+            $.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
         }
         else if( mId == :Search)  {
-            var oldSensor = $._mApp.mSensorTypeExt;
-            $._mApp.mSensorTypeExt = SENSOR_SEARCH;
+            var oldSensor = $.mSensorTypeExt;
+            $.mSensorTypeExt = SENSOR_SEARCH;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Internal)).setSelected(false);  
-            $._mApp.mTestControl.fCheckSwitchType( :SensorType, oldSensor);  
+            $.mTestControl.fCheckSwitchType( :SensorType, oldSensor);  
         }
         else if( mId == :Write)  {
-        	var oldFitWrite = $._mApp.mFitWriteEnabled;
-            $._mApp.mFitWriteEnabled = true;
+        	var oldFitWrite = $.mFitWriteEnabled;
+            $.mFitWriteEnabled = true;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:NoWrite)).setSelected(false);   
-            $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
+            $.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
         }
         else if( mId == :NoWrite)  {
-        	var oldFitWrite = $._mApp.mFitWriteEnabled;        
-            $._mApp.mFitWriteEnabled = false;
+        	var oldFitWrite = $.mFitWriteEnabled;        
+            $.mFitWriteEnabled = false;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:Write)).setSelected(false);  
-            $._mApp.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
+            $.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);  
         }        
         else if( mId == :autoS)  {
-            $._mApp.mBoolScaleII = true;
+            $.mBoolScaleII = true;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:fixedS)).setSelected(false);  
             Sys.println("Interval Auto ON");  
         }
         else if( mId == :fixedS)  {       
-            $._mApp.mBoolScaleII = false;
+            $.mBoolScaleII = false;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:autoS)).setSelected(false);   
             Sys.println("Interval Auto OFF");  

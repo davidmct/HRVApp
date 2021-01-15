@@ -62,7 +62,7 @@ class CustomBackground extends Ui.Drawable {
 
     // fill background
     function draw(dc) {
-        dc.setColor(-1, $._mApp.mBgColour);
+        dc.setColor(-1, $.mBgColour);
     	dc.clear();
 
     }
@@ -79,16 +79,16 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
 
-	//Sys.println("mDeviceType = "+$._mApp.mDeviceType);
+	//Sys.println("mDeviceType = "+$.mDeviceType);
 	//Sys.println("width, height = "+width+", "+height);
 	
 	if (msgTxt.length() == 0) { return;}
 	
-    //if ($._mApp.mDeviceType == RES_240x240) {
+    //if ($.mDeviceType == RES_240x240) {
     //	mFont = Graphics.FONT_SMALL;
-    //} else if ( $._mApp.mDeviceType == RES_260x260 ) {
+    //} else if ( $.mDeviceType == RES_260x260 ) {
     //	mFont = Graphics.FONT_SMALL;
-    //} else if ( $._mApp.mDeviceType == RES_280x280 ) {
+    //} else if ( $.mDeviceType == RES_280x280 ) {
     //	mFont = Graphics.FONT_SMALL;
     //}
     
@@ -202,6 +202,56 @@ function f_drawTextArea(dc, msgTxt, mValueColour, backColour, LocX, LocY, width,
         :justification=>Graphics.TEXT_JUSTIFY_CENTER
     });	
     myTextArea.draw(dc);    
+}
+ 
+ function plusView() {
+	var _plusView = ($.viewNum + 1) % NUM_VIEWS;
+	return getView(_plusView);
+}
+
+function lastView() { return getView($.lastViewNum); }
+
+function subView() {
+	var _subView = ($.viewNum + NUM_VIEWS - 1) % NUM_VIEWS;
+	return getView(_subView);
+}
+
+function getView(newViewNum) {
+	$.lastViewNum = $.viewNum;
+	$.viewNum = newViewNum;
+	
+	//Sys.println("Last view: " + lastViewNum + " current: " + viewNum);
+	if (STATS1_VIEW == $.viewNum) {
+		return new StatsView(1);
+	}
+	else if (STATS2_VIEW == $.viewNum) {
+		return new StatsView(2);
+	}
+	//0.4.4 - removing current view as no extra info and 
+	else if (STATS3_VIEW == $.viewNum) {
+		return new StatsView(3);
+	}				
+	else if (HISTORY_VIEW == $.viewNum) {
+		return new HistoryView();
+	}
+	else if (POINCARE_VIEW == $.viewNum) {
+		return new PoincareView(1);
+	}
+	else if (POINCARE_VIEW2 == $.viewNum) {
+		return new PoincareView(2);
+	}	
+	else if (BEATS_VIEW == $.viewNum) {
+		//Sys.println("Beats view setup");
+		return new BeatView();
+	}	
+	else if (INTERVAL_VIEW == $.viewNum) {
+		//Sys.println("Interval view setup");
+		return new IntervalView();
+	}		
+		
+	else {
+		return new TestView();
+	}
 }
     
 function timerFormat(time) {

@@ -51,13 +51,13 @@ class IntervalView extends Ui.View {
 	
 	// points to plot
 	hidden var cNumPoints = null;
-	hidden var gg;
+	//hidden var gg;
 	
 	hidden var mRestingHR_II;
 	hidden var mZone1TopHR_II;
 
 	function initialize() { 
-		gg = $._mApp;
+		//gg = $._m$.	
 		View.initialize();
 	}
 	
@@ -135,7 +135,7 @@ class IntervalView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		var mDevType = gg.mDeviceType;
+		var mDevType = $.mDeviceType;
 		if ((mDevType == RES_240x240) || (mDevType == RES_218x218)) {
 			if (mLabelFont == null) {
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
@@ -146,11 +146,11 @@ class IntervalView extends Ui.View {
 		
 		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
-		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
 		
 		// draw lines
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
 		// X range is unscaled and just point number out of range
@@ -160,10 +160,10 @@ class IntervalView extends Ui.View {
     	var Ymax = 0;
    	
 		// if no sample processing then exit 
-    	if (gg.mSampleProc == null ) { return true;}
+    	if ($.mSampleProc == null ) { return true;}
     	
     	// reduce entries by 1 as points to next free slot    	
-		var mNumberEntries = gg.mSampleProc.getNumberOfSamples();
+		var mNumberEntries = $.mSampleProc.getNumberOfSamples();
 		// how many points to plot
     	var mSampleNum = 0;
     	
@@ -187,10 +187,10 @@ class IntervalView extends Ui.View {
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	//Sys.println("IntervalPlot: mBoolScaleII = "+gg.mBoolScaleII);
+    	//Sys.println("IntervalPlot: mBoolScaleII = "+$.mBoolScaleII);
     			
 		// True if auto scaling on 
-		if (!gg.mBoolScaleII) {
+		if (!$.mBoolScaleII) {
 			Ymax = mRestingHR_II;
 			Ymin = mZone1TopHR_II;
 		} else {
@@ -199,7 +199,7 @@ class IntervalView extends Ui.View {
 	    	var value;
 	    	for( var i = mStartIndex; i < mNumberEntries-1; i++ ){	
 				// first iteration this is end point	
-				value = gg.mIntervalSampleBuffer[i] & 0x0FFF;
+				value = $.mIntervalSampleBuffer[i] & 0x0FFF;
 				if(Ymin > value) {
 					Ymin = value;
 				}
@@ -229,7 +229,7 @@ class IntervalView extends Ui.View {
 		//var scaleY = chartHeight / (Ymax - Ymin).toFloat();		
 		
 		// now draw graph
-		var sample = gg.mIntervalSampleBuffer[mStartIndex] & 0x0FFF;
+		var sample = $.mIntervalSampleBuffer[mStartIndex] & 0x0FFF;
 		var mIIState = 0;
 		var mY0 = floorY - ((sample-floor) * scaleY).toNumber();
 		var mX0 = leftX;
@@ -238,7 +238,7 @@ class IntervalView extends Ui.View {
 		// we go from mStartIndex until used all mSampleNum		
 		for( var i = mStartIndex+1; i < mNumberEntries-1; i++ ){	
 			// first iteration this is end point				
-			sample = gg.mIntervalSampleBuffer[i];
+			sample = $.mIntervalSampleBuffer[i];
 			mIIState = (sample >> 12) & 0x000F;
 			sample = sample & 0x0FFF;
 			
@@ -277,17 +277,17 @@ class IntervalView extends Ui.View {
 						
 		} // end sample loop
 		
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 				
 		// label avg axis
-		//var mXoffset = ( gg.mDeviceType == RES_240x240 ? leftX+25 : leftX+20);
+		//var mXoffset = ( $.mDeviceType == RES_240x240 ? leftX+25 : leftX+20);
 		
 		var mOffText = leftX+22;
 		var mOffTextY = ceilY;
-		if (gg.mDeviceType == RES_218x218) {
+		if ($.mDeviceType == RES_218x218) {
 			mOffText = leftX+38;
 			mOffTextY += 5;
-		} else if ( gg.mDeviceType == RES_240x240) {		
+		} else if ( $.mDeviceType == RES_240x240) {		
 			mOffText = leftX+25;
 		}
 		
@@ -304,7 +304,7 @@ class IntervalView extends Ui.View {
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
-		Sys.println("IntervalPlot executes in "+mProcessingTime+"ms for "+gg.mSampleProc.getNumberOfSamples()+" dots");			
+		Sys.println("IntervalPlot executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("IntervalPlot memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			
