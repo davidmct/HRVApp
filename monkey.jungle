@@ -19,7 +19,7 @@ base.resourcePath=$(resBase)
 base.excludeAnnotations = $(base.excludeAnnotations);oldSampleProcessing;preCIQ24;discard;HistoryViaDictionary;ConsoleDebug
 # exTrialParamProperty: specific code change in HRVApp.mc for trial mode from properties to storage
 # oldResults - removes code setting results array as permanent global. Now loaded as needed
-base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold;oldResults;TestVersion;UseJson
+base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold;oldResults;TestVersion;notUseJson
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!
