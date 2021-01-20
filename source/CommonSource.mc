@@ -6,6 +6,52 @@ using Toybox.Time.Gregorian as Calendar;
 using Toybox.Timer;
 using Toybox.Time;
 using Toybox.Lang;
+using Toybox.Application.Properties; // as Property;
+using Toybox.Application.Storage as Storage;
+
+
+function saveGResultsToStore() {
+	Sys.println("saveGResultsToStore() called");
+
+	try {
+		if (Toybox.Application has :Storage) {	
+			Storage.setValue("GlanceSummary", glanceData);		
+		}
+	} catch (ex) {
+		// storage error - most likely not written
+		Sys.println("saveGResultsToStore(): ERROR failed to save");
+		return false;
+	}
+	finally {
+
+	}
+	Sys.println("saveResultsToStore() done");
+	return true;		
+}
+
+function loadGResultsFromStore() {
+	Sys.println("loadGResultsFromStore() called");	
+	
+	try {
+		if (Toybox.Application has :Storage) {	
+			glanceData = Storage.getValue("GlanceSummary");		
+		}
+	} catch (ex) {
+		// storage error - most likely not written
+		Sys.println("ERROR loadGResultsFromStore");
+		return false;
+	}
+	finally {
+		if (glanceData == null) {
+			// not been written yet
+			return false;
+		} else {
+			// loaded target variable - glanceData
+			return true;
+		}
+	}	
+
+} 
     
 //0.4.4 - in memory debug
 var mDebugString ="";

@@ -186,6 +186,10 @@ class myException extends Lang.Exception {
 	
 	// Auto scale when true otherwise fixed range
 	var mBoolScaleII;
+	
+	var glanceData = new [12];
+	//var mArcCol = [Gfx.COLOR_DK_RED, Gfx.COLOR_ORANGE, Gfx.COLOR_DK_GREEN, Gfx.COLOR_GREEN];
+	var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
 		
 class HRVAnalysis extends App.AppBase {
 	
