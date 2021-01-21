@@ -5,8 +5,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
-using Toybox.Time;
-using Toybox.Time.Gregorian;
+using AuthCode as Auth;
 
 using HRVStorageHandler as mStorage;
 
@@ -149,7 +148,7 @@ class myException extends Lang.Exception {
 	var mLogScale = LOG_SCALE;
 	
 	var mMenuTitleSize;
-	var mDeviceID;
+	var mDeviceID = null;
 
 	// Results array variable
 	var results;
@@ -192,15 +191,6 @@ class myException extends Lang.Exception {
 	var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
 		
 class HRVAnalysis extends App.AppBase {
-	
-	// Trial mode variables!!
-	hidden var mTrialMode;
-	hidden var mTrialStarted;
-	hidden var mAuthorised;
-	hidden var mTrailPeriod;
-	hidden var mTrialStartDate; 
-	hidden var mAuthID;
-	hidden var mTrialMessage;
   
     // ensure second update
     hidden var _uiTimer;
@@ -214,163 +204,9 @@ class HRVAnalysis extends App.AppBase {
 		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
 		mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
-		//Modification for 0.4.4 - remove properties which are not settings and use storage
-		// load trial variables
-		// 1st test for first time by failure to read!
-		var test;
-		test = Store.getValue("pTrialMode");
-		
-		if (test == null) {
-			// failed to read so need to initialise
-			Store.setValue("pTrialMode", false);
-			Store.setValue("pTrialStarted", false);
-			Store.setValue("pAuthorised", false);
-			Store.setValue("pTrailPeriod", 30);
-			Store.setValue("pTrialStartDate", 0);
-		}
-
-		mTrialMode = Store.getValue("pTrialMode");
-		mTrialStarted = Store.getValue("pTrialStarted");
-		mAuthorised = Store.getValue("pAuthorised");
-		mTrailPeriod = Store.getValue("pTrailPeriod");
-		mTrialStartDate = Store.getValue("pTrialStartDate");
-		
-		Properties.setValue("pDeviceID", mDeviceID);
-		// code to authenticate device with given DeviceID
-		mAuthID = Properties.getValue("pAuthID");       
+		Auth.init();		      
     }
     
-(:exTrialParamProperty)   
-// pre 0.4.4 code
-    function initializeWithStorage() {
-		mAntID = Properties.getValue("pAuxHRAntID");
-		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
-		mSensorTypeExt = Properties.getValue("pSensorSelect");	
-		
-		// load trial variables
-		mTrialMode = Properties.getValue("pTrialMode");
-		mTrialStarted = Properties.getValue("pTrialStarted");
-		mAuthorised = Properties.getValue("pAuthorised");
-		mTrailPeriod = Properties.getValue("pTrailPeriod");
-		mTrialStartDate = Properties.getValue("pTrialStartDate");
-		
-		Properties.setValue("pDeviceID", mDeviceID);
-		// code to authenticate device with given DeviceID
-		mAuthID = Properties.getValue("pAuthID");       
-    }
- 
- (:preCIQ24)   
-    function initializeNoStorage() {
-  
-    
-    }
-    
-(:storageMethod)   
-    function saveTrialWithStorage() {		
-		// save trial variables
-		Store.setValue("pTrialMode", mTrialMode);
-		Store.setValue("pTrialStarted", mTrialStarted);
-		Store.setValue("pAuthorised", mAuthorised );
-		Store.setValue("pTrialStartDate", mTrialStartDate);
-		      
-    }
-    
-(:exTrialParamProperty)   
-// pre 0.4.4 code 
-    function saveTrialWithStorage() {		
-		// save trial variables
-		Properties.setValue("pTrialMode", mTrialMode);
-		Properties.setValue("pTrialStarted", mTrialStarted);
-		Properties.setValue("pAuthorised", mAuthorised );
-		Properties.setValue("pTrialStartDate", mTrialStartDate);
-		      
-    }
- 
- (:preCIQ24)   
-    function saveTrialNoStorage() {
- 
-    }    
- 
- 	function checkAuth(AuthorisationID, DeviceIdentification) {		
- 		// Need an algo based on device ID that checks against Device Identification
- 		// DeviceIndentication is a hex string
- 		var numArray = new [ DeviceIdentification.length()];
- 		numArray = DeviceIdentification.toUtf8Array();  // toCharArray 
- 		//Sys.println( "numArray = "+numArray);
- 		
- 		return true; // fake success
- 	}
- 	 
-    function UpdateTrialState() {
- 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);  
- 		Sys.println("UpdateTrialState() called");
- 		mTrialMessage = true;
- 		Sys.println("updateTrial State #1 mAuthorised = "+mAuthorised); 		
- 		if (checkAuth(mAuthID, mDeviceID) == true) {
- 			mAuthorised = true;
- 			mTrialMessage = false;
- 		}
- 		Sys.println("updateTrial State #2 after check mAuthorised = "+mAuthorised);
- 		
- 		if (mAuthorised) {
- 			// good to go
- 			mTrialMode = false;
- 			mTrialStarted = false;
- 			mTrialMessage = false;
- 		} else if (!mTrialStarted && mTrialMode) {
-    		// initialise trial and save properties
-    		// SHOULD use tineMow() common function...
-    		var mWhen = new Time.Moment(Time.now().value()); 
-    		mTrialStartDate = mWhen.value()+System.getClockTime().timeZoneOffset;
-    		Sys.println("Start date = "+mTrialStartDate ); 
-    		mTrialStarted = true;
-    	} else if ( mTrialStarted && mTrialMode ) {
-    		// started and in trial mode
-
-    	}
-    	
-  		// update properties store
-    	if (Toybox.Application has :Storage) {
-			saveTrialWithStorage();				
-		} else {
-			saveTrialNoStorage();
-		}
-    	Sys.println("exit updateTrial State mAuthorised = "+mAuthorised);
-    }
-    
-    function getTrialDaysRemaining() {
-    	// days remaining or null if trials not supported or 0 to disable app
-    	//return null;
-    	
-  		var daysToGo;  	
-     	if (mAuthorised) {
- 			// good to go
- 			Sys.println("getTrailDaysRemaining() called, returned : null");
- 			return null;
- 		} else if (!mTrialStarted && mTrialMode) {
-    		// initialise trial and save properties
-    		Sys.println("getTrailDaysRemaining() called, returned default : 30"); 
-    		return 30;
-    	} else if ( mTrialStarted && mTrialMode ) {
-    		// started and in trial mode 	
-    		var mWhenNow = new Time.Moment(Time.now().value()); 
-    		var timeDiff = mWhenNow.value() + System.getClockTime().timeZoneOffset - mTrialStartDate;  
-    		// add on a day TEST CODE
-    		//timeDiff += 86400;  		  	
-    		daysToGo = 30 - timeDiff / 86400;
-	
-    		Sys.println("getTrailDaysRemaining() called, returned :"+daysToGo.toNumber());
-    		return daysToGo.toNumber();
-    	} else {
-    		return 30;
-    	}
-    }
- 
- 	function allowTrialMessage() {
- 		// return false if you want no reminders
- 		Sys.println("allowTrialMessage() called");
- 		return mTrialMessage;
- 	}
     
     
     function initialize() {
@@ -394,20 +230,21 @@ class HRVAnalysis extends App.AppBase {
 		//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
 		//Any use of this value for tracking user information must be in compliance with international privacy law.
 		var mySettings = Sys.getDeviceSettings();
-        mDeviceID = mySettings.uniqueIdentifier;
+        //mDeviceID = mySettings.uniqueIdentifier;
+        mDeviceID = null;
              
 		if (Toybox.Application has :Storage) {
 			initializeWithStorage();				
 		} else {
-			initializeNoStorage();
+			//initializeNoStorage();
 		}
 		
 		Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
-		Sys.println("Is app in trial mode? "+AppBase.isTrial());
-		Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
+		//Sys.println("Is app in trial mode? "+AppBase.isTrial());
+		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
 		
-		UpdateTrialState();
+		Auth.UpdateTrialState();
 		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();		
@@ -601,52 +438,6 @@ class HRVAnalysis extends App.AppBase {
 		
 		writeStrings(1, mNumEntries, mNumBlocks, mRemainder);
 	}		
-	
-	(:discard)	
-	function OLDXXX () {
-		
-		var separator = ",";
-		for (i=0; i < mNumBlocks; i++) {
-			base = i*BLOCK_SIZE;
-			var j;
-			for (j=0; j< BLOCK_SIZE; j++) {
-				mSp = mIntervalSampleBuffer[base+j];
-				mString += (mSp & 0x0FFF).toString()+separator;				
-			}
-			Sys.println(mString);
-			mString = "";		
-		}
-		mString = "";
-		// Write tail end of buffer
-		base = BLOCK_SIZE * mNumBlocks;
-		for (i=0; i < mRemainder; i++) {	
-			mSp = mIntervalSampleBuffer[base+i];
-			mString += (mSp & 0x0FFF).toString()+separator;						
-		}	
-		Sys.println(mString);
-		
-		mString = "Flags:, ";
-		
-		for (i=0; i < mNumBlocks; i++) {
-			base = i*BLOCK_SIZE;
-			var j;
-			for (j=0; j< BLOCK_SIZE; j++) {
-				mSp = mIntervalSampleBuffer[base+j];
-				mString += (mSp >> 12 & 0x0F).toString()+separator;			
-			}
-			Sys.println(mString);
-			mString = "";		
-		}
-		mString = "";
-		// Write tail end of buffer
-		base = BLOCK_SIZE * mNumBlocks;
-		for (i=0; i < mRemainder; i++) {	
-			mSp = mIntervalSampleBuffer[base+i];
-			mString += (mSp >> 12 & 0x0F).toString()+separator;					
-		}	
-		Sys.println(mString);
-		mString = "";
-	}
 	
 }
 
