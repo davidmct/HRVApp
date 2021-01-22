@@ -108,87 +108,89 @@ class myException extends Lang.Exception {
     }
 }
 
-	// Settings variables
-    //var timestampSet;
-	var appNameSet;
+// Settings variables
+//var timestampSet;
+var appNameSet;
 
-	var soundSet;
-	var vibeSet;
-	var testTypeSet;
-	var timerTimeSet;
-	var mManualTimeSet;
-	var mMaxTimerTimeSet;
-	var bgColSet;
-	var lblColSet;
-    var txtColSet;
-    // History labels
-	var Label1ColSet;
-	var Label3ColSet;
-	var Label2ColSet;
-	
-	// actual values of colour based on ColSet index
-	// saves lots of UI resource loads and func calls
-	var mLabelColour;
-    var mValueColour;
-	var mBgColour;
-	var mHRColour;
-	var Label1Colour;		
-	var Label2Colour;
-	var Label3Colour;
-	//0.4.3 
-	//add variables for history text index
-	var mHistoryLabel1;
-	var mHistoryLabel2;
-	var mHistoryLabel3;	
-	
-	//0.4.6
-	var mNumberBeatsGraph;
-	
-	//0.6.0
-	var mLogScale = LOG_SCALE;
-	
-	var mMenuTitleSize;
-	var mDeviceID = null;
+var soundSet;
+var vibeSet;
+var testTypeSet;
+var timerTimeSet;
+var mManualTimeSet;
+var mMaxTimerTimeSet;
+var bgColSet;
+var lblColSet;
+var txtColSet;
+// History labels
+var Label1ColSet;
+var Label3ColSet;
+var Label2ColSet;
 
-	// Results array variable
-	var results;
-	//var mHistorySelectFlags;
-	// write pointer into results array
-	var resultsIndex;
+// actual values of colour based on ColSet index
+// saves lots of UI resource loads and func calls
+var mLabelColour;
+var mValueColour;
+var mBgColour;
+var mHRColour;
+var Label1Colour;		
+var Label2Colour;
+var Label3Colour;
+//0.4.3 
+//add variables for history text index
+var mHistoryLabel1;
+var mHistoryLabel2;
+var mHistoryLabel3;	
 
-	// View trackers
-	var viewNum;
-	var lastViewNum;
+//0.4.6
+var mNumberBeatsGraph;
 
-	var mFitWriteEnabled;   
-    //var mStorage;
-    var mTestControl;
-    var mIntervalSampleBuffer; // buffer in app space for intervals
-    var mSampleProc; // instance of sample processor
-    var mFitControl;
-    
-    // % permitted deviation from average for ectopic beats
-	var vUpperThresholdSet; // long % over
-	var vLowerThresholdSet; // short period under %
-	
-	// The device type
-	var mDeviceType;
-	//var customFont; // load in init if low res. saves load in every view
-	
-	//var mApp;
-	var mSensor;
-	var mAntID;
-	var mAuxHRAntID; // found sensor ID
-	// true if external unknown strap ie not enabled in watch
-	// 1 = true, 0 = false and INTERNAL_SENSOR
-	var mSensorTypeExt;
-	
-	// Auto scale when true otherwise fixed range
-	var mBoolScaleII;
-	
-	var glanceData = new [12];
-	//var mArcCol = [Gfx.COLOR_DK_RED, Gfx.COLOR_ORANGE, Gfx.COLOR_DK_GREEN, Gfx.COLOR_GREEN];
-	var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
+//0.6.0
+var mLogScale = LOG_SCALE;
+
+var mMenuTitleSize;
+var mDeviceID = null;
+
+// Results array variable
+var results;
+//var mHistorySelectFlags;
+// write pointer into results array
+var resultsIndex;
+
+// View trackers
+var viewNum;
+var lastViewNum;
+
+var mFitWriteEnabled;   
+//var mStorage;
+var mTestControl;
+var mIntervalSampleBuffer; // buffer in app space for intervals
+var mSampleProc; // instance of sample processor
+var mFitControl;
+
+// % permitted deviation from average for ectopic beats
+var vUpperThresholdSet; // long % over
+var vLowerThresholdSet; // short period under %
+
+// The device type
+var mDeviceType;
+//var customFont; // load in init if low res. saves load in every view
+
+//var mApp;
+var mSensor;
+var mAntID;
+var mAuxHRAntID; // found sensor ID
+// true if external unknown strap ie not enabled in watch
+// 1 = true, 0 = false and INTERNAL_SENSOR
+var mSensorTypeExt;
+
+// Auto scale when true otherwise fixed range
+var mBoolScaleII;
+
+var glanceData = new [12];
+//var mArcCol = [Gfx.COLOR_DK_RED, Gfx.COLOR_ORANGE, Gfx.COLOR_DK_GREEN, Gfx.COLOR_GREEN];
+var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
+// colour of arrow display
+var mCircColSel;
 		
 class HRVAnalysis extends App.AppBase {
   

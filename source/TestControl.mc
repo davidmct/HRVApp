@@ -22,6 +22,7 @@ using Toybox.Attention;
 using Toybox.System as Sys;	
 
 using HRVStorageHandler as mStorage;
+using GlanceGen as GG;
 
 class TestController {
 
@@ -454,7 +455,12 @@ class TestController {
     	mStorage.prepareSaveResults( utcStart); 
     	
      	// FIT FILE SESSION RESULTS HERE
-    	$.mFitControl.saveFITrec(); // also sets mSession to null   	
+    	$.mFitControl.saveFITrec(); // also sets mSession to null   
+    	
+    	// 0.6.2 now generate widget type data
+    	var _stats = [ $.mSampleProc.mRMSSD, $.mSampleProc.vEBeatCnt, $.mSampleProc.mNN50];
+		$.mCircColSel = GG.generateResults( _stats);
+		_stats = null; 	
     	
     } // end save test
     
