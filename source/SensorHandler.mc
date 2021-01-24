@@ -74,18 +74,6 @@ class SensorHandler {
 	function setObserver(func) {
 		mFunc = func;
 	}
-	
-	// post 0.4.01 release function to isolate sample processing and enable excludeAnnotations 
-	// now fixed as baseAnnotations needed setting to make exlude work
-	// can now use same function names
-(:discard)
-	function _callSampleProcessing(isTesting, livePulse, intMs, N ) {
-		if ( $.mSampleProc has :rawSampleProcessingUpdated ) {
-			$.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
-		} else {
-			$.mSampleProc.rawSampleProcessing(isTesting, livePulse, intMs, N );
-    	}
-    }
     
     // clean-up on exit
     function CloseSensors() {
