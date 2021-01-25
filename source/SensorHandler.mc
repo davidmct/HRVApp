@@ -74,19 +74,7 @@ class SensorHandler {
 	function setObserver(func) {
 		mFunc = func;
 	}
-	
-	// post 0.4.01 release function to isolate sample processing and enable excludeAnnotations 
-	// now fixed as baseAnnotations needed setting to make exlude work
-	// can now use same function names
-(:discard)
-	function _callSampleProcessing(isTesting, livePulse, intMs, N ) {
-		if ( $._mApp.mSampleProc has :rawSampleProcessingUpdated ) {
-			$._mApp.mSampleProc.rawSampleProcessingUpdated(isTesting, livePulse, intMs, N );
-		} else {
-			$._mApp.mSampleProc.rawSampleProcessing(isTesting, livePulse, intMs, N );
-    	}
-    }
-    
+	    
     // clean-up on exit
     function CloseSensors() {
  		//  
@@ -98,7 +86,8 @@ class SensorHandler {
     		sensor.stopIntSensor(); 
     	}   
     }
-    
+
+(:discard)    
     function fSwitchSensor( oldSensor) {
     	Sys.println("fSwitchSensor() potential sensor change of "+oldSensor+", to "+$._mApp.mSensorTypeExt);
 
@@ -156,7 +145,19 @@ class SensorHandler {
     		Sys.println("Sensor unchanged");
     	}  	
     }
-    
+
+
+// Now only inetrnal sensors to free memory
+    function SetUpSensors() {
+    	// has to be called after initialize as mSensor not created!!
+    	mSearching = true;
+	    // Internal or registered strap
+		Sys.println("OHR or registered sensor selected");
+		if (sensor != null) {sensor = null;}
+		sensor = new InternalSensor(mHRData);
+    }
+
+(:discard)    
     function SetUpSensors() {
     	// has to be called after initialize as mSensor not created!!
     	mSearching = true;
@@ -225,6 +226,7 @@ class SensorHandler {
     } 
 }
 
+(:discard)
 class AntHandler extends Ant.GenericChannel {  
     const DEVICE_TYPE = 120;  //strap
 	const PERIOD = 8070; // 4x per second	

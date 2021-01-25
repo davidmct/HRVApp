@@ -199,6 +199,9 @@ class HRVAnalysis extends App.AppBase {
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
+    
+    
+    //$._mApp.mSensorTypeExt = SENSOR_INTERNAL;
 
 (:storageMethod) 
     function initializeWithStorage() {

@@ -293,10 +293,11 @@ class TestController {
 				StateMachine(:RestartControl); 	
 			}	
 		}
-		else if (caller == :SensorType) {
+		//else if (caller == :SensorType) {
 			// this also restarts state machine and discard FIT data
-			$._mApp.mSensor.fSwitchSensor( value);		
-		} else if (caller == :TestType) {	
+			//$._mApp.mSensor.fSwitchSensor( value);		
+		//} 
+		else if (caller == :TestType) {	
 	 		if (value != $._mApp.testTypeSet) {             
 	        	StateMachine(:RestartControl); 
 	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
