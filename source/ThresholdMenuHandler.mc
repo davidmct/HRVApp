@@ -45,14 +45,14 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
             //var menu = new Ui.Menu2({:title=>"Upper"});
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
-	        Sys.println("Threshold upper before = "+$._mApp.vUpperThresholdSet);
-	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
+	        Sys.println("Threshold upper before = "+$.vUpperThresholdSet);
+	        Ui.pushView(new NumberPicker2Digit(10, $.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
         } else if( id.equals("l"))  {
             //var menu = new Ui.Menu2({:title=>"Lower"});
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE ); 
-	        Sys.println("Threshold lower before = "+$._mApp.vLowerThresholdSet);
-	        Ui.pushView(new NumberPicker2Digit(10, $._mApp.vLowerThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
+	        Sys.println("Threshold lower before = "+$.vLowerThresholdSet);
+	        Ui.pushView(new NumberPicker2Digit(10, $.vLowerThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
         }
     }
     
@@ -65,8 +65,8 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
     }
 	
 	// delegate scales to % already
-    function setUpper(value) { $._mApp.vUpperThresholdSet = value; Sys.println("Upper threshold set to "+$._mApp.vUpperThresholdSet); }
-    function setLower(value) { $._mApp.vLowerThresholdSet = value; Sys.println("Lower threshold set to "+$._mApp.vLowerThresholdSet); }
+    function setUpper(value) { $.vUpperThresholdSet = value; Sys.println("Upper threshold set to "+$.vUpperThresholdSet); }
+    function setLower(value) { $.vLowerThresholdSet = value; Sys.println("Lower threshold set to "+$.vLowerThresholdSet); }
     
 }
 

@@ -8,4 +8,8 @@
 	<jsonData id="jsonShortThresholdMap">[0.12, 0.15, 0.20, 0.25, 0.30]</jsonData>
 	<jsonData id="jsonThresholdStrings">[ "Very tight", "Tight", "Nominal", "Loose", "Very loose"]</jsonData>
 	--> 
+	<jsonData id="jsonStatsDisp">[140,28,98,67,182,67,98,123,182,123,98,184,182,184,98,89,182,89,98,148,182,148,98,210,182,210,53,109,170,229,179,53,53,140,229,179,53]</jsonData>
+	<!-- format is (lower age, upper age, low value, high value)xN -->
+	<jsonData   id="jsonMaleHRV">[25,34,19.8,59.6,35,44,15.5,48.5,45,54,12.1,33.9,55,64,8.8,31,  65,74,8.4,29.8]</jsonData>	
+	<jsonData id="jsonFemaleHRV">[25,34,20.1,65.7,35,44,16.9,53.9,45,54,12.7,39.9,55,64,9.5,33.3,65,74,7.3,30.9]</jsonData>
 </resources>

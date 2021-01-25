@@ -70,10 +70,10 @@ class BeatView extends Ui.View {
 	hidden var mScaleY;
 	hidden var mScaleX;
 	
-	hidden var gg = null;
+	//hidden var gg = null;
 	
 	function initialize() { 
-		gg = $._mApp;
+		//gg = $.$.
 		View.initialize();
 	}
 	
@@ -87,7 +87,7 @@ class BeatView extends Ui.View {
 		cGridWith = a.toNumber();
 		a = null;
 		
-		//if ($._mApp.mDeviceType == RES_240x240) {		
+		//if ($.$.DeviceType == RES_240x240) {		
 		//	customFont = Ui.loadResource(Rez.Fonts.smallFont);
 		//}
 		
@@ -118,7 +118,7 @@ class BeatView extends Ui.View {
     	// performance check
     	startTimeP = Sys.getTimer();
 		
-		var mDevType = gg.mDeviceType;
+		var mDevType = $.mDeviceType;
 		if ((mDevType == RES_240x240) || (mDevType == RES_218x218)) {
 			if (mLabelFont == null) {
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
@@ -129,11 +129,11 @@ class BeatView extends Ui.View {
 		
 		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 				
-		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
 		
 		// draw lines
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
     	// X Range determined by sum of previous N samples 
@@ -148,12 +148,12 @@ class BeatView extends Ui.View {
     	var a = new[2];
    	
 		// if no sample processing then exit 
-    	if (gg.mSampleProc == null ) { 	
+    	if ($.mSampleProc == null ) { 	
     		return true;
     	}
     	
     	// reduce entries by 1 as points to next free slot    	
-		var mNumberEntries = gg.mSampleProc.getNumberOfSamples();
+		var mNumberEntries = $.mSampleProc.getNumberOfSamples();
 		
 		// how many points to plot
     	var mSampleNum = 0;
@@ -165,10 +165,10 @@ class BeatView extends Ui.View {
     		return true;
     	}
     	
-    	if ( mNumberEntries <= gg.mNumberBeatsGraph) {
+    	if ( mNumberEntries <= $.mNumberBeatsGraph) {
     		mSampleNum = mNumberEntries-1;
     	} else {
-    		mSampleNum = gg.mNumberBeatsGraph;
+    		mSampleNum = $.mNumberBeatsGraph;
     	}
     	
     	//Sys.println("BeatView: mNumberEntries, mSampleNum: "+mNumberEntries+" "+mSampleNum);
@@ -176,7 +176,7 @@ class BeatView extends Ui.View {
     	// work out X range covered
     	var sumII = 0;
     	for (var i=0; i < mSampleNum; i++) {
-    		sumII += (gg.mIntervalSampleBuffer[mNumberEntries-i-1] & 0x0FFF); 		
+    		sumII += ($.mIntervalSampleBuffer[mNumberEntries-i-1] & 0x0FFF); 		
     	}
     	
     	// We'll offset the x-axis by half the first sample so we can see final one
@@ -207,7 +207,7 @@ class BeatView extends Ui.View {
 		
 		// work out Y range   	
     	for (var i=0; i < mSampleNum; i++) {   	
-    		var a = gg.mSampleProc.aAvgStore[i];
+    		var a = $.mSampleProc.aAvgStore[i];
 			// check we have this number of entries - shouldn't happen once code complete
 			if ((a == null) || (a == 0.0)) {
 				// ignore
@@ -256,7 +256,7 @@ class BeatView extends Ui.View {
 		var mPulseWidth = 4;
 		
 		for( var i = mSampleStartIndex; i < mNumberEntries-1; i++ ){		
-			sample = gg.mIntervalSampleBuffer[i];
+			sample = $.mIntervalSampleBuffer[i];
 			mIIState = (sample >> 12) & 0x000F;
 			sample = sample & 0x0FFF;
 			
@@ -313,7 +313,7 @@ class BeatView extends Ui.View {
 				
 		//Label and avg plot code
 		
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		
 		// now we have averages and X location so can plot text
 		var mStr;
@@ -345,8 +345,8 @@ class BeatView extends Ui.View {
 			// mXdata[] has x value
 			// text needs to be above bar (may need to alternate top/bottom)
 			// cOffset should be top of bar as they are drawn downwards to larger y
-			var a0 = gg.mSampleProc.aAvgStore[mSampleNum-i-1];
-			var a1 = gg.mSampleProc.aIIValue[mSampleNum-i-1];
+			var a0 = $.mSampleProc.aAvgStore[mSampleNum-i-1];
+			var a1 = $.mSampleProc.aIIValue[mSampleNum-i-1];
 			// a[0] can be used to plot avg line but need to scale across all of them
 			// a[1] is II sample
 			
@@ -398,7 +398,7 @@ class BeatView extends Ui.View {
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
-		Sys.println("BeatGraph executes in "+mProcessingTime+"ms for "+gg.mSampleProc.getNumberOfSamples()+" dots");			
+		Sys.println("BeatGraph executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("BeatGraph memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			

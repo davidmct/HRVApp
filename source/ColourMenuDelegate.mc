@@ -89,20 +89,20 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     	//Sys.println("setBackground called: "+value);
     	
     	if(value == 1) {
-    		$._mApp.bgColSet = 0; //WHITE;
+    		$.bgColSet = 0; //WHITE;
     		//Sys.println("WHITE background set "+WHITE);
-    		if(0 == $._mApp.txtColSet) {
-	    		$._mApp.txtColSet = 3; //BLACK;
+    		if(0 == $.txtColSet) {
+	    		$.txtColSet = 3; //BLACK;
 	    	}
     	}
     	else {
-    		$._mApp.bgColSet = 3; //BLACK;
+    		$.bgColSet = 3; //BLACK;
     		//Sys.println("BLACK background set "+BLACK);
-    		if(3 == $._mApp.txtColSet) { //BLACK
-	    		$._mApp.txtColSet = 0; //WHITE;
+    		if(3 == $.txtColSet) { //BLACK
+	    		$.txtColSet = 0; //WHITE;
 	    	}
     	}   	
-    	//Sys.println("Colours: back, text "+$._mApp.bgColSet+" "+$._mApp.txtColSet);
+    	//Sys.println("Colours: back, text "+$.bgColSet+" "+$.txtColSet);
     }
     
     function onBack() {
@@ -113,12 +113,12 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
 
-    function setLabel(value) { $._mApp.lblColSet = value;  }
-    function setText(value) { $._mApp.txtColSet = value; }
+    function setLabel(value) { $.lblColSet = value;  }
+    function setText(value) { $.txtColSet = value; }
     //0.4.3
-    function setHistory1(value) { $._mApp.mHistoryLabel1 = value;}
-    function setHistory2(value) { $._mApp.mHistoryLabel2 = value;}
-    function setHistory3(value) { $._mApp.mHistoryLabel3 = value;}
+    function setHistory1(value) { $.mHistoryLabel1 = value;}
+    function setHistory2(value) { $.mHistoryLabel2 = value;}
+    function setHistory3(value) { $.mHistoryLabel3 = value;}
     
 }
 

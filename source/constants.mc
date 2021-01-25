@@ -115,6 +115,11 @@ enum {
 
 // STORAGE PROPERTIES
 
+// Glance Results memory locations. (X) <> (X - 99)
+const NUM_RESGL_ENTRIES = 100; // last 100 entries
+const GL_SET_SIZE = 2; // each containing this number of entries
+const RESGL_ARRAY_SIZE = 200;
+
 // Results memory locations. (X) <> (X + 29)
 const NUM_RESULT_ENTRIES = 30; // last 30 days
 const DATA_SET_SIZE = 14; // each containing this number of entries
