@@ -11,9 +11,11 @@
 	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWriteEnabledT" prompt="@Strings.mFitWriteEnabledP">
 		<settingConfig type="boolean" />
 	</setting>	
+	<!-- 
 	<setting propertyKey="@Properties.pSensorSelect" title="@Strings.pSensorSelectT" prompt="@Strings.pSensorSelectP">
 		<settingConfig type="boolean" />
 	</setting>	
+	-->
 	<setting propertyKey="@Properties.pIIScale" title="@Strings.pIIScaleT" prompt="@Strings.pIIScaleP">
 		<settingConfig type="boolean" />
 	</setting>		

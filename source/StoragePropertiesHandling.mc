@@ -35,7 +35,7 @@ module HRVStorageHandler {
 		Properties.setValue("pAuxHRAntID", 0);
 		Storage.setValue("firstLoadEver", true);
 		Properties.setValue("pFitWriteEnabled", false);
-		Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
+		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
 		Properties.setValue("pIIScale", false);
 		Properties.setValue("soundSet", true);
@@ -229,7 +229,7 @@ Sys.println("NO CIQ 2.4 support");
 		//$.timestampSet = $.getProperty("timestampSet");
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = $.getProperty("pFitWriteEnabled");
-		$.mSensorTypeExt = $.getProperty("pSensorSelect");	
+		//$.mSensorTypeExt = $.getProperty("pSensorSelect");	
 		$.mBoolScaleII = $.getProperty("pIIScale");
 		$.soundSet = $.getProperty("soundSet");
 		$.vibeSet = $.getProperty("vibeSet");
@@ -286,7 +286,7 @@ Sys.println("NO CIQ 2.4 support");
 			//$.timestampSet = Storage.getValue("timestampSet");
 			$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 			$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
-			$.mSensorTypeExt = Properties.getValue("pSensorSelect");
+			//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
 			$.mBoolScaleII = Properties.getValue("pIIScale");
 			$.soundSet = Properties.getValue("soundSet");
 			$.vibeSet = Properties.getValue("vibeSet");
@@ -373,7 +373,7 @@ Sys.println("NO CIQ 2.4 support");
 	function _CallSavePropStorage() {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
-		Properties.setValue("pSensorSelect", $.mSensorTypeExt);
+		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		
 		// user changable
 		Properties.setValue("pIIScale", $.mBoolScaleII);

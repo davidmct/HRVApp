@@ -197,9 +197,6 @@ class HRVAnalysis extends App.AppBase {
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
-    
-    
-    //$._mApp.mSensorTypeExt = SENSOR_INTERNAL;
 
 (:storageMethod) 
     function initializeWithStorage() {
@@ -207,12 +204,11 @@ class HRVAnalysis extends App.AppBase {
 		mAuxHRAntID = mAntID; // default
 		
 		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
-		mSensorTypeExt = Properties.getValue("pSensorSelect");	
+		mSensorTypeExt = SENSOR_INTERNAL;
+		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
 		Auth.init();		      
-    }
-    
-    
+    }   
     
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
@@ -370,7 +366,7 @@ class HRVAnalysis extends App.AppBase {
 		mStorage.onSettingsChangedStore();
 		
 		// check whether we need to switch
-		$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
+		//$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
         // if type has changed then force restart of state machine  
         $.mTestControl.fCheckSwitchType( :TestType, oldTestType); 
         // and if write state has changed!!
