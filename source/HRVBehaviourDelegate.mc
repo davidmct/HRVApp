@@ -86,7 +86,7 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
         var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
         // add items
         menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
-        menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
+        //menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
         menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
         menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
         //0.6.0 check low memory device

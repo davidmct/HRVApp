@@ -25,20 +25,20 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		    customMenu.addItem(new CustomItem(:Timer, "Timer", (TYPE_TIMER== mTestSelected)) );				
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
         }
-     	else if( id.equals("s")) {
-			// optical/registered strap or unknown/disabled
-  			var mExtStrap = $._mApp.mSensorTypeExt;		
-		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
-		    	{
-		        :focusItemHeight=>45,
-		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
-		        :title=>new DrawableMenuTitle("Source", false),
-		        :footer=>new DrawableMenuFooter()
-		    	});
-		    customMenu.addItem(new CustomItem(:Internal, "Internal", mExtStrap == SENSOR_INTERNAL) );
-		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
-     		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
-        }
+//     	else if( id.equals("s")) {
+//			// optical/registered strap or unknown/disabled
+//  			var mExtStrap = $._mApp.mSensorTypeExt;		
+//		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
+//		    	{
+//		        :focusItemHeight=>45,
+//		        //:foreground=>new Rez.Drawables.MenuForeground_id(),
+//		        :title=>new DrawableMenuTitle("Source", false),
+//		        :footer=>new DrawableMenuFooter()
+//		    	});
+//		    customMenu.addItem(new CustomItem(:Internal, "Internal", mExtStrap == SENSOR_INTERNAL) );
+//		    customMenu.addItem(new CustomItem(:Search, "Search", mExtStrap == SENSOR_SEARCH) );				
+ //    		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );    		
+ //       }
         else if( id.equals("f")) {
 			// want to set FIT file creation
   			var mFitWrite = $._mApp.mFitWriteEnabled;		
