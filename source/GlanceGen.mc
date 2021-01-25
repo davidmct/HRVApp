@@ -174,7 +174,10 @@ module GlanceGen
 	}
 	
 	function calcPosition( _HRV, _expected, _found) {
-		var mPos = 0;
+		var mPos = 0.0;
+		
+		// monthly or weekly averages could come in as zero whereas ranges set on actual values
+		if (_HRV == 0.0 || _HRV == 0) { return 0.0;}
 		
 	    if ( _HRV >= _expected[0] && _HRV <= _expected[1]) {
      		mPos = 20 + 60.0 * ( _HRV - _expected[0]) / (_expected[1] - _expected[0]);
@@ -183,7 +186,7 @@ module GlanceGen
      		// value must be lower than expected and also by implication min is also less
      		mPos = 20 * (_HRV - _found[0]) / (_expected[0] - _found[0]); 
      		// Monthly can be zero _HRV as no data 
-     		if (mPos < 0 ) {mPos = 0;}   	
+     		if (mPos < 0.0 ) {mPos = 0.0;}   	
      	} else {
      		// over range for age
      		// range it in the upper 20% 
