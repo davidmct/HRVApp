@@ -658,61 +658,8 @@ module GlanceGen
 		} 
 	}
 
-(:TestVersionGL)
-	// pull in JSON data instead
-	function prepareSaveResGL( utcStart, _stats) {
-		var _res = new [5];	
-		// create arrays, store and keep
-		resetResGL( false);
-		
-		var dateList = Ui.loadResource(Rez.JsonData.jsonTestDates); 
-		var latestDate = dateList[0]; // force to earliest
-		
-		var hrvList = Ui.loadResource(TESTSET); 
-		var j = 0;
-		for(var i=0; i < dateList.size(); i++) {		
-			resGL[j+1] = hrvList[i];
-			
-			// check date is not zero
-			if ( hrvList[i] != 0 ) {
-				resGL[j] = dateList[i];			
-				if (resGL[j] > latestDate ) { latestDate = resGL[j];}
-			} else {
-				// force date to zero
-				resGL[j] = 0; // no data for this date
-			}
-			
-			//resGL[j+1] = hrvList[i]; //done already at start of loop
-			//resGL[j+2] = 0.0;
-			//resGL[j+3] = 0.0;	
-			j += GL_SET_SIZE;		
-			
-			// NEED TO EDIT IF DATA SIZE CHANGES
-		}
-		
-		// pass array, today and current HRV
-		_res = f_MinMax ( resGL, utcStart, _stats[0]);
-		
-		// We want to set date to last valid HRV entry
-		_res[1] = latestDate;
-				
-		Sys.println("dateList size = "+dateList.size()+" with latest date of "+latestDate);
-		Sys.println("Dates loaded="+dateList+"\n and HRV="+hrvList);
-		Sys.println("resGL array created ="+resGL);
-		Sys.println("passing back res:"+_res);
-		
-		dateList = null;
-		hrvList = null; 
-		// leave index at 0 as doesn't matter	
-		storeResGL();
-		//return latestDate;
-		
-		return _res;	
-	}
-
 	// function to read in results array 
 	// update current values and write back to store 	
-(:notTestVersionGL)
 	function prepareSaveResGL( utcStart, _stats) {
 		// need to load results array fill and then save
 		// assume pointer still valid	
