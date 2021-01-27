@@ -1,21 +1,26 @@
 <settings>
+<!-- 
 	<setting propertyKey="@Properties.pDeviceID" title="@Strings.pDeviceIDT" prompt="@Strings.pDeviceIDP">
 		<settingConfig type="alphaNumeric"  />
 	</setting>	
+-->
+<!-- 
 		<setting propertyKey="@Properties.pAuthID" title="@Strings.pAuthIDT" prompt="@Strings.pAuthIDP">
 		<settingConfig type="alphaNumeric"  />
-	</setting>		
+	</setting>
+	
 	<setting propertyKey="@Properties.pAuxHRAntID" title="@Strings.pAuxHRAntIDT" prompt="@Strings.pAuxHRAntIDP">
 		<settingConfig type="numeric"  />
-	</setting>	
+	</setting>
+-->		
 	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWriteEnabledT" prompt="@Strings.mFitWriteEnabledP">
 		<settingConfig type="boolean" />
 	</setting>	
-	<!-- 
+<!-- 
 	<setting propertyKey="@Properties.pSensorSelect" title="@Strings.pSensorSelectT" prompt="@Strings.pSensorSelectP">
 		<settingConfig type="boolean" />
 	</setting>	
-	-->
+-->
 	<setting propertyKey="@Properties.pIIScale" title="@Strings.pIIScaleT" prompt="@Strings.pIIScaleP">
 		<settingConfig type="boolean" />
 	</setting>		
@@ -203,7 +208,8 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<!--
+	
+<!--
 	<setting propertyKey="@Properties.pLongThresholdIndex" title="@Strings.LongThresholdtT" prompt="@Strings.ThresholdP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.VTIGHT</listEntry>
@@ -222,7 +228,7 @@
 			<listEntry value="4">@Strings.VLOOSE</listEntry>
 		</settingConfig>
 	</setting>	
-	-->					
+-->					
 
 	<setting propertyKey="@Properties.pLongThresholdIndex" title="@Strings.LongThresholdT" prompt="@Strings.ThresholdP">	
 		<settingConfig type="numeric" min="0.1" max="0.4" errorMessage="@Strings.ThresholdErrorT" />
@@ -232,10 +238,12 @@
 	</setting>	
 	<setting propertyKey="@Properties.pLogScale" title="@Strings.LogT" prompt="@Strings.LogP">	
 		<settingConfig type="numeric" min="1.0" max="50.0" errorMessage="@Strings.LogErrorT" />
-	</setting>	
-	
-	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLT"> <!--helpUrl="@Strings.PayURLString">-->
-	<settingConfig type="url"  readonly="true" />	
 	</setting>
-	
+		
+
+<!-- 
+	<setting propertyKey="@Properties.pPaypalRef" title="@Strings.PayURLT">
+		<settingConfig type="url"  readonly="true" />	
+	</setting>
+-->
 </settings>

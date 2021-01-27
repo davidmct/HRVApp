@@ -3,6 +3,7 @@ using Toybox.Application as App;
 using Toybox.Graphics;
 
 using HRVStorageHandler as mStorage;
+using GlanceGen as GG;
 
 class ResetMenuDelegate extends Ui.Menu2InputDelegate {
 
@@ -25,11 +26,11 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
     
     function setResetSettings(value) {
 		if (value == 1) { 
-			var oldSensor = $.mSensorTypeExt;
+			//var oldSensor = $.mSensorTypeExt;
             mStorage.resetSettings();
             //0.4.04
             // this may have changed sensor type !!
-            $.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
+            //$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
         }	
     }
     
@@ -38,6 +39,9 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
             mStorage.resetResults();
             // and push to memory
             mStorage.storeResults();
+			GG.resetResGL(true);
+            // and push to memory
+            GG.storeResGL();
         }	
     }
  

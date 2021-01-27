@@ -148,7 +148,7 @@ var mNumberBeatsGraph;
 var mLogScale = LOG_SCALE;
 
 var mMenuTitleSize;
-var mDeviceID = null;
+//var mDeviceID = null;
 
 // Results array variable
 var results;
@@ -201,8 +201,8 @@ class HRVAnalysis extends App.AppBase {
 
 (:storageMethod) 
     function initializeWithStorage() {
-		mAntID = Properties.getValue("pAuxHRAntID");
-		mAuxHRAntID = mAntID; // default
+		//mAntID = Properties.getValue("pAuxHRAntID");
+		//mAuxHRAntID = mAntID; // default
 		
 		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
 		mSensorTypeExt = SENSOR_INTERNAL;
@@ -233,7 +233,7 @@ class HRVAnalysis extends App.AppBase {
 		//Any use of this value for tracking user information must be in compliance with international privacy law.
 		var mySettings = Sys.getDeviceSettings();
         //mDeviceID = mySettings.uniqueIdentifier;
-        mDeviceID = null;
+        //mDeviceID = null;
              
 		if (Toybox.Application has :Storage) {
 			initializeWithStorage();				
@@ -241,7 +241,7 @@ class HRVAnalysis extends App.AppBase {
 			//initializeNoStorage();
 		}
 		
-		Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
+		//Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		//Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);

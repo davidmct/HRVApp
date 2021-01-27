@@ -1,12 +1,14 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
 	<string id="AppVersion">0.6.2</string>
+<!--
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
 	<string id="pAuthIDT">Licence String</string> 
 	<string id="pAuthIDP">Enter string sent to you</string>	
 	<string id="pAuxHRAntIDT">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDP">0 for any or ID of strap</string>
+-->
 	<string id="mFitWriteEnabledT">FIT File Write</string> 
 	<string id="mFitWriteEnabledP">True to write FIT file</string>	
 	<string id="lAvgPulseCT">Average Pulse</string>
@@ -43,9 +45,11 @@
 	<string id="lHeartRateUnits">bpm</string> 
 	<string id="lNoUnits">times</string>  	
 	<string id="lSourceLabel">Sensor Source:</string>
-	<string id="lSourceUnits"> </string> 	
+	<string id="lSourceUnits"> </string> 
+<!-- 	
 	<string id="pSensorSelectT">Use unregistered HRM</string> 
 	<string id="pSensorSelectP">True for unregistered/disabled strap</string>
+-->
 	<string id="pIIScaleT">Auto Scale II</string>
 	<string id="pIIScaleP">On or Off</string>
 	<string id="soundSetT">Sound?</string>
@@ -105,8 +109,9 @@
 	<string id="LOOSE">Loose</string>
 	<string id="VLOOSE">Very Loose</string>
 -->
-	
+<!--	
 	<string id="PayURLT">Please support</string> 
+-->
 	<!-- <string id="PayURLString">xxxxx</string> -->
 		
 	<!-- Number Picker -->
