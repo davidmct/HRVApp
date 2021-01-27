@@ -21,7 +21,8 @@ enum {
 	BEATS_VIEW = 6,
 	INTERVAL_VIEW =7,
 	HISTORY_VIEW = 8,
-	NUM_VIEWS = 9
+	GLANCE_VIEW = 9,
+	NUM_VIEWS = 10
 }
 
 // Colors index. Arrays start at zero
@@ -119,6 +120,7 @@ enum {
 const NUM_RESGL_ENTRIES = 100; // last 100 entries
 const GL_SET_SIZE = 2; // each containing this number of entries
 const RESGL_ARRAY_SIZE = 200;
+const GL_RMSSD_INDEX = 1;
 
 // Results memory locations. (X) <> (X + 29)
 const NUM_RESULT_ENTRIES = 30; // last 30 days

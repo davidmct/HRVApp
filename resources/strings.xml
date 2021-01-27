@@ -8,7 +8,7 @@
 	<string id="pAuxHRAntIDT">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDP">0 for any or ID of strap</string>
 	<string id="mFitWriteEnabledT">FIT File Write</string> 
-	<string id="mFitWriteEnabledP">Set  true to write FIT file</string>	
+	<string id="mFitWriteEnabledP">True to write FIT file</string>	
 	<string id="lAvgPulseCT">Average Pulse</string>
 	<string id="lRMSSDCT">RMSSD</string>
 	<string id="lLnRMSSDCT">Ln(RMSSD)</string>
@@ -91,8 +91,8 @@
 	<string id="LabelHistTitle3">History Entry 3</string> 
 	<string id="LabelHistTitleP">Select History Entry</string> 	
 	
-	<string id="LongThresholdT">Long Pulse Threshold</string>
-	<string id="ShortThresholdT">Short Pulse Threshold</string> 
+	<string id="LongThresholdT">Long Threshold</string>
+	<string id="ShortThresholdT">Short Threshold</string> 
 	<string id="ThresholdP">Select Threshold</string> 
 	<string id="ThresholdErrorT">Range 0.1-0.4</string>
 	<string id="LogT">Ln(RMSSD) scale</string> 

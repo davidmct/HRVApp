@@ -677,7 +677,7 @@ module GlanceGen
 		Sys.println("index = "+index+"ResGL: "+utcStart+","+_stats);
 			
 		resGL[index + TIME_STAMP_INDEX] = utcStart;		
-		resGL[index + RMSSD_INDEX] = _stats[0];
+		resGL[index + GL_RMSSD_INDEX] = _stats[0];
 		//resGL[index + ECT_INDEX] = _stats[1];
 		//resGL[index + NN50_INDEX] = _stats[2];
   		

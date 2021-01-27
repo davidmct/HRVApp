@@ -35,11 +35,13 @@ class HRVView extends Ui.View {
 	hidden var mArrowLen;
 	hidden var cGridWith;
 	hidden var mCircColSel;
+	hidden var _viewN;
 			
-    function initialize() { 
+    function initialize( viewNum) { 
       	View.initialize();  
         // Retrieve device type
 		mCircColSel = 0; // which colour centre circle to show
+		_viewN = viewNum;
      }
 
  	function onLayout(dc) {
@@ -72,15 +74,22 @@ class HRVView extends Ui.View {
 		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
 		dc.clear();
 		dc.setColor(Gfx.COLOR_BLUE,Gfx.COLOR_TRANSPARENT);
-			
+		
+		
 		// NEED TO TEST FOR DATA AVAILABLE OTHERWISE MESSAGE	
-		if (true) {				
-			resultsShow(dc);
+		if ($.mGData == true && $.glanceData != null) {
+			if (_viewN == 0) {					
+				resultsShow(dc);
+			}
+			else {
+				// Second screen
+			
+			}
 		} else {
 			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No result yet", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);		
-		}
-		//Sys.println("IntroView: onUpdate exit");
-  
+		}		
+
+		//Sys.println("IntroView: onUpdate exit");  
     }
 
     //! Called when this View is removed from the screen. Save the

@@ -96,7 +96,7 @@ var mDumpIntervals = true;
 var mDebuggingResults = false;
 
 // access App variables and classes
-var _mApp;
+//var _mApp;
 
 using Toybox.Lang;
 
@@ -187,6 +187,7 @@ var mSensorTypeExt;
 var mBoolScaleII;
 
 var glanceData = new [12];
+var mGData = false;
 //var mArcCol = [Gfx.COLOR_DK_RED, Gfx.COLOR_ORANGE, Gfx.COLOR_DK_GREEN, Gfx.COLOR_GREEN];
 var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
 // colour of arrow display
@@ -299,6 +300,9 @@ class HRVAnalysis extends App.AppBase {
     	// Init view variables
 		viewNum = TEST_VIEW;
 		lastViewNum = TEST_VIEW;
+		
+		// No glance data available
+		mGData = false;
 
 		// Init timers
 		_uiTimer = new Timer.Timer();
