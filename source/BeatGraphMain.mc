@@ -331,12 +331,13 @@ class BeatView extends Ui.View {
 		dc.setPenWidth(1);
 				
 		// label avg axis
-		dc.drawText( leftX+5, mColStart, mLabelFont, format("$1$",[Ymax.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( leftX, ctrY, mLabelFont, format("$1$",[mAvgOffset.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( leftX+5, mColHeight+mColStart, mLabelFont, format("$1$",[Ymin.format("%d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		var _format = Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER;
+		dc.drawText( leftX+5, mColStart, mLabelFont, format("$1$",[Ymax.format("%d")]), _format );
+		dc.drawText( leftX, ctrY, mLabelFont, format("$1$",[mAvgOffset.format("%d")]), _format );
+		dc.drawText( leftX+5, mColHeight+mColStart, mLabelFont, format("$1$",[Ymin.format("%d")]), _format );		
 		dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 		
-		dc.drawText( leftX-3, ctrY-mColHeight/4, mLabelFont, "Avg", Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );	
+		dc.drawText( leftX-3, ctrY-mColHeight/4, mLabelFont, "Avg", _format );	
 		dc.drawText( ctrX, floorY+5, mLabelFont, "percent diff", Gfx.TEXT_JUSTIFY_CENTER );	
 		
 		dc.setPenWidth(3);

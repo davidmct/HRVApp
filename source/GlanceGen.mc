@@ -168,7 +168,7 @@ module GlanceGen
 		// Make it so we need four weeks
 		if (mMcnt == 4) { mMonthAvg = mMonthAvg / mMcnt.toFloat(); } else { mMonthAvg = 0;}
 		
-		Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
+		//Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
 			
 		return [ mMonthAvg, mWeekly[0] ];
 	}
@@ -223,7 +223,7 @@ module GlanceGen
 		var _str3 = ((_utc - _utc % 86400) / 86400);
 		count = _str3 - _str2 + 1;
 		
-		Sys.println("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
+		//intln("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
 		
 		if (count <= 3) {
 			Sys.println(" Not enough dates found for trend!");
@@ -376,7 +376,7 @@ module GlanceGen
 			_startIdx = _endIdx - _cnt; 
 		}
 		
-		Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
+		//Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
 
 		// check for how many non zero entires in range being used
 		var _tmp = 0;
@@ -419,7 +419,7 @@ module GlanceGen
 			mR = ( _NumSamp * _sumXY - _sumX * _sumY) / _div;
 		}	
 		
-		Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
+		//Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
 	
 		return [mB, mM, mR];
 	}
@@ -558,7 +558,7 @@ module GlanceGen
     	var minD = _cD;
     	var maxD = 0;	
     	
-    	Sys.println("ENTER: f_minmax: "+_cD+" HRV: "+_cH);
+    	//Sys.println("ENTER: f_minmax: "+_cD+" HRV: "+_cH);
     		
 		for (var i=0; i < _mCheck.size(); i=i+2) {
 			resGL[i] = _mCheck[i];
@@ -568,7 +568,7 @@ module GlanceGen
 			var _val = resGL[i];
 			if ( _val != 0) { 
 				if (_val > maxD ) { maxD = _val;}
-				if (_val < minD ) { minD = _val; Sys.println("MinD set on i of:"+i);}
+				if (_val < minD ) { minD = _val; }// Sys.println("MinD set on i of:"+i);}
 				
 				_val = resGL[i+1];
 				cntH++;
@@ -623,8 +623,8 @@ module GlanceGen
 			}				
 			
 			if (mCheck != null) { 
-				Sys.println("retrieveResGL: mCheck="+mCheck+"\n with resGL:"+resGL);
-				Sys.println("size mCheck="+mCheck.size()+" resGL="+resGL.size());
+				//Sys.println("retrieveResGL: mCheck="+mCheck+"\n with resGL:"+resGL);
+				//Sys.println("size mCheck="+mCheck.size()+" resGL="+resGL.size());
 				
 				// pass array, today and current HRV
 				res = f_MinMax ( mCheck, utcStart, _stats[0]);
@@ -645,7 +645,7 @@ module GlanceGen
 		// check current date and 
 		
 		// removed boolean on return as always forced an array to exist
-		Sys.println("retrieveResGL() finished. Rtn:"+res);
+		//Sys.println("retrieveResGL() finished. Rtn:"+res);
 		return res;	     
 	
 	}
@@ -674,14 +674,14 @@ module GlanceGen
 		// we write every entry!
 		index = resGLIndex * GL_SET_SIZE;	
 		
-		Sys.println("index = "+index+"ResGL: "+utcStart+","+_stats);
+		//Sys.println("index = "+index+"ResGL: "+utcStart+","+_stats);
 			
 		resGL[index + TIME_STAMP_INDEX] = utcStart;		
 		resGL[index + GL_RMSSD_INDEX] = _stats[0];
 		//resGL[index + ECT_INDEX] = _stats[1];
 		//resGL[index + NN50_INDEX] = _stats[2];
   		
-   		Sys.println("storing resGL ... ="+resGL);
+   		//Sys.println("storing resGL ... ="+resGL);
    		
 		// written a new entry so move pointer
    		// increment write pointer to circular buffer

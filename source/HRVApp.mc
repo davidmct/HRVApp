@@ -362,7 +362,7 @@ class HRVAnalysis extends App.AppBase {
 		//0.4.04
 		// read in changed data
 		// check old state of sensor and test type
-		var oldSensor = mSensorTypeExt;
+		//var oldSensor = mSensorTypeExt;
 		var oldTestType = testTypeSet;
 		var oldFitWrite = $.mFitWriteEnabled;
  
@@ -421,6 +421,12 @@ class HRVAnalysis extends App.AppBase {
 		var BLOCK_SIZE = 40;
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
+		
+		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
+			Sys.println("Buffer overrun - no dump");
+			return;
+		}
+		
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
 		var mString = "II:, ";
