@@ -207,13 +207,13 @@ class BeatView extends Ui.View {
 		
 		// work out Y range   	
     	for (var i=0; i < mSampleNum; i++) {   	
-    		var a = $.mSampleProc.aAvgStore[i];
+    		var ab = $.mSampleProc.aAvgStore[i];
 			// check we have this number of entries - shouldn't happen once code complete
-			if ((a == null) || (a == 0.0)) {
+			if ((ab == null) || (ab == 0.0)) {
 				// ignore
 			} else {
-    	    	if (a < Ymin) { Ymin = a;}
-    			if (Ymax < a) { Ymax = a;}
+    	    	if (ab < Ymin) { Ymin = ab;}
+    			if (Ymax < ab) { Ymax = ab;}
     		}
     	}
     	
