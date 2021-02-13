@@ -137,7 +137,7 @@ class SampleProcessing {
 	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
 	hidden var mStartThreshold = false;
-	hidden var gg; //$._ mApp to make global more local!
+	//hidden var gg; //$._ mApp to make global more local!
 	
 	var dataCount;
 	var avgPulse;

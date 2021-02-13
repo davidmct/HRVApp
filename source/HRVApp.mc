@@ -383,7 +383,7 @@ class HRVAnalysis extends App.AppBase {
 	}
 
 	
-	function writeStrings(_type, _mNumEntries, _mNumBlocks, _mRemainder) {
+	function writeStrings(_type, _mNumBlocks, _mRemainder) {
 	    // Block size for dump to debug of intervals
   		var BLOCK_SIZE = 40;
 		var mString;
@@ -421,22 +421,22 @@ class HRVAnalysis extends App.AppBase {
 		var BLOCK_SIZE = 40;
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
-		
+
+		mStorage.PrintStats();
+				
 		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
 			Sys.println("Buffer overrun - no dump");
 			return;
 		}
+		if (mNumEntries <= 0) { return;}
 		
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
 		var mString = "II:, ";
 		var i;
 		var base;
-		var mSp;
-		
-		mStorage.PrintStats();
-		
-		if (mNumEntries <= 0) { return;}
+		var mSp;		
+
 		Sys.println("Dumping intervals");
 		
 		//if (mDebugging == true) {
@@ -445,9 +445,9 @@ class HRVAnalysis extends App.AppBase {
 		
 		// save memory by removing code lines
 		// type 0 = II, 1 = flags
-		writeStrings(0, mNumEntries, mNumBlocks, mRemainder);
+		writeStrings(0, mNumBlocks, mRemainder);
 		
-		writeStrings(1, mNumEntries, mNumBlocks, mRemainder);
+		writeStrings(1, mNumBlocks, mRemainder);
 	}		
 	
 }

@@ -65,7 +65,7 @@ module HRVStorageHandler {
 		//0.6.0
 		Properties.setValue("pLogScale", 50.0);
 		
-		Properties.setValue("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
+		//Properties.setValue("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	}
 
 (:preCIQ24)	

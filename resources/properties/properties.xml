@@ -11,8 +11,8 @@
 	<!-- <property id="pTrialStartDate" type="number">0</property>-->
 
 	<property id="pAuxHRAntID" type="number">0</property>
-	<property id="pDeviceID" type="string">null</property>
-	<property id="pAuthID" type="string">Not Set</property>
+	<!--  <property id="pDeviceID" type="string">null</property>
+	<property id="pAuthID" type="string">Not Set</property> -->
 	<!-- <property id="firstLoadEver" type ="boolean">false</property> -->
 	<property id="timestampSet" type="number">1447234278</property>
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
@@ -43,5 +43,7 @@
 	<property id="pLongThresholdIndex"  type="float">0.15</property>
 	<property id="pShortThresholdIndex" type="float">0.15</property>
 	<property id="pLogScale" type="float">50.0</property>
+	<!-- 
 	<property id="pPaypalRef" type="string">https://www.paypal.com/paypalme/hrvapp</property>
+	-->
 </properties>

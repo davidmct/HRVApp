@@ -7,7 +7,8 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
 	hidden var mFunc;
 	
 	function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }
-	        
+
+(:discard)	        
    	function onSelect(item) {
         var id = item.getId();
         // id is dictionary entry
@@ -31,6 +32,20 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
     function onDone() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
+    
+    // use value as ID to save look up
+    function onSelect(item) {
+        var id = item.getId();
+        // id is dictionary entry
+        //var ColStringDict = Ui.loadResource(Rez.JsonData.jsonColourDict);
+        //var value = ColStringDict.get(id);
+ 		
+ 		Sys.println("Setting colour -"+id);
+ 		
+ 		mFunc.invoke( id);   
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);         
+    }
+    
 }
 
 class ColourMenuDelegate extends Ui.Menu2InputDelegate {
@@ -48,7 +63,8 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         	var mColValue = ColStringDict.get(mColName);
         	if (mColValue != 14 ) { //TRANSPARENT) {
         	    //Sys.println("Label menu item colour: " + mColName);
-        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+        		//menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+        		menu.addItem(new Ui.MenuItem(mColName, null, mColValue, null));
         	}
     	}
 	}
