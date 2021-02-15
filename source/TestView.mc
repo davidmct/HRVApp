@@ -66,7 +66,23 @@ class TestView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-		
+	
+	hidden var mScreen;
+	
+	// BUILD Print list for coords
+	//hidden var mBitMapLocS = [2]; Index 0, 1
+	//hidden var mTitleLocS = [2];	2,3
+	//hidden var mMesssgeLocS = new [4];	4,5,6,7	
+	//hidden var mFitIconLocXS; 8
+	//hidden var mFitIconLocYS; 9
+	//hidden var mLabelSetXS = new [ 4]; 10, 11, 12 ,13
+	//hidden var mLabelSetYS = new [ 4]; 14,15,16,17	
+	//hidden var mLabelValueLocXS = new [ 5]; 18..22
+	//hidden var mLabelValueLocYS = new [ 5]; 23..27	
+	//hidden var mRectHorizWHS = 0; 28
+	//hidden var mRectHorizXS = 0; 29
+	//hidden var mRectHorizYS = new [ 2]; 30, 31
+			
 	
     function initialize() { View.initialize(); }
     
@@ -125,6 +141,29 @@ class TestView extends Ui.View {
 
 		mFitIconLocXS = (mFitIconLocX * mScaleX)/100;
 		mFitIconLocYS = (mFitIconLocY * mScaleY)/100;	
+		
+		// SETUP OUTPUT
+		var a = (mBitMapLoc[0] * mScaleX)/100;
+		var b = (mBitMapLoc[1] * mScaleY)/100;	
+		
+		Sys.println("Test view JSON for "+mScaleX+":\n<jsonData id="+"jsonTestD"+">[ "+
+			a+", "+b+", "+
+			mTitleLocS[0]+", "+mTitleLocS[1]+", "+
+			mMesssgeLocS+", "+
+			mFitIconLocXS+", "+mFitIconLocYS+", "+
+			mLabelSetXS+", "+mLabelSetYS+", "+
+			mLabelValueLocXS+", "+mLabelValueLocYS+", "+
+			mRectHorizWHS+", "+
+			mRectHorizXS+", "+
+			mRectHorizYS+		
+			"]</jsonData>");
+	
+	}
+
+(:discard)	
+	function onLayout(dc) {
+		// load JSON
+		mScreen = Ui.loadResource(Rez.JsonData.jsonTestD);
 	
 	}
         
