@@ -16,6 +16,10 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.6.3 Changes
+// Memory optimisations to fit new functionality
+// Added new HRV trend functions
+
 // 0.5.5
 // New algorithm for threshold detection using forward and backward average make group delay 0
 
