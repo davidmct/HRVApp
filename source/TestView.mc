@@ -7,8 +7,8 @@ using Toybox.System as Sys;
 //(:discard)
 class TestView extends Ui.View {
 	
-	var msgTxt = "";
-	var timer = timerFormat(0);	
+	hidden var msgTxt = "";
+	hidden var timer = timerFormat(0);	
 	hidden var mBitMap = null;
 	hidden var mTitleLabels = ["HRV"];
 	
@@ -59,6 +59,7 @@ class TestView extends Ui.View {
 	function onLayout(dc) {
 		// load JSON
 		mScreen = Ui.loadResource(Rez.JsonData.jsonTestD);
+		$.mTestControl.setObserver(self.method(:onNotify));	
 	
 	}
         

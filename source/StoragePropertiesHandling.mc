@@ -479,10 +479,44 @@ Sys.println("NO CIQ 2.4 support");
 			}
 		}	
 	}
-	
+
+// loading directly into results array and only with storage
+//(:discard)	
+	function retrieveResults() {
+		
+Sys.println("retrieveResults memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+			", "+Sys.getSystemStats().freeMemory.toString()+
+			", "+Sys.getSystemStats().totalMemory.toString()			
+			);	
+		$.results = null;		
+		try {
+			$.results = Storage.getValue("resultsArray");
+			$.resultsIndex = Storage.getValue("resultIndex");
+		}
+		catch (ex) {
+			Sys.println("ERROR: retrieveResults: no results array");
+			$.resultsIndex = 0;
+			return false;
+		}				
+		
+		// have a null if not saved 1st time
+		if ($.resultsIndex == null) {$.resultsIndex = 0;}
+		
+		Sys.println("retrieveResults() finished");		
+		return true;
+	}
+
+// Creating a double buffer of results so try just loading directly
+(:discard)	
 	function retrieveResults() {
 		var mCheck;
 		// currently references a results array in HRVApp
+		
+Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+			", "+System.getSystemStats().freeMemory.toString()+
+			", "+System.getSystemStats().totalMemory.toString()			
+			);	
+		
 		if (Toybox.Application has :Storage) {
 			try {
 				mCheck = Storage.getValue("resultsArray");
@@ -571,21 +605,32 @@ Sys.println("NO CIQ 2.4 support");
 	}
 
 (:newResults)
-	// function to readin results array 
+	// function to read in results array 
 	// update current day values and write back to store 	
 	function prepareSaveResults( utcStart) {
 		// need to load results array fill and then save
 		// assume pointer still valid
-		$.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		
+		// remove for 0.6.3
+		//$.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		
 		// if retrieve returns null i eno storage then we will have all 0's
-		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			$.results[i] = 0;
-		}
+		//for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
+		//	$.results[i] = 0;
+		//}
+		
 		// this will be overridden if we load results
 		$.resultsIndex = 0;
 		
 		retrieveResults(); 
+		if ($.results == null) {
+			$.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+			
+			// if retrieve returns null ie no storage then we will have all 0's
+			for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
+				$.results[i] = 0;
+			}
+		}
 
     	// seconds in day = 86400
     	// make whole number of days (still seconds since UNIX epoch)
@@ -640,12 +685,12 @@ Sys.println("NO CIQ 2.4 support");
    		
     	// better write results to memory!!
     	storeResults(); 
+    	// discard results buffer as large
+    	$.results = null;
+    	
     	// save intervals as well so we can reload and display
     	saveIntervalsToStore();
     	saveStatsToStore();   	
-    	
-    	// discard results buffer as large
-    	$.results = null;
     	
 	} // end prepareResults 
 
