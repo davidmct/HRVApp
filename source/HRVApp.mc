@@ -16,6 +16,10 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.6.3 Changes
+// Memory optimisations to fit new functionality
+// Added new HRV trend functions
+
 // 0.5.5
 // New algorithm for threshold detection using forward and backward average make group delay 0
 
@@ -96,7 +100,7 @@ var mDumpIntervals = true;
 var mDebuggingResults = false;
 
 // access App variables and classes
-var _mApp;
+//var _mApp;
 
 using Toybox.Lang;
 
@@ -148,7 +152,7 @@ var mNumberBeatsGraph;
 var mLogScale = LOG_SCALE;
 
 var mMenuTitleSize;
-var mDeviceID = null;
+//var mDeviceID = null;
 
 // Results array variable
 var results;
@@ -187,6 +191,7 @@ var mSensorTypeExt;
 var mBoolScaleII;
 
 var glanceData = new [12];
+var mGData = false;
 //var mArcCol = [Gfx.COLOR_DK_RED, Gfx.COLOR_ORANGE, Gfx.COLOR_DK_GREEN, Gfx.COLOR_GREEN];
 var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
 // colour of arrow display
@@ -197,22 +202,18 @@ class HRVAnalysis extends App.AppBase {
     // ensure second update
     hidden var _uiTimer;
     const UI_UPDATE_PERIOD_MS = 1000;
-    
-    
-    //$._mApp.mSensorTypeExt = SENSOR_INTERNAL;
 
 (:storageMethod) 
     function initializeWithStorage() {
-		mAntID = Properties.getValue("pAuxHRAntID");
-		mAuxHRAntID = mAntID; // default
+		//mAntID = Properties.getValue("pAuxHRAntID");
+		//mAuxHRAntID = mAntID; // default
 		
 		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
-		mSensorTypeExt = Properties.getValue("pSensorSelect");	
+		mSensorTypeExt = SENSOR_INTERNAL;
+		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
 		Auth.init();		      
-    }
-    
-    
+    }   
     
     function initialize() {
     	Sys.println("HRVApp INITIALISATION called");
@@ -236,7 +237,7 @@ class HRVAnalysis extends App.AppBase {
 		//Any use of this value for tracking user information must be in compliance with international privacy law.
 		var mySettings = Sys.getDeviceSettings();
         //mDeviceID = mySettings.uniqueIdentifier;
-        mDeviceID = null;
+        //mDeviceID = null;
              
 		if (Toybox.Application has :Storage) {
 			initializeWithStorage();				
@@ -244,7 +245,7 @@ class HRVAnalysis extends App.AppBase {
 			//initializeNoStorage();
 		}
 		
-		Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
+		//Sys.println("HRVApp: Initial ANT ID set to : " + mAntID);
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		//Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
@@ -303,6 +304,9 @@ class HRVAnalysis extends App.AppBase {
     	// Init view variables
 		viewNum = TEST_VIEW;
 		lastViewNum = TEST_VIEW;
+		
+		// No glance data available
+		mGData = false;
 
 		// Init timers
 		_uiTimer = new Timer.Timer();
@@ -362,7 +366,7 @@ class HRVAnalysis extends App.AppBase {
 		//0.4.04
 		// read in changed data
 		// check old state of sensor and test type
-		var oldSensor = mSensorTypeExt;
+		//var oldSensor = mSensorTypeExt;
 		var oldTestType = testTypeSet;
 		var oldFitWrite = $.mFitWriteEnabled;
  
@@ -370,7 +374,7 @@ class HRVAnalysis extends App.AppBase {
 		mStorage.onSettingsChangedStore();
 		
 		// check whether we need to switch
-		$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
+		//$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);    
         // if type has changed then force restart of state machine  
         $.mTestControl.fCheckSwitchType( :TestType, oldTestType); 
         // and if write state has changed!!
@@ -383,7 +387,7 @@ class HRVAnalysis extends App.AppBase {
 	}
 
 	
-	function writeStrings(_type, _mNumEntries, _mNumBlocks, _mRemainder) {
+	function writeStrings(_type, _mNumBlocks, _mRemainder) {
 	    // Block size for dump to debug of intervals
   		var BLOCK_SIZE = 40;
 		var mString;
@@ -421,16 +425,22 @@ class HRVAnalysis extends App.AppBase {
 		var BLOCK_SIZE = 40;
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
+
+		mStorage.PrintStats();
+				
+		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
+			Sys.println("Buffer overrun - no dump");
+			return;
+		}
+		if (mNumEntries <= 0) { return;}
+		
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
 		var mString = "II:, ";
 		var i;
 		var base;
-		var mSp;
-		
-		mStorage.PrintStats();
-		
-		if (mNumEntries <= 0) { return;}
+		var mSp;		
+
 		Sys.println("Dumping intervals");
 		
 		//if (mDebugging == true) {
@@ -439,9 +449,9 @@ class HRVAnalysis extends App.AppBase {
 		
 		// save memory by removing code lines
 		// type 0 = II, 1 = flags
-		writeStrings(0, mNumEntries, mNumBlocks, mRemainder);
+		writeStrings(0, mNumBlocks, mRemainder);
 		
-		writeStrings(1, mNumEntries, mNumBlocks, mRemainder);
+		writeStrings(1, mNumBlocks, mRemainder);
 	}		
 	
 }

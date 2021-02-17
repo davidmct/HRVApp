@@ -293,8 +293,11 @@ function getView(newViewNum) {
 	else if (INTERVAL_VIEW == $.viewNum) {
 		//Sys.println("Interval view setup");
 		return new IntervalView();
-	}		
-		
+	}	
+	else if (GLANCE_VIEW == $.viewNum) {
+		//Sys.println("Interval view setup");
+		return new HRVView(0);
+	}								
 	else {
 		return new TestView();
 	}

@@ -7,7 +7,9 @@ using Toybox.Time;
 using Toybox.Timer;
 using Toybox.Math;
 using Toybox.Attention;
+
 using GlanceGen as GG;
+using HRVStorageHandler as mStorage;
 
 
     	// Message to glance structure
@@ -23,16 +25,9 @@ using GlanceGen as GG;
 		//  [9] Position for monthly dial
 		// [10] Low age HRV
 		// [11] High age HRV
-		
-// Use this step to allow back button to work!!
-var finalShow = false;
 
-(:discard)
-class IntroView extends Ui.View {
+class HRVView extends Ui.View {
 
-	hidden var shown = false;
-	hidden var oneCalc = true;
-	hidden var mCloseCnt = 0;
 	// screen centre point
 	hidden var scrnCP;
 	hidden var mArcRadius;
@@ -40,21 +35,13 @@ class IntroView extends Ui.View {
 	hidden var mArrowLen;
 	hidden var cGridWith;
 	hidden var mCircColSel;
-
-	
-	hidden var _allowExit = false;
+	hidden var _viewN;
 			
-    function initialize() { 
+    function initialize( viewNum) { 
       	View.initialize();  
         // Retrieve device type
-		$.mDeviceType = Ui.loadResource(Rez.Strings.DeviceNum).toNumber();
-		shown = false;  // not shown test view
-		oneCalc = true; // one pass of generating results only
-		$.mTesting = true; // enter test state 1st
-		$.mSaveSession = false;  // if test finishes then save
-		mCloseCnt = 0; 
 		mCircColSel = 0; // which colour centre circle to show
-		_allowExit = false; // see if we can pop this view
+		_viewN = viewNum;
      }
 
  	function onLayout(dc) {
@@ -72,13 +59,44 @@ class IntroView extends Ui.View {
  	//! Restore the state of the app and prepare the view to be shown
     function onShow() { 
     	Sys.println("InitView onShow()");
-    	 				
-		if(!shown) { 	
-			Sys.println("Initview show() !shown");	
-	 		Ui.pushView( new TestView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
-	 		shown=true;			
-		}
+
     }
+    
+    //! Update the view
+    function onUpdate(dc) {
+    	//Sys.println("IntroView: onUpdate start");
+    	
+    	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
+    	
+		var width=dc.getWidth();
+		var height=dc.getHeight();
+		
+		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
+		dc.clear();
+		dc.setColor(Gfx.COLOR_BLUE,Gfx.COLOR_TRANSPARENT);
+		
+		
+		// NEED TO TEST FOR DATA AVAILABLE OTHERWISE MESSAGE	
+		if ($.mGData == true && $.glanceData != null) {
+			if (_viewN == 0) {					
+				resultsShow(dc);
+			}
+			else {
+				// Second screen
+			
+			}
+		} else {
+			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No result yet", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);		
+		}		
+
+		//Sys.println("IntroView: onUpdate exit");  
+    }
+
+    //! Called when this View is removed from the screen. Save the
+    //! state of your app here.
+    function onHide() {   	
+    	Sys.println("onHide InitView");
+    }   
     	
     // From analog sample
     // This function is used to generate the coordinates of the 4 corners of the polygon
@@ -265,110 +283,5 @@ class IntroView extends Ui.View {
  		mTxt = $.glanceData[5]; 	
     	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);    	    	
     }
-
-(:discard)   
-    function f_drawTrendArrow(dc) {    
-        // Draw arrow showing trend or flat
-    	// could make variable if we had a bounded value between -100 and 100 say
-    	// need to add range around zero once scale known
-    	var posArrow = [140, 200];
-    	
-    	// valid trend data
-    	if ( $.glanceData[3] == true) {
-	    	if ( $.glanceData[4] > 0) {
-	    		// trend going up
-	    		// principal is draw an arrow at an angle representing scale of trend
-	    		// (centerPoint, angle, handLength, tailLength, width) - angle of 0 = 12 o'clock
-	        	dc.fillPolygon(generateHandCoordinates(posArrow, 0, 20, 0, 8));        
-		        // add a rotated arrow head
-		        // (centerPoint, angle, offset, arrowBase, arrowHeight )
-		        dc.fillPolygon(generateArrowCoordinates(posArrow, 0, 20, 10, 15 ));
-	    	} else if ( $.glanceData[4] < 0) {
-	    		// trend going down
-	         	dc.fillPolygon(generateHandCoordinates(posArrow, 180, 20, 0, 8));        
-		        // add a rotated arrow head
-		        // (centerPoint, angle, offset, arrowBase, arrowHeight )
-		        dc.fillPolygon(generateArrowCoordinates(posArrow, 180, 20, 10, 15 ));   	
-	    	} else {
-	    		dc.fillRectangle( posArrow[0] - 20/2, posArrow[1] - 8/2, 20, 8); 	
-	    	}
-    	}
-    }
-    
-    function alert(type) {
-		if( Attention has :playTone ) {
-    		//Attention.playTone(type);
-    	}
-    	
-    	if (Attention has :vibrate) {
-    		Attention.vibrate([new Attention.VibeProfile(100,400)]);
-    	}
-    }
-      
-    //! Update the view
-    function onUpdate(dc) {
-    	//Sys.println("IntroView: onUpdate start");
-    	
-    	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
-    	
-		var width=dc.getWidth();
-		var height=dc.getHeight();
-		dc.setColor(Gfx.COLOR_BLACK,Gfx.COLOR_BLACK);
-		dc.clear();
-		dc.setColor(Gfx.COLOR_BLUE,Gfx.COLOR_TRANSPARENT);
-		
-		if (finalShow && mSaveSession ) {
-			// timer expired 
-			
-			// calculate glance and test results - only call once
-			if (oneCalc) { 
-				alert (TONE_SUCCESS);
-				var _stats = [ $.mSampleProc.mRMSSD, $.mSampleProc.vEBeatCnt, $.mSampleProc.mNN50];
-				mCircColSel = GG.generateResults( _stats);
-				_stats = null; 
-				oneCalc = false;
-				
-				// close sensors to stop overflow of buffers
-				$.mSensor.CloseSensors();
-				$.mSensor = null;
-				
-				// just in case any properties changed
-				HRVS.saveProperties();
-				
-				// start timer
-				mCloseCnt = $.mSecondCnt;
-			}
-			
-			// display results for 5 seconds then set finalShow  = false. Could also probably release some memory buffers eg intervals			
-			// time out of this view
-			// removed timeout so user has to press back to exit or timeout of widget
-			//if ( $.mSecondCnt > mCloseCnt + 15) { finalShow = false; _allowExit = true;}
-			
-			resultsShow(dc);
-
-		} else if (finalShow && !mSaveSession) {
-			// we hit escape or enter to leave session
-		 	dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No result saved\nHit Back to Exit",Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);
-		}
-		else if (_allowExit) {		
-			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"Hit Back to Exit",Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);
-			Sys.println("Hit back pushed to view");
-			// what happens if we pop view here??
-			// aim to leave widget
-			//Ui.popView(Ui.SLIDE_IMMEDIATE); // System Error. failed invoking Symbol 
-		}
-
-		//Sys.println("IntroView: onUpdate exit");
-  
-    }
-
-    //! Called when this View is removed from the screen. Save the
-    //! state of your app here.
-    function onHide() {   	
-    	Sys.println("onHide InitView");
-    }
-    
-// ALL Glance data generation moved out to module
-    
     
 }

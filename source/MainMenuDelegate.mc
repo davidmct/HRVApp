@@ -143,11 +143,11 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         	// Generate a new Menu for mainmenu
 	        var menu = new Ui.Menu2({:title=>"About"});
 	       	var mAppVer = Ui.loadResource(Rez.Strings.AppVersion);
-	        var mID = $.mDeviceID;
-	        if (mID == null) {mID = "No device ID";}
+	        //var mID = $.mDeviceID;
+	        //if (mID == null) {mID = "No device ID";}
 	        //Sys.println("Device indentifier = "+mID);
 	        menu.addItem(new Ui.MenuItem(mAppVer, null, "t", null));
-	        menu.addItem(new Ui.MenuItem(mID, null, "d", null));
+	        //menu.addItem(new Ui.MenuItem(mID, null, "d", null));
 	        Ui.pushView(menu, new EmptyMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
     }

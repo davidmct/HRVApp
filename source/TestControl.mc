@@ -301,7 +301,7 @@ class TestController {
 			//$._mApp.mSensor.fSwitchSensor( value);
 		//}
 		else if (caller == :TestType) {
-	 		if (value != $._mApp.testTypeSet) {
+	 		if (value != $.testTypeSet) {
 	        	StateMachine(:RestartControl);
 	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
 	        }
@@ -461,6 +461,7 @@ class TestController {
     	// 0.6.2 now generate widget type data
     	var _stats = [ $.mSampleProc.mRMSSD, $.mSampleProc.vEBeatCnt, $.mSampleProc.mNN50];
 		$.mCircColSel = GG.generateResults( _stats);
+		$.mGData = true;
 		_stats = null;
 
     } // end save test

@@ -168,13 +168,16 @@ module GlanceGen
 		// Make it so we need four weeks
 		if (mMcnt == 4) { mMonthAvg = mMonthAvg / mMcnt.toFloat(); } else { mMonthAvg = 0;}
 		
-		Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
+		//Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
 			
 		return [ mMonthAvg, mWeekly[0] ];
 	}
 	
 	function calcPosition( _HRV, _expected, _found) {
-		var mPos = 0;
+		var mPos = 0.0;
+		
+		// monthly or weekly averages could come in as zero whereas ranges set on actual values
+		if (_HRV == 0.0 || _HRV == 0) { return 0.0;}
 		
 	    if ( _HRV >= _expected[0] && _HRV <= _expected[1]) {
      		mPos = 20 + 60.0 * ( _HRV - _expected[0]) / (_expected[1] - _expected[0]);
@@ -183,7 +186,7 @@ module GlanceGen
      		// value must be lower than expected and also by implication min is also less
      		mPos = 20 * (_HRV - _found[0]) / (_expected[0] - _found[0]); 
      		// Monthly can be zero _HRV as no data 
-     		if (mPos < 0 ) {mPos = 0;}   	
+     		if (mPos < 0.0 ) {mPos = 0.0;}   	
      	} else {
      		// over range for age
      		// range it in the upper 20% 
@@ -220,7 +223,7 @@ module GlanceGen
 		var _str3 = ((_utc - _utc % 86400) / 86400);
 		count = _str3 - _str2 + 1;
 		
-		Sys.println("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
+		//intln("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
 		
 		if (count <= 3) {
 			Sys.println(" Not enough dates found for trend!");
@@ -373,7 +376,7 @@ module GlanceGen
 			_startIdx = _endIdx - _cnt; 
 		}
 		
-		Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
+		//Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
 
 		// check for how many non zero entires in range being used
 		var _tmp = 0;
@@ -416,7 +419,7 @@ module GlanceGen
 			mR = ( _NumSamp * _sumXY - _sumX * _sumY) / _div;
 		}	
 		
-		Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
+		//Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
 	
 		return [mB, mM, mR];
 	}
@@ -555,7 +558,7 @@ module GlanceGen
     	var minD = _cD;
     	var maxD = 0;	
     	
-    	Sys.println("ENTER: f_minmax: "+_cD+" HRV: "+_cH);
+    	//Sys.println("ENTER: f_minmax: "+_cD+" HRV: "+_cH);
     		
 		for (var i=0; i < _mCheck.size(); i=i+2) {
 			resGL[i] = _mCheck[i];
@@ -565,7 +568,7 @@ module GlanceGen
 			var _val = resGL[i];
 			if ( _val != 0) { 
 				if (_val > maxD ) { maxD = _val;}
-				if (_val < minD ) { minD = _val; Sys.println("MinD set on i of:"+i);}
+				if (_val < minD ) { minD = _val; }// Sys.println("MinD set on i of:"+i);}
 				
 				_val = resGL[i+1];
 				cntH++;
@@ -620,8 +623,8 @@ module GlanceGen
 			}				
 			
 			if (mCheck != null) { 
-				Sys.println("retrieveResGL: mCheck="+mCheck+"\n with resGL:"+resGL);
-				Sys.println("size mCheck="+mCheck.size()+" resGL="+resGL.size());
+				//Sys.println("retrieveResGL: mCheck="+mCheck+"\n with resGL:"+resGL);
+				//Sys.println("size mCheck="+mCheck.size()+" resGL="+resGL.size());
 				
 				// pass array, today and current HRV
 				res = f_MinMax ( mCheck, utcStart, _stats[0]);
@@ -642,7 +645,7 @@ module GlanceGen
 		// check current date and 
 		
 		// removed boolean on return as always forced an array to exist
-		Sys.println("retrieveResGL() finished. Rtn:"+res);
+		//Sys.println("retrieveResGL() finished. Rtn:"+res);
 		return res;	     
 	
 	}
@@ -655,61 +658,8 @@ module GlanceGen
 		} 
 	}
 
-(:TestVersionGL)
-	// pull in JSON data instead
-	function prepareSaveResGL( utcStart, _stats) {
-		var _res = new [5];	
-		// create arrays, store and keep
-		resetResGL( false);
-		
-		var dateList = Ui.loadResource(Rez.JsonData.jsonTestDates); 
-		var latestDate = dateList[0]; // force to earliest
-		
-		var hrvList = Ui.loadResource(TESTSET); 
-		var j = 0;
-		for(var i=0; i < dateList.size(); i++) {		
-			resGL[j+1] = hrvList[i];
-			
-			// check date is not zero
-			if ( hrvList[i] != 0 ) {
-				resGL[j] = dateList[i];			
-				if (resGL[j] > latestDate ) { latestDate = resGL[j];}
-			} else {
-				// force date to zero
-				resGL[j] = 0; // no data for this date
-			}
-			
-			//resGL[j+1] = hrvList[i]; //done already at start of loop
-			//resGL[j+2] = 0.0;
-			//resGL[j+3] = 0.0;	
-			j += GL_SET_SIZE;		
-			
-			// NEED TO EDIT IF DATA SIZE CHANGES
-		}
-		
-		// pass array, today and current HRV
-		_res = f_MinMax ( resGL, utcStart, _stats[0]);
-		
-		// We want to set date to last valid HRV entry
-		_res[1] = latestDate;
-				
-		Sys.println("dateList size = "+dateList.size()+" with latest date of "+latestDate);
-		Sys.println("Dates loaded="+dateList+"\n and HRV="+hrvList);
-		Sys.println("resGL array created ="+resGL);
-		Sys.println("passing back res:"+_res);
-		
-		dateList = null;
-		hrvList = null; 
-		// leave index at 0 as doesn't matter	
-		storeResGL();
-		//return latestDate;
-		
-		return _res;	
-	}
-
 	// function to read in results array 
 	// update current values and write back to store 	
-(:notTestVersionGL)
 	function prepareSaveResGL( utcStart, _stats) {
 		// need to load results array fill and then save
 		// assume pointer still valid	
@@ -724,14 +674,14 @@ module GlanceGen
 		// we write every entry!
 		index = resGLIndex * GL_SET_SIZE;	
 		
-		Sys.println("index = "+index+"ResGL: "+utcStart+","+_stats);
+		//Sys.println("index = "+index+"ResGL: "+utcStart+","+_stats);
 			
 		resGL[index + TIME_STAMP_INDEX] = utcStart;		
-		resGL[index + RMSSD_INDEX] = _stats[0];
+		resGL[index + GL_RMSSD_INDEX] = _stats[0];
 		//resGL[index + ECT_INDEX] = _stats[1];
 		//resGL[index + NN50_INDEX] = _stats[2];
   		
-   		Sys.println("storing resGL ... ="+resGL);
+   		//Sys.println("storing resGL ... ="+resGL);
    		
 		// written a new entry so move pointer
    		// increment write pointer to circular buffer

@@ -1,30 +1,32 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.6.2</string>
+	<string id="AppVersion">0.6.3</string>
+<!--
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
 	<string id="pAuthIDT">Licence String</string> 
 	<string id="pAuthIDP">Enter string sent to you</string>	
 	<string id="pAuxHRAntIDT">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDP">0 for any or ID of strap</string>
-	<string id="mFitWriteEnabledT">FIT File Write</string> 
-	<string id="mFitWriteEnabledP">Set  true to write FIT file</string>	
+-->
+	<string id="mFitWriteEnabledT">FIT Write</string> 
+	<string id="mFitWriteEnabledP">True to write FIT</string>	
 	<string id="lAvgPulseCT">Average Pulse</string>
 	<string id="lRMSSDCT">RMSSD</string>
 	<string id="lLnRMSSDCT">Ln(RMSSD)</string>
-	<string id="lSDNNCT">SDNN - II SD</string>
-	<string id="lSDSDCT">SDSD - II difference SD</string>
+	<string id="lSDNNCT">SDNN-II SD</string>
+	<string id="lSDSDCT">SDSD-II difference SD</string>
 	<string id="lNN50CT">II delta > 50ms</string>
 	<string id="lpNN50CT">NN50 as % of samples</string>
 	<string id="lNN20CT">II delta > 20ms</string>
 	<string id="lpNN20CT">NN20 as % of samples</string>
-	<string id="lLongT">Count of Long beats</string>
-	<string id="lShortT">Count of Short beats</string>	
+	<string id="lLongT">Long beats #</string>
+	<string id="lShortT">Short beats #</string>	
 	<string id="lET">Type of beat</string>        <!--Count of Ectopic beats</string>	-->
 	<string id="lHistoryNull">None</string>
 	<string id="lHeartRate">Average bpm</string>
-	<string id="lMinInterval">Minimum II</string>
-	<string id="lMaxInterval">Maximum II</string>
+	<string id="lMinInterval">Min II</string>
+	<string id="lMaxInterval">Max II</string>
 	<string id="lRMSSD">RMSSD</string>
 	<string id="lLnRMSSD">Ln(RMSSD)</string>
 	<string id="lSDNN">SDNN</string>
@@ -43,9 +45,11 @@
 	<string id="lHeartRateUnits">bpm</string> 
 	<string id="lNoUnits">times</string>  	
 	<string id="lSourceLabel">Sensor Source:</string>
-	<string id="lSourceUnits"> </string> 	
+	<string id="lSourceUnits"> </string> 
+<!-- 	
 	<string id="pSensorSelectT">Use unregistered HRM</string> 
 	<string id="pSensorSelectP">True for unregistered/disabled strap</string>
+-->
 	<string id="pIIScaleT">Auto Scale II</string>
 	<string id="pIIScaleP">On or Off</string>
 	<string id="soundSetT">Sound?</string>
@@ -55,9 +59,9 @@
 	<string id="testTypeSetT">Use timer based test</string>
 	<string id="testTypeSetP">set for timer, unset for manual</string>
 	<string id="timerTimeSetT">Timer based test time</string>
-	<string id="timerTimeSetP">Length of test (secs) - should be 300 (5mins)</string>
+	<string id="timerTimeSetP">Length of test (secs) - default 300 (5mins)</string>
 	<!--v0.4.2: 480 = MAX_TIME * MAX_BPM -->
-	<string id="TimeTooLargeError">Maximum value is 480 seconds</string>
+	<string id="TimeTooLargeError">Max value is 480 seconds</string>
 	<string id="ManualTimeSetT">Manual test time</string> 
 	<!--  <string id="ManualTimeSetP">Maximum allowed manual time 600 seconds</string> -->
 	<string id="lnumberBeatsGraph">Beats to show in graph</string>
@@ -91,8 +95,8 @@
 	<string id="LabelHistTitle3">History Entry 3</string> 
 	<string id="LabelHistTitleP">Select History Entry</string> 	
 	
-	<string id="LongThresholdT">Long Pulse Threshold</string>
-	<string id="ShortThresholdT">Short Pulse Threshold</string> 
+	<string id="LongThresholdT">Long Threshold</string>
+	<string id="ShortThresholdT">Short Threshold</string> 
 	<string id="ThresholdP">Select Threshold</string> 
 	<string id="ThresholdErrorT">Range 0.1-0.4</string>
 	<string id="LogT">Ln(RMSSD) scale</string> 
@@ -105,8 +109,9 @@
 	<string id="LOOSE">Loose</string>
 	<string id="VLOOSE">Very Loose</string>
 -->
-	
+<!--	
 	<string id="PayURLT">Please support</string> 
+-->
 	<!-- <string id="PayURLString">xxxxx</string> -->
 		
 	<!-- Number Picker -->
