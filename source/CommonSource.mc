@@ -11,7 +11,7 @@ using Toybox.Application.Storage as Storage;
 
 
 function saveGResultsToStore() {
-	Sys.println("saveGResultsToStore() called");
+	//Sys.println("saveGResultsToStore() called");
 
 	try {
 		if (Toybox.Application has :Storage) {	
@@ -19,18 +19,18 @@ function saveGResultsToStore() {
 		}
 	} catch (ex) {
 		// storage error - most likely not written
-		Sys.println("saveGResultsToStore(): ERROR failed to save");
+		//Sys.println("saveGResultsToStore(): ERROR failed to save");
 		return false;
 	}
 	finally {
 
 	}
-	Sys.println("saveResultsToStore() done");
+	//Sys.println("saveResultsToStore() done");
 	return true;		
 }
 
 function loadGResultsFromStore() {
-	Sys.println("loadGResultsFromStore() called");	
+	//Sys.println("loadGResultsFromStore() called");	
 	
 	try {
 		if (Toybox.Application has :Storage) {	
@@ -38,7 +38,7 @@ function loadGResultsFromStore() {
 		}
 	} catch (ex) {
 		// storage error - most likely not written
-		Sys.println("ERROR loadGResultsFromStore");
+		//Sys.println("ERROR loadGResultsFromStore");
 		return false;
 	}
 	finally {

@@ -75,13 +75,13 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             $.mBoolScaleII = true;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:fixedS)).setSelected(false);
-            Sys.println("Interval Auto ON");
+            //Sys.println("Interval Auto ON");
         }
         else if( mId == :fixedS)  {
             $.mBoolScaleII = false;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:autoS)).setSelected(false);
-            Sys.println("Interval Auto OFF");
+            //Sys.println("Interval Auto OFF");
         }
 
         // this should turn item blue...

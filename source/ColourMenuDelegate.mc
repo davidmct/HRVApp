@@ -40,7 +40,7 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
         //var ColStringDict = Ui.loadResource(Rez.JsonData.jsonColourDict);
         //var value = ColStringDict.get(id);
  		
- 		Sys.println("Setting colour -"+id);
+ 		//Sys.println("Setting colour -"+id);
  		
  		mFunc.invoke( id);   
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);         

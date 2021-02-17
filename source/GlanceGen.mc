@@ -273,7 +273,7 @@ module GlanceGen
 			mSortedRes[i] = mSortedRes[i] / mSortedCnt[i]; 
 		}
 		
-		Sys.println("Sorted "+count+" days with o/p="+mSortedRes);
+		//Sys.println("Sorted "+count+" days with o/p="+mSortedRes);
 		
 		mSortedCnt = null;
 		return true;

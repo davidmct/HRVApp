@@ -29,7 +29,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         // assume code sets this as required when item clicked
         if (item.isEnabled()) {
         	// check not exceeded 3 values
-        	Sys.println("History menu delegate. selected "+id+" index "+index);
+        	//Sys.println("History menu delegate. selected "+id+" index "+index);
     		
     		// set bit for this value	
  			$.mHistorySelectFlags |= (1 << (index-1));
@@ -59,7 +59,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         // assume code sets this as required when item clicked
         if (item.isEnabled()) {
 			// only allowed one item ... should reset state
-        	Sys.println("History menu delegate. selected "+id+" index "+index+" for label "+instanceIndex);
+        	//Sys.println("History menu delegate. selected "+id+" index "+index+" for label "+instanceIndex);
          	if (instanceIndex == 1) {
         		$.mHistoryLabel1 = index;
         	} else if (instanceIndex == 2) {
@@ -81,7 +81,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
 	       	//Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
         	
        	} else {
-       		Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
+       		//Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
           	if (instanceIndex == 1) {
         		$.mHistoryLabel1 = 0;
         	} else if (instanceIndex == 2) {

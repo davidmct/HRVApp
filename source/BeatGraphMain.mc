@@ -399,7 +399,7 @@ class BeatView extends Ui.View {
     function onHide() {
  		// performance check only on real devices
 		//var currentTime = Sys.getTimer();
-		Sys.println("BeatGraph executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");			
+		//Sys.println("BeatGraph executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");			
 		//Sys.println("BeatGraph memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			

@@ -16,7 +16,7 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
         var i;
         for (i = 0; i < $.mLongThresholdMap.size() ; i++) {
         	var mColName = mKeys[i].toString();
-        	Sys.println("Add threshold menu item "+mColName+" index "+i);
+        	//Sys.println("Add threshold menu item "+mColName+" index "+i);
         	menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
     	}
 	}
@@ -30,7 +30,7 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
         var i;
         for (i = 0; i < mThresholdStrings.size() ; i++) {
         	var mColName = mThresholdStrings[i];
-        	Sys.println("Add threshold menu item "+mColName+" index "+i);
+        	//Sys.println("Add threshold menu item "+mColName+" index "+i);
         	menu.addItem(new Ui.MenuItem(mColName, null, i.toString(), null));
     	}
 	}    
@@ -39,19 +39,19 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
    	function onSelect(item) {
         var id = item.getId();
         
-        Sys.println("Threshold onselect id "+id);
+        //Sys.println("Threshold onselect id "+id);
                   
      	if( id.equals("u"))  {
             //var menu = new Ui.Menu2({:title=>"Upper"});
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
-	        Sys.println("Threshold upper before = "+$.vUpperThresholdSet);
+	        //Sys.println("Threshold upper before = "+$.vUpperThresholdSet);
 	        Ui.pushView(new NumberPicker2Digit(10, $.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
         } else if( id.equals("l"))  {
             //var menu = new Ui.Menu2({:title=>"Lower"});
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE ); 
-	        Sys.println("Threshold lower before = "+$.vLowerThresholdSet);
+	        //Sys.println("Threshold lower before = "+$.vLowerThresholdSet);
 	        Ui.pushView(new NumberPicker2Digit(10, $.vLowerThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
         }
     }
@@ -65,8 +65,8 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
     }
 	
 	// delegate scales to % already
-    function setUpper(value) { $.vUpperThresholdSet = value; Sys.println("Upper threshold set to "+$.vUpperThresholdSet); }
-    function setLower(value) { $.vLowerThresholdSet = value; Sys.println("Lower threshold set to "+$.vLowerThresholdSet); }
+    function setUpper(value) { $.vUpperThresholdSet = value; Sys.println("U threshold set to "+$.vUpperThresholdSet); }
+    function setLower(value) { $.vLowerThresholdSet = value; Sys.println("L threshold set to "+$.vLowerThresholdSet); }
     
 }
 
