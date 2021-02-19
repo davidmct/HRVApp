@@ -452,12 +452,9 @@ class TestController {
     function saveTest() {
     	Sys.println("TestControl: saveTest()");
     	
-    	//0.6.3 force return to test view _DOESN'T WORK IN SIM or maybe watch
-    	//Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
-    	//Sys.println("POP");
-		//Ui.popView(Ui.SLIDE_IMMEDIATE);
-		//Ui.popView(Ui.SLIDE_IMMEDIATE);
-		
+    	//0.6.3
+    	// trying to popView's here doesn't work if buried in menus. Need to stop views being pushed
+    	
      	// FIT FILE SESSION RESULTS HERE
     	$.mFitControl.saveFITrec(); // also sets mSession to null
     	

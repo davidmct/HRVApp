@@ -156,17 +156,18 @@ module HRVStorageHandler {
 		//Sys.println("saveIntervalsToStore() called");
 		
 		//0.6.3 Breakdown array as run out of memory on smaller devices!!
-		//Storage.setValue("IntervalStoreData", $.mIntervalSampleBuffer);
-		var _t = new [MAX_BPM];	
-		var _off = 0;
-		for (var i = 0; i < MAX_TIME; i++) {
-			for (var j=0; j < MAX_BPM; j++) {
-				_t[j] = $.mIntervalSampleBuffer[_off];
-				_off++;			
-			} 
-			Storage.setValue("ISD"+i.toString(), _t);		
-		}
-		_t = null;
+		Storage.setValue("IntervalStoreData", $.mIntervalSampleBuffer);
+		// revert back to all at once
+		//var _t = new [MAX_BPM];	
+		//var _off = 0;
+		//for (var i = 0; i < MAX_TIME; i++) {
+		//	for (var j=0; j < MAX_BPM; j++) {
+		//		_t[j] = $.mIntervalSampleBuffer[_off];
+		//		_off++;			
+		//	} 
+		//	Storage.setValue("ISD"+i.toString(), _t);		
+		//}
+		//_t = null;
 				
 		Storage.setValue("IntervalStoreMin", $.mSampleProc.minIntervalFound);	
 		Storage.setValue("IntervalStoreMax", $.mSampleProc.maxIntervalFound);	
