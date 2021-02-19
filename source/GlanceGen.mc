@@ -41,7 +41,7 @@ module GlanceGen
     	
     	if (mGender == null) {
     		// none set to will need to fake range?
-    		Sys.println("No gender found in profile");
+    		Sys.println("No gender in profile");
     		min = 0.0;
     		max = 100.0;
     		
@@ -58,7 +58,7 @@ module GlanceGen
     	
     	if (mYear == null) {
     		// handle no age set 
-    		Sys.println("generateResults: no age found. Assuming 35");
+    		Sys.println("generateResults: no age - Assuming 35");
     		mAgeUser = 35;    		
     	} else {
     		var mCurrYear = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM).year;
@@ -84,7 +84,7 @@ module GlanceGen
 	    	}
     	}
     	    	
-    	Sys.println("HRV range for age is "+min+" to "+max);
+    	Sys.println("HRV age range is "+min+" to "+max);
     	
      	mHRVGender = null;   	
     	return [min.toFloat(), max.toFloat()];
@@ -425,7 +425,7 @@ module GlanceGen
 	}
     
     function generateResults( _stats) {
-    	Sys.println("Generate results");
+    	Sys.println("GR");
     	var mHRVExpected = new [2];
     	var mHRVFound = new [3];
     	var mTrend = [0, false];

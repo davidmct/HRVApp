@@ -94,7 +94,7 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
-		if (mDebugging == true) {Sys.println("TC: SM() satrt state "+mTestState); }
+		if (mDebugging == true) {Sys.println("TC: SM() start state "+mTestState); }
 
 		// request to restart
 		if (caller == :RestartControl) {
@@ -136,7 +136,7 @@ class TestController {
 					mTestMessage = setSensorStr+" sensor ready";
 					mTestState = TS_READY;
 				} else {
-					mTestMessage = "Waiting for "+setSensorStr+" HR source";
+					mTestMessage = "Waiting for "+setSensorStr+" sensor";
 				}
 				if (caller == :enterPressed) {
 					// we might be lucky and HR is ready at the same time as sensor is ready
@@ -268,7 +268,7 @@ class TestController {
 			break;
 
 			default:
-				Sys.println("UNKNOWN state in test controller!");
+				Sys.println("UNKNOWN state in TC!");
 			break;
 		} // end switch
 
@@ -276,7 +276,7 @@ class TestController {
 		//if (mFunc == null) {Sys.println("TestControl: Statemachine: mFunc NULL "); }
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
-    		if (mDebugging == true) {Sys.println("TestControl: Testview update - "+mTestMessage);}
+    		if (mDebugging == true) {Sys.println("TC: Testview update - "+mTestMessage);}
     	}
 
     	// update Current  View data
@@ -285,7 +285,7 @@ class TestController {
     		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
     	}
 
-		if (mDebugging == true) {Sys.println("TestControl: StateMachine() exit in state "+mTestState); }
+		if (mDebugging == true) {Sys.println("TC: SM() exit in state "+mTestState); }
 		return mResponse;
 	}
 

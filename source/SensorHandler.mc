@@ -164,12 +164,12 @@ class SensorHandler {
 
         if (mSensorType) {
     		// ANT case
-    		Sys.println("ANT sensor selected");
+    		Sys.println("ANT sensor");
     		if (sensor != null) {sensor = null;}
     		sensor = new AntHandler(mAntIDLocal, mHRData);
     	} else {
     		// Internal or registered strap
-    		Sys.println("OHR or registered sensor selected");
+    		Sys.println("OHR or registered sensor");
     		if (sensor != null) {sensor = null;}
     		sensor = new InternalSensor(mHRData);
     	}

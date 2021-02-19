@@ -334,16 +334,6 @@ class HRVAnalysis extends App.AppBase {
     	// output any debug if present
     	$.FlushMsg();
     	
-    	//0.6.3 TEST CODE FOR POP
-    	//_cnt++;
-    	//if (_cnt == 30) {
-    	//	Sys.println("Attempting to pop menu stack");
-    	//	Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    	//	Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    	//	Ui.popView(WatchUi.SLIDE_IMMEDIATE);
-    		////Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
-    	//}
-    	
     	// update views
         Ui.requestUpdate();
     }
