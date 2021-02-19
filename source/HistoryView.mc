@@ -299,7 +299,7 @@ class HistoryView extends Ui.View {
 			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
 				dump += $.results[i].toString() + ",";
 			}
-			Sys.println("History view DUMP of results : "+dump);
+			Sys.println("History DUMP results : "+dump);
 		}
 		
 		// Find result limits

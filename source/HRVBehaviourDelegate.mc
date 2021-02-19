@@ -81,29 +81,41 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onMenu() {
-		//Sys.println("onMenu()");		
-		// Generate a new Menu for mainmenu
-        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
-        // add items
-        menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
-        //menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
-        menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
-        menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
-        //0.6.0 check low memory device
-        if (System.getSystemStats().totalMemory > 128000) { 
-        	//Sys.println("System memory > 128k");
-        	menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
-        }
-       	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
-        menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
-        menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
-        menu.addItem(new Ui.MenuItem("Auto Scaling", null, "sc", null));
-        menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
-        menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
-        menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
-        menu.addItem(new Ui.MenuItem("About", null, "a", null));
-        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
-        //Sys.println("onMenu()- end");
+		
+		//0.6.3 Stop menus if testing and on small memory device
+		// Skip if not ready or waiting and on small memory devices
+		if( ($.mTestControl !=null) && 
+			!($.mTestControl.mTestState == TS_READY || $.mTestControl.mTestState == TS_WAITING) && 
+			(Sys.getSystemStats().totalMemory < 128000) ) {
+			
+			$.mTestControl.alert(TONE_ERROR);
+			Sys.println("HRVBehaviour onMenu() - skip menu");
+		}
+		else {
+			//Sys.println("onMenu()");		
+			// Generate a new Menu for mainmenu
+	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
+	        // add items
+	        menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
+	        //menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
+	        menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
+	        menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
+	        //0.6.0 check low memory device
+	        //if (System.getSystemStats().totalMemory > 128000) { 
+	        	//Sys.println("System memory > 128k");
+	        	menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
+	        //}
+	       	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
+	        menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
+	        menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
+	        menu.addItem(new Ui.MenuItem("Auto Scaling", null, "sc", null));
+	        menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
+	        menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
+	        menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
+	        menu.addItem(new Ui.MenuItem("About", null, "a", null));
+	        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+	    }
+	   	//Sys.println("onMenu()- end");
 		return true;
     }
 

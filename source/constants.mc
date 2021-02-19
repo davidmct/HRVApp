@@ -126,7 +126,7 @@ const GL_RMSSD_INDEX = 1;
 const NUM_RESULT_ENTRIES = 30; // last 30 days
 const DATA_SET_SIZE = 14; // each containing this number of entries
 // for properties method of storage, arranged as arrays of results per time period
-const RESULTS = "RESULTS";
+//const RESULTS = "RESULTS";
 
 // Samples needed for stats min
 const MIN_SAMPLES = 20;

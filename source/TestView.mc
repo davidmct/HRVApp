@@ -75,7 +75,7 @@ class TestView extends Ui.View {
     //! Update the view
     function onUpdate(dc) {
 		if(mDebugging) {
-			Sys.println("TestView:onUpdate() called");
+			//Sys.println("TestView:onUpdate() called");
 			//Sys.println("Test View live pulse: " + $.mSensor.mHRData.livePulse.toString());
 			//Sys.println("Test state = "+ $.mTestControl.mTestState);
 		}
@@ -107,12 +107,12 @@ class TestView extends Ui.View {
 		// 0.4.04 - select which text area to use
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
-			if (mDebugging) { Sys.println("UI has TextArea");}
+			//if (mDebugging) { Sys.println("UI has TextArea");}
 			$.f_drawTextArea(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mScreen[4], mScreen[5], mScreen[6], mScreen[7]);		
 
 		} else {
-			if (mDebugging) {Sys.println("UI has Text not area");}
+			//if (mDebugging) {Sys.println("UI has Text not area");}
 			$.f_drawText(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mScreen[4], mScreen[5], mScreen[6], mScreen[7]);		
 

@@ -231,7 +231,7 @@ class TestController {
 							if ((testTime >= mManualTestStopTime) && (TYPE_MANUAL == testType)) {
 								mTestMessage = "Manual Test Finished";
 								// reached limit set by user
-								if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
+								//if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
 								if (enoughSamples) {
 									autoFinish();
 								} else {
@@ -276,7 +276,7 @@ class TestController {
 		//if (mFunc == null) {Sys.println("TestControl: Statemachine: mFunc NULL "); }
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
-    		if (mDebugging == true) {Sys.println("TestControl: Statemachine: Testview update - "+mTestMessage);}
+    		if (mDebugging == true) {Sys.println("TestControl: Testview update - "+mTestMessage);}
     	}
 
     	// update Current  View data
@@ -303,7 +303,7 @@ class TestController {
 		else if (caller == :TestType) {
 	 		if (value != $.testTypeSet) {
 	        	StateMachine(:RestartControl);
-	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
+	        	//Sys.println("fCheckSwitchType(): TestType changed so restart controller");
 	        }
 		}
 	}
@@ -365,7 +365,7 @@ class TestController {
     }
 
     function resetTest() {
-    	Sys.println("TestControl: resetTest() called");
+    	Sys.println("TestControl: resetTest()");
     	// don't call this as useful to see old data before starting a new test
     	//$.mSensor.mHRData.initForTest();
     	testTimer.stop();
@@ -450,13 +450,16 @@ class TestController {
 // core functionality moved to storage
 (:newResults)
     function saveTest() {
-    	Sys.println("TestControl: saveTest() called");
-
-    	// prepare results and save
-    	mStorage.prepareSaveResults( utcStart);
-
+    	Sys.println("TestControl: saveTest()");
+    	
+    	//0.6.3
+    	// trying to popView's here doesn't work if buried in menus. Need to stop views being pushed
+    	
      	// FIT FILE SESSION RESULTS HERE
     	$.mFitControl.saveFITrec(); // also sets mSession to null
+    	
+    	// prepare results and save
+    	mStorage.prepareSaveResults( utcStart);
 
     	// 0.6.2 now generate widget type data
     	var _stats = [ $.mSampleProc.mRMSSD, $.mSampleProc.vEBeatCnt, $.mSampleProc.mNN50];

@@ -73,6 +73,8 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        	success = success && mStorage.loadStatsFromStore();
 	        	if (success) {
 			  		if( $.viewNum != POINCARE_VIEW) {
+			  		// 0.6.3 memory leak - without pop have an extra level of stack!
+			  			Ui.popView(WatchUi.SLIDE_IMMEDIATE);
 						Ui.switchToView($.getView(POINCARE_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 					}
 				} else { // failed to load data
@@ -184,5 +186,5 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
         //Disallow Wrapping
         return false;
     }
-
+    
 }

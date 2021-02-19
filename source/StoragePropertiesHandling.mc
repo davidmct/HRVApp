@@ -68,42 +68,23 @@ module HRVStorageHandler {
 		//Properties.setValue("pPaypalRef", "https://www.paypal.com/paypalme/hrvapp");
 	}
 
-(:preCIQ24)	
-	function fresetPropertiesPreCIQ24() {		
-		
-	
-	}
-	
 	// This should be factory default settings and should write values back to store
 	// ideally these should align with properties defined in XML
 	function resetSettings() {
 	
-		if (Toybox.Application has :Storage) {		
-			fresetPropertiesStorage();				
-		} else {		
-			fresetPropertiesPreCIQ24();	
-		}	
+		fresetPropertiesStorage();				
 		// now load up variables
 		readProperties();
 		mapIndexToColours();
 	}
 
 	function readProperties() {	
-		if (Toybox.Application has :Storage) {
-			_CallReadPropStorage();
-		} else {
-			_CallReadPropProperty();
-		}
+		_CallReadPropStorage();
 	}	
 	
 	function saveProperties() {	
-		Sys.println("saveProperties() called");
-		
-		if (Toybox.Application has :Storage) {
-			_CallSavePropStorage();
-		} else {
-			_CallSavePropProperty();
-		}
+		//Sys.println("saveProperties() called");
+		_CallSavePropStorage();
 	}
 	
 	function PrintStats() {
@@ -120,7 +101,7 @@ module HRVStorageHandler {
 	}
 	
 	function saveStatsToStore() {
-		Sys.println("saveStatsToStore() called");	
+		//Sys.println("saveStatsToStore() called");	
 		var stats = new [11];
 		stats[0] = $.mSampleProc.avgPulse;
 		stats[1] = $.mSampleProc.mRMSSD;
@@ -134,26 +115,19 @@ module HRVStorageHandler {
 		stats[9] = $.mSampleProc.minDiffFound;
 		stats[10] = $.mSampleProc.maxDiffFound;
 		
-		if (Toybox.Application has :Storage) {
-			Storage.setValue("runstats", stats);				
-		} else {
-			$.setProperty("runstats", stats);			
-		}			
+		Storage.setValue("runstats", stats);				
+			
 	}
 	
 	function loadStatsFromStore() {
-		Sys.println("loadStatsFromStore() called");	
+		//Sys.println("loadStatsFromStore() called");	
 		var stats = new [11];
 		
-		try {
-			if (Toybox.Application has :Storage) {	
-				stats = Storage.getValue("runstats");		
-			} else {
-				stats = $.getProperty("runstats");			
-			}
+		try {	
+			stats = Storage.getValue("runstats");		
 		} catch (ex) {
 			// storage error - most likely not written
-			Sys.println("StoragePropertiesHandling: ERROR loadStatsFromStore");
+			Sys.println("ERROR loadStatsFromStore");
 			return false;
 		}
 		finally {
@@ -179,33 +153,38 @@ module HRVStorageHandler {
 	}
 	
 	function saveIntervalsToStore() {
-		Sys.println("saveIntervalsToStore() called");
+		//Sys.println("saveIntervalsToStore() called");
 		
-		if (Toybox.Application has :Storage) {
-			Storage.setValue("IntervalStoreData", $.mIntervalSampleBuffer);	
-			Storage.setValue("IntervalStoreMin", $.mSampleProc.minIntervalFound);	
-			Storage.setValue("IntervalStoreMax", $.mSampleProc.maxIntervalFound);	
-			Storage.setValue("IntervalStoreIndex", $.mSampleProc.getNumberOfSamples());				
-		} else {
-Sys.println("NO CIQ 2.4 support");			
-		}	
+		//0.6.3 Breakdown array as run out of memory on smaller devices!!
+		Storage.setValue("IntervalStoreData", $.mIntervalSampleBuffer);
+		// revert back to all at once
+		//var _t = new [MAX_BPM];	
+		//var _off = 0;
+		//for (var i = 0; i < MAX_TIME; i++) {
+		//	for (var j=0; j < MAX_BPM; j++) {
+		//		_t[j] = $.mIntervalSampleBuffer[_off];
+		//		_off++;			
+		//	} 
+		//	Storage.setValue("ISD"+i.toString(), _t);		
+		//}
+		//_t = null;
+				
+		Storage.setValue("IntervalStoreMin", $.mSampleProc.minIntervalFound);	
+		Storage.setValue("IntervalStoreMax", $.mSampleProc.maxIntervalFound);	
+		Storage.setValue("IntervalStoreIndex", $.mSampleProc.getNumberOfSamples());				
 	}
 	
 	function loadIntervalsFromStore() {
-		Sys.println("loadIntervalsFromStore() called");
+		//Sys.println("loadIntervalsFromStore() called");
 		
-		try {
-			if (Toybox.Application has :Storage) {				
-				$.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
-				$.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
-				$.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
-				$.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
-			} else {
-		
-			}
+		try {			
+			$.mIntervalSampleBuffer = Storage.getValue("IntervalStoreData");	
+			$.mSampleProc.minIntervalFound = Storage.getValue("IntervalStoreMin");	
+			$.mSampleProc.maxIntervalFound = Storage.getValue("IntervalStoreMax");	
+			$.mSampleProc.setNumberOfSamples( Storage.getValue("IntervalStoreIndex"));	
 		} catch (ex) {
 			// storage error - most likely not written
-			Sys.println("StoragePropertiesHandling: ERROR loadIntervalsFromStore");
+			Sys.println("ERROR loadIntervalsFromStore");
 			return false;
 		}
 		finally {
@@ -223,60 +202,6 @@ Sys.println("NO CIQ 2.4 support");
 		}
 	}
 
-(:preCIQ24)	
-	function _CallReadPropProperty() {	
-		// assumes all these values exist
-		//$.timestampSet = $.getProperty("timestampSet");
-		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		$.mFitWriteEnabled = $.getProperty("pFitWriteEnabled");
-		//$.mSensorTypeExt = $.getProperty("pSensorSelect");	
-		$.mBoolScaleII = $.getProperty("pIIScale");
-		$.soundSet = $.getProperty("soundSet");
-		$.vibeSet = $.getProperty("vibeSet");
-		$.testTypeSet = $.getProperty("testTypeSet");
-		$.timerTimeSet = $.getProperty("timerTimeSet").toNumber();
-		// 0.4.2
-		$.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;		
-		//$.mMaxTimerTimeSet = $.getProperty("MaxTimerTimeSet").toNumber();
-		$.mManualTimeSet = $.getProperty("ManualTimeSet").toNumber();	      
-		// ColSet are index into colour map
-		$.bgColSet = $.getProperty("bgColSet").toNumber();
-		$.lblColSet = $.getProperty("lblColSet").toNumber();
-		$.txtColSet = $.getProperty("txtColSet").toNumber();
-		$.Label1ColSet = $.getProperty("Label1ColSet").toNumber();
-		$.Label3ColSet = $.getProperty("Label3ColSet").toNumber();
-		$.Label2ColSet = $.getProperty("Label2ColSet").toNumber();
-		
-		//0.4.3
-		$.mHistoryLabel1 = $.getProperty("pHistLabel1").toNumber();	
-		$.mHistoryLabel2 = $.getProperty("pHistLabel2").toNumber();	
-		$.mHistoryLabel3 = $.getProperty("pHistLabel3").toNumber();	
-		
-		mapIndexToColours();
-		
-		// no history selected. binary flags as bits
-		// set default selection
-		// Used in menu creation
-		// Note array 0 entry is time stamp but use for null case
-		//$.mHistorySelectFlags = (1 << $.mHistoryLabel1);
-		//$.mHistorySelectFlags |= (1 << $.mHistoryLabel2);
-		//$.mHistorySelectFlags |= (1 << $.mHistoryLabel3);	
-		
-		//0.4.6
-		$.mNumberBeatsGraph = $.getProperty("pNumberBeatsGraph").toNumber();	
-		
-		//var index = $.getProperty("pLongThresholdIndex").toNumber();
-		//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
-        //var mShortThresholdMap = Ui.loadResource(Rez.JsonData.jsonShortThresholdMap);				
-		//$.vUpperThresholdSet = mLongThresholdMap[index];
-		//index = $.getProperty("pShortThresholdIndex").toNumber();	
-		//$.vLowerThresholdSet = mShortThresholdMap[index];	
-		$.vUpperThresholdSet = $.getProperty("pLongThresholdIndex").toFloat();
-		$.vLowerThresholdSet = $.getProperty("pShortThresholdIndex").toFloat();
-		
-		//0.6.0
-		$.mLogScale = $.getProperty("pLogScale").toFloat();
-	}
 
 (:storageMethod)	
 	function _CallReadPropStorage() {
@@ -284,38 +209,38 @@ Sys.println("NO CIQ 2.4 support");
 		// On very first use of app don't read in properties!
 		//try {
 			//$.timestampSet = Storage.getValue("timestampSet");
-			$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-			$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
-			//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
-			$.mBoolScaleII = Properties.getValue("pIIScale");
-			$.soundSet = Properties.getValue("soundSet");
-			$.vibeSet = Properties.getValue("vibeSet");
-			$.testTypeSet = Properties.getValue("testTypeSet");
-			$.timerTimeSet = Properties.getValue("timerTimeSet").toNumber();
-			// 0.4.2
-			$.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
-			//$.mMaxTimerTimeSet = Properties.getValue("MaxTimerTimeSet").toNumber();
-			$.mManualTimeSet = Properties.getValue("ManualTimeSet").toNumber();
-	      
-			// ColSet are index into colour map
-			$.bgColSet = Properties.getValue("bgColSet").toNumber();
-			$.lblColSet = Properties.getValue("lblColSet").toNumber();
-			$.txtColSet = Properties.getValue("txtColSet").toNumber();
-			$.Label1ColSet = Properties.getValue("Label1ColSet").toNumber();
-			$.Label3ColSet = Properties.getValue("Label3ColSet").toNumber();
-			$.Label2ColSet = Properties.getValue("Label2ColSet").toNumber();	
-			
-			//0.4.3
-			$.mHistoryLabel1 = Properties.getValue("pHistLabel1").toNumber();	
-			$.mHistoryLabel2 = Properties.getValue("pHistLabel2").toNumber();	
-			$.mHistoryLabel3 = Properties.getValue("pHistLabel3").toNumber();	
-			
-			mapIndexToColours();
+		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
+		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
+		$.mBoolScaleII = Properties.getValue("pIIScale");
+		$.soundSet = Properties.getValue("soundSet");
+		$.vibeSet = Properties.getValue("vibeSet");
+		$.testTypeSet = Properties.getValue("testTypeSet");
+		$.timerTimeSet = Properties.getValue("timerTimeSet").toNumber();
+		// 0.4.2
+		$.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
+		//$.mMaxTimerTimeSet = Properties.getValue("MaxTimerTimeSet").toNumber();
+		$.mManualTimeSet = Properties.getValue("ManualTimeSet").toNumber();
+      
+		// ColSet are index into colour map
+		$.bgColSet = Properties.getValue("bgColSet").toNumber();
+		$.lblColSet = Properties.getValue("lblColSet").toNumber();
+		$.txtColSet = Properties.getValue("txtColSet").toNumber();
+		$.Label1ColSet = Properties.getValue("Label1ColSet").toNumber();
+		$.Label3ColSet = Properties.getValue("Label3ColSet").toNumber();
+		$.Label2ColSet = Properties.getValue("Label2ColSet").toNumber();	
+		
+		//0.4.3
+		$.mHistoryLabel1 = Properties.getValue("pHistLabel1").toNumber();	
+		$.mHistoryLabel2 = Properties.getValue("pHistLabel2").toNumber();	
+		$.mHistoryLabel3 = Properties.getValue("pHistLabel3").toNumber();	
+		
+		mapIndexToColours();
 			
 		//} catch (e) {
 		//	Sys.println(e.getErrorMessage() );
 		//}
-			$.mNumberBeatsGraph = Properties.getValue("pNumberBeatsGraph").toNumber();	
+		$.mNumberBeatsGraph = Properties.getValue("pNumberBeatsGraph").toNumber();	
 			
 			//var index = Properties.getValue("pLongThresholdIndex").toNumber();
 			//var mLongThresholdMap = Ui.loadResource(Rez.JsonData.jsonLongThresholdMap);
@@ -418,10 +343,6 @@ Sys.println("NO CIQ 2.4 support");
 			
 	}
 
-(:preCIQ24)	
-	function _CallSavePropProperty() {
-	}
-
 (:oldResults)
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
@@ -439,7 +360,7 @@ Sys.println("NO CIQ 2.4 support");
 	function resetResults() {
 		// should only be called from settings - also called onStart() but followed by load
 		$.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
-		Sys.println("resetResults() array created");
+		//Sys.println("resetResults() array created");
 
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
 			$.results[i] = 0;
@@ -452,42 +373,16 @@ Sys.println("NO CIQ 2.4 support");
 		$.results = null;
 	}
 
-(:preCIQ24)
-	function retrieveResultsProp() {
-		var tmp = $.getProperty("resultIndex");
-		if (tmp == null) { tmp = 0;}
-		$.resultsIndex = tmp;
-		
-		for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-			var result = $.getProperty(RESULTS + i);
-			var ii = i * DATA_SET_SIZE;
-			if(null != result) {
-				$.results[ii + 0] = result[0];
-				$.results[ii + 1] = result[1];
-				$.results[ii + 2] = result[2];
-				$.results[ii + 3] = result[3];
-				$.results[ii + 4] = result[4];
-				$.results[ii + 5] = result[5];
-				$.results[ii + 6] = result[6];
-				$.results[ii + 7] = result[7];
-				$.results[ii + 8] = result[8];
-				$.results[ii + 9] = result[9];
-				$.results[ii + 10] = result[10];
-				$.results[ii + 11] = result[11];
-				$.results[ii + 12] = result[12];
-				$.results[ii + 13] = result[13];
-			}
-		}	
-	}
 
 // loading directly into results array and only with storage
 //(:discard)	
 	function retrieveResults() {
 		
-Sys.println("retrieveResults memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
-			", "+Sys.getSystemStats().freeMemory.toString()+
-			", "+Sys.getSystemStats().totalMemory.toString()			
-			);	
+//Sys.println("retrieveResults memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+//			", "+Sys.getSystemStats().freeMemory.toString()+
+//			", "+Sys.getSystemStats().totalMemory.toString()			
+//			);	
+
 		$.results = null;		
 		try {
 			$.results = Storage.getValue("resultsArray");
@@ -502,7 +397,7 @@ Sys.println("retrieveResults memory used, free, total: "+Sys.getSystemStats().us
 		// have a null if not saved 1st time
 		if ($.resultsIndex == null) {$.resultsIndex = 0;}
 		
-		Sys.println("retrieveResults() finished");		
+		//Sys.println("retrieveResults() finished");		
 		return true;
 	}
 
@@ -566,42 +461,15 @@ Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats()
 		Sys.println("restrieveResults() finished");
 		return true;
 	}
-
-(:preCIQ24)
-	function storeResultsProp() {
-		$.setProperty("resultIndex", $.resultsIndex);
-    	for(var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-			var ii = i * DATA_SET_SIZE;
-			var result = $.getProperty(RESULTS + i);
-			if(null == result || $.results[ii] != result[0]) {
-				$.setProperty(RESULTS + i, [
-					$.results[ii + 0],
-					$.results[ii + 1],
-					$.results[ii + 2],
-					$.results[ii + 3],
-					$.results[ii + 4],
-					$.results[ii + 5],
-					$.results[ii + 6],
-					$.results[ii + 7],
-					$.results[ii + 8],
-					$.results[ii + 9],
-					$.results[ii + 10],
-					$.results[ii + 11],						
-					$.results[ii + 12],
-					$.results[ii + 13]						
-					]);
-			}
-		}	
-	}
 		
 	function storeResults() {
 	    // Save results to memory
-	    if (Toybox.Application has :Storage) {
-			Storage.setValue("resultsArray", $.results);
-			Storage.setValue("resultIndex", $.resultsIndex);
-		} else {
-			storeResultsProp();
-		}
+Sys.println("STres memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+			", "+Sys.getSystemStats().freeMemory.toString()+
+			", "+Sys.getSystemStats().totalMemory.toString()			
+			);	
+		Storage.setValue("resultsArray", $.results);
+		Storage.setValue("resultIndex", $.resultsIndex);
 	}
 
 (:newResults)
@@ -663,7 +531,7 @@ Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats()
    			Sys.println("SaveTest: pointer now "+$.resultsIndex);
    		}
 			
-		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
+		//Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
 		$.results[index + TIME_STAMP_INDEX] = utcStart;
 		$.results[index + AVG_PULSE_INDEX] = $.mSampleProc.avgPulse;
@@ -681,13 +549,17 @@ Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats()
 		$.results[index + NN20_INDEX] = $.mSampleProc.mNN20;
 		$.results[index + PNN20_INDEX] = $.mSampleProc.mpNN20;
    		
-   		Sys.println("storing results ... ="+$.results);
+   		//Sys.println("storing results ... ="+$.results);
    		
     	// better write results to memory!!
     	storeResults(); 
     	// discard results buffer as large
     	$.results = null;
-    	
+Sys.println("STint memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+			", "+Sys.getSystemStats().freeMemory.toString()+
+			", "+Sys.getSystemStats().totalMemory.toString()			
+			);	 
+			   	
     	// save intervals as well so we can reload and display
     	saveIntervalsToStore();
     	saveStatsToStore();   	
@@ -725,7 +597,7 @@ Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats()
 	// on close of app so data doesn't matter
 	function saveIntervalStrings() {
 		
-		Sys.println("Storing intervals and flags");
+		//Sys.println("Storing intervals and flags");
 		
 		// save memory by removing code lines
 		// type 0 = II, 1 = flags
