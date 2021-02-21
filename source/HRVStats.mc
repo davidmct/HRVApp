@@ -36,6 +36,7 @@ class HRVView extends Ui.View {
 	hidden var cGridWith;
 	hidden var mCircColSel;
 	hidden var _viewN;
+	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
 			
     function initialize( viewNum) { 
       	View.initialize();  
@@ -66,6 +67,8 @@ class HRVView extends Ui.View {
     function onUpdate(dc) {
     	//Sys.println("IntroView: onUpdate start");
     	
+    	var _dataOK = false;
+    	
     	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
     	
 		var width=dc.getWidth();
@@ -76,18 +79,44 @@ class HRVView extends Ui.View {
 		dc.setColor(Gfx.COLOR_BLUE,Gfx.COLOR_TRANSPARENT);
 		
 		
-		// NEED TO TEST FOR DATA AVAILABLE OTHERWISE MESSAGE	
-		if ($.mGData == true && $.glanceData != null) {
-			if (_viewN == 0) {					
-				resultsShow(dc);
-			}
-			else {
-				// Second screen
-			
-			}
+		// NEED TO TEST FOR DATA AVAILABLE OTHERWISE MESSAGE
+		
+		// if view 0:
+		// 	if mData not set then pull in old results once! and draw red circle around. Put -- in middle of circle
+		//	if mData set and we have glance data then show results
+		// if view 1
+		// more text on screen - maybe even chart of HRV saved
+		
+		if (_viewN == 0) {	
+			// Case of mGData true and glanceData null not possible as flag set after creation		
+			if ($.mGData == true && $.glanceData != null) {
+				// Need to draw green circle around like test view. Check not overwritten or add to code			
+				resultsShow(dc, true);
+			} else if ($.mGData == false ) {
+				 if ($.glanceData == null || $.glanceData[0] == null) {
+				 	// Try to load data and display
+				 	_dataOK = $.loadGResultsFromStore();	
+				 } else if ($.glanceData != null || $.glanceData[0] != null) {
+				 	// we have previous loaded
+				 	_dataOK = true;				 
+				 }
+				
+				if (_dataOK) { 					
+					// draw a red circle and also -- in middle
+					//Sys.println("Show old results");
+					resultsShow(dc, false);
+				} else {
+					//Sys.println("show no test");
+					dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No test result", mJust);
+				}
+			}	
 		} else {
-			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No result yet", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);		
-		}		
+			// placeholder for second screen
+			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"Second screen placeholder", mJust);		
+		
+		}	
+		
+		// $.loadGResultsFromStore()	
 
 		//Sys.println("IntroView: onUpdate exit");  
     }
@@ -209,14 +238,16 @@ class HRVView extends Ui.View {
     	// add HRV to centre of circle
 		//dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
 		dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_TRANSPARENT);
-		dc.drawText(scrnCP[0], scrnCP[1], Gfx.FONT_TINY, $.glanceData[2].format("%.1f") ,Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);
+		dc.drawText(scrnCP[0], scrnCP[1], Gfx.FONT_TINY, $.glanceData[2].format("%.1f"), mJust);
     
     	// back to text colour
     	dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);   
        
     }
     
-	function resultsShow(dc) {
+    // create results view
+    // if _newG is true then have full data
+	function resultsShow(dc, _newG) {
     
     	// Could draw a dial in upperhalf of screen with arrow showing scale position as per glance.
     	// would have band of R, A, G with arrow pointing to some point on arc
@@ -225,8 +256,25 @@ class HRVView extends Ui.View {
     	//	 Maybe message in TextBox?
     	// 	 Today and avg over X days for HRV?
     	
+		//Sys.println("resultsShow");
+		
+		//0.6.3 HRV. Show source of data		
+		if (_newG) {
+			// draw green ring
+			dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);	
+		} else {
+			// draw red ring
+			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
+			
+			// we should have no current data so NEED TO FORCE "--"
+		}
+		dc.setPenWidth(2);
+		dc.drawArc(dc.getWidth()/2, dc.getHeight()/2, dc.getWidth()/2-2, Gfx.ARC_COUNTER_CLOCKWISE, 0, 360);
+		dc.setPenWidth(1);		
+
     	// See if we can add age range labels. These will be at 54 degrees from vertical (12 o'clock = 0)
 		dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+						
 		var _results;
 		var angle = -54 * Math.PI / 180.0;
 		// mArcRadius plus width of arc itself
@@ -240,6 +288,11 @@ class HRVView extends Ui.View {
 		angle = -angle; // 126 * Math.PI / 180.0;
 		_results = generateHandCoordinates(scrnCP, angle, mArcRadius+mArcWidth-5, 0, 2);
 		dc.drawText(_results[1][0], _results[1][1], Gfx.FONT_XTINY, $.glanceData[11].format("%.0f"), Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER);
+		
+		if ( !_newG) {
+			_results = generateHandCoordinates(scrnCP, 0, mArcRadius+mArcWidth-5, 0, 2);
+			dc.drawText(_results[1][0], _results[1][1]-5, Gfx.FONT_XTINY, "OLD", mJust);		
+		}
   	
     	// drawArc(x, y, r, attr, degreeStart, degreeEnd)
     	dc.setPenWidth( mArcWidth);
@@ -271,17 +324,17 @@ class HRVView extends Ui.View {
 		}
 		
 		// was left just when using lineX. Draw ST trend
-    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);
+    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, mJust);
 
 		// Draw averages for M and W
 		lineY += a[1] - 5;
 		mTxt = " W="+$.glanceData[1].format("%.1f")+" M="+$.glanceData[0].format("%.1f");    		
-    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);
+    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, mJust);
  		
  		// Draw recommendation
  		lineY += a[1] - 5;  
  		mTxt = $.glanceData[5]; 	
-    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);    	    	
+    	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, mJust);    	    	
     }
     
 }
