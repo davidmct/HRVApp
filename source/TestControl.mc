@@ -318,6 +318,9 @@ class TestController {
 		$.mFitControl.createSession();
 		// now start recording
 		$.mFitControl.startFITrec();
+		
+		// 0.6.3 Glance data in no longer latest
+		$.mGData = false;
 
     	alert(TONE_START);
     	start();

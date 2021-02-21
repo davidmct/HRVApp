@@ -19,8 +19,9 @@ using HRVStorageHandler as mStorage;
 //0.6.3 Changes
 // Memory optimisations to fit new functionality
 // Added new HRV trend functions
-// Stop menus during test on limited devices (otherwise no memory for save)
+// Stop menu load during test on memory limited devices (otherwise no memory for save)
 // Fixed memory leak on menu pop
+// Fixed very first run issue on history graph
 
 // 0.5.5
 // New algorithm for threshold detection using forward and backward average make group delay 0
@@ -349,7 +350,8 @@ class HRVAnalysis extends App.AppBase {
 		// Dump all interval data to txt file on device
 		if (mDumpIntervals == true) {DumpIntervals();}
 		
-		mStorage.saveIntervalStrings();
+		//0.6.3 No point saving interval strings to storage as not separate from app. Already in Interval Array 
+		//mStorage.saveIntervalStrings();
 		
 		Sys.println("Closing sensors");
 		if (mSensor != null) {

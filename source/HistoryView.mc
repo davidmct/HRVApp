@@ -200,37 +200,26 @@ class HistoryView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
+		dc.clear();
+				
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		
+		// draw lines
+		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+		
 		if ( $.results == null) {
 			prepResults();
 		}
 		
-		//Sys.println("DeviceType = "+$.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);
-		
-		//Sys.println("Results = "+$.results);
-		
-		// get pointer to next empty slot in results array .. should be oldest data		
-		var indexDay = $.resultsIndex;
-		var today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
-		 
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
 
-		// draw the layout. remove if trying manual draw of layout elements
-    	//View.onUpdate(dc);
-
-		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
-		dc.clear();
-		
-		// draw lines
-		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
-
 		for (var i=0; i < mRectHorizYS.size(); i++) {
 			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 1);
 		}
-
-		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 
 		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
 		//	indexDay+", "+today+", "+$.mHistorySelectFlags+", "+$.resultsIndex);
@@ -292,6 +281,19 @@ class HistoryView extends Ui.View {
 		//	$.results[loc] = i+1; // set none zero time
 		//	$.results[loc + AVG_PULSE_INDEX] = i; // ramp up values		
 		//}
+		
+		//0.6.3 we could still have no array on first run
+		if ($.results == null) {
+			//dc.drawText(dc.getWidth()/2,dc.getHeight()/2,Gfx.FONT_SMALL,"No history", mJust);
+			return;
+		}
+		
+		//Sys.println("DeviceType = "+$.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);		
+		//Sys.println("Results = "+$.results);
+		
+		// get pointer to next empty slot in results array .. should be oldest data		
+		var indexDay = $.resultsIndex;
+		var today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;		
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
 		if (mDebuggingResults) {

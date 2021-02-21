@@ -67,6 +67,8 @@ class HRVView extends Ui.View {
     function onUpdate(dc) {
     	//Sys.println("IntroView: onUpdate start");
     	
+    	var _dataOK = false;
+    	
     	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
     	
 		var width=dc.getWidth();
@@ -85,19 +87,32 @@ class HRVView extends Ui.View {
 		// if view 1
 		// more text on screen - maybe even chart of HRV saved
 		
-		if (_viewN == 0) {			
+		if (_viewN == 0) {	
+			// Case of mGData true and glanceData null not possible as flag set after creation		
 			if ($.mGData == true && $.glanceData != null) {
 				// Need to draw green circle around like test view. Check not overwritten or add to code			
 				resultsShow(dc, true);
-			} else if ($.mGData == false) {
-				// pull in glance once
-				if ($.glanceData == null) { $.loadGResultsFromStore();}
-				// draw a red circle and also -- in middle
-				resultsShow(dc, false);
+			} else if ($.mGData == false ) {
+				 if ($.glanceData == null || $.glanceData[0] == null) {
+				 	// Try to load data and display
+				 	_dataOK = $.loadGResultsFromStore();	
+				 } else if ($.glanceData != null || $.glanceData[0] != null) {
+				 	// we have previous loaded
+				 	_dataOK = true;				 
+				 }
+				
+				if (_dataOK) { 					
+					// draw a red circle and also -- in middle
+					//Sys.println("Show old results");
+					resultsShow(dc, false);
+				} else {
+					//Sys.println("show no test");
+					dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No test result", mJust);
+				}
 			}	
 		} else {
 			// placeholder for second screen
-			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"No test result yet", mJust);		
+			dc.drawText(width/2,height/2,Gfx.FONT_SMALL,"Second screen placeholder", mJust);		
 		
 		}	
 		
@@ -241,18 +256,25 @@ class HRVView extends Ui.View {
     	//	 Maybe message in TextBox?
     	// 	 Today and avg over X days for HRV?
     	
-    	// See if we can add age range labels. These will be at 54 degrees from vertical (12 o'clock = 0)
-		dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+		//Sys.println("resultsShow");
 		
+		//0.6.3 HRV. Show source of data		
 		if (_newG) {
 			// draw green ring
-		
+			dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);	
 		} else {
 			// draw red ring
-		
+			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
+			
+			// we should have no current data so NEED TO FORCE "--"
 		}
-		
-				
+		dc.setPenWidth(2);
+		dc.drawArc(dc.getWidth()/2, dc.getHeight()/2, dc.getWidth()/2-2, Gfx.ARC_COUNTER_CLOCKWISE, 0, 360);
+		dc.setPenWidth(1);		
+
+    	// See if we can add age range labels. These will be at 54 degrees from vertical (12 o'clock = 0)
+		dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+						
 		var _results;
 		var angle = -54 * Math.PI / 180.0;
 		// mArcRadius plus width of arc itself
@@ -266,6 +288,11 @@ class HRVView extends Ui.View {
 		angle = -angle; // 126 * Math.PI / 180.0;
 		_results = generateHandCoordinates(scrnCP, angle, mArcRadius+mArcWidth-5, 0, 2);
 		dc.drawText(_results[1][0], _results[1][1], Gfx.FONT_XTINY, $.glanceData[11].format("%.0f"), Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER);
+		
+		if ( !_newG) {
+			_results = generateHandCoordinates(scrnCP, 0, mArcRadius+mArcWidth-5, 0, 2);
+			dc.drawText(_results[1][0], _results[1][1]-5, Gfx.FONT_XTINY, "OLD", mJust);		
+		}
   	
     	// drawArc(x, y, r, attr, degreeStart, degreeEnd)
     	dc.setPenWidth( mArcWidth);

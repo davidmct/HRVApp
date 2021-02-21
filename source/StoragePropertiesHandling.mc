@@ -555,10 +555,10 @@ Sys.println("STres memory used, free, total: "+Sys.getSystemStats().usedMemory.t
     	storeResults(); 
     	// discard results buffer as large
     	$.results = null;
-Sys.println("STint memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
-			", "+Sys.getSystemStats().freeMemory.toString()+
-			", "+Sys.getSystemStats().totalMemory.toString()			
-			);	 
+//Sys.println("STint memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+//			", "+Sys.getSystemStats().freeMemory.toString()+
+//			", "+Sys.getSystemStats().totalMemory.toString()			
+//			);	 
 			   	
     	// save intervals as well so we can reload and display
     	saveIntervalsToStore();
@@ -566,6 +566,7 @@ Sys.println("STint memory used, free, total: "+Sys.getSystemStats().usedMemory.t
     	
 	} // end prepareResults 
 
+(:discard)
 	function saveStrings(_type) {
 		var mString;
 		var base;
@@ -595,6 +596,7 @@ Sys.println("STint memory used, free, total: "+Sys.getSystemStats().usedMemory.t
 	
 	// save intervals and flags as strings to storage to see if we can find them!!
 	// on close of app so data doesn't matter
+(:discard)
 	function saveIntervalStrings() {
 		
 		//Sys.println("Storing intervals and flags");
