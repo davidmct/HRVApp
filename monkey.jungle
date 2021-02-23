@@ -1,4 +1,5 @@
 project.manifest = manifest.xml
+
 # default directories for these..
 srcBase=source
 resBase=resources

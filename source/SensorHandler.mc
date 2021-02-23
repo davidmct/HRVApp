@@ -505,7 +505,9 @@ class InternalSensor {
     	$.mSensor.mSearching = true;
     	// suspicion that having no sensors kills optical after testing until long timeout
     	// Note CIQ ignores off state of ANT HRM. See if this line of code releases it.
-		Sensor.setEnabledSensors( [] );
+    	
+    	//0.6.3 remove disabling of sensors to keep already attached ones alive
+		//Sensor.setEnabledSensors( [] );
 	}
 
 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
@@ -515,11 +517,25 @@ class InternalSensor {
 			:period => 1, 	// 1 second data packets
 			:heartBeatIntervals => {:enabled => true}
 		};
-		Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
+		
+		//0.6.3 
+		// Enable external and onboard if CIQ >= 3.2.0
+		var _ans;
+		
+		if (Sensor has :enableSensorType) {
+			Sys.println(">=CIQ 3.2 detected");
+			_ans = Sensor.enableSensorType( Sensor.SENSOR_HEARTRATE);
+			if (_ans) { Sys.println("External sensor enabled"); } else {Sys.println("ans: "+_ans);}
+			_ans = Sensor.enableSensorType( Sensor.SENSOR_ONBOARD_HEARTRATE);
+			if (_ans) { Sys.println("OHR enabled");} else {Sys.println("ans: "+_ans);}
+		} else {
+			_ans = Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
+			Sys.println("Enable response ="+_ans);
+		}
+		
 		Sensor.registerSensorDataListener(self.method(:onHeartRateData), options);
-
-		Sys.println("Internal SensorSetup()");
-
+		//Sys.println("Internal SensorSetup()");
+	
 		mHRDataLnk.isChOpen = true;
 		$.mSensor.mSearching = false;
 

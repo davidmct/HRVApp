@@ -288,12 +288,7 @@ class HRVView extends Ui.View {
 		angle = -angle; // 126 * Math.PI / 180.0;
 		_results = generateHandCoordinates(scrnCP, angle, mArcRadius+mArcWidth-5, 0, 2);
 		dc.drawText(_results[1][0], _results[1][1], Gfx.FONT_XTINY, $.glanceData[11].format("%.0f"), Gfx.TEXT_JUSTIFY_LEFT|Gfx.TEXT_JUSTIFY_VCENTER);
-		
-		if ( !_newG) {
-			_results = generateHandCoordinates(scrnCP, 0, mArcRadius+mArcWidth-5, 0, 2);
-			dc.drawText(_results[1][0], _results[1][1]-5, Gfx.FONT_XTINY, "OLD", mJust);		
-		}
-  	
+		 	
     	// drawArc(x, y, r, attr, degreeStart, degreeEnd)
     	dc.setPenWidth( mArcWidth);
 		dc.setColor($.mArcCol[0], Gfx.COLOR_BLACK);
@@ -335,6 +330,13 @@ class HRVView extends Ui.View {
  		lineY += a[1] - 5;  
  		mTxt = $.glanceData[5]; 	
     	dc.drawText( scrnCP[0], lineY, Gfx.FONT_TINY, mTxt, mJust);    	    	
+    	
+    	dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+    	if ( !_newG) {
+			lineY += a[1] - 5; 
+			dc.drawText(scrnCP[0], lineY, Gfx.FONT_TINY, "OLD", mJust);		
+		}
+ 
     }
     
 }

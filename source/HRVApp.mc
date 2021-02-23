@@ -22,6 +22,7 @@ using HRVStorageHandler as mStorage;
 // Stop menu load during test on memory limited devices (otherwise no memory for save)
 // Fixed memory leak on menu pop
 // Fixed very first run issue on history graph
+// Fixed text size on Approach
 
 // 0.5.5
 // New algorithm for threshold detection using forward and backward average make group delay 0

@@ -119,8 +119,8 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
 	var myTextArea;
 	var mFont = Graphics.FONT_MEDIUM;
 	var mFontID;
-	var vFonts = [Graphics.FONT_LARGE, Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY];
-	
+	//var vFonts = [Graphics.FONT_LARGE, Graphics.FONT_MEDIUM, Graphics.FONT_SMALL, Graphics.FONT_TINY, Graphics.FONT_XTINY];
+	var vFonts = [Graphics.FONT_XTINY, Graphics.FONT_TINY, Graphics.FONT_SMALL, Graphics.FONT_MEDIUM, Graphics.FONT_LARGE];
 			
     // now we need to pick font		
     // :font=>[Gfx.FONT_MEDIUM, Gfx.FONT_SMALL, Gfx.FONT_TINY, Gfx.FONT_XTINY],
@@ -150,7 +150,7 @@ function f_drawText(dc, msgTxt, mValueColour, backColour, LocX, LocY, width, hei
     // need to check if string fits in width then ok
     
     // Does text fit in first line?
-    mFontID = selectFont(dc, msgTxt, width, height/2, vFonts);
+    mFontID = selectFont(dc, msgTxt, width, height/2, vFonts); // was height /2
     var mTextWidth = dc.getTextWidthInPixels(msgTxt, vFonts[mFontID]);
 	// tested whether a font is available that fits string so check within width 
 	// font is possibly 0 the smallest so may not be ideal
