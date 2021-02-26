@@ -469,6 +469,9 @@ class TestController {
 		$.mCircColSel = GG.generateResults( _stats);
 		$.mGData = true;
 		_stats = null;
+		
+		//0.6.3 switch to new view
+		Ui.switchToView($.getView(GLANCE_VIEW ), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 
     } // end save test
 
