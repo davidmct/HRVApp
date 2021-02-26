@@ -22,7 +22,7 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
         	// can't control order unless use individual lines and no dictionary
         	// get value for current key
         	var index = $.mHistorySelect.get(mHistoryName);
-        	var selectState = ($._mApp.mHistorySelectFlags & (1 << (index-1))) ? true : false;
+        	var selectState = ($.mHistorySelectFlags & (1 << (index-1))) ? true : false;
         	//Sys.println("SelectState = "+selectState);
         	mMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, mHistoryName, selectState, align));	        	
     	}
@@ -38,11 +38,11 @@ class HistoryMainMenuDelegate extends Ui.Menu2InputDelegate {
         	var selectState = 0;
         	// should have made HistoryLabel an array
         	if (labelNum == 1) {
-        		selectState = ($._mApp.mHistoryLabel1 == i) ? true : false;
+        		selectState = ($.mHistoryLabel1 == i) ? true : false;
         	} else if (labelNum == 2) {
-        		selectState = ($._mApp.mHistoryLabel2 == i) ? true : false;
+        		selectState = ($.mHistoryLabel2 == i) ? true : false;
         	} else if (labelNum == 3) {
-        		selectState = ($._mApp.mHistoryLabel3 == i) ? true : false;
+        		selectState = ($.mHistoryLabel3 == i) ? true : false;
         	}
         	//Sys.println("SelectState = "+selectState);
         	mMenu.addItem(new Ui.ToggleMenuItem(mHistoryName, options, i.toString(), selectState, align));

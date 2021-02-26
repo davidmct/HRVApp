@@ -46,7 +46,14 @@ Future ..
 		
 24. When CIQ 3.2.x out on devices can check for optical v strap
 
+30. Incorporate Widget func
+- add GlanceGen.mc
+- reset menu needs to use GG reset in resetmenuDelegate for long-term stats and another func to clear normal results ie separate arrays
+- Add display as version of history maybe for display of HRV long-term data
+- add a more fully featured summary of trend data etc as new view - or page on another if suitable
+- 
 
+DONE
 
 27. New version of app as glance/widget
 - Measures rMSSD and SDNN for less than 2 mins (Garmin times out)
@@ -57,7 +64,7 @@ Future ..
 - Reduced configurability
 - No FIT write (at start at least)
 
-DONE
+
 26. minor tweaks
 - Add text to II and Beat plots if not enough data yet. Also label bottom of beats chart
 - Is history label correct? looks like newest sample is on left of chart

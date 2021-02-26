@@ -26,37 +26,37 @@ class HRVFitContributor {
 
     // FIT Contributions variables    
 
-	hidden var mSessionMinIntervalFound_Field;
-	hidden var mSessionMaxIntervalFound_Field;
-	//hidden var mSessionMinDiffFound_Field;
-	//hidden var mSessionMaxDiffFound_Field;
+	//hidden var mSminIntervalFound_Field;
+	//hidden var mSmaxIntervalFound_Field;
+	//hidden var mSminDiffFound_Field;
+	//hidden var mSmaxDiffFound_Field;
 
-	hidden var mSessionAvgPulse_Field;
-	hidden var mSessionmRMSSD_Field;
-	hidden var mSessionmLnRMSSD_Field;
-	hidden var mSessionmSDNN_Field;
-	hidden var mSessionmSDSD_Field; 
-	hidden var mSessionmNN50_Field;
-	hidden var mSessionmpNN50_Field; 
-	hidden var mSessionmNN20_Field;
-	hidden var mSessionmpNN20_Field;
-	hidden var mSessionSource_Field;
-	hidden var mSessionLONG_Field;
-	hidden var mSessionSHORT_Field;
-	hidden var mSessionECTOPIC_Field;	
+	hidden var mSAvgPulse_Field;
+	hidden var mSmRMSSD_Field;
+	hidden var mSmLnRMSSD_Field;
+	hidden var mSmSDNN_Field;
+	hidden var mSmSDSD_Field; 
+	hidden var mSmNN50_Field;
+	hidden var mSmpNN50_Field; 
+	hidden var mSmNN20_Field;
+	hidden var mSmpNN20_Field;
+	hidden var mSSource_Field;
+	hidden var mSLONG_Field;
+	hidden var mSSHORT_Field;
+	hidden var mSECTOPIC_Field;	
 		
-	hidden var mRecordAvgPulse_Field;
-	hidden var mRecordmRMSSD_Field;
-	hidden var mRecordmLnRMSSD_Field;
-	hidden var mRecordmSDNN_Field;
-	hidden var mRecordmSDSD_Field; 
-	hidden var mRecordmNN50_Field;
-	hidden var mRecordmpNN50_Field; 
-	hidden var mRecordmNN20_Field;
-	hidden var mRecordmpNN20_Field;
+	hidden var mRAvgPulse_Field;
+	hidden var mRmRMSSD_Field;
+	hidden var mRmLnRMSSD_Field;
+	hidden var mRmSDNN_Field;
+	hidden var mRmSDSD_Field; 
+	hidden var mRmNN50_Field;
+	hidden var mRmpNN50_Field; 
+	hidden var mRmNN20_Field;
+	hidden var mRmpNN20_Field;
 	//hidden var mRecordLONG_Field;
 	//hidden var mRecordSHORT_Field;
-	hidden var mRecordECTOPIC_Field;
+	hidden var mRECTOPIC_Field;
 
     // Constructor ... 
     function initialize() {
@@ -68,77 +68,77 @@ class HRVFitContributor {
  		// Monkey graph can't seem to display UINT16 in summary charts!!!
  		// Get rid of consts as hardwired in fircontributions.xml anyway so why maintain two lists     
 
-       	mRecordAvgPulse_Field = mSession.createField("AvgPulse", 0, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
-       	mRecordmRMSSD_Field = mSession.createField("RMSSD", 1, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
-       	mRecordmLnRMSSD_Field = mSession.createField("LnRMSSD", 2, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
-       	mRecordmSDNN_Field = mSession.createField("SDNN", 3, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
-       	mRecordmSDSD_Field = mSession.createField("SDSD", 4, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" }); 
-       	mRecordmNN50_Field = mSession.createField("NN50", 5, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-       	mRecordmpNN50_Field = mSession.createField("pNN50", 6, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
-       	mRecordmNN20_Field = mSession.createField("NN20", 7, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-		mRecordmpNN20_Field = mSession.createField("pNN20", 8, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
+       	mRAvgPulse_Field = mSession.createField("AvgPulse", 0, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"bpm" });
+       	mRmRMSSD_Field = mSession.createField("RMSSD", 1, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
+       	mRmLnRMSSD_Field = mSession.createField("LnRMSSD", 2, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
+       	mRmSDNN_Field = mSession.createField("SDNN", 3, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" });
+       	mRmSDSD_Field = mSession.createField("SDSD", 4, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"ms" }); 
+       	mRmNN50_Field = mSession.createField("NN50", 5, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	mRmpNN50_Field = mSession.createField("pNN50", 6, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" }); 
+       	mRmNN20_Field = mSession.createField("NN20", 7, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+		mRmpNN20_Field = mSession.createField("pNN20", 8, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"%" });
        	//mRecordLONG_Field = mSession.createField("Long", 9, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        	//mRecordSHORT_Field = mSession.createField("Short", 10, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        	//mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
-       	mRecordECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
+       	mRECTOPIC_Field = mSession.createField("Ectopic-R", 11, FitContributor.DATA_TYPE_UINT16, { :mesgType=>FitContributor.MESG_TYPE_RECORD, :units=>"#" });
        			
-        mSessionAvgPulse_Field = mSession.createField("AvgPulse", 20, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });		
- 	   	//mSessionMinIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	//mSessionMaxIntervalFound_Field = mSession.createField("MaxInterval", 22, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionmRMSSD_Field = mSession.createField("RMSSD", 23, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionmLnRMSSD_Field = mSession.createField("LnRMSSD", 24, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionmSDNN_Field = mSession.createField("SDNN", 25, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionmSDSD_Field = mSession.createField("SDSD", 26, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" }); 
-       	mSessionmNN50_Field = mSession.createField("NN50", 27, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-       	mSessionmpNN50_Field = mSession.createField("pNN50", 28, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
-       	mSessionmNN20_Field = mSession.createField("NN20", 29, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-       	mSessionmpNN20_Field = mSession.createField("pNN20", 30, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
-       	//mSessionMinDiffFound_Field = mSession.createField("MinDiffII", 31, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	//mSessionMaxDiffFound_Field = mSession.createField("MaxDiffII", 32, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
-       	mSessionLONG_Field = mSession.createField("Long",       33, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-       	mSessionSHORT_Field = mSession.createField("Short",     34, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-       	mSessionECTOPIC_Field = mSession.createField("Ectopic-S", 35, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
-        mSessionSource_Field = mSession.createField("Src",   36, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
+        mSAvgPulse_Field = mSession.createField("AvgPulse", 20, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"bpm" });		
+ 	   	//mSminIntervalFound_Field = mSession.createField("MinInterval", 21, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	//mSmaxIntervalFound_Field = mSession.createField("MaxInterval", 22, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSmRMSSD_Field = mSession.createField("RMSSD", 23, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSmLnRMSSD_Field = mSession.createField("LnRMSSD", 24, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSmSDNN_Field = mSession.createField("SDNN", 25, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSmSDSD_Field = mSession.createField("SDSD", 26, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" }); 
+       	mSmNN50_Field = mSession.createField("NN50", 27, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+       	mSmpNN50_Field = mSession.createField("pNN50", 28, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" }); 
+       	mSmNN20_Field = mSession.createField("NN20", 29, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+       	mSmpNN20_Field = mSession.createField("pNN20", 30, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"%" });
+       	//mSminDiffFound_Field = mSession.createField("MinDiffII", 31, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	//mSmaxDiffFound_Field = mSession.createField("MaxDiffII", 32, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"ms" });
+       	mSLONG_Field = mSession.createField("Long",       33, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+       	mSSHORT_Field = mSession.createField("Short",     34, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+       	mSECTOPIC_Field = mSession.createField("Ectopic-S", 35, FitContributor.DATA_TYPE_FLOAT, { :mesgType=>FitContributor.MESG_TYPE_SESSION, :units=>"#" });
+        mSSource_Field = mSession.createField("Src",   36, FitContributor.DATA_TYPE_STRING, {:count=>10, :mesgType=>FitContributor.MESG_TYPE_SESSION});
        			 
-		//mSessionMinIntervalFound_Field.setData(0);
-		//mSessionMaxIntervalFound_Field.setData(0);
-		//mSessionMinDiffFound_Field.setData(0);
-		//mSessionMaxDiffFound_Field.setData(0);
+		//mSminIntervalFound_Field.setData(0);
+		//mSmaxIntervalFound_Field.setData(0);
+		//mSminDiffFound_Field.setData(0);
+		//mSmaxDiffFound_Field.setData(0);
 		
-		mSessionAvgPulse_Field.setData(0);
-		mSessionmRMSSD_Field.setData(0.0);
-		mSessionmLnRMSSD_Field.setData(0.0);
-		mSessionmSDNN_Field.setData(0.0);
-		mSessionmSDSD_Field.setData(0.0); 
-		mSessionmNN50_Field.setData(0);
-		mSessionmpNN50_Field.setData(0.0); 
-		mSessionmNN20_Field.setData(0);
-		mSessionmpNN20_Field.setData(0.0);
-		mSessionSource_Field.setData("");
-		mSessionLONG_Field.setData(0.0);
-		mSessionSHORT_Field.setData(0.0);
-		mSessionECTOPIC_Field.setData(0.0);
-		mSessionSource_Field.setData("");
+		mSAvgPulse_Field.setData(0);
+		mSmRMSSD_Field.setData(0.0);
+		mSmLnRMSSD_Field.setData(0.0);
+		mSmSDNN_Field.setData(0.0);
+		mSmSDSD_Field.setData(0.0); 
+		mSmNN50_Field.setData(0);
+		mSmpNN50_Field.setData(0.0); 
+		mSmNN20_Field.setData(0);
+		mSmpNN20_Field.setData(0.0);
+		mSSource_Field.setData("");
+		mSLONG_Field.setData(0.0);
+		mSSHORT_Field.setData(0.0);
+		mSECTOPIC_Field.setData(0.0);
+		mSSource_Field.setData("");
 			
-		mRecordAvgPulse_Field.setData(0);
-		mRecordmRMSSD_Field.setData(0.0);
-		mRecordmLnRMSSD_Field.setData(0.0);
-		mRecordmSDNN_Field.setData(0.0);
-		mRecordmSDSD_Field.setData(0.0); 
-		mRecordmNN50_Field.setData(0);
-		mRecordmpNN50_Field.setData(0.0); 
-		mRecordmNN20_Field.setData(0);
-		mRecordmpNN20_Field.setData(0.0);
+		mRAvgPulse_Field.setData(0);
+		mRmRMSSD_Field.setData(0.0);
+		mRmLnRMSSD_Field.setData(0.0);
+		mRmSDNN_Field.setData(0.0);
+		mRmSDSD_Field.setData(0.0); 
+		mRmNN50_Field.setData(0);
+		mRmpNN50_Field.setData(0.0); 
+		mRmNN20_Field.setData(0);
+		mRmpNN20_Field.setData(0.0);
 		//mRecordLONG_Field.setData(0.0);
 		//mRecordSHORT_Field.setData(0.0);
 		//mRecordECTOPIC_Field.setData(0.0);
-		mRecordECTOPIC_Field.setData(0);
+		mRECTOPIC_Field.setData(0);
     }
     
 	function createSession() {
 		// if FIT write is enabled we can initialise session
 		//15:25 27/04/20 mSession = null;
-		if ($._mApp.mFitWriteEnabled) {
+		if ($.mFitWriteEnabled) {
 			if (Toybox has :ActivityRecording) {    
 				if ((mSession != null) && mSession.isRecording()) {
 		        	mSession.stop();                                      // stop the session
@@ -189,66 +189,65 @@ class HRVFitContributor {
 	}
 	
 	function updateSessionStats() {
-		var gg = $._mApp;
+		//var gg = $.$.
 	
-		//mSessionMinIntervalFound_Field.setData(gg.mSampleProc.minIntervalFound);
-		//mSessionMaxIntervalFound_Field.setData(gg.mSampleProc.maxIntervalFound);
-		//mSessionMinDiffFound_Field.setData(gg.mSampleProc.minDiffFound);
-		//mSessionMaxDiffFound_Field.setData(gg.mSampleProc.maxDiffFound);
+		//mSminIntervalFound_Field.setData($.mSampleProc.minIntervalFound);
+		//mSmaxIntervalFound_Field.setData($.mSampleProc.maxIntervalFound);
+		//mSminDiffFound_Field.setData($.mSampleProc.minDiffFound);
+		//mSmaxDiffFound_Field.setData($.mSampleProc.maxDiffFound);
 		
-		mSessionAvgPulse_Field.setData(gg.mSampleProc.avgPulse);
-		mSessionmRMSSD_Field.setData(gg.mSampleProc.mRMSSD);
-		mSessionmLnRMSSD_Field.setData(gg.mSampleProc.mLnRMSSD);
-		mSessionmSDNN_Field.setData(gg.mSampleProc.mSDNN);
-		mSessionmSDSD_Field.setData(gg.mSampleProc.mSDSD); 
-		mSessionmNN50_Field.setData(gg.mSampleProc.mNN50);
-		mSessionmpNN50_Field.setData(gg.mSampleProc.mpNN50); 
-		mSessionmNN20_Field.setData(gg.mSampleProc.mNN20);
-		mSessionmpNN20_Field.setData(gg.mSampleProc.mpNN20);	
-		mSessionLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
-		mSessionSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
-		mSessionECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
+		mSAvgPulse_Field.setData($.mSampleProc.avgPulse);
+		mSmRMSSD_Field.setData($.mSampleProc.mRMSSD);
+		mSmLnRMSSD_Field.setData($.mSampleProc.mLnRMSSD);
+		mSmSDNN_Field.setData($.mSampleProc.mSDNN);
+		mSmSDSD_Field.setData($.mSampleProc.mSDSD); 
+		mSmNN50_Field.setData($.mSampleProc.mNN50);
+		mSmpNN50_Field.setData($.mSampleProc.mpNN50); 
+		mSmNN20_Field.setData($.mSampleProc.mNN20);
+		mSmpNN20_Field.setData($.mSampleProc.mpNN20);	
+		mSLONG_Field.setData($.mSampleProc.vLongBeatCnt.toFloat());
+		mSSHORT_Field.setData($.mSampleProc.vShortBeatCnt.toFloat());
+		mSECTOPIC_Field.setData($.mSampleProc.vEBeatCnt.toFloat());
 					
 		var str;
-		if (gg.mSensorTypeExt == SENSOR_SEARCH) {
+		if ($.mSensorTypeExt == SENSOR_SEARCH) {
 			str = "Ext";
 		} else {
 			str = "Int";
 		}
-		mSessionSource_Field.setData(str);		
+		mSSource_Field.setData(str);		
 
-		//Sys.println("FIT Session: "+gg.mSampleProc.avgPulse+","+gg.mSampleProc.mNN50+","+gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20);		
+		//Sys.println("FIT Session: "+$.mSampleProc.avgPulse+","+$.mSampleProc.mNN50+","+$.mSampleProc.mpNN50+","+$.mSampleProc.mNN20+","+$.mSampleProc.mpNN20);		
 	}
 	
 	function updateRecordStats() {
 		//Sys.println("Updating FIT records");
-		var gg = $._mApp;
-				
-		mRecordAvgPulse_Field.setData(gg.mSampleProc.avgPulse);
-		mRecordmRMSSD_Field.setData(gg.mSampleProc.mRMSSD);
-		mRecordmLnRMSSD_Field.setData(gg.mSampleProc.mLnRMSSD);
-		mRecordmSDNN_Field.setData(gg.mSampleProc.mSDNN);
-		mRecordmSDSD_Field.setData(gg.mSampleProc.mSDSD); 
+		//var gg = $._m$.			
+		mRAvgPulse_Field.setData($.mSampleProc.avgPulse);
+		mRmRMSSD_Field.setData($.mSampleProc.mRMSSD);
+		mRmLnRMSSD_Field.setData($.mSampleProc.mLnRMSSD);
+		mRmSDNN_Field.setData($.mSampleProc.mSDNN);
+		mRmSDSD_Field.setData($.mSampleProc.mSDSD); 
 		
-		//Sys.println("FIT record: "+gg.mSampleProc.mNN50+","+gg.mSampleProc.mpNN50+","+gg.mSampleProc.mNN20+","+gg.mSampleProc.mpNN20);
+		//Sys.println("FIT record: "+$.mSampleProc.mNN50+","+$.mSampleProc.mpNN50+","+$.mSampleProc.mNN20+","+$.mSampleProc.mpNN20);
 
-		mRecordmNN50_Field.setData(gg.mSampleProc.mNN50);
-		mRecordmpNN50_Field.setData(gg.mSampleProc.mpNN50); 
-		mRecordmNN20_Field.setData(gg.mSampleProc.mNN20);
-		mRecordmpNN20_Field.setData(gg.mSampleProc.mpNN20);	
-		//mRecordLONG_Field.setData(gg.mSampleProc.vLongBeatCnt.toFloat());
-		//mRecordSHORT_Field.setData(gg.mSampleProc.vShortBeatCnt.toFloat());
-		//mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatCnt.toFloat());
-		mRecordECTOPIC_Field.setData(gg.mSampleProc.vEBeatFlag);
+		mRmNN50_Field.setData($.mSampleProc.mNN50);
+		mRmpNN50_Field.setData($.mSampleProc.mpNN50); 
+		mRmNN20_Field.setData($.mSampleProc.mNN20);
+		mRmpNN20_Field.setData($.mSampleProc.mpNN20);	
+		//mRecordLONG_Field.setData($.mSampleProc.vLongBeatCnt.toFloat());
+		//mRecordSHORT_Field.setData($.mSampleProc.vShortBeatCnt.toFloat());
+		//mRecordECTOPIC_Field.setData($.mSampleProc.vEBeatCnt.toFloat());
+		mRECTOPIC_Field.setData($.mSampleProc.vEBeatFlag);
 		// reset for next sample
-		gg.mSampleProc.vEBeatFlag = 0;
+		$.mSampleProc.vEBeatFlag = 0;
 	}
 	
 	function closeFITrec() {Sys.println("closeFITrec"); mSession = null;}
     
 	// save data in FIT
     function compute() {
-		if ((mSession == null) || ($._mApp.mTestControl.mTestState != TS_TESTING) ) {return;}
+		if ((mSession == null) || ($.mTestControl.mTestState != TS_TESTING) ) {return;}
 		// update records every call if testing
 		updateRecordStats();
 		// programmers guide says to update these as well!

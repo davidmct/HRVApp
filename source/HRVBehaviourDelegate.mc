@@ -26,13 +26,13 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	function onNextPage() {
 		//Sys.println("onNextPage()");
 		// down or swipe UP
-		Ui.switchToView($._mApp.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+		Ui.switchToView($.plusView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
     function onPreviousPage() {
 		// Up or swipe down
-		Ui.switchToView($._mApp.subView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+		Ui.switchToView($.subView(), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 		return true;
     }
 
@@ -59,14 +59,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 
     function onEnter() {
     	//Sys.println("onEnter()");
-		if($._mApp.viewNum != TEST_VIEW) {
+		if($.viewNum != TEST_VIEW) {
 			//Sys.println("HRVBehaviour onEnter() - switch to test view");
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+			Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 			return true;
 		}
 		else {
 			// in test view so means stop or start test
-			var res = $._mApp.mTestControl.StateMachine(:enterPressed);
+			var res = $.mTestControl.StateMachine(:enterPressed);
 			// true if enough samples to save but we have to be in testing state
 			if (res == true) {
 				var menu = new Ui.Menu2({:title=>"Save?"});
@@ -81,36 +81,48 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 	}
 
 	function onMenu() {
-		//Sys.println("onMenu()");		
-		// Generate a new Menu for mainmenu
-        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
-        // add items
-        menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
-        menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
-        menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
-        menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
-        //0.6.0 check low memory device
-        if (System.getSystemStats().totalMemory > 128000) { 
-        	//Sys.println("System memory > 128k");
-        	menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
-        }
-       	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
-        menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
-        menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
-        menu.addItem(new Ui.MenuItem("Auto Scaling", null, "sc", null));
-        menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
-        menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
-        menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
-        menu.addItem(new Ui.MenuItem("About", null, "a", null));
-        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
-        //Sys.println("onMenu()- end");
+		
+		//0.6.3 Stop menus if testing and on small memory device
+		// Skip if not ready or waiting and on small memory devices
+		if( ($.mTestControl !=null) && 
+			!($.mTestControl.mTestState == TS_READY || $.mTestControl.mTestState == TS_WAITING) && 
+			(Sys.getSystemStats().totalMemory < 128000) ) {
+			
+			$.mTestControl.alert(TONE_ERROR);
+			Sys.println("HRVBehaviour onMenu() - skip menu");
+		}
+		else {
+			//Sys.println("onMenu()");		
+			// Generate a new Menu for mainmenu
+	        var menu = new Ui.Menu2({:title=>new DrawableMenuTitle("Main", false)});
+	        // add items
+	        menu.addItem(new Ui.MenuItem("Test type", null, "t", null));
+	        //menu.addItem(new Ui.MenuItem("Source", null, "s", null));  
+	        menu.addItem(new Ui.MenuItem("Fit Output", null, "f", null));
+	        menu.addItem(new Ui.MenuItem("History view", null, "h", null));      
+	        //0.6.0 check low memory device
+	        //if (System.getSystemStats().totalMemory > 128000) { 
+	        	//Sys.println("System memory > 128k");
+	        	menu.addItem(new Ui.MenuItem("Load Intervals", null, "l", null)); 
+	        //}
+	       	menu.addItem(new Ui.MenuItem("Timer", null, "ti", null));
+	        menu.addItem(new Ui.MenuItem("Threshold", null, "th", null));
+	        menu.addItem(new Ui.MenuItem("Colours", null, "c", null));
+	        menu.addItem(new Ui.MenuItem("Auto Scaling", null, "sc", null));
+	        menu.addItem(new Ui.MenuItem("Sound", null, "so", null));
+	        menu.addItem(new Ui.MenuItem("Vibration", null, "v", null));   
+	        menu.addItem(new Ui.MenuItem("Reset", null, "r", null));    
+	        menu.addItem(new Ui.MenuItem("About", null, "a", null));
+	        Ui.pushView(menu, new MainMenuDelegate(), Ui.SLIDE_IMMEDIATE );
+	    }
+	   	//Sys.println("onMenu()- end");
 		return true;
     }
 
 	function onEscape() {
 		//Sys.println("onEscape()");
-		if(TEST_VIEW == $._mApp.viewNum) {
-			var res = $._mApp.mTestControl.StateMachine(:escapePressed);	
+		if(TEST_VIEW == $.viewNum) {
+			var res = $.mTestControl.StateMachine(:escapePressed);	
 			// true means we need to check to save	
 			if (res == true) {		
 				var menu = new Ui.Menu2({:title=>"Save test"});
@@ -120,14 +132,14 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 			} 	
 		
 			// in TEST_VIEW. If we ended a test we fall back to test view otherwise Pop
-			if ($._mApp.mTestControl.mTestState < TS_TESTING) {
-				//Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+			if ($.mTestControl.mTestState < TS_TESTING) {
+				//Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 				Ui.popView(Ui.SLIDE_IMMEDIATE);
 				return true;
 			} 
 		} else {
 			// move back to test view
-			Ui.switchToView($._mApp.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);				
+			Ui.switchToView($.getView(TEST_VIEW), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);				
 		}
 		return true;
 	}
@@ -140,11 +152,11 @@ class HRVBehaviourDelegate extends Ui.BehaviorDelegate {
 		//Sys.println("setSave() called with "+value);
 		if (value == 1) { 
 			//Sys.println("saveTest() called");
-            $._mApp.mTestControl.saveTest();
+            $.mTestControl.saveTest();
         }
         else {
         	//Sys.println("discardTest() called");
-        	$._mApp.mTestControl.discardTest();
+        	$.mTestControl.discardTest();
         }		
     }
 	
@@ -174,7 +186,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         var bitmapWidth = 0;
         var bitmapX = 0;
         var bitmapY = 0;              
-        var labelWidth = dc.getTextWidthInPixels(mTitle, $._mApp.mMenuTitleSize);
+        var labelWidth = dc.getTextWidthInPixels(mTitle, $.mMenuTitleSize);
         
         if ( drawTrue) { 
         	appIcon = WatchUi.loadResource(Rez.Drawables.LauncherIcon);
@@ -194,7 +206,7 @@ class DrawableMenuTitle extends Ui.Drawable {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         
         if (drawTrue) {
-        	dc.drawText(labelX, labelY, $._mApp.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        	dc.drawText(labelX, labelY, $.mMenuTitleSize, mTitle, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         } else {        
         	dc.drawText(dc.getWidth()/2, labelY, Gfx.FONT_MEDIUM, mTitle, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }

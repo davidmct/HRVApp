@@ -29,22 +29,22 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         // assume code sets this as required when item clicked
         if (item.isEnabled()) {
         	// check not exceeded 3 values
-        	Sys.println("History menu delegate. selected "+id+" index "+index);
+        	//Sys.println("History menu delegate. selected "+id+" index "+index);
     		
     		// set bit for this value	
- 			$._mApp.mHistorySelectFlags |= (1 << (index-1));
+ 			$.mHistorySelectFlags |= (1 << (index-1));
         	// then check if limit reached and reset
         	if (checkToMany()) {
         		// need to set disabled and clear flag
         		//Sys.println("HistoryMenuDelegate: too many toggles selected");
         		item.setEnabled(false);
-        		$._mApp.mHistorySelectFlags &= ~(1 << (index-1));  
-        		$._mApp.mTestControl.alert(TONE_ERROR);     	
+        		$.mHistorySelectFlags &= ~(1 << (index-1));  
+        		$.mTestControl.alert(TONE_ERROR);     	
         	} 
  		}
  		else {
  			// deselected case
- 			$._mApp.mHistorySelectFlags &= ~(1 << (index-1)); 
+ 			$.mHistorySelectFlags &= ~(1 << (index-1)); 
  		} // end deselected case
  		
  		//Sys.println("History menu delegate. mHistorySelectFlags = "+$.mHistorySelectFlags.format("%x"));
@@ -59,13 +59,13 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
         // assume code sets this as required when item clicked
         if (item.isEnabled()) {
 			// only allowed one item ... should reset state
-        	Sys.println("History menu delegate. selected "+id+" index "+index+" for label "+instanceIndex);
+        	//Sys.println("History menu delegate. selected "+id+" index "+index+" for label "+instanceIndex);
          	if (instanceIndex == 1) {
-        		$._mApp.mHistoryLabel1 = index;
+        		$.mHistoryLabel1 = index;
         	} else if (instanceIndex == 2) {
-        		$._mApp.mHistoryLabel2 = index;
+        		$.mHistoryLabel2 = index;
         	} else if (instanceIndex == 3) {
-        		$._mApp.mHistoryLabel3 = index;
+        		$.mHistoryLabel3 = index;
         	}
         	
         	// fix the checked state as only one allowed
@@ -81,13 +81,13 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
 	       	//Sys.println("History item "+instanceIndex+" set to "+$.mHistoryLabelList[index]);
         	
        	} else {
-       		Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
+       		//Sys.println("History menu delegate. deselected "+id+" index "+index+" for label "+instanceIndex);
           	if (instanceIndex == 1) {
-        		$._mApp.mHistoryLabel1 = 0;
+        		$.mHistoryLabel1 = 0;
         	} else if (instanceIndex == 2) {
-        		$._mApp.mHistoryLabel2 = 0;
+        		$.mHistoryLabel2 = 0;
         	} else if (instanceIndex == 3) {
-        		$._mApp.mHistoryLabel3 = 0;
+        		$.mHistoryLabel3 = 0;
         	}   
         	
         	// defaults to "none" and turn off current selection
@@ -121,7 +121,7 @@ class HistoryMenuDelegate extends Ui.Menu2InputDelegate {
     	var count = 0;
     	for (var i = 0; i < 14 ; i++) {
     		// if non-zero then set
-    		if ( $._mApp.mHistorySelectFlags & (1 << i) ) {  
+    		if ( $.mHistorySelectFlags & (1 << i) ) {  
     			count++; 
     			//Sys.println("count "+count);
     		}  	

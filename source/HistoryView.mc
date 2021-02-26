@@ -3,6 +3,8 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 
+using HRVStorageHandler as mStorage;
+
 // Show the previous test results over time
 class HistoryView extends Ui.View {
 	
@@ -58,10 +60,10 @@ class HistoryView extends Ui.View {
 	
 	hidden var mScaleY;
 	hidden var mScaleX;
-	var gg;
+	//var gg;
    
 	function initialize() { 
-		gg = $._mApp;
+		//gg = $._m$.	
 		View.initialize();
 	}
 	
@@ -138,7 +140,7 @@ class HistoryView extends Ui.View {
 			var bitPosition = $.mHistorySelect.get(possible);
 			
 			// now check if corresponding bit position-1 is set 
-			if (gg.mHistorySelectFlags & (1 << (bitPosition-1))) {
+			if ($.mHistorySelectFlags & (1 << (bitPosition-1))) {
 				// found set bit, capture index in to dictionary
 				labelList[j] = possible;
 				resultsIndexList[j] = bitPosition;
@@ -162,25 +164,25 @@ class HistoryView extends Ui.View {
 	
 		//Sys.println("prepResults()");
 		
-		gg.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
+		$.results = new [NUM_RESULT_ENTRIES * DATA_SET_SIZE];
 		
 		// if retrieve returns null i eno storage then we will have all 0's
 		for(var i = 0; i < (NUM_RESULT_ENTRIES * DATA_SET_SIZE); i++) {
-			gg.results[i] = 0;
+			$.results[i] = 0;
 		}
 		// this will be overridden if we load results
-		gg.resultsIndex = 0;
+		$.resultsIndex = 0;
 		
-		gg.mStorage.retrieveResults();
+		mStorage.retrieveResults();
 		
-		//Sys.println("Retrieved results ="+gg.results);
+		//Sys.println("Retrieved results ="+$.results);
 	}
 	
 (:oldResults)
 	function freeResults() {}
 	
 (:newResults)
-	function freeResults() {gg.results = null;}
+	function freeResults() {$.results = null;}
 
 
     //! Update the view
@@ -188,7 +190,7 @@ class HistoryView extends Ui.View {
 		
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
 		
-		if (gg.mDeviceType == RES_240x240) {
+		if ($.mDeviceType == RES_240x240) {
 			//Sys.println("device is 240x240");
 			if (mLabelFont == null) {	
 				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
@@ -198,41 +200,32 @@ class HistoryView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
-		prepResults();
-		
-		//Sys.println("DeviceType = "+gg.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);
-		
-		//Sys.println("Results = "+gg.results);
-		
-		// get pointer to next empty slot in results array .. should be oldest data		
-		var indexDay = gg.resultsIndex;
-		var today = (gg.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
-		 
-		var dataCount = 0;
-		var max = 0;
-		var min = 1000;
-
-		// draw the layout. remove if trying manual draw of layout elements
-    	//View.onUpdate(dc);
-
-		dc.setColor( Gfx.COLOR_TRANSPARENT, gg.mBgColour);
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
+				
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
 		
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+		
+		if ( $.results == null) {
+			prepResults();
+		}
+		
+		var dataCount = 0;
+		var max = 0;
+		var min = 1000;
 
 		for (var i=0; i < mRectHorizYS.size(); i++) {
 			dc.drawRectangle(mRectHorizXS, mRectHorizYS[i], mRectHorizWHS, 1);
 		}
 
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
-
 		//Sys.println("HistoryView: indexDay, today, HistoryFlags, $.resultsIndex :"+
-		//	indexDay+", "+today+", "+gg.mHistorySelectFlags+", "+gg.resultsIndex);
+		//	indexDay+", "+today+", "+$.mHistorySelectFlags+", "+$.resultsIndex);
 		
 		// OLD 0.4.2 code
-		//if (gg.mHistorySelectFlags == 0) {
+		//if ($.mHistorySelectFlags == 0) {
 		//	// no data fields set to dsiplay so go home
 		//	return;
 		//}
@@ -250,52 +243,65 @@ class HistoryView extends Ui.View {
 		
 		//0.4.3 - Now have list available to match label and colour!
 		// resultsIndexList to null if no data to display
-		if ( gg.mHistoryLabel1 == 0 && gg.mHistoryLabel2 == 0 && gg.mHistoryLabel3 == 0) {
+		if ( $.mHistoryLabel1 == 0 && $.mHistoryLabel2 == 0 && $.mHistoryLabel3 == 0) {
 			mHistoryLabelList = null;
 			return;
 		}	
 		 
-		labelList[0] = mHistoryLabelList[gg.mHistoryLabel1];
-        resultsIndexList[0] = ( gg.mHistoryLabel1 == 0 ? null : gg.mHistoryLabel1);
-		labelList[1] = mHistoryLabelList[gg.mHistoryLabel2];
-        resultsIndexList[1] = ( gg.mHistoryLabel2 == 0 ? null : gg.mHistoryLabel2);
-		labelList[2] = mHistoryLabelList[gg.mHistoryLabel3];
-        resultsIndexList[2] = ( gg.mHistoryLabel3 == 0 ? null : gg.mHistoryLabel3);   
+		labelList[0] = mHistoryLabelList[$.mHistoryLabel1];
+        resultsIndexList[0] = ( $.mHistoryLabel1 == 0 ? null : $.mHistoryLabel1);
+		labelList[1] = mHistoryLabelList[$.mHistoryLabel2];
+        resultsIndexList[1] = ( $.mHistoryLabel2 == 0 ? null : $.mHistoryLabel2);
+		labelList[2] = mHistoryLabelList[$.mHistoryLabel3];
+        resultsIndexList[2] = ( $.mHistoryLabel3 == 0 ? null : $.mHistoryLabel3);   
         
         mHistoryLabelList = null;
                         	
         // hard to tie menu on selection order to this list-> fixed 0.4.3
         // draw the data being drawn labels
-        dc.setColor( gg.Label1Colour, Gfx.COLOR_TRANSPARENT);
+        dc.setColor( $.Label1Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[0], mLabelValueLocYS[0], mLabelFont, labelList[0], mJust);			
-        dc.setColor( gg.Label2Colour, Gfx.COLOR_TRANSPARENT);
+        dc.setColor( $.Label2Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, labelList[1], mJust);	
-		dc.setColor( gg.Label3Colour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, labelList[2], mJust);	
 		
 		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
 		
 		// TEST CODE..
 		// set results up to end point...
-		//for (var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE ; i++) { gg.results[i] = 0;}
+		//for (var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE ; i++) { $.results[i] = 0;}
 		//for (var i = 0; i < NUM_RESULT_ENTRIES; i++) { 
 			// force index day
-		//	gg.resultsIndex = 0;
-		//	indexDay = gg.resultsIndex;
-		//	today = (gg.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		//	$.resultsIndex = 0;
+		//	indexDay = $.resultsIndex;
+		//	today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
 			
 		//	var loc = i * DATA_SET_SIZE;
-		//	gg.results[loc] = i+1; // set none zero time
-		//	gg.results[loc + AVG_PULSE_INDEX] = i; // ramp up values		
+		//	$.results[loc] = i+1; // set none zero time
+		//	$.results[loc + AVG_PULSE_INDEX] = i; // ramp up values		
 		//}
+		
+		//0.6.3 we could still have no array on first run
+		if ($.results == null) {
+			//dc.drawText(dc.getWidth()/2,dc.getHeight()/2,Gfx.FONT_SMALL,"No history", mJust);
+			return;
+		}
+		
+		//Sys.println("DeviceType = "+$.mDeviceType+", sel font: "+mLabelFont+" xtiny is "+Gfx.FONT_XTINY);		
+		//Sys.println("Results = "+$.results);
+		
+		// get pointer to next empty slot in results array .. should be oldest data		
+		var indexDay = $.resultsIndex;
+		var today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;		
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
 		if (mDebuggingResults) {
 			var dump = "";
 			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-				dump += gg.results[i].toString() + ",";
+				dump += $.results[i].toString() + ",";
 			}
-			Sys.println("History view DUMP of results : "+dump);
+			Sys.println("History DUMP results : "+dump);
 		}
 		
 		// Find result limits
@@ -304,13 +310,13 @@ class HistoryView extends Ui.View {
 		var day = indexDay; // start at furthest past
 		var index = day * DATA_SET_SIZE;
 		do {
-			if (gg.results[index] != 0) { // we have an entry that has been created	
+			if ($.results[index] != 0) { // we have an entry that has been created	
 				// get values and check max/min
 				var cnt = 0;
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 					var j = resultsIndexList[i];					
 					if (j != null) {
-						var value = gg.results[index+j].toNumber();
+						var value = $.results[index+j].toNumber();
 						cnt++;
 						//Sys.println("index = "+j+", value : "+value);
 						// do min max
@@ -327,7 +333,7 @@ class HistoryView extends Ui.View {
 				if (cnt > 0) { dataCount++;}
 			}	
 			
-			index = (index + DATA_SET_SIZE) % gg.results.size();
+			index = (index + DATA_SET_SIZE) % $.results.size();
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
 		} 
 		// iterate until back to start
@@ -360,14 +366,14 @@ class HistoryView extends Ui.View {
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
 		// Built new font instead
-		dc.setColor( gg.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
 			var str = format(" $1$ ",[num.format("%d")] );	
 			// using custom font so not needed
-			//if ((gg.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
+			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
 			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
 			//} else { 		
 				dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, str, mJust);
@@ -386,7 +392,7 @@ class HistoryView extends Ui.View {
 				var j = resultsIndexList[i];	
 				// up to MAX_DISPLAY_VAR to show - check valid entry			
 				if (j != null) {
-					firstData[i] = gg.results[j].toNumber();
+					firstData[i] = $.results[j].toNumber();
 				} // j != null
 			} // for each display value
 			// scale can return null which need to check on draw
@@ -397,11 +403,11 @@ class HistoryView extends Ui.View {
 			//Sys.println("HistoryView() single data point");
 			
 			// now we should have a continuous set of points having found a non-zero entry
-			dc.setColor(gg.Label1Colour, gg.mBgColour);
+			dc.setColor($.Label1Colour, $.mBgColour);
 			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
-			dc.setColor(gg.Label2Colour, gg.mBgColour);
+			dc.setColor($.Label2Colour, $.mBgColour);
 			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
-			dc.setColor(gg.Label3Colour, gg.mBgColour);
+			dc.setColor($.Label3Colour, $.mBgColour);
 			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
 			
 			// TEST CODE		
@@ -419,13 +425,13 @@ class HistoryView extends Ui.View {
 		index = day * DATA_SET_SIZE;
 		var pointNumber = 0;
 		do {
-			if (gg.results[index] != 0) { // we have an entry that has been created	
+			if ($.results[index] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 					var j = resultsIndexList[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
-						firstData[i] = gg.results[index+j].toNumber();
+						firstData[i] = $.results[index+j].toNumber();
 					} // j != null
 				} // for each display value
 				var x1 = pointNumber * xStep + 3; // 3,9....177 width of chart = 180
@@ -444,13 +450,13 @@ class HistoryView extends Ui.View {
 				var secondIndex = ((day + 1) % NUM_RESULT_ENTRIES)*DATA_SET_SIZE;
 				
 				// we have more than one entry so OK to not test for no data
-				//if (gg.results[secondIndex] != 0) { // we have an entry that has been created	
+				//if ($.results[secondIndex] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
 					var j = resultsIndexList[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
-						firstData[i] = gg.results[secondIndex+j].toNumber();
+						firstData[i] = $.results[secondIndex+j].toNumber();
 					} // j != null
 				} // for each display value
 
@@ -461,11 +467,11 @@ class HistoryView extends Ui.View {
 	 			
 	 			//Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
 
-				dc.setColor(gg.Label1Colour, gg.mBgColour);
+				dc.setColor($.Label1Colour, $.mBgColour);
 				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
-				dc.setColor(gg.Label2Colour, gg.mBgColour);
+				dc.setColor($.Label2Colour, $.mBgColour);
 				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
-				dc.setColor(gg.Label3Colour, gg.mBgColour);
+				dc.setColor($.Label3Colour, $.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 
 				pointNumber++;	
@@ -473,7 +479,7 @@ class HistoryView extends Ui.View {
 			
 			// update pointers
 			day = (day + 1) % NUM_RESULT_ENTRIES; // wrap round end of buffer
-			index = (day * DATA_SET_SIZE) % gg.results.size();
+			index = (day * DATA_SET_SIZE) % $.results.size();
 		} 
 		while ( day != today);
 		

@@ -137,7 +137,7 @@ class SampleProcessing {
 	hidden var mSDSD_param = [0, 0.0, 0.0, 0.0, 0.0];
 	
 	hidden var mStartThreshold = false;
-	hidden var gg; //$._ mApp to make global more local!
+	//hidden var gg; //$._ mApp to make global more local!
 	
 	var dataCount;
 	var avgPulse;
@@ -185,19 +185,18 @@ class SampleProcessing {
 		// do we keep big buffer of intervals here?
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
-		gg = $._mApp;
-		gg.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		$.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
 		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();
 		
-		Sys.println("ln(rMSSD) scale factor is "+gg.mLogScale);
+		Sys.println("ln(rMSSD) scale factor is "+$.mLogScale);
 	}
 	
 	function resetSampleBuffer() { 
 		mSampleIndex = 0;
 		mSampleProc = 0; // delayed version of above
-		gg.mIntervalSampleBuffer[0] = 0;
+		$.mIntervalSampleBuffer[0] = 0;
 		clearAvgBuffer();
 		mStartThreshold = false;
 		minIntervalFound = 2000; // around 30 BPM
@@ -277,10 +276,10 @@ class SampleProcessing {
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
-		if ( mSampleIndex > gg.mIntervalSampleBuffer.size()-1) {
-			new gg.myException("Buffer limit reached in sample Processing");
+		if ( mSampleIndex > $.mIntervalSampleBuffer.size()-1) {
+			new $.myException("Buffer limit reached in sample Processing");
 		}
-		gg.mIntervalSampleBuffer[mSampleIndex] = intervalMs; // | (mFlag << 12);	
+		$.mIntervalSampleBuffer[mSampleIndex] = intervalMs; // | (mFlag << 12);	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 		//Sys.println("Sample count: "+mSampleIndex);
@@ -288,12 +287,12 @@ class SampleProcessing {
 	
 	// updates flag at mSampleProc and increments pointer
 	function addFlagProc( mFlag) {
-		gg.mIntervalSampleBuffer[mSampleProc] |= (mFlag << 12);	
+		$.mIntervalSampleBuffer[mSampleProc] |= (mFlag << 12);	
 		mSampleProc++;
 	}
 	
 	function getSample(index) {
-		var mSamp = gg.mIntervalSampleBuffer[index];
+		var mSamp = $.mIntervalSampleBuffer[index];
 		var mFlag = (mSamp) >> 12 & 0xF;
 		mSamp = mSamp & 0x0FFF;		
 		return [mSamp, mFlag];
@@ -314,8 +313,8 @@ class SampleProcessing {
 		shiftAvgBuffer();
 		aAvgStore[0] =	mAvg;
 		aIIValue[0] = mSample;
-		gg.mTestAvgBuffer[gg.mTestBufferIndex] = mAvg;
-		gg.mTestBufferIndex++;		
+		$.mTestAvgBuffer[$.mTestBufferIndex] = mAvg;
+		$.mTestBufferIndex++;		
 		//Sys.println("addAverage(test) :"+mAvg);
 	}
 	
@@ -368,14 +367,14 @@ class SampleProcessing {
     	// however as this range might include ectopci beats need to skip those
     	var i = mNumSamples-1;
     	while (!mFound && i >= 0 ) {
-    		if ( (gg.mIntervalSampleBuffer[i]) & 0xF000 !=0 ) {
+    		if ( ($.mIntervalSampleBuffer[i]) & 0xF000 !=0 ) {
     			// bad entry so need to move on further back
     			//Sys.println("fCalcAvgValues: skip sample # :"+i+", mFlagOffset: "+mFlagOffset);
     			i--;    		
     		} else {
     			// Good sample	
     			mFoundCount++;
-    			mIIVal[mFoundCount] = gg.mIntervalSampleBuffer[i] & 0x0FFF;
+    			mIIVal[mFoundCount] = $.mIntervalSampleBuffer[i] & 0x0FFF;
     			
     			//Sys.println("fCalcAvgValues: Add sample: "+i+", mFoundCount: "+mFoundCount+", mIIVal[]:"+mIIVal);
     			
@@ -545,12 +544,12 @@ class SampleProcessing {
 		
 		var mDelta = mDiff / newAvg;
 		if (mDelta >= 0) {
-			if (mDelta >= gg.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
+			if (mDelta >= $.vUpperThresholdSet) {	c_mFlag = SAMP_L; }
 			if (mDelta > mpLongMax ) { mpLongMax = mDelta;}					
 		} 
 		else {
 			var mDa = mDelta.abs();
-			if (mDa >= gg.vLowerThresholdSet) { c_mFlag = SAMP_S;}
+			if (mDa >= $.vLowerThresholdSet) { c_mFlag = SAMP_S;}
 			if (mDa > mpShortMax ) { mpShortMax = mDa;}				
 		}
 		
@@ -784,7 +783,7 @@ class SampleProcessing {
 			// HRV is actually RMSSD. Use (N-1)
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
-			mLnRMSSD = (gg.mLogScale * (Math.ln(mRMSSD)+0.5)).toNumber();
+			mLnRMSSD = ($.mLogScale * (Math.ln(mRMSSD)+0.5)).toNumber();
 			// 0.4.3
 			if (mLnRMSSD < 0) {mLnRMSSD = 0;}
 		}

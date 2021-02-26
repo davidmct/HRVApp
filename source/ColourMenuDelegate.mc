@@ -7,7 +7,8 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
 	hidden var mFunc;
 	
 	function initialize(func) { mFunc = func; Menu2InputDelegate.initialize(); }
-	        
+
+(:discard)	        
    	function onSelect(item) {
         var id = item.getId();
         // id is dictionary entry
@@ -31,6 +32,20 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
     function onDone() {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
+    
+    // use value as ID to save look up
+    function onSelect(item) {
+        var id = item.getId();
+        // id is dictionary entry
+        //var ColStringDict = Ui.loadResource(Rez.JsonData.jsonColourDict);
+        //var value = ColStringDict.get(id);
+ 		
+ 		//Sys.println("Setting colour -"+id);
+ 		
+ 		mFunc.invoke( id);   
+        Ui.popView(WatchUi.SLIDE_IMMEDIATE);         
+    }
+    
 }
 
 class ColourMenuDelegate extends Ui.Menu2InputDelegate {
@@ -48,7 +63,8 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         	var mColValue = ColStringDict.get(mColName);
         	if (mColValue != 14 ) { //TRANSPARENT) {
         	    //Sys.println("Label menu item colour: " + mColName);
-        		menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+        		//menu.addItem(new Ui.MenuItem(mColName, null, mColName, null));
+        		menu.addItem(new Ui.MenuItem(mColName, null, mColValue, null));
         	}
     	}
 	}
@@ -89,20 +105,20 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
     	//Sys.println("setBackground called: "+value);
     	
     	if(value == 1) {
-    		$._mApp.bgColSet = 0; //WHITE;
+    		$.bgColSet = 0; //WHITE;
     		//Sys.println("WHITE background set "+WHITE);
-    		if(0 == $._mApp.txtColSet) {
-	    		$._mApp.txtColSet = 3; //BLACK;
+    		if(0 == $.txtColSet) {
+	    		$.txtColSet = 3; //BLACK;
 	    	}
     	}
     	else {
-    		$._mApp.bgColSet = 3; //BLACK;
+    		$.bgColSet = 3; //BLACK;
     		//Sys.println("BLACK background set "+BLACK);
-    		if(3 == $._mApp.txtColSet) { //BLACK
-	    		$._mApp.txtColSet = 0; //WHITE;
+    		if(3 == $.txtColSet) { //BLACK
+	    		$.txtColSet = 0; //WHITE;
 	    	}
     	}   	
-    	//Sys.println("Colours: back, text "+$._mApp.bgColSet+" "+$._mApp.txtColSet);
+    	//Sys.println("Colours: back, text "+$.bgColSet+" "+$.txtColSet);
     }
     
     function onBack() {
@@ -113,12 +129,12 @@ class ColourMenuDelegate extends Ui.Menu2InputDelegate {
         Ui.popView(WatchUi.SLIDE_IMMEDIATE);
     }  
 
-    function setLabel(value) { $._mApp.lblColSet = value;  }
-    function setText(value) { $._mApp.txtColSet = value; }
+    function setLabel(value) { $.lblColSet = value;  }
+    function setText(value) { $.txtColSet = value; }
     //0.4.3
-    function setHistory1(value) { $._mApp.mHistoryLabel1 = value;}
-    function setHistory2(value) { $._mApp.mHistoryLabel2 = value;}
-    function setHistory3(value) { $._mApp.mHistoryLabel3 = value;}
+    function setHistory1(value) { $.mHistoryLabel1 = value;}
+    function setHistory2(value) { $.mHistoryLabel2 = value;}
+    function setHistory3(value) { $.mHistoryLabel3 = value;}
     
 }
 

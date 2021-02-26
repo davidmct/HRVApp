@@ -1,6 +1,6 @@
 //
 // Copyright 2020 David McTernan
-// 
+//
 // Test control logic
 
 // Attempt to use Model-View-Controller structure
@@ -19,19 +19,22 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.Attention;
-using Toybox.System as Sys;	
+using Toybox.System as Sys;
+
+using HRVStorageHandler as mStorage;
+using GlanceGen as GG;
 
 class TestController {
 
-	var timerTime;	
+	var timerTime;
 	hidden var testTimer;
-	
+
 	var mTestState;
 	var mTestMessage;
 	var mSensorReady;
-	
+
 	var utcStart;
-	var utcNow; 
+	var utcNow;
 	var startMoment;
 	var mManualTestStopTime;
 	hidden var mFunc;
@@ -46,42 +49,42 @@ class TestController {
 		startMoment = 0;
     	timerTime = 0;
     	utcStart = 0;
-		utcNow = 0;		
+		utcNow = 0;
 		startMoment = 0;
 		mManualTestStopTime = 0;
 		mSensorReady = false;
-		mHRmsgTxt = "";	
+		mHRmsgTxt = "";
 	}
 
-	
+
 	// function to call to update Summary view
 	function setObserver(func) {
 		//Sys.println("Testcontrol: setObserver() called with "+func);
 		mFunc = func;
 	}
-	
+
 	function setObserver2(func) {
 		mFuncCurrent = func;
-	}	
-	
-	// allow 
+	}
+
+	// allow
 	function onNotify(symbol, params) {
 		// [ msgTxt, HR status, state INIT]
 		var stateInit;
 		mHRmsgTxt = params[0]; // used in view
-		mSensorReady = params[1];	
+		mSensorReady = params[1];
 		stateInit = params[2];
 		//$.DebugMsg(false, "TestControl: onNotify : "+params);
 		// sensor has changed so force INIT
-		if (stateInit) { 
+		if (stateInit) {
 			Sys.println("TC:OnNotify: S/M forced INIT");
 			mTestState = TS_INIT;
 			StateMachine(:RestartControl);
-		}	
-		
+		}
+
 		//$.DebugMsg(true, "mHRmsgTxt - "+mHRmsgTxt+", Sensor ready? "+mSensorReady);
 	}
-	
+
 	// probably need to modify Sensor to notify statemachine when found strap etc
 	// sets mSensorReady = true or false
 	function StateMachine(caller) {
@@ -91,65 +94,65 @@ class TestController {
 		// :timerExpired - we have reached end of test naturally
 		// :HR_ready - found strap has a pulse - make this a variable... set by notify
 		// :UpdateUI
-		if (mDebugging == true) {Sys.println("TC: SM() satrt state "+mTestState); }
+		if (mDebugging == true) {Sys.println("TC: SM() start state "+mTestState); }
 
-		// request to restart		
-		if (caller == :RestartControl) { 
-			Sys.println("TC(): Restart issued"); 
-			mTestState = TS_INIT; 
+		// request to restart
+		if (caller == :RestartControl) {
+			Sys.println("TC(): Restart issued");
+			mTestState = TS_INIT;
 			discardTest();
 		}
-					
+
 		var mResponse = false; // some UI inputs require response
 		var enoughSamples = false;
-		var setSensorStr = ($._mApp.mSensorTypeExt ? "external" : "registered");
-		
+		var setSensorStr = ($.mSensorTypeExt ? "external" : "registered");
+
 		// Timer information for view
-		timerTime = 0; 
-		var testType = $._mApp.testTypeSet;
-		
+		timerTime = 0;
+		var testType = $.testTypeSet;
+
 		// set default time display and adjust below
 		if(TYPE_TIMER == testType) {
-			timerTime = $._mApp.timerTimeSet;
+			timerTime = $.timerTimeSet;
 		}
 		else if(TYPE_MANUAL == testType) {
 			// driven by user stopping or hitting limit
 			timerTime = 0;
 		}
     	var testTime = timeNow() - utcStart;
-		
+
 		switch (mTestState) {
 			case TS_INIT:
 				// We may need to reinitialise sensors if swapped here
 				mTestMessage = "Initialising...";
 				resetTest();
-				mTestState = TS_WAITING; 
+				mTestState = TS_WAITING;
 				// Sensor status update method
-				$._mApp.mSensor.setObserver(self.method(:onNotify));
+				$.mSensor.setObserver(self.method(:onNotify));
 			break;
 			case TS_WAITING:
 				// we are waiting for the HR strap to be ready
-				if ( mSensorReady ) { 
+				if ( mSensorReady ) {
 					mTestMessage = setSensorStr+" sensor ready";
-					mTestState = TS_READY; 
+					mTestState = TS_READY;
 				} else {
-					mTestMessage = "Waiting for "+setSensorStr+" HR source";
+					mTestMessage = "Waiting for "+setSensorStr+" sensor";
 				}
 				if (caller == :enterPressed) {
 					// we might be lucky and HR is ready at the same time as sensor is ready
 					// ignore this
-					alert(TONE_ERROR);				
+					alert(TONE_ERROR);
 				} else if (caller == :escapePressed) {
 					// just pop the view by returning false
-				}				
+				}
 			break;
 			case TS_READY:
 				//0.4.4
 				// Print ID to see if we can display for external or known!
-				//$.DebugMsg( true, "Found ANT ID = "+$._mApp.mAuxHRAntID);
-				
+				//$.DebugMsg( true, "Found ANT ID = "+$.mAuxHRAntID);
+
 				// we know ANT ID is now available
-				
+
 				// stars are aligned. we have a source of data and waiting to go
 				if(TYPE_TIMER == testType) {
 					//0.4.4 - simplify message
@@ -162,33 +165,33 @@ class TestController {
 					mTestMessage = "Begin manual test?";
 				}
 				//Sys.println("TS_READY: message: "+mTestMessage);
-				
+
 				if (caller == :enterPressed) {
 					// now we can setup test ready to go
 					// KEEP OLD data until actually starting the test!
-					Sys.println("TS_READY - enter pressed");	
-					$._mApp.mSensor.mHRData.initForTest();
+					Sys.println("TS_READY - enter pressed");
+					$.mSensor.mHRData.initForTest();
 					startTest();
-					mTestState = TS_TESTING; 	
-	
+					mTestState = TS_TESTING;
+
 				} else if (caller == :escapePressed) {
 					// just pop the view by returning false
 					// go back to initialising or READY?
 					endTest(); // maybe in line as only timer to stop
-					mTestState = TS_INIT; 
+					mTestState = TS_INIT;
 					//04.4.4 - not on screen long and people know key pressed
 					//mTestMessage = "escape pressed";
 					mTestMessage = "";
-				}				
+				}
 			break;
 			case TS_TESTING:
 				// now we are in the mist of testing
 				//04.04.4
 				//mTestMessage = "Breathe regularly and stay still";
 				mTestMessage = "Testing HRV";
-				
-				if (MIN_SAMPLES < $._mApp.mSampleProc.dataCount) {enoughSamples = true;}
-				
+
+				if (MIN_SAMPLES < $.mSampleProc.dataCount) {enoughSamples = true;}
+
 				switch (caller) {
 					case :timerExpired:
 					case :manualExpired:
@@ -199,7 +202,7 @@ class TestController {
 							// no save
 							finishTest();
 						}
-						mTestState = TS_CLOSE; 	
+						mTestState = TS_CLOSE;
 						mTestMessage = "Test time ended";
 					break;
 					case :enterPressed:
@@ -209,11 +212,11 @@ class TestController {
 						if (enoughSamples) {
 							mResponse = true;
 						} else { // we don't have enough samples so close FIT
-							if ($._mApp.mFitControl.mSession != null) {
-    							$._mApp.mFitControl.discardFITrec();
-    						}		
-						}		
-						mTestState = TS_ABORT; 	
+							if ($.mFitControl.mSession != null) {
+    							$.mFitControl.discardFITrec();
+    						}
+						}
+						mTestState = TS_ABORT;
 						mTestMessage = "Test terminated";
 					break;
 					default:
@@ -228,7 +231,7 @@ class TestController {
 							if ((testTime >= mManualTestStopTime) && (TYPE_MANUAL == testType)) {
 								mTestMessage = "Manual Test Finished";
 								// reached limit set by user
-								if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
+								//if (mDebugging == true) {Sys.println("Update: manual test time expired : "+testTime);}
 								if (enoughSamples) {
 									autoFinish();
 								} else {
@@ -238,83 +241,87 @@ class TestController {
 								mTestState = TS_CLOSE;
 							}
 						}
-					break;				
-				} // end caller switch	
-							
+					break;
+				} // end caller switch
+
 			break;
 			case TS_ABORT:
 				// go back to ready or maybe INIT if new sensors
 				mTestMessage = "Results available until next test";
-				mTestState = TS_PAUSE;	
+				mTestState = TS_PAUSE;
 				resetTest();
 			break;
 			case TS_CLOSE:
 				// go back to ready or maybe INIT if new sensors
 				// maybe TestView is popped at this point?
-				mTestState = TS_PAUSE;	
+				mTestState = TS_PAUSE;
 				mTestMessage = "Results available until next test";
 				resetTest();
 			break;
 			case TS_PAUSE:
 				// allow one update cycle to show close and and abort messages
-				mTestState = TS_PAUSE2;					
+				mTestState = TS_PAUSE2;
 			break;
 			case TS_PAUSE2:
 				// allow one update cycle to show close and and abort messages
-				mTestState = TS_READY;					
+				mTestState = TS_READY;
 			break;
-			
+
 			default:
-				Sys.println("UNKNOWN state in test controller!");
-			break;	
+				Sys.println("UNKNOWN state in TC!");
+			break;
 		} // end switch
-		
-		// update Test View data  
+
+		// update Test View data
 		//if (mFunc == null) {Sys.println("TestControl: Statemachine: mFunc NULL "); }
     	if (mFunc != null) {
     		mFunc.invoke(:Update, [ mTestMessage, timerFormat(timerTime)]);
-    		if (mDebugging == true) {Sys.println("TestControl: Statemachine: Testview update - "+mTestMessage);}
+    		if (mDebugging == true) {Sys.println("TC: Testview update - "+mTestMessage);}
     	}
-    	
-    	// update Current  View data  
+
+    	// update Current  View data
     	if (mFuncCurrent != null) {
-    		var limit = TYPE_MANUAL == testType ? $._mApp.mManualTimeSet : $._mApp.timerTimeSet;
+    		var limit = TYPE_MANUAL == testType ? $.mManualTimeSet : $.timerTimeSet;
     		mFuncCurrent.invoke(:Update,  [timerFormat(timerTime), timerFormat(limit)]);
     	}
 
-		if (mDebugging == true) {Sys.println("TestControl: StateMachine() exit in state "+mTestState); }    	    	
+		if (mDebugging == true) {Sys.println("TC: SM() exit in state "+mTestState); }
 		return mResponse;
 	}
-	
+
 	function fCheckSwitchType( caller, value) {
 		if (caller == :FitType) {
-			if (value != $._mApp.mFitWriteEnabled) {
+			if (value != $.mFitWriteEnabled) {
 				discardTest();
-				StateMachine(:RestartControl); 	
-			}	
+				StateMachine(:RestartControl);
+			}
 		}
-		else if (caller == :SensorType) {
+		//else if (caller == :SensorType) {
 			// this also restarts state machine and discard FIT data
-			$._mApp.mSensor.fSwitchSensor( value);		
-		} else if (caller == :TestType) {	
-	 		if (value != $._mApp.testTypeSet) {             
-	        	StateMachine(:RestartControl); 
-	        	Sys.println("fCheckSwitchType(): TestType changed so restart controller");
+			//$._mApp.mSensor.fSwitchSensor( value);
+		//}
+		else if (caller == :TestType) {
+	 		if (value != $.testTypeSet) {
+	        	StateMachine(:RestartControl);
+	        	//Sys.println("fCheckSwitchType(): TestType changed so restart controller");
 	        }
-		}	
-	}  
-	
+		}
+	}
+
 	// function onHide() {getModel().setObserver(null);}
-	
+
 	function startTest() {
 		Sys.println("startTest() called");
 		// make sure no old FIT open
 		discardTest();
 		// set up FIT to write data if enabled
-		$._mApp.mFitControl.createSession();
+		$.mFitControl.createSession();
 		// now start recording
-		$._mApp.mFitControl.startFITrec(); 
+		$.mFitControl.startFITrec();
 		
+		// 0.6.3 Glance data in no longer latest
+		$.mGData = false;
+
     	alert(TONE_START);
     	start();
     }
@@ -326,12 +333,12 @@ class TestController {
     }
 
     function finishTest() {
-    	// called when not enough data 
+    	// called when not enough data
     	Sys.println("finishTest()");
     	// 0.4.04 changed to mSession not class as mSession is null if no FIT created
     	// test maybe unnecessary as in discard aleady
     	// previous version called mFitControl.discardTest() which doesn't exist
-    	//if ($._mApp.mFitControl.mSession != null) { discardTest(); }
+    	//if ($.mFitControl.mSession != null) { discardTest(); }
     	discardTest();
     	endTest();
     	alert(TONE_SUCCESS);
@@ -349,137 +356,149 @@ class TestController {
     	Sys.println("endTest()");
     	testTimer.stop();
     }
-    
+
     function alert(type)
 	{
 		if( Attention has :playTone ) {
-    		if($._mApp.soundSet) { Attention.playTone(type);  }
+    		if($.soundSet) { Attention.playTone(type);  }
     	}
     	if (Attention has :vibrate) {
-    		if($._mApp.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
+    		if($.vibeSet) { Attention.vibrate([new Attention.VibeProfile(100,400)]); }
     	}
     }
 
     function resetTest() {
-    	Sys.println("TestControl: resetTest() called");
+    	Sys.println("TestControl: resetTest()");
     	// don't call this as useful to see old data before starting a new test
-    	//$._mApp.mSensor.mHRData.initForTest();
+    	//$.mSensor.mHRData.initForTest();
     	testTimer.stop();
     	// reseting utcStart here overwrites when we about test but have enough samples
 		//utcStart = 0;
     }
-    
+
     function discardTest() {
     	// called from HRVBehaviourDelegate
     	Sys.println("discardTest() called");
     	resetTest(); // may not be necessary as handled by state machine
     	//0.4.04 test mSession not mFitControl for null
-    	//if ($._mApp.mFitControl.mSession != null) {
-    	$._mApp.mFitControl.discardFITrec();
+    	//if ($.mFitControl.mSession != null) {
+    	$.mFitControl.discardFITrec();
     	//}
     }
 
-(:oldResults) // moved to storage   
+(:oldResults) // moved to storage
     function saveTest() {
     	Sys.println("TestControl: saveTest() called");
-    	
+
     	// seconds in day = 86400
     	// make whole number of days (still seconds since UNIX epoch)
     	// This ignores possiblity of 32 bit integar of time wrapping on testday and epoch
     	// should change to use time functions available
 		var testDayutc = utcStart - (utcStart % 86400);
-		
+
 		// next slot in cycle, can overwrite multiple times in a day and keep last ones
 		// Check whether we are creating another set of results on the same day by inspecting previous entry
-		var previousEntry = ($._mApp.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
+		var previousEntry = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;
 		var previousIndex = previousEntry * DATA_SET_SIZE;
-		var currentIndex = $._mApp.resultsIndex * DATA_SET_SIZE;	
-		
-		var x = $._mApp.results[previousIndex + TIME_STAMP_INDEX];
+		var currentIndex = $.resultsIndex * DATA_SET_SIZE;
+
+		var x = $.results[previousIndex + TIME_STAMP_INDEX];
 		// convery to day units
 		var previousSavedutc = 	x - (x % 86400);
-		x = $._mApp.results[currentIndex + TIME_STAMP_INDEX];
+		x = $.results[currentIndex + TIME_STAMP_INDEX];
 		var currentSavedutc = x - (x % 86400);
 		var index;
-		
+
 		if (testDayutc == previousSavedutc) {
 			// overwrite current days entry
 			index = previousIndex;
 		}
 		else {
-			index = currentIndex;			
+			index = currentIndex;
 			// written a new entry so move pointer
    			// increment write pointer to circular buffer
-   			$._mApp.resultsIndex = ($._mApp.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
-   			Sys.println("SaveTest: pointer now "+$._mApp.resultsIndex);
+   			$.resultsIndex = ($.resultsIndex + 1 ) % NUM_RESULT_ENTRIES;
+   			Sys.println("SaveTest: pointer now "+$.resultsIndex);
    		}
-			
+
 		Sys.println("utcStart, index, testdayutc, previous entry utc = "+utcStart+", "+index+", "+testDayutc+", "+previousSavedutc);
 
-		$._mApp.results[index + TIME_STAMP_INDEX] = utcStart;
-		$._mApp.results[index + AVG_PULSE_INDEX] = $._mApp.mSampleProc.avgPulse;
-		$._mApp.results[index + MIN_II_INDEX] = $._mApp.mSampleProc.minIntervalFound;
-		$._mApp.results[index + MAX_II_INDEX] = $._mApp.mSampleProc.maxIntervalFound;		
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.minDiffFound;
-		$._mApp.results[index + MAX_DIFF_INDEX] = $._mApp.mSampleProc.maxDiffFound;				
-		$._mApp.results[index + RMSSD_INDEX] = $._mApp.mSampleProc.mRMSSD;
-		$._mApp.results[index + LNRMSSD_INDEX] = $._mApp.mSampleProc.mLnRMSSD;
+		$.results[index + TIME_STAMP_INDEX] = utcStart;
+		$.results[index + AVG_PULSE_INDEX] = $.mSampleProc.avgPulse;
+		$.results[index + MIN_II_INDEX] = $.mSampleProc.minIntervalFound;
+		$.results[index + MAX_II_INDEX] = $.mSampleProc.maxIntervalFound;
+		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.minDiffFound;
+		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.maxDiffFound;
+		$.results[index + RMSSD_INDEX] = $.mSampleProc.mRMSSD;
+		$.results[index + LNRMSSD_INDEX] = $.mSampleProc.mLnRMSSD;
 
-		$._mApp.results[index + SDNN_INDEX] = $._mApp.mSampleProc.mSDNN;
-		$._mApp.results[index + SDSD_INDEX] = $._mApp.mSampleProc.mSDSD; 
-		$._mApp.results[index + NN50_INDEX] = $._mApp.mSampleProc.mNN50;
-		$._mApp.results[index + PNN50_INDEX] = $._mApp.mSampleProc.mpNN50; 
-		$._mApp.results[index + NN20_INDEX] = $._mApp.mSampleProc.mNN20;
-		$._mApp.results[index + PNN20_INDEX] = $._mApp.mSampleProc.mpNN20;
-   		
+		$.results[index + SDNN_INDEX] = $.mSampleProc.mSDNN;
+		$.results[index + SDSD_INDEX] = $.mSampleProc.mSDSD;
+		$.results[index + NN50_INDEX] = $.mSampleProc.mNN50;
+		$.results[index + PNN50_INDEX] = $.mSampleProc.mpNN50;
+		$.results[index + NN20_INDEX] = $.mSampleProc.mNN20;
+		$.results[index + PNN20_INDEX] = $.mSampleProc.mpNN20;
+
     	// better write results to memory!!
-    	$._mApp.mStorage.storeResults(); 
+    	mStorage.storeResults();
     	// save intervals as well so we can reload and display
-    	$._mApp.mStorage.saveIntervalsToStore();
-    	$._mApp.mStorage.saveStatsToStore();    
-    		
+    	mStorage.saveIntervalsToStore();
+    	mStorage.saveStatsToStore();
+
     	// FIT FILE SESSION RESULTS HERE
-    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null
+    	$.mFitControl.saveFITrec(); // also sets mSession to null
 
     }
- 
-// core functionality moved to storage  
-(:newResults) 
+
+// core functionality moved to storage
+(:newResults)
     function saveTest() {
-    	Sys.println("TestControl: saveTest() called");
+    	Sys.println("TestControl: saveTest()");
     	
-    	// prepare results and save
-    	$._mApp.mStorage.prepareSaveResults( utcStart); 
+    	//0.6.3
+    	// trying to popView's here doesn't work if buried in menus. Need to stop views being pushed
     	
      	// FIT FILE SESSION RESULTS HERE
-    	$._mApp.mFitControl.saveFITrec(); // also sets mSession to null   	
+    	$.mFitControl.saveFITrec(); // also sets mSession to null
     	
+    	// prepare results and save
+    	mStorage.prepareSaveResults( utcStart);
+
+    	// 0.6.2 now generate widget type data
+    	var _stats = [ $.mSampleProc.mRMSSD, $.mSampleProc.vEBeatCnt, $.mSampleProc.mNN50];
+		$.mCircColSel = GG.generateResults( _stats);
+		$.mGData = true;
+		_stats = null;
+		
+		//0.6.3 switch to new view
+		Ui.switchToView($.getView(GLANCE_VIEW ), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
+
     } // end save test
-    
+
 	// called by startTest() to initial test timers etc
     function start() {
 		Sys.println("start() ENTERED");
 		// Set up test type and timer up or down.
-		
+
 		resetTest();
 		//Sys.println("TestControl: start() - clearing stats and interval buffer");
-    	//$._mApp.mSampleProc.resetSampleBuffer();
-		$._mApp.mSensor.mHRData.initForTest();
-		
+    	//$.mSampleProc.resetSampleBuffer();
+		$.mSensor.mHRData.initForTest();
+
 		mManualTestStopTime = 0;
 		testTimer.stop();	// This is in case user has changed test type while waiting
-    	
-    	var testType = $._mApp.testTypeSet;
-    				
+
+    	var testType = $.testTypeSet;
+
     	if(TYPE_MANUAL == testType){
  			// kick off a timer for max period of testing allowed
  			// going to stop a manual test at the time set by user OR when Start pressed again
  			// note value here is in elapsed seconds
- 			mManualTestStopTime = $._mApp.mManualTimeSet;	 			
-			testTimer.start(method(:timerEnded),$._mApp.mMaxTimerTimeSet*1000,false); // false   	
+ 			mManualTestStopTime = $.mManualTimeSet;
+			testTimer.start(method(:timerEnded),$.mMaxTimerTimeSet*1000,false); // false
     	} else {
     		// kick off a timer for period of test
-    		timerTime = $._mApp.timerTimeSet;
+    		timerTime = $.timerTimeSet;
     		//Sys.println("timerTime in timed test = "+timerTime);
 			testTimer.start(method(:timerEnded),timerTime*1000,false); // false
 		}
@@ -487,14 +506,14 @@ class TestController {
 		// Common start
 		startMoment = Time.now();
 		utcStart = startMoment.value() + System.getClockTime().timeZoneOffset;
-		
+
 		Sys.println("Test started at : "+utcStart);
-    } 
-    
+    }
+
     function timerEnded() {
     	// either hit limit on manual or test time finsished on auto
     	Sys.println("timerEnded()");
     	StateMachine(:timerExpired);
 	}
-    		
+
 }
