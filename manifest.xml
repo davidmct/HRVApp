@@ -2,11 +2,9 @@
     <iq:application entry="HRVAnalysis" id="782cf890ed5043f8801625f77c6eb37e" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="3.0.0" name="@Strings.AppName" type="watch-app">
         <iq:products>
             <iq:product id="approachs62"/>
-            <iq:product id="d2charlie"/>
-            <iq:product id="d2delta"/>
-            <iq:product id="d2deltapx"/>
-            <iq:product id="d2deltas"/>
+            <iq:product id="d2air"/>
             <iq:product id="descentmk1"/>
+            <iq:product id="descentmk2"/>
             <iq:product id="enduro"/>
             <iq:product id="fenix5"/>
             <iq:product id="fenix5plus"/>

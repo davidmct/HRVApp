@@ -23,6 +23,7 @@ using HRVStorageHandler as mStorage;
 // Fixed memory leak on menu pop
 // Fixed very first run issue on history graph
 // Fixed text size on Approach
+// Removed D2 support except Air as ANT+ code needed to support beat to beat intervals
 
 // 0.5.5
 // New algorithm for threshold detection using forward and backward average make group delay 0
