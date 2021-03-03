@@ -221,7 +221,7 @@ class HRVAnalysis extends App.AppBase {
     }   
     
     function initialize() {
-    	Sys.println("HRVApp INITIALISATION called");
+    	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
         
         //$._m$.pp.getApp();
         
