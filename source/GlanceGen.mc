@@ -546,6 +546,9 @@ module GlanceGen
 		
 		if (_discardArray) { 
 			resGL = null;
+			//0.6.4 force glance to null as well
+			$.glanceData = null;
+			$.saveGResultsToStore(); 
 		}
 	}
 

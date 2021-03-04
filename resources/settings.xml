@@ -61,7 +61,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>		
 		</settingConfig>	
 	</setting>		
-	<setting propertyKey="@Properties.lblColSet" title="@Strings.lblColSetT" prompt="@Strings.lblColSetP">
+	<setting propertyKey="@Properties.lblColSet" title="@Strings.lblColSetT" prompt="@Strings.LCSP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -97,7 +97,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.pHistLabel1" title="@Strings.LabelHistTitle1" prompt="@Strings.LabelHistTitleP">
+	<setting propertyKey="@Properties.pHistLabel1" title="@Strings.LHT1" prompt="@Strings.LHTP">
 		<settingConfig type="list">
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
@@ -116,7 +116,7 @@
 			<listEntry value="13">@Strings.lpNN20</listEntry>
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.Label1ColSetT" prompt="@Strings.LabelColSetP">
+	<setting propertyKey="@Properties.Label1ColSet" title="@Strings.LCST1" prompt="@Strings.LCSP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -134,7 +134,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>		
 	</setting>
-	<setting propertyKey="@Properties.pHistLabel2" title="@Strings.LabelHistTitle2" prompt="@Strings.LabelHistTitleP">
+	<setting propertyKey="@Properties.pHistLabel2" title="@Strings.LHT2" prompt="@Strings.LHTP">
 		<settingConfig type="list">
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
@@ -153,7 +153,7 @@
 			<listEntry value="13">@Strings.lpNN20</listEntry>
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.Label2ColSetT" prompt="@Strings.LabelColSetP">
+	<setting propertyKey="@Properties.Label2ColSet" title="@Strings.LCST2" prompt="@Strings.LCSP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
@@ -171,7 +171,7 @@
 			<listEntry value="13">@Strings.PINK</listEntry>	
 		</settingConfig>				
 	</setting>
-	<setting propertyKey="@Properties.pHistLabel3" title="@Strings.LabelHistTitle3" prompt="@Strings.LabelHistTitleP">
+	<setting propertyKey="@Properties.pHistLabel3" title="@Strings.LHT3" prompt="@Strings.LHTP">
 		<settingConfig type="list">
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
@@ -190,7 +190,7 @@
 			<listEntry value="13">@Strings.lpNN20</listEntry>
 		</settingConfig>					
 	</setting>
-	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.Label3ColSetT" prompt="@Strings.LabelColSetP">
+	<setting propertyKey="@Properties.Label3ColSet" title="@Strings.LCST3" prompt="@Strings.LCSP">
 		<settingConfig type="list" >
 			<listEntry value="0">@Strings.WHITE</listEntry>
 			<listEntry value="1">@Strings.LT_GRAY</listEntry>
