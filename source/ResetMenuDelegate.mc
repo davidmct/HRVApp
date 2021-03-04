@@ -41,7 +41,8 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
             mStorage.storeResults();
 			GG.resetResGL(true);
             // and push to memory
-            GG.storeResGL();
+            //0.6.4 - already saved in memory by reset above
+            //GG.storeResGL();
         }	
     }
  

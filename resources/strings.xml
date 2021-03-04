@@ -86,14 +86,14 @@
 	<string id="lblColSetP">Select colour</string>
 	<string id="txtColSetT" >Text colour</string>
 	<string id="txtColSetP">Select colour</string>
-	<string id="Label1ColSetT" >History label 1 colour</string>
-	<string id="LabelColSetP">Select colour</string>
-	<string id="Label3ColSetT">History label 3 colour</string> 
-	<string id="Label2ColSetT">History label 2 colour</string> 
-	<string id="LabelHistTitle1">History Entry 1</string> 
-	<string id="LabelHistTitle2">History Entry 2</string> 
-	<string id="LabelHistTitle3">History Entry 3</string> 
-	<string id="LabelHistTitleP">Select History Entry</string> 	
+	<string id="LCST1" >History label 1 colour</string>
+	<string id="LCSP">Select colour</string>
+	<string id="LCST3">History label 3 colour</string> 
+	<string id="LCST2">History label 2 colour</string> 
+	<string id="LHT1">History Entry 1</string> 
+	<string id="LHT2">History Entry 2</string> 
+	<string id="LHT3">History Entry 3</string> 
+	<string id="LHTP">Select History Entry</string> 	
 	
 	<string id="LongThresholdT">Long Threshold</string>
 	<string id="ShortThresholdT">Short Threshold</string> 
