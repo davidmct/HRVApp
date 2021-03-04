@@ -9,8 +9,8 @@
 	<string id="pAuxHRAntIDT">ANT Strap ID</string> 
 	<string id="pAuxHRAntIDP">0 for any or ID of strap</string>
 -->
-	<string id="mFitWriteEnabledT">FIT Write</string> 
-	<string id="mFitWriteEnabledP">True to write FIT</string>	
+	<string id="mFitWrET">FIT Write</string> 
+	<string id="mFitWrEP">True to write FIT</string>	
 	<string id="lAvgPulseCT">Average Pulse</string>
 	<string id="lRMSSDCT">RMSSD</string>
 	<string id="lLnRMSSDCT">Ln(RMSSD)</string>

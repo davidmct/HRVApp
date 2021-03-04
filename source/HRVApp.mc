@@ -16,6 +16,9 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// 0.6.4
+// Made sensor selection exclusive on CIQ > 3.2
+
 //0.6.3 Changes
 // Memory optimisations to fit new functionality
 // Added new HRV trend functions

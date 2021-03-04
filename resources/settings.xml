@@ -13,7 +13,7 @@
 		<settingConfig type="numeric"  />
 	</setting>
 -->		
-	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWriteEnabledT" prompt="@Strings.mFitWriteEnabledP">
+	<setting propertyKey="@Properties.pFitWriteEnabled" title="@Strings.mFitWrET" prompt="@Strings.mFitWrEP">
 		<settingConfig type="boolean" />
 	</setting>	
 <!-- 
