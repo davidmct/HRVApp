@@ -37,7 +37,7 @@ class HistoryView extends Ui.View {
     
     //hidden var mTitleLoc = [50, 11]; // %
 	//hidden var mTitleLocS = [0,0];	
-	hidden var mTitleLabels = ["History"];
+	//hidden var mTitleLabels = ["History"];
 	
 	// coordinates of set of labels as %
 	// split to 1D array to save memory
@@ -69,8 +69,11 @@ class HistoryView extends Ui.View {
 	
 	// layout of screen
 	hidden var mScr;
+	// original history = 0, long term history is 1
+	hidden var mView = 0;
    
-	function initialize() { 	
+	function initialize( _mView) {
+	 	if (_mView > 1) { mView = 0;} else { mView = _mView;}
 		View.initialize();
 	}
 	
@@ -100,30 +103,6 @@ class HistoryView extends Ui.View {
 		floorY = ctrY + chartHeight/2;
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
-		
-		//mScaleY = dc.getHeight();
-		//mScaleX = dc.getWidth();
-		
-		// convert % to numbers based on screen size
-		//mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
-				
-		//for( var i=0; i < mLabelValueLocXS.size(); i++) {
-		//	mLabelValueLocXS[i] = (mLabelValueLocX[i] * mScaleX)/100;	
-		//	mLabelValueLocYS[i] = (mLabelValueLocY[i] * mScaleY)/100;
-		//}	
-								
-		//for( var i=0; i < mRectHorizYS.size(); i++) {
-		//	mRectHorizYS[i] = (mRectHorizY[i] * mScaleY)/100;		
-		//}	
-		//mRectHorizWHS = (mRectHorizWH * mScaleX)/100;
-		//mRectHorizXS = (mRectHorizX * mScaleX)/100;
-		
-		//mLabelValueLocX = null;
-		//mLabelValueLocY = null;
-		//mTitleLoc = null;	
-		//mRectHorizY = null;
-			
-		//fBuildJson();
 				
 		return true;
 	}
@@ -135,36 +114,6 @@ class HistoryView extends Ui.View {
     function scale(num) {
     	if (num == null) { return 0;}
 		return (((num - floor) * scaleY) + 0.5).toNumber();
-	}
-
-	// return labels into dictionary of results offsets
-(:HistoryViaDictionary)
-	function findResultLabels(keys) {		
-		// init arrays
-		for ( var i=0; i < labelList.size(); i++) { labelList[i] = "";}
-		for ( var i=0; i < resultsIndexList.size(); i++) { resultsIndexList[i] = null;}
-		
-		// scan through flags looking for true and then get label
-		// find first N out of set
-		var j = 0; // number found
-		for(var search = 0; search < $.mHistorySelect.size(); search++) {
-			var possible = keys[search].toString();
-			var bitPosition = $.mHistorySelect.get(possible);
-			
-			// now check if corresponding bit position-1 is set 
-			if ($.mHistorySelectFlags & (1 << (bitPosition-1))) {
-				// found set bit, capture index in to dictionary
-				labelList[j] = possible;
-				resultsIndexList[j] = bitPosition;
-				numResultsToDisplay++;
-				j++;
-				if (j >= MAX_DISPLAY_VAR) {
-					// break loop
-					search = $.mHistorySelect.size();
-				}
-			} // end flag found
-		} // end search
-		return;
 	}
 	
 (:oldResults)
@@ -196,11 +145,8 @@ class HistoryView extends Ui.View {
 (:newResults)
 	function freeResults() {$.results = null;}
 
-
     //! Update the view
     function onUpdate(dc) {
-		
-		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
 		
 		if ($.mDeviceType == RES_240x240) {
 			//Sys.println("device is 240x240");
@@ -214,25 +160,51 @@ class HistoryView extends Ui.View {
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
-				
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mScr[0], mScr[1], mTitleFont, mTitleLabels[0], mJust);
+				
+		// original history view
+		var _title = "";
+		if (mView == 0 ) {
+			_title = "History";
+		} else {
+			_title = "Test hist";
+		}					
+		dc.drawText( mScr[0], mScr[1], mTitleFont, _title, mJust);
+		_title = null;
 		
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
+
+		for (var i=0; i < 7; i++) {
+			dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
+		}
+		
+		if ( mView == 0 ) {
+			drawHistory(dc);
+		} else {
+			drawLongTerm(dc);
+		}
+		
+	}
+	
+	function drawLongTerm(dc) {
+	    dc.setColor( $.Label2Colour, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( mScr[4], mScr[5], mLabelFont, "HRV", mJust);
+	
+	}
+
+	function drawHistory(dc) {		
+				
+		var dataCount = 0;
+		var max = 0;
+		var min = 1000;
 		
 		if ( $.results == null) {
 			prepResults();
 		}
 		
-		var dataCount = 0;
-		var max = 0;
-		var min = 1000;
-
-		for (var i=0; i < 7; i++) {
-			dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
-		}
-
+		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
+		
 		//0.4.3 - Now have list available to match label and colour!
 		// resultsIndexList to null if no data to display
 		if ( $.mHistoryLabel1 == 0 && $.mHistoryLabel2 == 0 && $.mHistoryLabel3 == 0) {
@@ -272,16 +244,7 @@ class HistoryView extends Ui.View {
 		// get pointer to next empty slot in results array .. should be oldest data		
 		var indexDay = $.resultsIndex;
 		var today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;		
-		
-		// TEST CODE DUMP RESULTS AS getting weird type
-		if (mDebuggingResults) {
-			var dump = "";
-			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-				dump += $.results[i].toString() + ",";
-			}
-			Sys.println("History DUMP results : "+dump);
-		}
-		
+				
 		// Find result limits
 		// ASSUME THAT HISTORY IS LAST 30 samples on different days NOT that they have to be contiguous days!!!		
 		// only do min/max on variables of interest
