@@ -46,7 +46,6 @@ class HistoryView extends Ui.View {
 	// scaled variables
 	hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
 	hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
-
 	
 	hidden var mRectHorizWHS = 0;
 	hidden var mRectHorizXS = 0;
