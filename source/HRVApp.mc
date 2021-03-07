@@ -18,6 +18,8 @@ using HRVStorageHandler as mStorage;
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
+// Added VenuSQ
+// adjusted font for all 240x240 devices on all screens
 
 //0.6.3 Changes
 // Memory optimisations to fit new functionality

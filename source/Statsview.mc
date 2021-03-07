@@ -25,6 +25,8 @@ class StatsView extends Ui.View {
 	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "Ectopic" ];
 	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Long", "Short" ];
 	hidden var mLabel3Labels = [ "II","#II", "L_%", "L-ms", "S_%", "S-ms" ];
+	
+	// font missing %, _, (, ), #
 
 	// x%, y%, width/height
 	//hidden var mRectHorizWH = 64;
@@ -51,7 +53,7 @@ class StatsView extends Ui.View {
 	//hidden var mRectVertYS = 0;	
 	//hidden var mRectVertXS = new [ mRectVertX.size() ];
 	
-	hidden var mLabelFont = Gfx.FONT_XTINY;
+	hidden var mLabelFont = null; // 0.6.4 Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_TINY;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_RED;
@@ -85,6 +87,16 @@ class StatsView extends Ui.View {
     //! Update the view
     function onUpdate(dc) { 
     	//Sys.println("StatsView: onUpdate() called");
+    	
+    	if ($.mDeviceType == RES_240x240) {
+			//Sys.println("device is 240x240");
+			if (mLabelFont == null) {	
+				mLabelFont = Ui.loadResource(Rez.Fonts.smallFont);
+				//Sys.println("smallFont loaded");
+			}
+		} else {
+			mLabelFont = Gfx.FONT_XTINY;
+		}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
@@ -179,6 +191,7 @@ class StatsView extends Ui.View {
     //! state of this View here. This includes freeing resources from
     //! memory.
     function onHide() {
+    	mLabelFont = null;
     }
 }
 
@@ -329,6 +342,8 @@ class StatsView extends Ui.View {
     //! Update the view
     function onUpdate(dc) { 
     	//Sys.println("StatsView: onUpdate() called");
+    	
+    	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();

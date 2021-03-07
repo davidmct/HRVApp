@@ -89,6 +89,8 @@ class TestView extends Ui.View {
 	            :locY=>mScreen[1]           
 	        });
 	    }
+	    
+	    if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
         
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
@@ -210,6 +212,7 @@ class TestView extends Ui.View {
     	// don't want to send null as state machine still running
     	//$.mTestControl.setObserver(null);
     	// free up all the arrays - NO as maybe switches without a new ...
+    	//mLabelFont = null;
     	mBitMap = null;
     }
 
