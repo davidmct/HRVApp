@@ -329,6 +329,8 @@ class StatsView extends Ui.View {
     //! Update the view
     function onUpdate(dc) { 
     	//Sys.println("StatsView: onUpdate() called");
+    	
+    	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();

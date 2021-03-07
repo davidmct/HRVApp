@@ -180,6 +180,8 @@ class PoincareView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
+		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
+		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
 		

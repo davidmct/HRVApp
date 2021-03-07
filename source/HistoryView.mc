@@ -147,6 +147,8 @@ class HistoryView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
+    
+    	if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		if ($.mDeviceType == RES_240x240) {
 			//Sys.println("device is 240x240");

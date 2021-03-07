@@ -89,6 +89,8 @@ class TestView extends Ui.View {
 	            :locY=>mScreen[1]           
 	        });
 	    }
+	    
+	    if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
         
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
