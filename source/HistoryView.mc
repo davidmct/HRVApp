@@ -20,8 +20,8 @@ class HistoryView extends Ui.View {
     hidden var ctrX;
 	hidden var ctrY;
 	hidden var leftX;
-	hidden var rightX;
-	hidden var ceilY;
+	//hidden var rightX;
+	//hidden var ceilY;
 	hidden var floorY;
 	hidden var scaleY;
 	hidden var xStep;
@@ -96,10 +96,11 @@ class HistoryView extends Ui.View {
     	ctrX = dc.getWidth() / 2;
 		ctrY = dc.getHeight() / 2;
 		// define box about centre
-		leftX = ctrX - cGridWidth/2;
-		rightX = ctrX + cGridWidth/2;
+		// leftX should be on left side of screen aligned with Y axis
+		leftX = mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
+		//rightX = ctrX + cGridWidth/2;
 		// 45 *2 is height of chart
-		ceilY = ctrY - chartHeight/2;
+		//ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
@@ -305,11 +306,6 @@ class HistoryView extends Ui.View {
 		
 		// chartHeight defines height of chart and sets scale
 		scaleY = chartHeight / range.toFloat();
-		        		
-		// Title - X, Y : 0, 1
-		// [mLabelValueLox X, Y] x 11: 2, 3; 4, 5; 6, 7; 8, 9; 10, 11; 12,13; 14,15; 16,17; 18, 19; 20, 21;	22,23
-		// mRectHorizY[7] : 24-30
-		// mRectHorizWHS , HorizXS : 31, 32
 		
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
@@ -422,6 +418,8 @@ class HistoryView extends Ui.View {
 				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 				dc.setColor($.Label3Colour, $.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+				
+				Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" v1: "+mLabel1Val1+" v2: "+mLabel2Val1+" v3: "+mLabel3Val1);
 
 				pointNumber++;	
 			} // found entry	
