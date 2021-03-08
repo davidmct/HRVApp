@@ -178,8 +178,14 @@ class HistoryView extends Ui.View {
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
 
+		var yStep = (chartHeight / 7.0).toNumber();
+		var yInit = ctrY - chartHeight / 2;
 		for (var i=0; i < 7; i++) {
-			dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
+			// 0.6.4 Draw rectangle using computed numbers
+			dc.drawRectangle(mScr[32], yInit, mScr[31], 1);
+			yInit += yStep;
+			//dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
+			//Sys.println("Rect Coords: "+mScr[32]+", "+mScr[24+i]+", "+mScr[31]);
 		}
 		
 		if ( mView == 0 ) {
@@ -293,6 +299,7 @@ class HistoryView extends Ui.View {
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
+		
 		floor = min - (min % 5);
 		//if (floor < 0 ) { floor = 0;}
 		
@@ -419,7 +426,10 @@ class HistoryView extends Ui.View {
 				dc.setColor($.Label3Colour, $.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 				
-				Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" v1: "+mLabel1Val1+" v2: "+mLabel2Val1+" v3: "+mLabel3Val1);
+				Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" l1v1: "+mLabel1Val1+" l1v2: "+mLabel1Val2+
+					" l2v1: "+mLabel2Val1+" l2v2: "+mLabel2Val2+
+					" l3v1: "+mLabel3Val1+" l3v2: "+mLabel3Val2
+				);
 
 				pointNumber++;	
 			} // found entry	
