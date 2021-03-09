@@ -26,6 +26,7 @@ class HistoryView extends Ui.View {
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
+	hidden var dispH;
 	
 	//hidden var customFont = null;
 	
@@ -94,7 +95,8 @@ class HistoryView extends Ui.View {
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
     	ctrX = dc.getWidth() / 2;
-		ctrY = dc.getHeight() / 2;
+    	dispH = dc.getHeight();
+		ctrY = dispH / 2;
 		// define box about centre
 		// leftX should be on left side of screen aligned with Y axis
 		leftX = mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
@@ -172,14 +174,20 @@ class HistoryView extends Ui.View {
 		} else {
 			_title = "Test hist";
 		}					
-		dc.drawText( mScr[0], mScr[1], mTitleFont, _title, mJust);
+		// heading at 50% of X and 11% of Y
+		dc.drawText( ctrX, (dispH * 11)/100, mTitleFont, _title, mJust);
 		_title = null;
 		
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
-
-		var yStep = (chartHeight / 7.0).toNumber();
-		var yInit = ctrY - chartHeight / 2;
+	
+		var _lineStart = (dispH * 27) /100; //% of total height
+		var _lineEnd = (dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		
+		Sys.println("yStep = "+yStep+", yInit = "+yInit);
+		
 		for (var i=0; i < 7; i++) {
 			// 0.6.4 Draw rectangle using computed numbers
 			dc.drawRectangle(mScr[32], yInit, mScr[31], 1);
