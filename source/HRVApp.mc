@@ -436,6 +436,8 @@ class HRVAnalysis extends App.AppBase {
 		// to reduce write time group up the data
 		var BLOCK_SIZE = 40;
 		
+		if (mSampleProc == null) { return;}
+		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 
 		mStorage.PrintStats();

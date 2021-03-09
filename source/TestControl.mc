@@ -133,7 +133,7 @@ class TestController {
 			case TS_WAITING:
 				// we are waiting for the HR strap to be ready
 				if ( mSensorReady ) {
-					mTestMessage = "Senor Ready"; //0.6.4 setSensorStr+" sensor ready";
+					mTestMessage = "Sensor Ready"; //0.6.4 setSensorStr+" sensor ready";
 					mTestState = TS_READY;
 				} else {
 					mTestMessage = "Waiting for sensor"; // 0.6.4 "Waiting for "+setSensorStr+" sensor";

@@ -20,12 +20,13 @@ class HistoryView extends Ui.View {
     hidden var ctrX;
 	hidden var ctrY;
 	hidden var leftX;
-	hidden var rightX;
-	hidden var ceilY;
+	//hidden var rightX;
+	//hidden var ceilY;
 	hidden var floorY;
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
+	hidden var dispH;
 	
 	//hidden var customFont = null;
 	
@@ -94,13 +95,17 @@ class HistoryView extends Ui.View {
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
     	ctrX = dc.getWidth() / 2;
-		ctrY = dc.getHeight() / 2;
+    	dispH = dc.getHeight();
+		ctrY = dispH / 2;
 		// define box about centre
-		leftX = ctrX - cGridWidth/2;
-		rightX = ctrX + cGridWidth/2;
+		// leftX should be on left side of screen aligned with Y axis
+		leftX = ctrX - cGridWidth/2; // mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
+		//rightX = ctrX + cGridWidth/2;
 		// 45 *2 is height of chart
-		ceilY = ctrY - chartHeight/2;
-		floorY = ctrY + chartHeight/2;
+		//ceilY = ctrY - chartHeight/2;
+		
+		floorY = (dispH * 71) / 100;
+		// floorY = ctrY + chartHeight/2;
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
 				
@@ -171,15 +176,33 @@ class HistoryView extends Ui.View {
 		} else {
 			_title = "Test hist";
 		}					
-		dc.drawText( mScr[0], mScr[1], mTitleFont, _title, mJust);
+		// heading at 50% of X and 11% of Y
+		dc.drawText( ctrX, (dispH * 11)/100, mTitleFont, _title, mJust);
 		_title = null;
 		
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
-
+	
+		var _lineStart = (dispH * 27) /100; //% of total height
+		var _lineEnd = floorY; //(dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		
+		//Sys.println("yStep = "+yStep+", yInit = "+yInit);
+		
 		for (var i=0; i < 7; i++) {
-			dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
+			// 0.6.4 Draw rectangle using computed numbers
+			dc.drawRectangle( leftX, yInit, cGridWidth, 1);
+			yInit += yStep;
+			//dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
+			//Sys.println("Rect Coords: "+mScr[32]+", "+mScr[24+i]+", "+mScr[31]);
 		}
+		
+		//Sys.println("rect draw final line coord: "+yInit+" with step:"+yStep);
+		
+		// Adjust floorY for rounding errors in stepping lines down
+		// we have gone one step too far
+		floorY = yInit - yStep;
 		
 		if ( mView == 0 ) {
 			drawHistory(dc);
@@ -292,6 +315,7 @@ class HistoryView extends Ui.View {
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
+		
 		floor = min - (min % 5);
 		//if (floor < 0 ) { floor = 0;}
 		
@@ -305,11 +329,13 @@ class HistoryView extends Ui.View {
 		
 		// chartHeight defines height of chart and sets scale
 		scaleY = chartHeight / range.toFloat();
-		        		
-		// Title - X, Y : 0, 1
-		// [mLabelValueLox X, Y] x 11: 2, 3; 4, 5; 6, 7; 8, 9; 10, 11; 12,13; 14,15; 16,17; 18, 19; 20, 21;	22,23
-		// mRectHorizY[7] : 24-30
-		// mRectHorizWHS , HorizXS : 31, 32
+		
+		var _lineStart = (dispH * 27) /100; //% of total height
+		var _lineEnd = (dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		// 11% across
+		var xPos = ( dc.getWidth() * 11) / 100;
 		
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
@@ -324,8 +350,10 @@ class HistoryView extends Ui.View {
 			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
 			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
 			//} else {
-			var _ind = i*2+8; 		
-			dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
+			//var _ind = i*2+8; 		
+			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
+			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
+			yInit += yStep;
 			//}
 		}
 		
@@ -422,6 +450,11 @@ class HistoryView extends Ui.View {
 				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 				dc.setColor($.Label3Colour, $.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+				
+				//Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" l1v1: "+mLabel1Val1+" l1v2: "+mLabel1Val2+
+				//	" l2v1: "+mLabel2Val1+" l2v2: "+mLabel2Val2+
+				//	" l3v1: "+mLabel3Val1+" l3v2: "+mLabel3Val2
+				//);
 
 				pointNumber++;	
 			} // found entry	
