@@ -186,7 +186,7 @@ class HistoryView extends Ui.View {
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		
-		Sys.println("yStep = "+yStep+", yInit = "+yInit);
+		//Sys.println("yStep = "+yStep+", yInit = "+yInit);
 		
 		for (var i=0; i < 7; i++) {
 			// 0.6.4 Draw rectangle using computed numbers
@@ -322,6 +322,13 @@ class HistoryView extends Ui.View {
 		// chartHeight defines height of chart and sets scale
 		scaleY = chartHeight / range.toFloat();
 		
+		var _lineStart = (dispH * 27) /100; //% of total height
+		var _lineEnd = (dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		// 11% across
+		var xPos = ( dc.getWidth() * 11) / 100;
+		
 		// Draw the numbers on Y axis	
 		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
 		// Built new font instead
@@ -335,8 +342,10 @@ class HistoryView extends Ui.View {
 			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
 			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
 			//} else {
-			var _ind = i*2+8; 		
-			dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
+			//var _ind = i*2+8; 		
+			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
+			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
+			yInit += yStep;
 			//}
 		}
 		
