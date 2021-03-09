@@ -99,11 +99,13 @@ class HistoryView extends Ui.View {
 		ctrY = dispH / 2;
 		// define box about centre
 		// leftX should be on left side of screen aligned with Y axis
-		leftX = mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
+		leftX = ctrX - cGridWidth/2; // mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
 		//rightX = ctrX + cGridWidth/2;
 		// 45 *2 is height of chart
 		//ceilY = ctrY - chartHeight/2;
-		floorY = ctrY + chartHeight/2;
+		
+		floorY = (dispH * 71) / 100;
+		// floorY = ctrY + chartHeight/2;
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
 				
@@ -182,7 +184,7 @@ class HistoryView extends Ui.View {
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
 	
 		var _lineStart = (dispH * 27) /100; //% of total height
-		var _lineEnd = (dispH * 71) / 100;
+		var _lineEnd = floorY; //(dispH * 71) / 100;
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		
@@ -190,11 +192,17 @@ class HistoryView extends Ui.View {
 		
 		for (var i=0; i < 7; i++) {
 			// 0.6.4 Draw rectangle using computed numbers
-			dc.drawRectangle(mScr[32], yInit, mScr[31], 1);
+			dc.drawRectangle( leftX, yInit, cGridWidth, 1);
 			yInit += yStep;
 			//dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
 			//Sys.println("Rect Coords: "+mScr[32]+", "+mScr[24+i]+", "+mScr[31]);
 		}
+		
+		//Sys.println("rect draw final line coord: "+yInit+" with step:"+yStep);
+		
+		// Adjust floorY for rounding errors in stepping lines down
+		// we have gone one step too far
+		floorY = yInit - yStep;
 		
 		if ( mView == 0 ) {
 			drawHistory(dc);
@@ -443,10 +451,10 @@ class HistoryView extends Ui.View {
 				dc.setColor($.Label3Colour, $.mBgColour);
 				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 				
-				Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" l1v1: "+mLabel1Val1+" l1v2: "+mLabel1Val2+
-					" l2v1: "+mLabel2Val1+" l2v2: "+mLabel2Val2+
-					" l3v1: "+mLabel3Val1+" l3v2: "+mLabel3Val2
-				);
+				//Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" l1v1: "+mLabel1Val1+" l1v2: "+mLabel1Val2+
+				//	" l2v1: "+mLabel2Val1+" l2v2: "+mLabel2Val2+
+				//	" l3v1: "+mLabel3Val1+" l3v2: "+mLabel3Val2
+				//);
 
 				pointNumber++;	
 			} // found entry	
