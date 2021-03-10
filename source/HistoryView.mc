@@ -27,6 +27,7 @@ class HistoryView extends Ui.View {
 	hidden var xStep;
 	hidden var floor;
 	hidden var dispH;
+	hidden var dispW;
 	
 	//hidden var customFont = null;
 	
@@ -69,7 +70,8 @@ class HistoryView extends Ui.View {
 	//hidden var mScaleX;
 	
 	// layout of screen
-	hidden var mScr;
+	// hidden var mScr;
+	
 	// original history = 0, long term history is 1
 	hidden var mView = 0;
    
@@ -90,12 +92,14 @@ class HistoryView extends Ui.View {
 		a = null;
 		
 		// load JSON
-		mScr = Ui.loadResource(Rez.JsonData.jsonStatsHist);
+		//mScr = Ui.loadResource(Rez.JsonData.jsonStatsHist);
 		
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
-    	ctrX = dc.getWidth() / 2;
+    	//ctrX = dc.getWidth() / 2;
     	dispH = dc.getHeight();
+    	dispW = dc.getWidth();
+    	ctrX = dispW / 2;
 		ctrY = dispH / 2;
 		// define box about centre
 		// leftX should be on left side of screen aligned with Y axis
@@ -213,8 +217,11 @@ class HistoryView extends Ui.View {
 	}
 	
 	function drawLongTerm(dc) {
-	    dc.setColor( $.Label2Colour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mScr[4], mScr[5], mLabelFont, "HRV", mJust);
+		    
+	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
+	    var _x = ctrX;
+        var _y = (dispH * 88 ) / 100;		
+		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
 	
 	}
 
@@ -248,12 +255,19 @@ class HistoryView extends Ui.View {
                         	
         // hard to tie menu on selection order to this list-> fixed 0.4.3
         // draw the data being drawn labels
+        var _x = (dispW * 30 ) / 100;
+        var _y = (dispH * 79 ) / 100;
         dc.setColor( $.Label1Colour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mScr[2], mScr[3], mLabelFont, labelList[0], mJust);			
+		dc.drawText( _x, _y, mLabelFont, labelList[0], mJust);	
+		
+		_x = (dispW * 64 ) / 100;		
         dc.setColor( $.Label2Colour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mScr[4], mScr[5], mLabelFont, labelList[1], mJust);	
+		dc.drawText( _x, _y, mLabelFont, labelList[1], mJust);	
+		
+		_x = ctrX;
+        _y = (dispH * 88 ) / 100;
 		dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mScr[6], mScr[7], mLabelFont, labelList[2], mJust);	
+		dc.drawText( _x, _y, mLabelFont, labelList[2], mJust);	
 		
 		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
 		
@@ -358,7 +372,9 @@ class HistoryView extends Ui.View {
 		}
 		
 		// draw final title
-		dc.drawText( mScr[22], mScr[23], mLabelFont, "newer->", mJust);	
+		_x = (dispW * 70 ) / 100;
+        _y = (dispH * 23 ) / 100;
+		dc.drawText( _x, _y, mLabelFont, "newer->", mJust);	
 		
 		var firstData = new [MAX_DISPLAY_VAR];
 		

@@ -4,7 +4,7 @@ using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;  
 
 // 0.6.3 version using JSON precalculated coordinates
-//(:discard)
+(:UseJson)
 class TestView extends Ui.View {
 	
 	hidden var msgTxt = "";
@@ -219,7 +219,7 @@ class TestView extends Ui.View {
 }
 
 
-(:discard)   // OLD VERSION using calculation of scaling
+(:notUseJson)  // OLD VERSION using calculation of scaling
 class TestView extends Ui.View {
 	
 	var msgTxt = "";
