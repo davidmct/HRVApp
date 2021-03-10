@@ -21,8 +21,9 @@ enum {
 	BEATS_VIEW = 6,
 	INTERVAL_VIEW =7,
 	HISTORY_VIEW = 8,
-	GLANCE_VIEW = 9,
-	NUM_VIEWS = 10
+	TREND_VIEW = 9,
+	GLANCE_VIEW = 10,
+	NUM_VIEWS = 11
 }
 
 // Colors index. Arrays start at zero

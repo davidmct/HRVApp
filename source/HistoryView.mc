@@ -178,7 +178,7 @@ class HistoryView extends Ui.View {
 		if (mView == 0 ) {
 			_title = "History";
 		} else {
-			_title = "Test hist";
+			_title = "Trends";
 		}					
 		// heading at 50% of X and 11% of Y
 		dc.drawText( ctrX, (dispH * 11)/100, mTitleFont, _title, mJust);
@@ -222,6 +222,27 @@ class HistoryView extends Ui.View {
 	    var _x = ctrX;
         var _y = (dispH * 88 ) / 100;		
 		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
+		
+		// Determine range of data
+		// - count # samples, min/max, #days covered, date of latest sample = day N
+		// - output Y scale factor for data
+		//
+		// Work out X scale - limited by pixel number and dot size
+		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
+		// - number of days to plot = min ( #days, W/3)
+		// - pixel pitch = max ( W / 3 , W / #days)  
+		// - dates in range of interest = date of youngest sample - #days to plot TO date of youngest sample
+		
+		// Plot X data
+		// - Run through whole results array looking for dates in range of interest
+		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
+		
+		// Save regression data from test just completed 
+		// - will need to only draw lines over date range drawn on screen using pitch
+		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
+		// - Use same day thresholds as in regression calc
+		
+		
 	
 	}
 
