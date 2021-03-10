@@ -16,6 +16,12 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// 0.6.4
+// Made sensor selection exclusive on CIQ > 3.2
+// Added VenuSQ
+// adjusted font for all 240x240 devices on all screens
+// Fixed rendering alignment issues on history view graphs
+
 //0.6.3 Changes
 // Memory optimisations to fit new functionality
 // Added new HRV trend functions
@@ -221,7 +227,7 @@ class HRVAnalysis extends App.AppBase {
     }   
     
     function initialize() {
-    	Sys.println("HRVApp INITIALISATION called");
+    	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
         
         //$._m$.pp.getApp();
         
@@ -430,6 +436,8 @@ class HRVAnalysis extends App.AppBase {
 	function DumpIntervals() {
 		// to reduce write time group up the data
 		var BLOCK_SIZE = 40;
+		
+		if (mSampleProc == null) { return;}
 		
 		var mNumEntries = mSampleProc.getNumberOfSamples();
 

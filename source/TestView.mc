@@ -4,7 +4,7 @@ using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;  
 
 // 0.6.3 version using JSON precalculated coordinates
-//(:discard)
+(:UseJson)
 class TestView extends Ui.View {
 	
 	hidden var msgTxt = "";
@@ -89,6 +89,8 @@ class TestView extends Ui.View {
 	            :locY=>mScreen[1]           
 	        });
 	    }
+	    
+	    if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
         
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
@@ -210,13 +212,14 @@ class TestView extends Ui.View {
     	// don't want to send null as state machine still running
     	//$.mTestControl.setObserver(null);
     	// free up all the arrays - NO as maybe switches without a new ...
+    	//mLabelFont = null;
     	mBitMap = null;
     }
 
 }
 
 
-(:discard)   // OLD VERSION using calculation of scaling
+(:notUseJson)  // OLD VERSION using calculation of scaling
 class TestView extends Ui.View {
 	
 	var msgTxt = "";

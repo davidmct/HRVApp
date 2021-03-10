@@ -152,7 +152,7 @@ class SensorHandler {
     	// has to be called after initialize as mSensor not created!!
     	mSearching = true;
 	    // Internal or registered strap
-		Sys.println("OHR or registered sensor selected");
+		Sys.println("OHR or Strap selected");
 		if (sensor != null) {sensor = null;}
 		sensor = new InternalSensor(mHRData);
     }
@@ -520,14 +520,20 @@ class InternalSensor {
 		
 		//0.6.3 
 		// Enable external and onboard if CIQ >= 3.2.0
+		//0.6.4
+		// Update test to select strap if available otherwise OHR
 		var _ans;
 		
 		if (Sensor has :enableSensorType) {
 			Sys.println(">=CIQ 3.2 detected");
 			_ans = Sensor.enableSensorType( Sensor.SENSOR_HEARTRATE);
-			if (_ans) { Sys.println("External sensor enabled"); } else {Sys.println("ans: "+_ans);}
-			_ans = Sensor.enableSensorType( Sensor.SENSOR_ONBOARD_HEARTRATE);
-			if (_ans) { Sys.println("OHR enabled");} else {Sys.println("ans: "+_ans);}
+			if (_ans) { 
+				Sys.println("Strap enabled"); 
+			} else {
+				Sys.println("no strap");
+				_ans = Sensor.enableSensorType( Sensor.SENSOR_ONBOARD_HEARTRATE);
+				if (_ans) { Sys.println("OHR enabled");} else {Sys.println("no OHR either");}
+			}
 		} else {
 			_ans = Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE]);
 			Sys.println("Enable response ="+_ans);
