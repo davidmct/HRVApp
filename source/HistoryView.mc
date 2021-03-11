@@ -3,8 +3,11 @@ using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
 using Toybox.Math;
+using Toybox.Time.Gregorian;
+using Toybox.Time;
 
 using HRVStorageHandler as mStorage;
+using GlanceGen as GG;
 
 // Show the largest number of samples possible in width of HRV measurements used by glance processing
 
@@ -115,14 +118,10 @@ class HistoryView extends Ui.View {
 		floorY = (dispH * 71) / 100;
 		// floorY = ctrY + chartHeight/2;
 		
-		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
-		
 		// in the trend view we want to use the maximum width of the screen ie the point at which all lines can be drawn
 		// first part of code is common so think about new variables
 		_lineStart = (dispH * 27) /100; //% of total height
 		_lineEnd = floorY; //(dispH * 71) / 100;
-		
-		Sys.println("Start: "+_lineStart+", end: "+_lineEnd);
 		
 		// find intersect on X axis of bounding circle
 		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
@@ -134,10 +133,15 @@ class HistoryView extends Ui.View {
 		// this is the new width to wrote in for Trend graph. Starts at LeftX
 		if ( mView == 0) {
 			_cWidth = cGridWidth;
+			// stepping used by History		
+			xStep = (_cWidth / NUM_RESULT_ENTRIES).toNumber();
 		} else { 
-			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();			
+			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
+			// stepping for trends. Not setting to 3 then determines how many days we can show
+			// alternatively we could work out how many days available and increase pitch 
+			xStep = 3;		
 		}
-		Sys.println("leftX is "+leftX+", _cWidth is: "+_cWidth);
+		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -249,6 +253,30 @@ class HistoryView extends Ui.View {
         var _y = (dispH * 88 ) / 100;		
 		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
 		
+		// Need to load required data
+		// can use existing function...		
+		var _stats = [ 0, 0, 0, 0];
+		var startMoment = Time.now();
+		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+
+    	// loads up resGL;
+    	// for test purposes return timestamp of test data or incoming value!    	
+    	// returns real utcStart ie one passed or in test code the first date in the test data
+		// 
+		
+		// need to check whether we have loaded results already and have _res as available and array
+		if (GG.ResGL == null) {
+			// load data for history	
+			
+			Sys.println("Loading Trend HRV results");
+			
+			var _res = new [5];	// provides min/max Date, HRV and count
+			_res = GG.retrieveResGL( utcStart, _stats);
+			_stats = null;
+			GG.mTrend = calcTrends( utcStart, 0.0, mMinUtc);
+		}
+		// Hopefully now mTrendLTXX setup
+		
 		// Determine range of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
 		// - output Y scale factor for data
@@ -258,6 +286,11 @@ class HistoryView extends Ui.View {
 		// - number of days to plot = min ( #days, W/3)
 		// - pixel pitch = max ( W / 3 , W / #days)  
 		// - dates in range of interest = date of youngest sample - #days to plot TO date of youngest sample
+		
+		// X-SCALE imp
+		// Fixed pitch at 3 as xStep
+		// We can then work out maximum number of days to plot
+		var numDaysMax = _cWidth / xStep;
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -541,6 +574,7 @@ class HistoryView extends Ui.View {
     function onHide() {
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
+    	GG.ResGL = null;
   		//remove buffer
 		freeResults();  	
     }
