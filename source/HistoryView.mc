@@ -2,6 +2,7 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
+using Toybox.Math;
 
 using HRVStorageHandler as mStorage;
 
@@ -28,6 +29,9 @@ class HistoryView extends Ui.View {
 	hidden var floor;
 	hidden var dispH;
 	hidden var dispW;
+	hidden var _cWidth; // revised width of chart
+	hidden var _lineStart; // start of grid in Y
+	hidden var _lineEnd; // last line of Grid in Y
 	
 	//hidden var customFont = null;
 	
@@ -112,6 +116,28 @@ class HistoryView extends Ui.View {
 		// floorY = ctrY + chartHeight/2;
 		
 		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
+		
+		// in the trend view we want to use the maximum width of the screen ie the point at which all lines can be drawn
+		// first part of code is common so think about new variables
+		_lineStart = (dispH * 27) /100; //% of total height
+		_lineEnd = floorY; //(dispH * 71) / 100;
+		
+		Sys.println("Start: "+_lineStart+", end: "+_lineEnd);
+		
+		// find intersect on X axis of bounding circle
+		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
+		var _farX2 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(_lineEnd - ctrY, 2) );
+		
+		Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
+		
+		// trend Width is smallest of two
+		// this is the new width to wrote in for Trend graph. Starts at LeftX
+		if ( mView == 0) {
+			_cWidth = cGridWidth;
+		} else { 
+			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();			
+		}
+		Sys.println("leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -187,8 +213,8 @@ class HistoryView extends Ui.View {
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
 	
-		var _lineStart = (dispH * 27) /100; //% of total height
-		var _lineEnd = floorY; //(dispH * 71) / 100;
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = floorY; //(dispH * 71) / 100;
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		
@@ -196,7 +222,7 @@ class HistoryView extends Ui.View {
 		
 		for (var i=0; i < 7; i++) {
 			// 0.6.4 Draw rectangle using computed numbers
-			dc.drawRectangle( leftX, yInit, cGridWidth, 1);
+			dc.drawRectangle( leftX, yInit, _cWidth, 1);
 			yInit += yStep;
 			//dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
 			//Sys.println("Rect Coords: "+mScr[32]+", "+mScr[24+i]+", "+mScr[31]);
@@ -365,8 +391,8 @@ class HistoryView extends Ui.View {
 		// chartHeight defines height of chart and sets scale
 		scaleY = chartHeight / range.toFloat();
 		
-		var _lineStart = (dispH * 27) /100; //% of total height
-		var _lineEnd = (dispH * 71) / 100;
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = (dispH * 71) / 100;
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		// 11% across
