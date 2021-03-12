@@ -265,17 +265,21 @@ class HistoryView extends Ui.View {
 		// 
 		
 		// need to check whether we have loaded results already and have _res as available and array
-		if (GG.ResGL == null) {
+		if (GG.resGL == null) {
 			// load data for history	
 			
 			Sys.println("Loading Trend HRV results");
 			
+			// res is minD, MaxD, minHRV, maxHRV, count
 			var _res = new [5];	// provides min/max Date, HRV and count
-			_res = GG.retrieveResGL( utcStart, _stats);
+			// retrieve data, assume no new result and don't compare min/max to test values
+			_res = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
-			GG.mTrend = calcTrends( utcStart, 0.0, mMinUtc);
+			GG.calcTrends( utcStart, 0.0, _res[0]);
+			// want to see mTrendST, LT, MT values
+			
 		}
-		// Hopefully now mTrendLTXX setup
+		// Hopefully now mTrendXX setup
 		
 		// Determine range of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
@@ -574,7 +578,7 @@ class HistoryView extends Ui.View {
     function onHide() {
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
-    	GG.ResGL = null;
+    	GG.resGL = null;
   		//remove buffer
 		freeResults();  	
     }

@@ -286,7 +286,9 @@ module GlanceGen
 //4. Current reading (or all todays?) Compared to yesterday's average	
 
 	// work out the trends of the HRV results
-	// utStart = time of latest test
+	// utc = time of latest test
+	// _HRV is test result
+	// _minUtc is earliest date found
 	// values returned are for ST trend
 	// returns 0 if trend close to flat using FLATNESS as threshold otherwise +/- and size of gap from trend
 	// returns flag true if enough data
