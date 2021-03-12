@@ -16,6 +16,10 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.6.5
+// Adding second history screen with HRV data plot over as many days as fits
+
+
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
 // Added VenuSQ

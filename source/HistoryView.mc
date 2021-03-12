@@ -2,8 +2,12 @@ using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
 using Toybox.System as Sys;
+using Toybox.Math;
+using Toybox.Time.Gregorian;
+using Toybox.Time;
 
 using HRVStorageHandler as mStorage;
+using GlanceGen as GG;
 
 // Show the largest number of samples possible in width of HRV measurements used by glance processing
 
@@ -28,6 +32,9 @@ class HistoryView extends Ui.View {
 	hidden var floor;
 	hidden var dispH;
 	hidden var dispW;
+	hidden var _cWidth; // revised width of chart
+	hidden var _lineStart; // start of grid in Y
+	hidden var _lineEnd; // last line of Grid in Y
 	
 	//hidden var customFont = null;
 	
@@ -111,7 +118,30 @@ class HistoryView extends Ui.View {
 		floorY = (dispH * 71) / 100;
 		// floorY = ctrY + chartHeight/2;
 		
-		xStep = (cGridWidth / NUM_RESULT_ENTRIES).toNumber();
+		// in the trend view we want to use the maximum width of the screen ie the point at which all lines can be drawn
+		// first part of code is common so think about new variables
+		_lineStart = (dispH * 27) /100; //% of total height
+		_lineEnd = floorY; //(dispH * 71) / 100;
+		
+		// find intersect on X axis of bounding circle
+		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
+		var _farX2 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(_lineEnd - ctrY, 2) );
+		
+		Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
+		
+		// trend Width is smallest of two
+		// this is the new width to wrote in for Trend graph. Starts at LeftX
+		if ( mView == 0) {
+			_cWidth = cGridWidth;
+			// stepping used by History		
+			xStep = (_cWidth / NUM_RESULT_ENTRIES).toNumber();
+		} else { 
+			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
+			// stepping for trends. Not setting to 3 then determines how many days we can show
+			// alternatively we could work out how many days available and increase pitch 
+			xStep = 3;		
+		}
+		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -178,7 +208,7 @@ class HistoryView extends Ui.View {
 		if (mView == 0 ) {
 			_title = "History";
 		} else {
-			_title = "Test hist";
+			_title = "Trends";
 		}					
 		// heading at 50% of X and 11% of Y
 		dc.drawText( ctrX, (dispH * 11)/100, mTitleFont, _title, mJust);
@@ -187,8 +217,8 @@ class HistoryView extends Ui.View {
 		// draw lines
 		dc.setColor( mRectColour, Gfx.COLOR_TRANSPARENT);
 	
-		var _lineStart = (dispH * 27) /100; //% of total height
-		var _lineEnd = floorY; //(dispH * 71) / 100;
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = floorY; //(dispH * 71) / 100;
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		
@@ -196,7 +226,7 @@ class HistoryView extends Ui.View {
 		
 		for (var i=0; i < 7; i++) {
 			// 0.6.4 Draw rectangle using computed numbers
-			dc.drawRectangle( leftX, yInit, cGridWidth, 1);
+			dc.drawRectangle( leftX, yInit, _cWidth, 1);
 			yInit += yStep;
 			//dc.drawRectangle(mScr[32], mScr[24+i], mScr[31], 1);
 			//Sys.println("Rect Coords: "+mScr[32]+", "+mScr[24+i]+", "+mScr[31]);
@@ -222,6 +252,60 @@ class HistoryView extends Ui.View {
 	    var _x = ctrX;
         var _y = (dispH * 88 ) / 100;		
 		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
+		
+		// Need to load required data
+		// can use existing function...		
+		var _stats = [ 0, 0, 0, 0];
+		var startMoment = Time.now();
+		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+
+    	// loads up resGL;
+    	// for test purposes return timestamp of test data or incoming value!    	
+    	// returns real utcStart ie one passed or in test code the first date in the test data
+		// 
+		
+		// need to check whether we have loaded results already and have _res as available and array
+		if (GG.resGL == null) {
+			// load data for history	
+			
+			Sys.println("Loading Trend HRV results");
+			
+			// res is minD, MaxD, minHRV, maxHRV, count
+			var _res = new [5];	// provides min/max Date, HRV and count
+			// retrieve data, assume no new result and don't compare min/max to test values
+			_res = GG.retrieveResGL( utcStart, _stats, true);
+			_stats = null;
+			GG.calcTrends( utcStart, 0.0, _res[0]);
+			// want to see mTrendST, LT, MT values
+			
+		}
+		// Hopefully now mTrendXX setup
+		
+		// Determine range of data
+		// - count # samples, min/max, #days covered, date of latest sample = day N
+		// - output Y scale factor for data
+		//
+		// Work out X scale - limited by pixel number and dot size
+		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
+		// - number of days to plot = min ( #days, W/3)
+		// - pixel pitch = max ( W / 3 , W / #days)  
+		// - dates in range of interest = date of youngest sample - #days to plot TO date of youngest sample
+		
+		// X-SCALE imp
+		// Fixed pitch at 3 as xStep
+		// We can then work out maximum number of days to plot
+		var numDaysMax = _cWidth / xStep;
+		
+		// Plot X data
+		// - Run through whole results array looking for dates in range of interest
+		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
+		
+		// Save regression data from test just completed 
+		// - will need to only draw lines over date range drawn on screen using pitch
+		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
+		// - Use same day thresholds as in regression calc
+		
+		
 	
 	}
 
@@ -344,8 +428,8 @@ class HistoryView extends Ui.View {
 		// chartHeight defines height of chart and sets scale
 		scaleY = chartHeight / range.toFloat();
 		
-		var _lineStart = (dispH * 27) /100; //% of total height
-		var _lineEnd = (dispH * 71) / 100;
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = (dispH * 71) / 100;
 		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
 		var yInit = _lineStart;
 		// 11% across
@@ -494,6 +578,7 @@ class HistoryView extends Ui.View {
     function onHide() {
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
+    	GG.resGL = null;
   		//remove buffer
 		freeResults();  	
     }

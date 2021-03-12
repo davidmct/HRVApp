@@ -286,7 +286,9 @@ module GlanceGen
 //4. Current reading (or all todays?) Compared to yesterday's average	
 
 	// work out the trends of the HRV results
-	// utStart = time of latest test
+	// utc = time of latest test
+	// _HRV is test result
+	// _minUtc is earliest date found
 	// values returned are for ST trend
 	// returns 0 if trend close to flat using FLATNESS as threshold otherwise +/- and size of gap from trend
 	// returns flag true if enough data
@@ -554,7 +556,10 @@ module GlanceGen
 
 // this function does the scan of array AND moves data over to ResGL
 // takes array read in, current date and current HRV
-	function f_MinMax ( _mCheck, _cD, _cH) {
+// _mCheck = source array
+// _cD and cH are current values of date and HRV
+// _skip skips test against this current data ie we are reading old data set
+	function f_MinMax ( _mCheck, _cD, _cH, _skip) {
         var minH = 100.0;
     	var maxH = 0.0;	
     	var cntH = 0;
@@ -583,10 +588,12 @@ module GlanceGen
     	Sys.println("Min/max D/H found:"+minD+"/"+maxD+", HRV "+minH+"/"+maxH);
     	
     	// include current data in comparison
-    	if ( _cD > maxD) { maxD = _cD;}
-    	if ( _cD < minD) { minD = _cD;}
-    	if ( _cH > maxH) { maxH = _cH;}
-    	if ( _cH < minH) { minH = _cH;}
+    	if (_skip == false) {
+    		if ( _cD > maxD) { maxD = _cD;}
+    		if ( _cD < minD) { minD = _cD;}
+    		if ( _cH > maxH) { maxH = _cH;}
+    		if ( _cH < minH) { minH = _cH;}
+     	}
      	
      	Sys.println("HRV actual range is "+minH+" to "+maxH);
     	
@@ -602,7 +609,8 @@ module GlanceGen
 	}
 	
 // this function scans the loaded array for min/max HRV and dates and counts non-zero date entries
-	function retrieveResGL( utcStart, _stats) {
+// _trend = boolean. True = we are asking for stored data
+	function retrieveResGL( utcStart, _stats, _trend) {
 		var mCheck;
 		// res is minD, MaxD, minHRV, maxHRV, count
 		var res = [ utcStart, utcStart, 0.0, 100.0, 0];
@@ -630,7 +638,7 @@ module GlanceGen
 				//Sys.println("size mCheck="+mCheck.size()+" resGL="+resGL.size());
 				
 				// pass array, today and current HRV
-				res = f_MinMax ( mCheck, utcStart, _stats[0]);
+				res = f_MinMax ( mCheck, utcStart, _stats[0], _trend);
 				
 				mCheck = null;
 			} else {
@@ -667,7 +675,7 @@ module GlanceGen
 		// need to load results array fill and then save
 		// assume pointer still valid	
 		var _res = new [5];	
-		_res = retrieveResGL( utcStart, _stats); 
+		_res = retrieveResGL( utcStart, _stats, false); 
 		
 		//Sys.println("ResGL restored: index:"+resGLIndex+" resGL="+resGL);
 
