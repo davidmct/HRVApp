@@ -30,11 +30,15 @@ class HistoryView extends Ui.View {
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
+	hidden var range;
+	hidden var ceil;
 	hidden var dispH;
 	hidden var dispW;
 	hidden var _cWidth; // revised width of chart
 	hidden var _lineStart; // start of grid in Y
 	hidden var _lineEnd; // last line of Grid in Y
+	
+	hidden var _resT = new[5];
 	
 	//hidden var customFont = null;
 	
@@ -247,7 +251,7 @@ class HistoryView extends Ui.View {
 	}
 	
 	function drawLongTerm(dc) {
-		    
+		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 	    var _x = ctrX;
         var _y = (dispH * 88 ) / 100;		
@@ -270,20 +274,37 @@ class HistoryView extends Ui.View {
 			
 			Sys.println("Loading Trend HRV results");
 			
-			// res is minD, MaxD, minHRV, maxHRV, count
-			var _res = new [5];	// provides min/max Date, HRV and count
+			// _resT is minD, MaxD, minHRV, maxHRV, count of tests
 			// retrieve data, assume no new result and don't compare min/max to test values
-			_res = GG.retrieveResGL( utcStart, _stats, true);
+			_resT = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
-			GG.calcTrends( utcStart, 0.0, _res[0]);
+			GG.calcTrends( utcStart, 0.0, _resT[0]);
 			// want to see mTrendST, LT, MT values
 			
 		}
 		// Hopefully now mTrendXX setup
 		
-		// Determine range of data
+		//TEST CODE
+		if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
+		Sys.println("_res = "+_resT);
+		Sys.println("resGL="+GG.resGL);
+		
+		// Determine range of data - already done in load of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
 		// - output Y scale factor for data
+		
+		
+		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
+		// need to look at data for last test date
+		// sets ceil, floor, range and scaleY then draws UY axis labels
+		defineRange( dc, _resT[4], _resT[2], _resT[3]);
+		
+		// Number of days covered by data
+		var _str2 = ((_resT[0] - _resT[0] % 86400) / 86400);
+		var _str3 = ((_resT[1] - _resT[1] % 86400) / 86400);
+		var days = _str3 - _str2 + 1;
+		Sys.println("Days covered by tests ="+days);
+		
 		//
 		// Work out X scale - limited by pixel number and dot size
 		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
@@ -307,6 +328,65 @@ class HistoryView extends Ui.View {
 		
 		
 	
+	}
+	
+	
+	// Work out data range for Y axis then draw labels assuming 7 lines ie 6 gaps
+	// _dataCnt : number of points we have. Check we have some otherwise default range
+	// _min/_max : min and max of dataset
+	function defineRange( dc, _dataCnt, _min, _max) { 
+		// If no results then set min & max to create a nice graph scale
+		var min = (_min+0.5).toNumber();
+		var max = (_max+0.5).toNumber();
+		
+		if ( 0 == _dataCnt){
+			min = 0;
+			max = 30;
+		}
+
+		// Create the range in blocks of 5
+		ceil = (max + 5) - (max % 5);		
+		floor = min - (min % 5);
+		//if (floor < 0 ) { floor = 0;}
+		
+		// now expand to multiple of 10 as height also multiple of 10. 
+		// Ensure floor doesn't go negative  
+		var test = (ceil - floor) % 10;
+		if (test == 5) { 
+			ceil += 5;
+		} 
+		range = ceil - floor;
+		
+		// chartHeight defines height of chart and sets scale
+		scaleY = chartHeight / range.toFloat();
+		
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = (dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		// 11% across
+		var xPos = ( dc.getWidth() * 11) / 100;
+		
+		// Draw the numbers on Y axis	
+		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
+		// Built new font instead
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		var gap = (ceil-floor);	
+		for (var i=0; i<7; i++) {
+			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
+			// just use whole numbers
+			var str = format(" $1$ ",[num.format("%d")] );	
+			// using custom font so not needed
+			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
+			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
+			//} else {
+			//var _ind = i*2+8; 		
+			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
+			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
+			yInit += yStep;
+			//}
+		}
+		
 	}
 
 	function drawHistory(dc) {		
@@ -405,55 +485,9 @@ class HistoryView extends Ui.View {
 		
 		//Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
 
-		// If no results then set min & max to create a nice graph scale
-		if(0 == dataCount){
-			min = 0;
-			max = 30;
-		}
-
-		// Create the range in blocks of 5
-		var ceil = (max + 5) - (max % 5);
-		
-		floor = min - (min % 5);
-		//if (floor < 0 ) { floor = 0;}
-		
-		// now expand to multiple of 10 as height also multiple of 10. 
-		// Ensure floor doesn't go negative  
-		var test = (ceil - floor) % 10;
-		if (test == 5) { 
-			ceil += 5;
-		} 
-		var range = ceil - floor;
-		
-		// chartHeight defines height of chart and sets scale
-		scaleY = chartHeight / range.toFloat();
-		
-		//var _lineStart = (dispH * 27) /100; //% of total height
-		//var _lineEnd = (dispH * 71) / 100;
-		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
-		var yInit = _lineStart;
-		// 11% across
-		var xPos = ( dc.getWidth() * 11) / 100;
-		
-		// Draw the numbers on Y axis	
-		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
-		// Built new font instead
-		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		var gap = (ceil-floor);	
-		for (var i=0; i<7; i++) {
-			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
-			// just use whole numbers
-			var str = format(" $1$ ",[num.format("%d")] );	
-			// using custom font so not needed
-			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
-			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
-			//} else {
-			//var _ind = i*2+8; 		
-			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
-			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
-			yInit += yStep;
-			//}
-		}
+		// sets ceil, floor, range and scaleY
+		// draws Y axis
+		defineRange( dc, dataCount, min, max);
 		
 		// draw final title
 		_x = (dispW * 70 ) / 100;

@@ -18,7 +18,7 @@ using HRVStorageHandler as mStorage;
 
 //0.6.5
 // Adding second history screen with HRV data plot over as many days as fits
-
+// Remove (I) indicator as now not needed
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2

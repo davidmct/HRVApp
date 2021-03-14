@@ -146,10 +146,11 @@ class TestView extends Ui.View {
 		str = $.mSensor.mHRData.mHRMStatus;
 		dc.drawText( mScreen[20], mScreen[25], mStrapFont, str, mJust);
 		
+		// 0.6.5 As we've deleted E mode then remove this! Change to (FIT) in Circle code
 		//0.4.4 - Separate field for I/E
-		str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
-		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
-		dc.drawText( mScreen[14], mScreen[19], mLabelFont, str, mJust);		
+		//str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
+		//dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
+		//dc.drawText( mScreen[14], mScreen[19], mLabelFont, str, mJust);		
 		
 		// now show values		
 		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);			
@@ -180,23 +181,26 @@ class TestView extends Ui.View {
 		// draw red if FIT enabled and writing
 		// else don't draw	
 		// 0.4.1
-		if (mDebugging) {
-			var strDBG = $.mFitWriteEnabled + ", ";
-			if ( $.mFitControl.mSession == null) { 
-				strDBG = strDBG+"null"+" not recording";
-			}
-			if ($.mFitControl.mSession != null ) {
-				strDBG = strDBG + "Session, "+$.mFitControl.mSession.isRecording();
-			}
-			Sys.println("FIT enabled, mSession, recording: "+strDBG);
-		}
+		//if (mDebugging) {
+		//	var strDBG = $.mFitWriteEnabled + ", ";
+		//	if ( $.mFitControl.mSession == null) { 
+		//		strDBG = strDBG+"null"+" not recording";
+		//	}
+		//	if ($.mFitControl.mSession != null ) {
+		//		strDBG = strDBG + "Session, "+$.mFitControl.mSession.isRecording();
+		//	}
+		//	Sys.println("FIT enabled, mSession, recording: "+strDBG);
+		//}
 					
 		if ($.mFitWriteEnabled && $.mFitControl.mSession != null && $.mFitControl.mSession.isRecording()) {
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
-			dc.fillCircle( mScreen[8], mScreen[9], 10);		
+			dc.fillCircle( mScreen[8], mScreen[9], 10);	
+			//0.6.5 provide FIT label
+			dc.drawText( mScreen[14], mScreen[19], mLabelFont, "FIT", mJust);	
 		} else if ($.mFitWriteEnabled) {
 			dc.setColor( mCircleCol, Gfx.COLOR_TRANSPARENT);	
-			dc.fillCircle( mScreen[8], mScreen[9], 10);				
+			dc.fillCircle( mScreen[8], mScreen[9], 10);	
+			dc.drawText( mScreen[14], mScreen[19], mLabelFont, "FIT", mJust);			
 		}
 		   		
    		// TEST CODE		
