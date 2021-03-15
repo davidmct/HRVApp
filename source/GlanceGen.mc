@@ -247,7 +247,7 @@ module GlanceGen
 			var tmp = resGL[i];
 			if ( tmp == 0) { continue; } // no date data
 			
-			var _str = ((tmp - tmp % 86400) / 86400);
+			//var _str = ((tmp - tmp % 86400) / 86400);
 			
 			val = (count-1) - (mCurrDay - (tmp - tmp % 86400) / 86400); // get day number
 			val = val.toNumber();

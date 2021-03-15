@@ -131,7 +131,7 @@ class HistoryView extends Ui.View {
 		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
 		var _farX2 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(_lineEnd - ctrY, 2) );
 		
-		Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
+		//Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
 		
 		// trend Width is smallest of two
 		// this is the new width to wrote in for Trend graph. Starts at LeftX
@@ -145,7 +145,7 @@ class HistoryView extends Ui.View {
 			// alternatively we could work out how many days available and increase pitch 
 			xStep = 3;		
 		}
-		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -291,21 +291,20 @@ class HistoryView extends Ui.View {
 		
 		// Determine range of data - already done in load of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
-		// - output Y scale factor for data
-		
-		
+		// - output Y scale factor for data		
 		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
 		// need to look at data for last test date
 		// sets ceil, floor, range and scaleY then draws UY axis labels
 		defineRange( dc, _resT[4], _resT[2], _resT[3]);
 		
 		// Number of days covered by data
-		var _str2 = ((_resT[0] - _resT[0] % 86400) / 86400);
-		var _str3 = ((_resT[1] - _resT[1] % 86400) / 86400);
+		var _minDate = (_resT[0] - _resT[0] % 86400); // Date format 
+		var _str2 = ( _minDate / 86400); // as actual days
+		var _maxDate = (_resT[1] - _resT[1] % 86400); 
+		var _str3 = ( _maxDate / 86400);
 		var days = _str3 - _str2 + 1;
 		Sys.println("Days covered by tests ="+days);
 		
-		//
 		// Work out X scale - limited by pixel number and dot size
 		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
 		// - number of days to plot = min ( #days, W/3)
@@ -317,16 +316,61 @@ class HistoryView extends Ui.View {
 		// We can then work out maximum number of days to plot
 		var numDaysMax = _cWidth / xStep;
 		
+		if ( days > numDaysMax) { 
+			days = numDaysMax; // number of days so not DATE format
+			// now need to work out first day in data. 
+			// - every day has an entry in ordered days and may contain zero entries
+			// - resGL list may not have entry on this day as only results days
+			
+			
+		} else {
+			// days has number of entries
+		
+		}
+		
+		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
 		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
+		// Need to check how range matches actual values
+		// Note: day calc OK as we are not worried about timing within day
 		
 		// Save regression data from test just completed 
 		// - will need to only draw lines over date range drawn on screen using pitch
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
+		// Need to check what X value was used to calc regression and use same
 		
+		// Could plot line through averages as data should be in glance array
+		// Need to again check how day numbers are calculated and use same - array was ordered in time ie [0] is oldest
 		
+		// mSortedRes contains daily averages
+		
+		Sys.println("ordered days: "+GG.mSortedRes);
+		
+		var _listSize = GG.mSortedRes.size();		
+		// need to TEST FOR not enough entries for a line
+		if (_listSize < 2) { return;}
+		
+		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+		var _index = _listSize - days;
+		var x1 = 0;
+		var y1 = scale( GG.mSortedRes[_index]);
+		_index++; // move past initial point
+		var x2;
+		var y2;
+		for ( var i=0; i < days - 1; i++) { // need to test ranges used
+			x2 = xStep * i;
+			y2 = scale( GG.mSortedRes[_index]);
+			Sys.println("-index="+_index);
+			_index++;
+			if (y2 != 0) {
+				// have a data point so update
+				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
+				y1 = y2;
+				x1 = x2;
+			}
+		}
 	
 	}
 	

@@ -109,7 +109,7 @@ using HRVStorageHandler as mStorage;
 //   
 
 var mDebugging = false;
-var mDebuggingANT = false;
+//var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
 var mDebuggingResults = false;
