@@ -454,8 +454,16 @@ class SampleProcessing {
 		// Sample #n arrived
 		
 		// Calculate estimated ranges for reliable data based on current pulse
-		var maxMs = 60000 / (livePulse * 0.7);
-		var minMs = 60000 / (livePulse * 1.4);
+		// Set special mode to ignore
+		var maxMs;
+		var minMs;
+		if ( $.mTestMode) {	
+			maxMs = 3000; // 20 bpm :-)
+			minMs = 200;  // 300 bpm
+		} else {			
+			maxMs = 60000 / (livePulse * 0.7);
+			minMs = 60000 / (livePulse * 1.4);
+		}
 		
 		// Put sample in buffer with average of samples available. We know top bits clear until we reach enough to start processing
 		// Start incrementing processing pointer when mSampleIndex >= FILTER_D (post index increment)

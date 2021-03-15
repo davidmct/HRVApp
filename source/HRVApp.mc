@@ -224,7 +224,10 @@ class HRVAnalysis extends App.AppBase {
 		//mAntID = Properties.getValue("pAuxHRAntID");
 		//mAuxHRAntID = mAntID; // default
 		
-		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mTestMode = Properties.getValue("pTest"); 
+		Sys.println("T:"+$.mTestMode);
+		
 		mSensorTypeExt = SENSOR_INTERNAL;
 		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
@@ -233,7 +236,6 @@ class HRVAnalysis extends App.AppBase {
     
     function initialize() {
     	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
-        $.mTestMode = false; 
         //$._m$.pp.getApp();
         
         // Retrieve device type
