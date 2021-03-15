@@ -18,7 +18,7 @@ using HRVStorageHandler as mStorage;
 
 //0.6.5
 // Adding second history screen with HRV data plot over as many days as fits
-// Remove (I) indicator as now not needed
+// Remove (I) indicator as now not needed and changed to FIT status
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
@@ -130,6 +130,7 @@ class myException extends Lang.Exception {
 // Settings variables
 //var timestampSet;
 var appNameSet;
+var mTestMode = false; // add functions for testing
 
 var soundSet;
 var vibeSet;
@@ -232,7 +233,7 @@ class HRVAnalysis extends App.AppBase {
     
     function initialize() {
     	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
-        
+        $.mTestMode = false; 
         //$._m$.pp.getApp();
         
         // Retrieve device type

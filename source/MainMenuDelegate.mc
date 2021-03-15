@@ -138,6 +138,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        var menu = new Ui.Menu2({:title=>"Reset"});
 	        menu.addItem(new Ui.MenuItem("Results", null, "r", null));
 	        menu.addItem(new Ui.MenuItem("Settings", null, "s", null));
+	        menu.addItem(new Ui.MenuItem("TEST", null, "t", null));
 	        Ui.pushView(menu, new ResetMenuDelegate(), Ui.SLIDE_IMMEDIATE );
         }
         else if( id.equals("a"))  {
