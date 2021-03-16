@@ -20,6 +20,7 @@ using HRVStorageHandler as mStorage;
 // Adding second history screen with HRV data plot over as many days as fits
 // Remove (I) indicator as now not needed and changed to FIT status
 
+
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
 // Added VenuSQ

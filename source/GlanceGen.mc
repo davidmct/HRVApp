@@ -25,9 +25,13 @@ module GlanceGen
 	
 	var mSortedRes = null;
 	// trend data y=a+bx and R2 [a, b, r]
-	var	mTrendLT = new[3];
-	var	mTrendMT = new[3];
-	var	mTrendST = new[3];
+	//var	mTrendLT = new[3];
+	//var	mTrendMT = new[3];
+	//var	mTrendST = new[3];
+	
+	var	mTrendLT = null;
+	var	mTrendMT = null;
+	var	mTrendST = null;
 	
     function getHRVAgeRange() {
     	var min = null;
@@ -523,9 +527,20 @@ module GlanceGen
     	  	
     	// create a package for glance and save in store   
  		$.saveGResultsToStore();   
- 		resGL = null;   
+  		purgeMemG();
  		
  		return mPosInRange[0]*100;  // make available for circle colour in % not fraction
+    }
+    
+    // free up glance memory for dynamic structures
+    function purgeMemG() {
+    	resGL = null;  
+		
+		mTrendLT = null;
+		mTrendMT = null;
+		mTrendST = null;
+	    
+    	mSortedRes = null;
     }
 
 	function resetResGLArray() {

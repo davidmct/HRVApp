@@ -654,9 +654,11 @@ class HistoryView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
+    	Sys.println("History view:"+mView+" hide");
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
-    	GG.resGL = null;
+    	//GG.resGL = null;
+    	GG.purgeMemG();
   		//remove buffer
 		freeResults();  	
     }
