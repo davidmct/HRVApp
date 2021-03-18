@@ -102,6 +102,8 @@
 	<string id="LogT">Ln(RMSSD) scale</string> 
 	<string id="LogP">Select scale factor</string> 
 	<string id="LogErrorT">Range 1.0-50.0</string>
+	<string id="rT">rMSSD?</string>
+	<string id="rP">On for rMSSD</string>
 <!-- 
 	<string id="VTIGHT">Very tight</string> 
 	<string id="TIGHT">Tight</string> 

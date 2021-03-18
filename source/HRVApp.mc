@@ -19,7 +19,7 @@ using HRVStorageHandler as mStorage;
 //0.6.5
 // Adding second history screen with HRV data plot over as many days as fits
 // Remove (I) indicator as now not needed and changed to FIT status
-
+// Added Ln(RMSSD) or RMSSD to test view via setting. Also changed range of scale factor.
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
@@ -191,6 +191,9 @@ var mFitControl;
 // % permitted deviation from average for ectopic beats
 var vUpperThresholdSet; // long % over
 var vLowerThresholdSet; // short period under %
+
+// if true then display rMSSD otherwise LN version
+var mRM;
 
 // The device type
 var mDeviceType;

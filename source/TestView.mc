@@ -13,7 +13,7 @@ class TestView extends Ui.View {
 	hidden var mTitleLabels = ["HRV"];
 	
 	// label values
-	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
+	//hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
 		
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
@@ -122,10 +122,14 @@ class TestView extends Ui.View {
 		
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 
-		dc.drawText( mScreen[11], mScreen[16], mLabelFont, mLabels[1], mJust);
+		var _lbl = "Ln(HRV)";
+		if ( $.mRM ) {
+			_lbl = "HRV";
+		}
+		dc.drawText( mScreen[11], mScreen[16], mLabelFont, _lbl, mJust);
 		//0.4.01 - draw BPM in strapFont to make larger
-		dc.drawText( mScreen[12], mScreen[17], mStrapFont, mLabels[2], mJust);
-		dc.drawText( mScreen[13], mScreen[18], mLabelFont, mLabels[3], mJust);
+		dc.drawText( mScreen[12], mScreen[17], mStrapFont, "BPM", mJust);
+		dc.drawText( mScreen[13], mScreen[18], mLabelFont, "TIMER", mJust);
 		
 		dc.setColor( mapColour($.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
 		
@@ -153,8 +157,16 @@ class TestView extends Ui.View {
 		//dc.drawText( mScreen[14], mScreen[19], mLabelFont, str, mJust);		
 		
 		// now show values		
-		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);			
-		dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
+		
+		//0.6.5
+		var _vHrv = $.mSampleProc.mLnRMSSD.format("%.1f");
+		if ( $.mRM ) {
+			_vHrv = $.mSampleProc.mRMSSD.format("%.1f");	
+			// dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		}
+		dc.drawText( mScreen[21], mScreen[26], mTimerFont, _vHrv, mJust);
+		
 		// 0.4.00 release for approval
 		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $.mSensor.mHRData.livePulse.format("%d"), mJust);
 		// 0.4.01

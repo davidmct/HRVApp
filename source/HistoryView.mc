@@ -305,6 +305,8 @@ class HistoryView extends Ui.View {
 		var days = _str3 - _str2 + 1;
 		Sys.println("Days covered by tests ="+days);
 		
+		if (days <= 1) { return;}
+		
 		// Work out X scale - limited by pixel number and dot size
 		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
 		// - number of days to plot = min ( #days, W/3)

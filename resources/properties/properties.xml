@@ -17,6 +17,7 @@
 	<property id="timestampSet" type="number">1447234278</property>
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
 	<property id="pTest" type ="boolean">false</property>
+	<property id="prMSSD" type ="boolean">false</property>
 	<!-- pSensorSelect true is external search -->
 	<!-- <property id="pSensorSelect" type="boolean">false</property> -->
 	<property id="pIIScale" type="boolean">false</property>

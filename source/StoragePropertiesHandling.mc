@@ -36,6 +36,7 @@ module HRVStorageHandler {
 		//Storage.setValue("firstLoadEver", true);
 		Properties.setValue("pFitWriteEnabled", false);
 		Properties.setValue("pTest", false);
+		Properties.setValue("prMSSD", false);
 		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
 		Properties.setValue("pIIScale", false);
@@ -213,6 +214,7 @@ module HRVStorageHandler {
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
 		$.mTestMode = Properties.getValue("pTest");
+		$.mRM = Properties.getValue("prMSSD");
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
 		$.mBoolScaleII = Properties.getValue("pIIScale");
 		$.soundSet = Properties.getValue("soundSet");
@@ -301,6 +303,7 @@ module HRVStorageHandler {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
 		Properties.setValue("pTest", $.mTestMode);
+		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		
 		// user changable
