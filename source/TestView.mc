@@ -160,7 +160,7 @@ class TestView extends Ui.View {
 		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
 		
 		//0.6.5
-		var _vHrv = $.mSampleProc.mLnRMSSD.format("%.1f");
+		var _vHrv = $.mSampleProc.mLnRMSSD.format("%d");
 		if ( $.mRM ) {
 			_vHrv = $.mSampleProc.mRMSSD.format("%.1f");	
 			// dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);

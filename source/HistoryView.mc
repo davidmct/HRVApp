@@ -245,9 +245,69 @@ class HistoryView extends Ui.View {
 		if ( mView == 0 ) {
 			drawHistory(dc);
 		} else {
-			drawLongTerm(dc);
+			drawLongTermTest(dc);
 		}
 		
+	}
+
+(:debug)	
+	function drawLongTermTest(dc) {
+	
+	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
+	    var _x = ctrX;
+        var _y = (dispH * 88 ) / 100;		
+		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
+		
+		// Need to load required data
+		// can use existing function...		
+		var _stats = [ 0, 0, 0, 0];
+		var startMoment = Time.now();
+		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+	
+		// TEST CODE
+		GG.mSortedRes = [ 
+			10,12,14,16,18,20,22,24,26,28,
+			31,34,37,40,43,46,49,52,55,58,
+			54,50,46,42,38,34,30,26,22,18,
+			10,12,14,16,18,20,22,24,26,28,
+			31,34,37,40,43,46,49,52,55,58,
+			54,50,46,42,38,34,30,26,22,18,
+			10,12,14,16,18,20,22,24,26,28,
+			31,34,37,40,43,46,49,52,55,58,
+			54,50,46,42,38,34,30,26,22,18,
+			21,24,27,30,33,36,39,42,45,48
+		];
+		
+		defineRange( dc, 100, 10, 58);
+		
+		Sys.println("ordered days: "+GG.mSortedRes);
+		var days = 100;
+		
+		var _listSize = GG.mSortedRes.size();		
+		// need to TEST FOR not enough entries for a line
+		if (_listSize < 2) { return;}
+		
+		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+		var _index = _listSize - days;
+		var x1 = 0;
+		var y1 = scale( GG.mSortedRes[_index]);
+		_index++; // move past initial point
+		var x2;
+		var y2;
+		for ( var i=0; i < days - 1; i++) { // need to test ranges used
+			x2 = xStep * i;
+			y2 = scale( GG.mSortedRes[_index]);
+			Sys.println("-index="+_index);
+			_index++;
+			if (y2 != 0) {
+				// have a data point so update
+				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
+				y1 = y2;
+				x1 = x2;
+			}
+		}	
+	
+	
 	}
 	
 	function drawLongTerm(dc) {
@@ -364,7 +424,7 @@ class HistoryView extends Ui.View {
 		for ( var i=0; i < days - 1; i++) { // need to test ranges used
 			x2 = xStep * i;
 			y2 = scale( GG.mSortedRes[_index]);
-			Sys.println("-index="+_index);
+			//Sys.println("-index="+_index);
 			_index++;
 			if (y2 != 0) {
 				// have a data point so update
