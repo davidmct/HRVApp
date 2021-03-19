@@ -165,7 +165,7 @@ class TestView extends Ui.View {
 			_vHrv = $.mSampleProc.mRMSSD.format("%.1f");	
 			// dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
 		}
-		dc.drawText( mScreen[21], mScreen[26], mTimerFont, _vHrv, mJust);
+		dc.drawText( mScreen[21], mScreen[26], mValueFont, _vHrv, mJust);
 		
 		// 0.4.00 release for approval
 		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $.mSensor.mHRData.livePulse.format("%d"), mJust);

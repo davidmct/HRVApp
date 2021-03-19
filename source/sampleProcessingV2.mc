@@ -791,9 +791,10 @@ class SampleProcessing {
 			// HRV is actually RMSSD. Use (N-1)
 			mRMSSD = Math.sqrt(devSqSum.toFloat() / (dataCount - 1));
 			// many people compand rmssd to a scaled range 0-100
-			mLnRMSSD = ($.mLogScale * (Math.ln(mRMSSD)+0.5)).toNumber();
+			//0.6.5 remove toNumber
+			mLnRMSSD = ($.mLogScale * (Math.ln(mRMSSD)+0.5)); //.toNumber();
 			// 0.4.3
-			if (mLnRMSSD < 0) {mLnRMSSD = 0;}
+			if (mLnRMSSD < 0.0) {mLnRMSSD = 0.0;}
 		}
 		avgPulse = ((pulseSum.toFloat() / dataCount) + 0.5).toNumber();			
 		
