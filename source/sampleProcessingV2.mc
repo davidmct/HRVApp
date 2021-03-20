@@ -271,8 +271,10 @@ class SampleProcessing {
 		
 		// pre process bounds for poincare plot of RR interval
 		// first sample will have null beatsInGap so ignore as 
-		if (beatsInGap != null && intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
-		if (beatsInGap != null && intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
+		if (beatsInGap != null ) {
+			if (intervalMs > maxIntervalFound) { maxIntervalFound = intervalMs;}
+			else if (intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
+		}
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
@@ -527,7 +529,7 @@ class SampleProcessing {
 			// always add sample to II buffer
 			addSample(intMs, 1);
 		} else {
-			Sys.println(" Sample out of nominal range: "+intMs+" at index:"+mSampleIndex);
+			Sys.println(" Sample out of nominal range: "+intMs+" at index:"+mSampleIndex+" with pulse:"+livePulse);
 			return;		
 		}
 		
