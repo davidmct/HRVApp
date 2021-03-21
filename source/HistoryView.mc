@@ -11,11 +11,7 @@ using GlanceGen as GG;
 
 // Show the largest number of samples possible in width of HRV measurements used by glance processing
 
-		// Title - X, Y : 0, 1
-		// [mLabelValueLox X, Y] x 11: 2, 3; 4, 5; 6, 7; 8, 9; 10, 11; 12,13; 14,15; 16,17; 18, 19; 20, 21;	22,23
-		// mRectHorizY[7] : 24-30
-		// mRectHorizWHS , HorizXS : 31, 32
-
+// this version no longer uses JSON for history
 (:UseJson)
 class HistoryView extends Ui.View {
 	
@@ -24,8 +20,6 @@ class HistoryView extends Ui.View {
     hidden var ctrX;
 	hidden var ctrY;
 	hidden var leftX;
-	//hidden var rightX;
-	//hidden var ceilY;
 	hidden var floorY;
 	hidden var scaleY;
 	hidden var xStep;
@@ -39,49 +33,12 @@ class HistoryView extends Ui.View {
 	hidden var _lineEnd; // last line of Grid in Y
 	
 	hidden var _resT = new[5];
-	
-	//hidden var customFont = null;
-	
-	//0.4.3
-	//hidden var numResultsToDisplay = 0;
-	
-	hidden var labelList = new [MAX_DISPLAY_VAR];
-	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
-    
-    //hidden var mTitleLoc = [50, 11]; // %
-	//hidden var mTitleLocS = [0,0];	
-	//hidden var mTitleLabels = ["History"];
-	
-	// coordinates of set of labels as %
-	// split to 1D array to save memory
-	// Labelx1,2,3, ylabel0...6, xAxisLabel
-	//hidden var mLabelValueLocX = [ 30, 64, 50, 11, 11, 11, 11, 11, 11, 11, 70];
-	//hidden var mLabelValueLocY = [ 79, 79, 88, 27, 36, 43, 50, 57, 64, 71, 23];
-		
-	// x%, y%, width/height. 
-	//hidden var mRectHorizWH = 64;
-	//hidden var mRectHorizX = 18;
-	//hidden var mRectHorizY = [ 28, 36, 43, 50, 57, 64, 71 ];
-	
-	// scaled variables
-	//hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
-	//hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
-	
-	//hidden var mRectHorizWHS = 0;
-	//hidden var mRectHorizXS = 0;
-	//hidden var mRectHorizYS = new [mRectHorizY.size() ];
 		
 	hidden var mLabelFont = null; //Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_RED;
 	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
-	
-	//hidden var mScaleY;
-	//hidden var mScaleX;
-	
-	// layout of screen
-	// hidden var mScr;
 	
 	// original history = 0, long term history is 1
 	hidden var mView = 0;
@@ -92,22 +49,15 @@ class HistoryView extends Ui.View {
 	}
 	
 	function onLayout(dc) {
-		
-		// variables already set
-		//if (mLabelValueLocX == null) {return true;}
 
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
 		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
 		chartHeight = a.toNumber();
 		a = null;
-		
-		// load JSON
-		//mScr = Ui.loadResource(Rez.JsonData.jsonStatsHist);
-		
+
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
-    	//ctrX = dc.getWidth() / 2;
     	dispH = dc.getHeight();
     	dispW = dc.getWidth();
     	ctrX = dispW / 2;
@@ -115,12 +65,8 @@ class HistoryView extends Ui.View {
 		// define box about centre
 		// leftX should be on left side of screen aligned with Y axis
 		leftX = ctrX - cGridWidth/2; // mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
-		//rightX = ctrX + cGridWidth/2;
-		// 45 *2 is height of chart
-		//ceilY = ctrY - chartHeight/2;
 		
 		floorY = (dispH * 71) / 100;
-		// floorY = ctrY + chartHeight/2;
 		
 		// in the trend view we want to use the maximum width of the screen ie the point at which all lines can be drawn
 		// first part of code is common so think about new variables
@@ -245,7 +191,7 @@ class HistoryView extends Ui.View {
 		if ( mView == 0 ) {
 			drawHistory(dc);
 		} else {
-			drawLongTermTest(dc);
+			drawLongTerm(dc);
 		}
 		
 	}
@@ -323,11 +269,7 @@ class HistoryView extends Ui.View {
 		var startMoment = Time.now();
 		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
 
-    	// loads up resGL;
-    	// for test purposes return timestamp of test data or incoming value!    	
-    	// returns real utcStart ie one passed or in test code the first date in the test data
-		// 
-		
+    	// loads up resGL;		
 		// need to check whether we have loaded results already and have _res as available and array
 		if (GG.resGL == null) {
 			// load data for history	
@@ -339,15 +281,14 @@ class HistoryView extends Ui.View {
 			_resT = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
 			GG.calcTrends( utcStart, 0.0, _resT[0]);
-			// want to see mTrendST, LT, MT values
-			
+			// want to see mTrendST, LT, MT values from this	
 		}
 		// Hopefully now mTrendXX setup
 		
 		//TEST CODE
 		if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
-		Sys.println("_res = "+_resT);
-		Sys.println("resGL="+GG.resGL);
+		Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
+		// END TEST CODE
 		
 		// Determine range of data - already done in load of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
@@ -482,15 +423,8 @@ class HistoryView extends Ui.View {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
 			var str = format(" $1$ ",[num.format("%d")] );	
-			// using custom font so not needed
-			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
-			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
-			//} else {
-			//var _ind = i*2+8; 		
-			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
 			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
 			yInit += yStep;
-			//}
 		}
 		
 	}
@@ -500,6 +434,9 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+	
+		var labelList = new [MAX_DISPLAY_VAR];
+		var resultsIndexList = new [MAX_DISPLAY_VAR];
 		
 		if ( $.results == null) {
 			prepResults();

@@ -212,6 +212,9 @@ module GlanceGen
 		//var minUtc = _utc; // can't be after today unless wrapped
 		var val;
 		var count=0;
+		var _real = 0; // real data days
+		
+		Sys.println("orgData");
 		
 		// find data range so we can work out number of entries
 		//for (var i=0; i < RESGL_ARRAY_SIZE; i+=GL_SET_SIZE) {
@@ -226,16 +229,11 @@ module GlanceGen
 		var _str2 = ((minUtc - minUtc % 86400) / 86400);
 		var _str3 = ((_utc - _utc % 86400) / 86400);
 		count = _str3 - _str2 + 1;
+		Sys.println("Days covered ="+count);		
 		
-		//intln("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
+		//Sys.println("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
 		
-		if (count <= 3) {
-			Sys.println(" Not enough dates found for trend!");
-			return false;
-		} else {
-			Sys.println("Days found ="+count);
-		}
-		
+		// Count will always be 1 or more as if we test today as first test then still have one result
 		mSortedRes = new [count];
 		var mSortedCnt = new [ count];
 		// zero array
@@ -251,19 +249,21 @@ module GlanceGen
 			var tmp = resGL[i];
 			if ( tmp == 0) { continue; } // no date data
 			
-			//var _str = ((tmp - tmp % 86400) / 86400);
-			
 			val = (count-1) - (mCurrDay - (tmp - tmp % 86400) / 86400); // get day number
 			val = val.toNumber();
 						
 			// HRV might be zero but unlikley
 			mData = resGL[i+1];
 			
-			//Sys.println("Today="+mCurrDay+" looking at day:"+_str+" day index="+val+" res index "+i+" HRV value="+mData);
+			// TEST CODE
+			//var _str = ((tmp - tmp % 86400) / 86400);
+			//Sys.println("Today="+mCurrDay+" looking at day:"+_str+" day index="+val+" res index "+i+" HRV value="+mData);			
+			// END TEST CODE
 			
 			if ( mData == 0.0) { 
 				continue; 
 			} else {
+				if ( mSortedRes[val] == 0) { _real++;} // had a real day ie no data already
 				mSortedRes[val] += mData;
 				mSortedCnt[val] = mSortedCnt[val]+1;			
 			}						
@@ -279,8 +279,19 @@ module GlanceGen
 		
 		//Sys.println("Sorted "+count+" days with o/p="+mSortedRes);
 		
+		// We now have an array covering full range of dates of tests. Will have 0 when no test done
+
 		mSortedCnt = null;
-		return true;
+		// Count is just the difference in dates between youngest and oldest. Actual entries may vary!!
+		Sys.println("Days with data ="+_real);
+		
+		// need three real points for trend				
+		if (_real < 3) { // was <=
+			Sys.println(" Not enough dates found for trend!");
+			return false;
+		} else {
+			return true;
+		}		
 	}
 
 //Trend
@@ -300,6 +311,8 @@ module GlanceGen
 	function calcTrends( _utc, _HRV, _minUtc) {		
 		var mEnough = false;
 		var HRVDelta = 0.0;
+		
+		Sys.println("calcTrends");
 		
 		// trend data y=a+bx and R2 [a, b, r]		
 		mTrendLT = [0.0, 0.0, 0.0];
