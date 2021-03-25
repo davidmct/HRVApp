@@ -327,7 +327,7 @@ class HistoryView extends Ui.View {
 			// now need to work out first day in data. 
 			// - every day has an entry in ordered days and may contain zero entries
 			// - resGL list may not have entry on this day as only results days
-			sDay = _maxDate - numDaysMax * 86400;
+			sDay = _maxDate - numDaysMax * 86400; // in time format
 			
 		} else {
 			// days has number of entries and we know it will fit on chart
@@ -341,12 +341,12 @@ class HistoryView extends Ui.View {
 		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
 		// Need to check how range matches actual values
 		// Note: day calc OK as we are not worried about timing within day
-		
+
+		// ------ do scatter plot ----------
+		// points in white		
 		var yCoord;
 		var xDate;
 		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-		// ------ do scatter plot ----------
-		// points in white
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {
 			// is date in range
 			if (GG.resGL[d] >= sDay) {
@@ -366,6 +366,9 @@ class HistoryView extends Ui.View {
 		if (_EnT ) {
 			// Plot regression lines as should have some! Check each one for 0 entries
 			// pick colours for each
+			
+			// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen
+			// 
 		
 		}
 		

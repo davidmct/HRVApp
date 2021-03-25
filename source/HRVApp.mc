@@ -22,6 +22,8 @@ using HRVStorageHandler as mStorage;
 // Added Ln(RMSSD) or RMSSD to test view via setting. Also changed range of scale factor.
 // Fixed bug in glance data sortedDays. Used Count as gap indays but needed real days count as well for trend .. to to put in Widget
 
+// Regression needs checking to see if enough points ie more than 3
+
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
 // Added VenuSQ
