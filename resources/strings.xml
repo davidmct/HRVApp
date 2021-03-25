@@ -101,7 +101,7 @@
 	<string id="ThresholdErrorT">Range 0.1-0.4</string>
 	<string id="LogT">Ln(RMSSD) scale</string> 
 	<string id="LogP">Select scale factor</string> 
-	<string id="LogErrorT">Range 1.0-50.0</string>
+	<string id="LogErrorT">Range 1.0-1000.0</string>
 	<string id="rT">rMSSD?</string>
 	<string id="rP">On for rMSSD</string>
 <!-- 

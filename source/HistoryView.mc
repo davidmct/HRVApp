@@ -89,7 +89,7 @@ class HistoryView extends Ui.View {
 			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
 			// stepping for trends. Not setting to 3 then determines how many days we can show
 			// alternatively we could work out how many days available and increase pitch 
-			xStep = 3;		
+			xStep = 4;		
 		}
 		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
@@ -259,6 +259,7 @@ class HistoryView extends Ui.View {
 	function drawLongTerm(dc) {
 		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
+	    var _EnT = false; // enable trend if enough data
 	    var _x = ctrX;
         var _y = (dispH * 88 ) / 100;		
 		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
@@ -272,15 +273,15 @@ class HistoryView extends Ui.View {
     	// loads up resGL;		
 		// need to check whether we have loaded results already and have _res as available and array
 		if (GG.resGL == null) {
-			// load data for history	
-			
+			// load data for history				
 			Sys.println("Loading Trend HRV results");
 			
 			// _resT is minD, MaxD, minHRV, maxHRV, count of tests
 			// retrieve data, assume no new result and don't compare min/max to test values
 			_resT = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
-			GG.calcTrends( utcStart, 0.0, _resT[0]);
+			// returns true if have more than 2 real days
+			_EnT = GG.calcTrends( utcStart, 0.0, _resT[0]);
 			// want to see mTrendST, LT, MT values from this	
 		}
 		// Hopefully now mTrendXX setup
@@ -319,18 +320,21 @@ class HistoryView extends Ui.View {
 		// We can then work out maximum number of days to plot
 		var numDaysMax = _cWidth / xStep;
 		
+		var sDay; //this day is the day we must be greater than or equal to for plotting
+		
 		if ( days > numDaysMax) { 
 			days = numDaysMax; // number of days so not DATE format
 			// now need to work out first day in data. 
 			// - every day has an entry in ordered days and may contain zero entries
 			// - resGL list may not have entry on this day as only results days
-			
+			sDay = _maxDate - numDaysMax * 86400;
 			
 		} else {
-			// days has number of entries
-		
+			// days has number of entries and we know it will fit on chart
+			sDay = _minDate; // start at earliest
 		}
-		
+				
+		Sys.println("Date info: _minDate:"+_minDate+", _maxDate:"+_maxDate+", days:"+days+", max days in chart W:"+numDaysMax);
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -338,18 +342,42 @@ class HistoryView extends Ui.View {
 		// Need to check how range matches actual values
 		// Note: day calc OK as we are not worried about timing within day
 		
+		var yCoord;
+		var xDate;
+		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+		// ------ do scatter plot ----------
+		// points in white
+		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {
+			// is date in range
+			if (GG.resGL[d] >= sDay) {
+				xDate = (GG.resGL[d] - _minDate ) / 86400;
+				xDate = xDate.toNumber() * xStep;
+				yCoord = scale( GG.resGL[d+1]);
+				Sys.println("xDate: "+xDate+" yCoord: "+yCoord);
+				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
+			}		
+		}
+		
 		// Save regression data from test just completed 
 		// - will need to only draw lines over date range drawn on screen using pitch
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
 		// Need to check what X value was used to calc regression and use same
+		if (_EnT ) {
+			// Plot regression lines as should have some! Check each one for 0 entries
+			// pick colours for each
+		
+		}
+		
 		
 		// Could plot line through averages as data should be in glance array
 		// Need to again check how day numbers are calculated and use same - array was ordered in time ie [0] is oldest
 		
 		// mSortedRes contains daily averages
-		
 		Sys.println("ordered days: "+GG.mSortedRes);
+		
+		// draw the data 
+		dc.setPenWidth(2);	
 		
 		var _listSize = GG.mSortedRes.size();		
 		// need to TEST FOR not enough entries for a line
