@@ -196,64 +196,80 @@ class HistoryView extends Ui.View {
 		
 	}
 
-(:debug)	
-	function drawLongTermTest(dc) {
+(:notdebugHist)
+	function loadTest() {
+	}
 	
-	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
-	    var _x = ctrX;
-        var _y = (dispH * 88 ) / 100;		
-		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
-		
-		// Need to load required data
-		// can use existing function...		
-		var _stats = [ 0, 0, 0, 0];
-		var startMoment = Time.now();
-		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+(:debugHist)	
+	function loadTest( _baseUtc) {
 	
-		// TEST CODE
-		GG.mSortedRes = [ 
-			10,12,14,16,18,20,22,24,26,28,
-			31,34,37,40,43,46,49,52,55,58,
-			54,50,46,42,38,34,30,26,22,18,
-			10,12,14,16,18,20,22,24,26,28,
-			31,34,37,40,43,46,49,52,55,58,
-			54,50,46,42,38,34,30,26,22,18,
-			10,12,14,16,18,20,22,24,26,28,
-			31,34,37,40,43,46,49,52,55,58,
-			54,50,46,42,38,34,30,26,22,18,
-			21,24,27,30,33,36,39,42,45,48
-		];
+		var testD;
 		
-		defineRange( dc, 100, 10, 58);
+		Sys.println("loadTest utc base: "+_baseUtc);
 		
-		Sys.println("ordered days: "+GG.mSortedRes);
-		var days = 100;
+		testD = [ 4150800,24,
+			3985200,26,
+			3988800,22,
+			3996000,30,
+			3895200,35,
+			3812400,38,
+			3726000,43,
+			3639600,42,
+			3553200,39,
+			3466800,20,
+			3380400,17,
+			3294000,35,
+			3207600,23,
+			3121200,23,
+			3034800,25,
+			2948400,26,
+			2862000,19,
+			2775600,24,
+			2689200,26,
+			2602800,22,
+			2516400,30,
+			2430000,35,
+			2343600,38,
+			2257200,43,
+			2170800,42,
+			2170800,39,
+			2170800,20,
+			1911600,17,
+			1825200,35,
+			1738800,23,
+			1652400,23,
+			1566000,25,
+			1479600,26,
+			1393200,19,
+			1306800,24,
+			1220400,26,
+			1134000,22,
+			1047600,30,
+			961200,30,
+			874800,30,
+			788400,30,
+			702000,30,
+			615600,30,
+			529200,30];	
 		
-		var _listSize = GG.mSortedRes.size();		
-		// need to TEST FOR not enough entries for a line
-		if (_listSize < 2) { return;}
+		GG.resetResGLArray();
+			
+		// Write data into array as much as we have
+		for(var i = 0; i < testD.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
+			GG.resGL[i+1] = testD[i+1]; //HRV
+			GG.resGLIndex++;
+		}
 		
-		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
-		var _index = _listSize - days;
-		var x1 = 0;
-		var y1 = scale( GG.mSortedRes[_index]);
-		_index++; // move past initial point
-		var x2;
-		var y2;
-		for ( var i=0; i < days - 1; i++) { // need to test ranges used
-			x2 = xStep * i;
-			y2 = scale( GG.mSortedRes[_index]);
-			Sys.println("-index="+_index);
-			_index++;
-			if (y2 != 0) {
-				// have a data point so update
-				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
-				y1 = y2;
-				x1 = x2;
-			}
-		}	
-	
-	
+		Sys.println("Created resGL:"+GG.resGL);
+		
+		// Save to storage
+		GG.storeResGL();
+		
+		// discard memory to force load
+		GG.resGL = null;	
+		GG.resGLIndex = 0;
+		testD = null;		
 	}
 	
 	function drawLongTerm(dc) {
@@ -269,6 +285,8 @@ class HistoryView extends Ui.View {
 		var _stats = [ 0, 0, 0, 0];
 		var startMoment = Time.now();
 		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+		
+		loadTest( utcStart);
 
     	// loads up resGL;		
 		// need to check whether we have loaded results already and have _res as available and array
@@ -396,6 +414,7 @@ class HistoryView extends Ui.View {
 		for ( var i=0; i < days - 1; i++) { // need to test ranges used
 			x2 = xStep * i;
 			y2 = scale( GG.mSortedRes[_index]);
+			Sys.println("y2:"+y2);
 			//Sys.println("-index="+_index);
 			_index++;
 			if (y2 != 0) {
