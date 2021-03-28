@@ -20,7 +20,7 @@ using HRVStorageHandler as mStorage;
 // Adding second history screen with HRV data plot over as many days as fits
 // Remove (I) indicator as now not needed and changed to FIT status
 // Added Ln(RMSSD) or RMSSD to test view via setting. Also changed range of scale factor.
-// Fixed bug in glance data sortedDays. Used Count as gap indays but needed real days count as well for trend .. to to put in Widget
+// Fixed bug in glance data sortedDays. Used Count as gap in days but needed real days count as well for trend .. to put in Widget
 
 // Regression needs checking to see if enough points ie more than 3
 

@@ -102,6 +102,7 @@ class HistoryView extends Ui.View {
 
     function scale(num) {
     	if (num == null) { return 0;}
+    	if (num < floor) {return 0;} // will hit x axis and equals lowest value in range NOT necessarily actual scaled value
 		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 	
@@ -245,12 +246,15 @@ class HistoryView extends Ui.View {
 			1220400,26,
 			1134000,22,
 			1047600,30,
-			961200,30,
-			874800,30,
-			788400,30,
-			702000,30,
-			615600,30,
-			529200,30];	
+			961200,35,
+			874800,38,
+			788400,43,
+			702000,42,
+			615600,39,
+			529200,20,
+			442800,17,
+			442800,35		
+			];	
 		
 		GG.resetResGLArray();
 			
@@ -304,9 +308,11 @@ class HistoryView extends Ui.View {
 		}
 		// Hopefully now mTrendXX setup
 		
-		//TEST CODE
-		if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
-		Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
+		// TEST CODE in TEST MODE
+		if ( $.mTestMode) {
+			if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
+			Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
+		}
 		// END TEST CODE
 		
 		// Determine range of data - already done in load of data
@@ -365,18 +371,19 @@ class HistoryView extends Ui.View {
 		var yCoord;
 		var xDate;
 		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {
+		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
+		 	var _date =	GG.resGL[d];	
 			// is date in range
-			if (GG.resGL[d] >= sDay) {
-				xDate = (GG.resGL[d] - _minDate ) / 86400;
+			if (_date >= sDay && _date > 0) {
+				xDate = (_date - _minDate ) / 86400;
 				xDate = xDate.toNumber() * xStep;
 				yCoord = scale( GG.resGL[d+1]);
-				Sys.println("xDate: "+xDate+" yCoord: "+yCoord);
+				//Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
 		}
 		
-		// Save regression data from test just completed 
+		// Use regression data from test just completed 
 		// - will need to only draw lines over date range drawn on screen using pitch
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
@@ -405,24 +412,29 @@ class HistoryView extends Ui.View {
 		if (_listSize < 2) { return;}
 		
 		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
-		var _index = _listSize - days;
+		var _index = _listSize - numDaysMax - 1; // plot point at x=0 so get additional point
 		var x1 = 0;
 		var y1 = scale( GG.mSortedRes[_index]);
+		
+		Sys.println("_index ="+_index+", listsize="+_listSize);
+		
 		_index++; // move past initial point
 		var x2;
 		var y2;
-		for ( var i=0; i < days - 1; i++) { // need to test ranges used
+		for ( var i=1; i < numDaysMax; i++) { // need to test ranges used
 			x2 = xStep * i;
-			y2 = scale( GG.mSortedRes[_index]);
-			Sys.println("y2:"+y2);
-			//Sys.println("-index="+_index);
-			_index++;
-			if (y2 != 0) {
+			//y2 = scale( GG.mSortedRes[_index]);			
+			var _pt = GG.mSortedRes[_index];
+			if ( _pt != 0) {
+				y2 = scale( _pt);
+				Sys.println("y2:"+y2+" from "+_pt);
+				//Sys.println("-index="+_index);
 				// have a data point so update
 				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
 				y1 = y2;
 				x1 = x2;
 			}
+			_index++;
 		}
 	
 	}
