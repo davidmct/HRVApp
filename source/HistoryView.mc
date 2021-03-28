@@ -329,7 +329,7 @@ class HistoryView extends Ui.View {
 		var _maxDate = (_resT[1] - _resT[1] % 86400); 
 		var _str3 = ( _maxDate / 86400);
 		var days = _str3 - _str2 + 1;
-		Sys.println("Days covered by tests ="+days);
+		//Sys.println("Days covered by tests ="+days);
 		
 		if (days <= 1) { return;}
 		
@@ -382,18 +382,36 @@ class HistoryView extends Ui.View {
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
 		}
-		
+
+		var _listSize = GG.mSortedRes.size();	
+				
 		// Use regression data from test just completed 
 		// - will need to only draw lines over date range drawn on screen using pitch
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
-		// Need to check what X value was used to calc regression and use same
+		// Regression starts at a nominal day 1
 		if (_EnT ) {
 			// Plot regression lines as should have some! Check each one for 0 entries
 			// pick colours for each
 			
-			// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen
-			// 
+			// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen			
+			var _sX; // start X
+			var _sY; // start Y
+			var _eX;
+			var _eY;
+			
+			// check data exists. ie more than 45 days of data
+			if (GG.mTrendLT !=  null && GG.mTrendLT[0] != 0) {
+				// we know that trend would not be created unless we had this much data
+				_sX = 0; // starts at earliest day
+				_eX = _listSize * xStep;
+				_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
+				_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
+				dc.setPenWidth(2);	
+				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
+			}
+			
 		
 		}
 		
@@ -402,21 +420,20 @@ class HistoryView extends Ui.View {
 		// Need to again check how day numbers are calculated and use same - array was ordered in time ie [0] is oldest
 		
 		// mSortedRes contains daily averages
-		Sys.println("ordered days: "+GG.mSortedRes);
+		//Sys.println("ordered days: "+GG.mSortedRes);
 		
 		// draw the data 
 		dc.setPenWidth(2);	
-		
-		var _listSize = GG.mSortedRes.size();		
+		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+					
 		// need to TEST FOR not enough entries for a line
 		if (_listSize < 2) { return;}
 		
-		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
 		var _index = _listSize - numDaysMax - 1; // plot point at x=0 so get additional point
 		var x1 = 0;
 		var y1 = scale( GG.mSortedRes[_index]);
 		
-		Sys.println("_index ="+_index+", listsize="+_listSize);
+		//Sys.println("_index ="+_index+", listsize="+_listSize);
 		
 		_index++; // move past initial point
 		var x2;
@@ -427,7 +444,7 @@ class HistoryView extends Ui.View {
 			var _pt = GG.mSortedRes[_index];
 			if ( _pt != 0) {
 				y2 = scale( _pt);
-				Sys.println("y2:"+y2+" from "+_pt);
+				// Sys.println("y2:"+y2+" from "+_pt);
 				//Sys.println("-index="+_index);
 				// have a data point so update
 				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
