@@ -205,6 +205,7 @@ class HistoryView extends Ui.View {
 	function loadTest( _baseUtc) {
 	
 		var testD;
+		var testD2;
 		
 		Sys.println("loadTest utc base: "+_baseUtc);
 		
@@ -255,13 +256,72 @@ class HistoryView extends Ui.View {
 			442800,17,
 			442800,35		
 			];	
+			
+		testD2 = [
+			4586400,24,
+			4500000,26,
+			4413600,22,
+			4327200,30,
+			4240800,35,
+			4154400,38,
+			4064400,43,
+			3985200,42,
+			3988800,39,
+			3996000,20,
+			3895200,17,
+			3812400,35,
+			3726000,23,
+			3639600,23,
+			3553200,25,
+			3466800,26,
+			3380400,19,
+			3294000,24,
+			3207600,26,
+			3121200,22,
+			3034800,30,
+			2948400,35,
+			2862000,38,
+			2775600,43,
+			2689200,42,
+			2602800,39,
+			2516400,20,
+			2430000,17,
+			2343600,35,
+			2257200,23,
+			2170800,23,
+			2170800,25,
+			2170800,26,
+			1911600,19,
+			1825200,24,
+			1738800,26,
+			1652400,22,
+			1566000,30,
+			1479600,35,
+			1393200,38,
+			1306800,43,
+			1220400,42,
+			1134000,39,
+			1047600,20,
+			961200,17,
+			874800,35,
+			788400,23,
+			702000,23,
+			615600,25,
+			529200,26,
+			442800,19,
+			442800,24,
+			345600,26,
+			259200,22,
+			259200,30,
+			172800,35 ];
+		
 		
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
-			GG.resGL[i+1] = testD[i+1]; //HRV
+		for(var i = 0; i < testD2.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
+			GG.resGL[i+1] = testD2[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -273,7 +333,8 @@ class HistoryView extends Ui.View {
 		// discard memory to force load
 		GG.resGL = null;	
 		GG.resGLIndex = 0;
-		testD = null;		
+		testD = null;	
+		testD2 = null;	
 	}
 	
 	function drawLongTerm(dc) {
@@ -366,7 +427,7 @@ class HistoryView extends Ui.View {
 		}
 		
 		Sys.println("_index ="+_index+", listsize="+_listSize);		
-		Sys.println("Date info: _minDate:"+_minDate+", _maxDate:"+_maxDate+", days covered plot:"+days+", max days in chart W:"+numDaysMax);
+		Sys.println("Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", days covered plot:"+days+", max days in chart W:"+numDaysMax);
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -379,14 +440,17 @@ class HistoryView extends Ui.View {
 		var yCoord;
 		var xDate;
 		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+		
+		Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
+		
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
 			// is date in range
 			if (_date >= sDay && _date > 0) {
-				xDate = (_date - _minDate ) / 86400;
-				xDate = xDate.toNumber() * xStep;
+				xDate = (_date - sDay) / 86400;
 				yCoord = scale( GG.resGL[d+1]);
-				//Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
+				Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
+				xDate = xDate.toNumber() * xStep;
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
 		}
@@ -441,27 +505,30 @@ class HistoryView extends Ui.View {
 		dc.setPenWidth(2);	
 		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
 
+		var _ind = _index; // don't corrupt index just in case
 		var x1 = 0;
-		var y1 = scale( GG.mSortedRes[_index]);
+		var y1 = scale( GG.mSortedRes[_ind]);
 		
-		_index++; // move past initial point
-		var x2;
+		Sys.println("Results per day Size:"+GG.mSortedRes.size()+" data:"+GG.mSortedRes);
+		
+		_ind++; // move past initial point
+		var x2 = 0;
 		var y2;
-		for ( var i=_index; i < _listSize; i++) { // need to test ranges used
-			x2 = xStep * i;
-			//y2 = scale( GG.mSortedRes[_index]);			
-			var _pt = GG.mSortedRes[_index];
+		//for ( var i=_index; i < _listSize; i++) { // need to test ranges used
+		while (_ind < _listSize)  { 
+			x2 += xStep;		
+			var _pt = GG.mSortedRes[_ind];
 			if ( _pt != 0) {
 				y2 = scale( _pt);
-				// Sys.println("y2:"+y2+" from "+_pt);
-				//Sys.println("-index="+_index);
+				Sys.println("y2:"+y2+" from "+_pt);
 				// have a data point so update
 				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
 				y1 = y2;
 				x1 = x2;
 			}
-			_index++;
-		}
+			Sys.println("_ind="+_ind);
+			_ind++;
+		} 
 	
 	}
 	
