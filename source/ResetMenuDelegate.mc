@@ -1,6 +1,7 @@
 using Toybox.WatchUi as Ui;
 using Toybox.Application as App;
 using Toybox.Graphics;
+using Toybox.System as Sys;
 
 using HRVStorageHandler as mStorage;
 using GlanceGen as GG;
@@ -16,12 +17,27 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
         menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
         menu.addItem(new Ui.MenuItem("No", null, "2", null));    
      	
-     	if( id.equals("s")) {
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_IMMEDIATE ); 
+     	//if( id.equals("s")) {
+ 	    //    Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetSettings)), Ui.SLIDE_IMMEDIATE ); 
+        //}
+        //else if (id.equals("r")) {
+ 	    //    Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_IMMEDIATE );
+        //}
+        //else if (id.equals("t")) {
+ 	    //    Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setTEST)), Ui.SLIDE_IMMEDIATE );
+        //}
+        
+        var _lbl = :setResetSettings;
+        if( id.equals("s")) {
+        	_lbl = :setResetSettings;
         }
         else if (id.equals("r")) {
- 	        Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setResetResults)), Ui.SLIDE_IMMEDIATE );
+ 	        _lbl= :setResetResults;
         }
+        else if (id.equals("t")) {
+        	_lbl = :setTEST;
+        }
+ 	    Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(_lbl)), Ui.SLIDE_IMMEDIATE );
     }
     
     function setResetSettings(value) {
@@ -33,6 +49,15 @@ class ResetMenuDelegate extends Ui.Menu2InputDelegate {
             //$.mTestControl.fCheckSwitchType( :SensorType, oldSensor);   
         }	
     }
+    
+    function setTEST(value) {
+    	if (value == 1) {
+    		$.mTestMode = true;
+    		Sys.println("T-mode");
+    	} else {
+    		$.mTestMode = false;
+    	}
+    }	
     
     function setResetResults(value) {
 		if (value == 1) { 

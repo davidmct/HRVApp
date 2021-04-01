@@ -18,7 +18,12 @@ using HRVStorageHandler as mStorage;
 
 //0.6.5
 // Adding second history screen with HRV data plot over as many days as fits
+// Remove (I) indicator as now not needed and changed to FIT status
+// Added Ln(RMSSD) or RMSSD to test view via setting. Also changed range of scale factor.
+// Fixed bug in glance data sortedDays. Used Count as gap in days but needed real days count as well for trend .. to put in Widget
+// Turn on backlight when HRV trend results shown
 
+// Regression needs checking to see if enough points ie more than 3
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
@@ -109,7 +114,7 @@ using HRVStorageHandler as mStorage;
 //   
 
 var mDebugging = false;
-var mDebuggingANT = false;
+//var mDebuggingANT = false;
 var mDumpIntervals = true;
 // dump results array on every call to view history
 var mDebuggingResults = false;
@@ -130,6 +135,7 @@ class myException extends Lang.Exception {
 // Settings variables
 //var timestampSet;
 var appNameSet;
+var mTestMode = false; // add functions for testing
 
 var soundSet;
 var vibeSet;
@@ -190,6 +196,9 @@ var mFitControl;
 var vUpperThresholdSet; // long % over
 var vLowerThresholdSet; // short period under %
 
+// if true then display rMSSD otherwise LN version
+var mRM;
+
 // The device type
 var mDeviceType;
 //var customFont; // load in init if low res. saves load in every view
@@ -223,7 +232,10 @@ class HRVAnalysis extends App.AppBase {
 		//mAntID = Properties.getValue("pAuxHRAntID");
 		//mAuxHRAntID = mAntID; // default
 		
-		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mTestMode = Properties.getValue("pTest"); 
+		Sys.println("T:"+$.mTestMode);
+		
 		mSensorTypeExt = SENSOR_INTERNAL;
 		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
@@ -232,7 +244,6 @@ class HRVAnalysis extends App.AppBase {
     
     function initialize() {
     	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
-        
         //$._m$.pp.getApp();
         
         // Retrieve device type

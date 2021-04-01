@@ -11,11 +11,7 @@ using GlanceGen as GG;
 
 // Show the largest number of samples possible in width of HRV measurements used by glance processing
 
-		// Title - X, Y : 0, 1
-		// [mLabelValueLox X, Y] x 11: 2, 3; 4, 5; 6, 7; 8, 9; 10, 11; 12,13; 14,15; 16,17; 18, 19; 20, 21;	22,23
-		// mRectHorizY[7] : 24-30
-		// mRectHorizWHS , HorizXS : 31, 32
-
+// this version no longer uses JSON for history
 (:UseJson)
 class HistoryView extends Ui.View {
 	
@@ -24,60 +20,25 @@ class HistoryView extends Ui.View {
     hidden var ctrX;
 	hidden var ctrY;
 	hidden var leftX;
-	//hidden var rightX;
-	//hidden var ceilY;
 	hidden var floorY;
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
+	hidden var range;
+	hidden var ceil;
 	hidden var dispH;
 	hidden var dispW;
 	hidden var _cWidth; // revised width of chart
 	hidden var _lineStart; // start of grid in Y
 	hidden var _lineEnd; // last line of Grid in Y
 	
-	//hidden var customFont = null;
-	
-	//0.4.3
-	//hidden var numResultsToDisplay = 0;
-	
-	hidden var labelList = new [MAX_DISPLAY_VAR];
-	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
-    
-    //hidden var mTitleLoc = [50, 11]; // %
-	//hidden var mTitleLocS = [0,0];	
-	//hidden var mTitleLabels = ["History"];
-	
-	// coordinates of set of labels as %
-	// split to 1D array to save memory
-	// Labelx1,2,3, ylabel0...6, xAxisLabel
-	//hidden var mLabelValueLocX = [ 30, 64, 50, 11, 11, 11, 11, 11, 11, 11, 70];
-	//hidden var mLabelValueLocY = [ 79, 79, 88, 27, 36, 43, 50, 57, 64, 71, 23];
-		
-	// x%, y%, width/height. 
-	//hidden var mRectHorizWH = 64;
-	//hidden var mRectHorizX = 18;
-	//hidden var mRectHorizY = [ 28, 36, 43, 50, 57, 64, 71 ];
-	
-	// scaled variables
-	//hidden var mLabelValueLocXS = new [ mLabelValueLocX.size() ];
-	//hidden var mLabelValueLocYS = new [ mLabelValueLocY.size() ];
-	
-	//hidden var mRectHorizWHS = 0;
-	//hidden var mRectHorizXS = 0;
-	//hidden var mRectHorizYS = new [mRectHorizY.size() ];
+	hidden var _resT = new[5];
 		
 	hidden var mLabelFont = null; //Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mRectColour = Gfx.COLOR_RED;
 	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
-	
-	//hidden var mScaleY;
-	//hidden var mScaleX;
-	
-	// layout of screen
-	// hidden var mScr;
 	
 	// original history = 0, long term history is 1
 	hidden var mView = 0;
@@ -88,22 +49,15 @@ class HistoryView extends Ui.View {
 	}
 	
 	function onLayout(dc) {
-		
-		// variables already set
-		//if (mLabelValueLocX == null) {return true;}
 
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
 		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
 		chartHeight = a.toNumber();
 		a = null;
-		
-		// load JSON
-		//mScr = Ui.loadResource(Rez.JsonData.jsonStatsHist);
-		
+
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
-    	//ctrX = dc.getWidth() / 2;
     	dispH = dc.getHeight();
     	dispW = dc.getWidth();
     	ctrX = dispW / 2;
@@ -111,12 +65,8 @@ class HistoryView extends Ui.View {
 		// define box about centre
 		// leftX should be on left side of screen aligned with Y axis
 		leftX = ctrX - cGridWidth/2; // mScr[32]+2; // 0.6.4 ctrX - cGridWidth/2;
-		//rightX = ctrX + cGridWidth/2;
-		// 45 *2 is height of chart
-		//ceilY = ctrY - chartHeight/2;
 		
 		floorY = (dispH * 71) / 100;
-		// floorY = ctrY + chartHeight/2;
 		
 		// in the trend view we want to use the maximum width of the screen ie the point at which all lines can be drawn
 		// first part of code is common so think about new variables
@@ -127,7 +77,7 @@ class HistoryView extends Ui.View {
 		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
 		var _farX2 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(_lineEnd - ctrY, 2) );
 		
-		Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
+		//Sys.println("_farX 1, 2:"+_farX1+", "+_farX2);
 		
 		// trend Width is smallest of two
 		// this is the new width to wrote in for Trend graph. Starts at LeftX
@@ -139,9 +89,9 @@ class HistoryView extends Ui.View {
 			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
 			// stepping for trends. Not setting to 3 then determines how many days we can show
 			// alternatively we could work out how many days available and increase pitch 
-			xStep = 3;		
+			xStep = 4;		
 		}
-		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -152,6 +102,7 @@ class HistoryView extends Ui.View {
 
     function scale(num) {
     	if (num == null) { return 0;}
+    	if (num < floor) {return 0;} // will hit x axis and equals lowest value in range NOT necessarily actual scaled value
 		return (((num - floor) * scaleY) + 0.5).toNumber();
 	}
 	
@@ -245,10 +196,90 @@ class HistoryView extends Ui.View {
 		}
 		
 	}
+
+(:notdebugHist)
+	function loadTest() {
+	}
+	
+(:debugHist)	
+	function loadTest( _baseUtc) {
+	
+		var testD;
+		
+		Sys.println("loadTest utc base: "+_baseUtc);
+		
+		testD = [ 4150800,24,
+			3985200,26,
+			3988800,22,
+			3996000,30,
+			3895200,35,
+			3812400,38,
+			3726000,43,
+			3639600,42,
+			3553200,39,
+			3466800,20,
+			3380400,17,
+			3294000,35,
+			3207600,23,
+			3121200,23,
+			3034800,25,
+			2948400,26,
+			2862000,19,
+			2775600,24,
+			2689200,26,
+			2602800,22,
+			2516400,30,
+			2430000,35,
+			2343600,38,
+			2257200,43,
+			2170800,42,
+			2170800,39,
+			2170800,20,
+			1911600,17,
+			1825200,35,
+			1738800,23,
+			1652400,23,
+			1566000,25,
+			1479600,26,
+			1393200,19,
+			1306800,24,
+			1220400,26,
+			1134000,22,
+			1047600,30,
+			961200,35,
+			874800,38,
+			788400,43,
+			702000,42,
+			615600,39,
+			529200,20,
+			442800,17,
+			442800,35		
+			];	
+		
+		GG.resetResGLArray();
+			
+		// Write data into array as much as we have
+		for(var i = 0; i < testD.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
+			GG.resGL[i+1] = testD[i+1]; //HRV
+			GG.resGLIndex++;
+		}
+		
+		Sys.println("Created resGL:"+GG.resGL);
+		
+		// Save to storage
+		GG.storeResGL();
+		
+		// discard memory to force load
+		GG.resGL = null;	
+		GG.resGLIndex = 0;
+		testD = null;		
+	}
 	
 	function drawLongTerm(dc) {
-		    
+		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
+	    var _EnT = false; // enable trend if enough data
 	    var _x = ctrX;
         var _y = (dispH * 88 ) / 100;		
 		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
@@ -258,33 +289,54 @@ class HistoryView extends Ui.View {
 		var _stats = [ 0, 0, 0, 0];
 		var startMoment = Time.now();
 		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
-
-    	// loads up resGL;
-    	// for test purposes return timestamp of test data or incoming value!    	
-    	// returns real utcStart ie one passed or in test code the first date in the test data
-		// 
 		
+		loadTest( utcStart);
+
+    	// loads up resGL;		
 		// need to check whether we have loaded results already and have _res as available and array
 		if (GG.resGL == null) {
-			// load data for history	
-			
+			// load data for history				
 			Sys.println("Loading Trend HRV results");
 			
-			// res is minD, MaxD, minHRV, maxHRV, count
-			var _res = new [5];	// provides min/max Date, HRV and count
+			// _resT is minD, MaxD, minHRV, maxHRV, count of tests
 			// retrieve data, assume no new result and don't compare min/max to test values
-			_res = GG.retrieveResGL( utcStart, _stats, true);
+			_resT = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
-			GG.calcTrends( utcStart, 0.0, _res[0]);
-			// want to see mTrendST, LT, MT values
-			
+			// returns true if have more than 2 real days
+			_EnT = GG.calcTrends( utcStart, 0.0, _resT[0]);
+			// want to see mTrendST, LT, MT values from this	
 		}
 		// Hopefully now mTrendXX setup
 		
-		// Determine range of data
+		// TEST CODE in TEST MODE
+		if ( $.mTestMode) {
+			if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
+			Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
+		}
+		// END TEST CODE
+		
+		// Determine range of data - already done in load of data
 		// - count # samples, min/max, #days covered, date of latest sample = day N
-		// - output Y scale factor for data
-		//
+		// - output Y scale factor for data		
+		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
+		// need to look at data for last test date
+		// sets ceil, floor, range and scaleY then draws UY axis labels
+		defineRange( dc, _resT[4], _resT[2], _resT[3]);
+		
+		// Number of days covered by data found in results
+		var _minDate = (_resT[0] - _resT[0] % 86400); // Date format 
+		var _str2 = ( _minDate / 86400); // as actual days
+		var _maxDate = (_resT[1] - _resT[1] % 86400); 
+		var _str3 = ( _maxDate / 86400);
+		var days = _str3 - _str2 + 1;
+		
+		Sys.println("Days covered by tests ="+days);
+		
+		if (days <= 1) { return;}
+
+		// this is number of total days we have in results
+		var _listSize = GG.mSortedRes.size();
+				
 		// Work out X scale - limited by pixel number and dot size
 		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
 		// - number of days to plot = min ( #days, W/3)
@@ -296,17 +348,173 @@ class HistoryView extends Ui.View {
 		// We can then work out maximum number of days to plot
 		var numDaysMax = _cWidth / xStep;
 		
+		// plot of day values starts at this position
+		var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
+		var sDay; //this day is the day we must be greater than or equal to for plotting
+		
+		if ( _listSize > numDaysMax) { 
+			days = numDaysMax; // number of days so not DATE format
+			_index = _listSize - days - 1;
+			// now need to work out first day in data. 
+			// - every day has an entry in ordered days and may contain zero entries
+			// - resGL list may not have entry on this day as only results days
+			sDay = _maxDate - numDaysMax * 86400; // in time format			
+		} else {
+			// days has number of entries and we know it will fit on chart
+			sDay = _minDate; // start at earliest
+			_index = 0;
+		}
+		
+		Sys.println("_index ="+_index+", listsize="+_listSize);		
+		Sys.println("Date info: _minDate:"+_minDate+", _maxDate:"+_maxDate+", days covered plot:"+days+", max days in chart W:"+numDaysMax);
+		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
 		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
+		// Need to check how range matches actual values
+		// Note: day calc OK as we are not worried about timing within day
+
+		// ------ do scatter plot ----------
+		// points in white		
+		var yCoord;
+		var xDate;
+		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
+		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
+		 	var _date =	GG.resGL[d];	
+			// is date in range
+			if (_date >= sDay && _date > 0) {
+				xDate = (_date - _minDate ) / 86400;
+				xDate = xDate.toNumber() * xStep;
+				yCoord = scale( GG.resGL[d+1]);
+				//Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
+				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
+			}		
+		}
 		
-		// Save regression data from test just completed 
+		// need to TEST FOR not enough entries for a line
+		if (_listSize < 2) { return;}	
+				
+		// Use regression data from test just completed 
 		// - will need to only draw lines over date range drawn on screen using pitch
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
+		// Regression starts at a nominal day 1
+		if (_EnT ) {
+			// Plot regression lines as should have some! Check each one for 0 entries
+			// pick colours for each
+			
+			// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen			
+			var _sX; // start X
+			var _sY; // start Y
+			var _eX;
+			var _eY;
+			
+			// check data exists. ie more than 45 days of data
+			if (GG.mTrendLT !=  null && GG.mTrendLT[0] != 0 && _listSize > 45) {
+				// we know that trend would not be created unless we had this much data
+				_sX = 0; // starts at earliest day
+				_eX = _listSize * xStep;
+				_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
+				_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
+				dc.setPenWidth(2);	
+				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
+			}
+			
+			// now do monthly
+			
+			
+			// now do weekly
+			
+			
+		
+		}
 		
 		
+		// Could plot line through averages as data should be in glance array
+		// Need to again check how day numbers are calculated and use same - array was ordered in time ie [0] is oldest
+		
+		// mSortedRes contains daily averages
+		//Sys.println("ordered days: "+GG.mSortedRes);
+		
+		// draw the data 
+		dc.setPenWidth(2);	
+		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+
+		var x1 = 0;
+		var y1 = scale( GG.mSortedRes[_index]);
+		
+		_index++; // move past initial point
+		var x2;
+		var y2;
+		for ( var i=_index; i < _listSize; i++) { // need to test ranges used
+			x2 = xStep * i;
+			//y2 = scale( GG.mSortedRes[_index]);			
+			var _pt = GG.mSortedRes[_index];
+			if ( _pt != 0) {
+				y2 = scale( _pt);
+				// Sys.println("y2:"+y2+" from "+_pt);
+				//Sys.println("-index="+_index);
+				// have a data point so update
+				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
+				y1 = y2;
+				x1 = x2;
+			}
+			_index++;
+		}
 	
+	}
+	
+	
+	// Work out data range for Y axis then draw labels assuming 7 lines ie 6 gaps
+	// _dataCnt : number of points we have. Check we have some otherwise default range
+	// _min/_max : min and max of dataset
+	function defineRange( dc, _dataCnt, _min, _max) { 
+		// If no results then set min & max to create a nice graph scale
+		var min = (_min+0.5).toNumber();
+		var max = (_max+0.5).toNumber();
+		
+		if ( 0 == _dataCnt){
+			min = 0;
+			max = 30;
+		}
+
+		// Create the range in blocks of 5
+		ceil = (max + 5) - (max % 5);		
+		floor = min - (min % 5);
+		//if (floor < 0 ) { floor = 0;}
+		
+		// now expand to multiple of 10 as height also multiple of 10. 
+		// Ensure floor doesn't go negative  
+		var test = (ceil - floor) % 10;
+		if (test == 5) { 
+			ceil += 5;
+		} 
+		range = ceil - floor;
+		
+		// chartHeight defines height of chart and sets scale
+		scaleY = chartHeight / range.toFloat();
+		
+		//var _lineStart = (dispH * 27) /100; //% of total height
+		//var _lineEnd = (dispH * 71) / 100;
+		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
+		var yInit = _lineStart;
+		// 11% across
+		var xPos = ( dc.getWidth() * 11) / 100;
+		
+		// Draw the numbers on Y axis	
+		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
+		// Built new font instead
+		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
+		var gap = (ceil-floor);	
+		for (var i=0; i<7; i++) {
+			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
+			// just use whole numbers
+			var str = format(" $1$ ",[num.format("%d")] );	
+			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
+			yInit += yStep;
+		}
+		
 	}
 
 	function drawHistory(dc) {		
@@ -314,6 +522,9 @@ class HistoryView extends Ui.View {
 		var dataCount = 0;
 		var max = 0;
 		var min = 1000;
+	
+		var labelList = new [MAX_DISPLAY_VAR];
+		var resultsIndexList = new [MAX_DISPLAY_VAR];
 		
 		if ( $.results == null) {
 			prepResults();
@@ -405,55 +616,9 @@ class HistoryView extends Ui.View {
 		
 		//Sys.println(" dataCount, min, max: "+dataCount+", "+min+", "+max);
 
-		// If no results then set min & max to create a nice graph scale
-		if(0 == dataCount){
-			min = 0;
-			max = 30;
-		}
-
-		// Create the range in blocks of 5
-		var ceil = (max + 5) - (max % 5);
-		
-		floor = min - (min % 5);
-		//if (floor < 0 ) { floor = 0;}
-		
-		// now expand to multiple of 10 as height also multiple of 10. 
-		// Ensure floor doesn't go negative  
-		var test = (ceil - floor) % 10;
-		if (test == 5) { 
-			ceil += 5;
-		} 
-		var range = ceil - floor;
-		
-		// chartHeight defines height of chart and sets scale
-		scaleY = chartHeight / range.toFloat();
-		
-		//var _lineStart = (dispH * 27) /100; //% of total height
-		//var _lineEnd = (dispH * 71) / 100;
-		var yStep = ((_lineEnd - _lineStart) / 6.0).toNumber();
-		var yInit = _lineStart;
-		// 11% across
-		var xPos = ( dc.getWidth() * 11) / 100;
-		
-		// Draw the numbers on Y axis	
-		// NOTE COULD DRAW ONLY HALF OF THESE ON SMALL SCREENS ie 240x240 use the mDeviceType value
-		// Built new font instead
-		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		var gap = (ceil-floor);	
-		for (var i=0; i<7; i++) {
-			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
-			// just use whole numbers
-			var str = format(" $1$ ",[num.format("%d")] );	
-			// using custom font so not needed
-			//if (($.mDeviceType == RES_240x240) && ( i % 2 == 1 )) {
-			//	dc.drawText( mLabelValueLocXS[3+i], mLabelValueLocYS[3+i], mLabelFont, "", mJust);				
-			//} else {
-			//var _ind = i*2+8; 		
-			//dc.drawText( mScr[_ind], mScr[_ind+1], mLabelFont, str, mJust);
-			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
-			yInit += yStep;
-			//}
-		}
+		// sets ceil, floor, range and scaleY
+		// draws Y axis
+		defineRange( dc, dataCount, min, max);
 		
 		// draw final title
 		_x = (dispW * 70 ) / 100;
@@ -576,9 +741,11 @@ class HistoryView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
+    	Sys.println("History view:"+mView+" hide");
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
-    	GG.resGL = null;
+    	//GG.resGL = null;
+    	GG.purgeMemG();
   		//remove buffer
 		freeResults();  	
     }

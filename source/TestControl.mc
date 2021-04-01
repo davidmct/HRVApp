@@ -355,6 +355,7 @@ class TestController {
     function endTest() {
     	Sys.println("endTest()");
     	testTimer.stop();
+    	Toybox.Attention.backlight(true);
     }
 
     function alert(type)

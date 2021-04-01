@@ -212,6 +212,8 @@ class PoincareView extends Ui.View {
 		}
 		
 		//Sys.println("Poincare: max, min "+max+" , "+min);
+		max = max.toNumber();
+		min = min.toNumber();
 
 		// Create the range in blocks of 5
 		var ceil = (max + 5) - (max % 5);
