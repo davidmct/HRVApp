@@ -319,9 +319,9 @@ class HistoryView extends Ui.View {
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD2.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
-			GG.resGL[i+1] = testD2[i+1]; //HRV
+		for(var i = 0; i < testD.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
+			GG.resGL[i+1] = testD[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -446,7 +446,7 @@ class HistoryView extends Ui.View {
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
 			// is date in range
-			if (_date >= sDay && _date > 0) {
+			if (_date >= sDay) {
 				xDate = (_date - sDay) / 86400;
 				yCoord = scale( GG.resGL[d+1]);
 				Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
