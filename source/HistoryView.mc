@@ -413,18 +413,30 @@ class HistoryView extends Ui.View {
 		var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
 		var sDay; //this day is the day we must be greater than or equal to for plotting
 		
-		if ( _listSize > numDaysMax) { 
-			days = numDaysMax; // number of days so not DATE format
-			_index = _listSize - days - 1;
+		if (_listSize <= numDaysMax) {
+			// we have fewer days than we can display so start at start of day list
+			_index = 0;
+			// our search of results can start at _minDate
+			sDay = _minDate; // not x needs to start from 0
+
+		} else {
+			// we need to start from a point part way along day list
+			_index = _listSize - numDaysMax;
+			sDay = _minDate + _index * 86400; // move date along to align with day average plot
+		}
+
+		//if ( _listSize > numDaysMax) { 
+		//	days = numDaysMax; // number of days so not DATE format
+		//	_index = _listSize - days - 1;
 			// now need to work out first day in data. 
 			// - every day has an entry in ordered days and may contain zero entries
 			// - resGL list may not have entry on this day as only results days
-			sDay = _maxDate - numDaysMax * 86400; // in time format			
-		} else {
+		//	sDay = _maxDate - numDaysMax * 86400; // in time format			
+		//} else {
 			// days has number of entries and we know it will fit on chart
-			sDay = _minDate; // start at earliest
-			_index = 0;
-		}
+		//	sDay = _minDate; // start at earliest
+		//	_index = 0;
+		//}
 		
 		Sys.println("_index ="+_index+", listsize="+_listSize);		
 		Sys.println("Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", days covered plot:"+days+", max days in chart W:"+numDaysMax);
@@ -443,6 +455,7 @@ class HistoryView extends Ui.View {
 		
 		Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
 		
+		// x value of plot needs to start at zero to align with days plot
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
 			// is date in range
