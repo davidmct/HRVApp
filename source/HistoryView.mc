@@ -365,6 +365,7 @@ class HistoryView extends Ui.View {
 			_stats = null;
 			// returns true if have more than 2 real days
 			_EnT = GG.calcTrends( utcStart, 0.0, _resT[0]);
+			utcStart = null;
 			// want to see mTrendST, LT, MT values from this	
 		}
 		// Hopefully now mTrendXX setup
@@ -394,6 +395,9 @@ class HistoryView extends Ui.View {
 		Sys.println("Days covered by tests ="+days);
 		
 		if (days <= 1) { return;}
+		days = null;
+		_str2 = null;
+		_str3 = null;
 
 		// this is number of total days we have in results
 		var _listSize = GG.mSortedRes.size();
@@ -485,12 +489,18 @@ class HistoryView extends Ui.View {
 			var _sY; // start Y
 			var _eX;
 			var _eY;
+
+			// NEED TO CHECK REGRESSION
+			// If we have more days than threshold for trend how many do we use
+			// This should set which is value to multiply x by to get y
+			// Also tells us what value of display X axis to use
 			
+			_eX = _listSize * xStep;
 			// check data exists. ie more than 45 days of data
 			if (GG.mTrendLT !=  null && GG.mTrendLT[0] != 0 && _listSize > 45) {
 				// we know that trend would not be created unless we had this much data
 				_sX = 0; // starts at earliest day
-				_eX = _listSize * xStep;
+				//_eX = _listSize * xStep;
 				_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
 				_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
 				dc.setPenWidth(2);	
@@ -499,10 +509,29 @@ class HistoryView extends Ui.View {
 			}
 			
 			// now do monthly
-			
-			
+			if (GG.mTrendMT !=  null && GG.mTrendMT[0] != 0 && _listSize > 28) {
+				// Have a choice. Either start at last 28 days and go to end date or
+				// 
+				_sX = (_listSize-28) * xStep; // starts at earliest day
+				// _eX = _listSize * xStep;
+				// x for trend starts at 1 and goes for length ???
+				_sY = scale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
+				_eY = scale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
+				dc.setPenWidth(2);	
+				dc.setColor( Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
+				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
+			}
+
 			// now do weekly
-			
+			if (GG.mTrendST !=  null && GG.mTrendST[0] != 0 && _listSize > 7) {
+				_sX = 7 * xStep; // starts at earliest day
+				// _eX = _listSize * xStep;
+				_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
+				_eY = scale( GG.mTrendST[1] * _listSize + GG.mTrendST[0]); 
+				dc.setPenWidth(2);	
+				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
+			}			
 			
 		
 		}
