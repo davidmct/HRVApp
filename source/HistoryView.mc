@@ -527,7 +527,7 @@ class HistoryView extends Ui.View {
 				_sX = 7 * xStep; // starts at earliest day
 				// _eX = _listSize * xStep;
 				_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
-				_eY = scale( GG.mTrendST[1] * _listSize + GG.mTrendST[0]); 
+				_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 
 				dc.setPenWidth(2);	
 				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
