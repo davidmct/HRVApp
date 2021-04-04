@@ -345,9 +345,12 @@ module GlanceGen
 		// might need to range to see how flat...
 		
 		// what is expected for one week (max) trend
-		var _num = (mSortedRes.size() >= 7 ? 6 : mSortedRes.size() - 1);
-		var y = mTrendST[0]+ (mSortedRes.size()-1) * mTrendST[1];
+		// pre 0.6.5 - assume regression from start of array
+		//var _num = (mSortedRes.size() >= 7 ? 6 : mSortedRes.size() - 1);
+		//var y = mTrendST[0]+ (mSortedRes.size()-1) * mTrendST[1];
 		
+		var _num = (mSortedRes.size() >= 7 ? 7 : mSortedRes.size());
+		var y = mTrendST[0]+ _num * mTrendST[1];
 		HRVDelta = _HRV - y;
 
 		Sys.println("Measured HRV="+_HRV+" Expected trend HRV="+y+" gives delta:"+HRVDelta+" for "+_num+" samples");		
@@ -382,27 +385,28 @@ module GlanceGen
 		var _sumY2 = 0.0; 
 		var _NumSamp = 0; // actual number of valid values (could use _tmp in this)
 		
-		var	_cnt = mSortedRes.size(); // how many entries
-		var _endIdx = _cnt-1 ; // end of array
+		//var	_cnt = mSortedRes.size(); // how many entries
+		var _endIdx = mSortedRes.size() -1 ; // end of array
 
 		if (_type == 0) { // LT 
 			_startIdx = 0; // start at beginning of array
 		} else if ( _type == 1) { // MT
-			_cnt = 28; // called with at least 28 entries
-			_startIdx = _endIdx - _cnt;
+			//_cnt = 28; // called with at least 28 entries
+			_startIdx = _endIdx - 28; // _cnt;
 		}  else if (_type == 2) { // ST
-			_cnt = mSortedRes.size() > 7 ? 7 : mSortedRes.size()-1; // called with at least 3 entries. Need -1 for case when less samples than 7
+			var _cnt = _endIdx >= 6 ? 6 : _endIdx; // called with at least 3 entries. Need -1 for case when less samples than 7
 			_startIdx = _endIdx - _cnt; 
 		}
 		
-		Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
+		Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type);
 
 		// check for how many non zero entires in range being used
 		var _tmp = 0;
+		var x = 0;
 		for (var i=_startIdx; i <= _endIdx; i++) {
 			// check how many valid entries
 			// index starts at 0 but want x to start at 1 otherwise lose a value as * 0
-			var x = i + 1;
+			x++;
 			var _val = mSortedRes[i];
 			if ( _val != 0.0) { // only use non zero values
 			 	_tmp++; 

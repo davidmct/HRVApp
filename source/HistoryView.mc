@@ -319,9 +319,9 @@ class HistoryView extends Ui.View {
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
-			GG.resGL[i+1] = testD[i+1]; //HRV
+		for(var i = 0; i < testD2.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
+			GG.resGL[i+1] = testD2[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
