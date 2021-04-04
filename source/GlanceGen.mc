@@ -395,7 +395,7 @@ module GlanceGen
 			_startIdx = _endIdx - _cnt; 
 		}
 		
-		//Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
+		Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
 
 		// check for how many non zero entires in range being used
 		var _tmp = 0;
@@ -416,6 +416,7 @@ module GlanceGen
 
 		if ( _tmp < 3) {
 			// no fit going to be possible for any period!!
+			Sys.println("No fit possible due to lack of data");
 			return [mB, mM, mR];
 		}
 
@@ -438,7 +439,7 @@ module GlanceGen
 			mR = ( _NumSamp * _sumXY - _sumX * _sumY) / _div;
 		}	
 		
-		//Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
+		Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
 	
 		return [mB, mM, mR];
 	}

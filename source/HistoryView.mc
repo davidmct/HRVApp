@@ -466,7 +466,7 @@ class HistoryView extends Ui.View {
 			if (_date >= sDay) {
 				xDate = (_date - sDay) / 86400;
 				yCoord = scale( GG.resGL[d+1]);
-				Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
+				//Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
 				xDate = xDate.toNumber() * xStep;
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
@@ -496,6 +496,7 @@ class HistoryView extends Ui.View {
 			// Also tells us what value of display X axis to use
 			
 			_eX = _listSize * xStep;
+			dc.setPenWidth(2);
 			// check data exists. ie more than 45 days of data
 			if (GG.mTrendLT !=  null && GG.mTrendLT[0] != 0 && _listSize > 45) {
 				// we know that trend would not be created unless we had this much data
@@ -503,7 +504,6 @@ class HistoryView extends Ui.View {
 				//_eX = _listSize * xStep;
 				_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
 				_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
-				dc.setPenWidth(2);	
 				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
 				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
 			}
@@ -517,18 +517,18 @@ class HistoryView extends Ui.View {
 				// x for trend starts at 1 and goes for length ???
 				_sY = scale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
 				_eY = scale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
-				dc.setPenWidth(2);	
 				dc.setColor( Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
 				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 			}
 
 			// now do weekly
 			if (GG.mTrendST !=  null && GG.mTrendST[0] != 0 && _listSize > 7) {
-				_sX = 7 * xStep; // starts at earliest day
+				Sys.println("ST trend plot");
+				_sX = (_listSize - 7) * xStep; // starts at earliest day
 				// _eX = _listSize * xStep;
 				_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
-				_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 
-				dc.setPenWidth(2);	
+				_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+				Sys.println("_Sy="+_sY+" _eY:"+_eY);
 				dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 			}			
@@ -562,13 +562,13 @@ class HistoryView extends Ui.View {
 			var _pt = GG.mSortedRes[_ind];
 			if ( _pt != 0) {
 				y2 = scale( _pt);
-				Sys.println("y2:"+y2+" from "+_pt);
+				//Sys.println("y2:"+y2+" from "+_pt);
 				// have a data point so update
 				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
 				y1 = y2;
 				x1 = x2;
 			}
-			Sys.println("_ind="+_ind);
+			//Sys.println("_ind="+_ind);
 			_ind++;
 		} 
 	
