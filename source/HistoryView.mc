@@ -89,9 +89,10 @@ class HistoryView extends Ui.View {
 			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
 			// stepping for trends. Not setting to 3 then determines how many days we can show
 			// alternatively we could work out how many days available and increase pitch 
+			Sys.println("History display width = "+_cWidth);
 			xStep = 4;		
 		}
-		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -319,9 +320,9 @@ class HistoryView extends Ui.View {
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
-			GG.resGL[i+1] = testD[i+1]; //HRV
+		for(var i = 0; i < testD2.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
+			GG.resGL[i+1] = testD2[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -363,17 +364,16 @@ class HistoryView extends Ui.View {
 			// retrieve data, assume no new result and don't compare min/max to test values
 			_resT = GG.retrieveResGL( utcStart, _stats, true);
 			_stats = null;
-			// returns true if have more than 2 real days
+			// returns true if have more than 2 real days for ST test
 			_EnT = GG.calcTrends( utcStart, 0.0, _resT[0]);
+			utcStart = null;
 			// want to see mTrendST, LT, MT values from this	
 		}
 		// Hopefully now mTrendXX setup
 		
 		// TEST CODE in TEST MODE
-		if ( $.mTestMode) {
-			if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
-			Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
-		}
+		Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
+		
 		// END TEST CODE
 		
 		// Determine range of data - already done in load of data
@@ -391,9 +391,12 @@ class HistoryView extends Ui.View {
 		var _str3 = ( _maxDate / 86400);
 		var days = _str3 - _str2 + 1;
 		
-		Sys.println("Days covered by tests ="+days);
+		Sys.println("Days covered by tests = "+days);
 		
 		if (days <= 1) { return;}
+		days = null;
+		_str2 = null;
+		_str3 = null;
 
 		// this is number of total days we have in results
 		var _listSize = GG.mSortedRes.size();
@@ -413,21 +416,33 @@ class HistoryView extends Ui.View {
 		var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
 		var sDay; //this day is the day we must be greater than or equal to for plotting
 		
-		if ( _listSize > numDaysMax) { 
-			days = numDaysMax; // number of days so not DATE format
-			_index = _listSize - days - 1;
+		if (_listSize <= numDaysMax) {
+			// we have fewer days than we can display so start at start of day list
+			_index = 0;
+			// our search of results can start at _minDate
+			sDay = _minDate; // not x needs to start from 0
+
+		} else {
+			// we need to start from a point part way along day list
+			_index = _listSize - numDaysMax;
+			sDay = _minDate + _index * 86400; // move date along to align with day average plot
+		}
+
+		//if ( _listSize > numDaysMax) { 
+		//	days = numDaysMax; // number of days so not DATE format
+		//	_index = _listSize - days - 1;
 			// now need to work out first day in data. 
 			// - every day has an entry in ordered days and may contain zero entries
 			// - resGL list may not have entry on this day as only results days
-			sDay = _maxDate - numDaysMax * 86400; // in time format			
-		} else {
+		//	sDay = _maxDate - numDaysMax * 86400; // in time format			
+		//} else {
 			// days has number of entries and we know it will fit on chart
-			sDay = _minDate; // start at earliest
-			_index = 0;
-		}
+		//	sDay = _minDate; // start at earliest
+		//	_index = 0;
+		//}
 		
 		Sys.println("_index ="+_index+", listsize="+_listSize);		
-		Sys.println("Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", days covered plot:"+days+", max days in chart W:"+numDaysMax);
+		Sys.println("Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -443,13 +458,14 @@ class HistoryView extends Ui.View {
 		
 		Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
 		
+		// x value of plot needs to start at zero to align with days plot
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
 			// is date in range
 			if (_date >= sDay) {
 				xDate = (_date - sDay) / 86400;
 				yCoord = scale( GG.resGL[d+1]);
-				Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
+				//Sys.println("xDate: "+xDate+" yCoord: "+yCoord+" scaled from "+GG.resGL[d+1]);
 				xDate = xDate.toNumber() * xStep;
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
@@ -463,38 +479,54 @@ class HistoryView extends Ui.View {
 		// - #days determines which or ST, MT, LT gets drawn suitably scaled. Could have all to none drawn
 		// - Use same day thresholds as in regression calc
 		// Regression starts at a nominal day 1
-		if (_EnT ) {
-			// Plot regression lines as should have some! Check each one for 0 entries
-			// pick colours for each
-			
-			// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen			
-			var _sX; // start X
-			var _sY; // start Y
-			var _eX;
-			var _eY;
-			
-			// check data exists. ie more than 45 days of data
-			if (GG.mTrendLT !=  null && GG.mTrendLT[0] != 0 && _listSize > 45) {
-				// we know that trend would not be created unless we had this much data
-				_sX = 0; // starts at earliest day
-				_eX = _listSize * xStep;
-				_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
-				_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
-				dc.setPenWidth(2);	
-				dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
-				dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
-			}
-			
-			// now do monthly
-			
-			
-			// now do weekly
-			
-			
-		
+
+		// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen			
+		var _sX; // start X
+		var _sY; // start Y
+		var _eX;
+		var _eY;
+		// Plot regression lines as should have some! Check each one for 0 entries
+		// pick colours for each
+
+		_eX = _listSize * xStep;
+		dc.setPenWidth(3);
+		// check data exists. 
+		// assume that regression test itself checks we have enough points in range of interest
+		// All we need are three data points for the trend. Could be anywhere over the days since first test
+		if (GG.mTrendLT !=  null && GG.mTrendLT[3] >= 3 && GG.mTrendLT[0] != 0)  {
+			// we know that trend would not be created unless we had this much data
+			_sX = 0; // starts at earliest day
+			//_eX = _listSize * xStep;
+			_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
+			_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
+			dc.setColor( Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
+			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
 		}
-		
-		
+
+		// now do monthly
+		if (GG.mTrendMT !=  null && GG.mTrendMT[0] != 0 && GG.mTrendMT[3] >= 3) {
+			// trend for last 28 days
+			_sX = (_listSize-28) * xStep; // starts at earliest day
+			// _eX = _listSize * xStep;
+			// x for trend starts at 1 and goes for length ???
+			_sY = scale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
+			_eY = scale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
+			dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
+			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
+		}
+
+		// now do weekly
+		if (GG.mTrendST !=  null && GG.mTrendST[0] != 0 && GG.mTrendST[3] > 2) {
+			Sys.println("ST trend plot");
+			_sX = (_listSize - 7) * xStep; // starts at earliest day
+			// _eX = _listSize * xStep;
+			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
+			_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+			Sys.println("_Sy="+_sY+" _eY:"+_eY);
+			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
+			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
+		}			
+				
 		// Could plot line through averages as data should be in glance array
 		// Need to again check how day numbers are calculated and use same - array was ordered in time ie [0] is oldest
 		
@@ -520,13 +552,13 @@ class HistoryView extends Ui.View {
 			var _pt = GG.mSortedRes[_ind];
 			if ( _pt != 0) {
 				y2 = scale( _pt);
-				Sys.println("y2:"+y2+" from "+_pt);
+				//Sys.println("y2:"+y2+" from "+_pt);
 				// have a data point so update
 				dc.drawLine(leftX + x1, floorY - y1, leftX + x2, floorY - y2);
 				y1 = y2;
 				x1 = x2;
 			}
-			Sys.println("_ind="+_ind);
+			//Sys.println("_ind="+_ind);
 			_ind++;
 		} 
 	

@@ -229,7 +229,7 @@ module GlanceGen
 		var _str2 = ((minUtc - minUtc % 86400) / 86400);
 		var _str3 = ((_utc - _utc % 86400) / 86400);
 		count = _str3 - _str2 + 1;
-		Sys.println("Days covered ="+count);		
+		Sys.println("Days covered = "+count);		
 		
 		//Sys.println("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
 		
@@ -263,7 +263,7 @@ module GlanceGen
 			if ( mData == 0.0) { 
 				continue; 
 			} else {
-				if ( mSortedRes[val] == 0) { _real++;} // had a real day ie no data already
+				if ( mSortedRes[val] == 0) { _real++;} // had a real day and no data already counted ie a second entry on this day
 				mSortedRes[val] += mData;
 				mSortedCnt[val] = mSortedCnt[val]+1;			
 			}						
@@ -283,11 +283,11 @@ module GlanceGen
 
 		mSortedCnt = null;
 		// Count is just the difference in dates between youngest and oldest. Actual entries may vary!!
-		Sys.println("Days with data ="+_real);
+		Sys.println("Days with data = "+_real);
 		
 		// need three real points for trend				
 		if (_real < 3) { // was <=
-			Sys.println(" Not enough dates found for trend!");
+			Sys.println(" Not enough dates found for any trend!");
 			return false;
 		} else {
 			return true;
@@ -307,6 +307,7 @@ module GlanceGen
 	// values returned are for ST trend
 	// returns 0 if trend close to flat using FLATNESS as threshold otherwise +/- and size of gap from trend
 	// returns flag true if enough data
+	// returns number of none zero samples in trend array
 	// mSortedRes has an entry for each day EVEN if empty ie always have required data points
 	function calcTrends( _utc, _HRV, _minUtc) {		
 		var mEnough = false;
@@ -314,10 +315,10 @@ module GlanceGen
 		
 		Sys.println("calcTrends");
 		
-		// trend data y=a+bx and R2 [a, b, r]		
-		mTrendLT = [0.0, 0.0, 0.0];
-		mTrendMT = [0.0, 0.0, 0.0];
-		mTrendST = [0.0, 0.0, 0.0];
+		// trend data y=a+bx and R2 [a, b, r, #samples]		
+		mTrendLT = [0.0, 0.0, 0.0, 0];
+		mTrendMT = [0.0, 0.0, 0.0, 0];
+		mTrendST = [0.0, 0.0, 0.0, 0];
 
 		if ( !orgData( _utc, _minUtc) ) {
 			// data for less than 3 days! Doesn't make a compelling case
@@ -339,26 +340,36 @@ module GlanceGen
 			mTrendST = regressionLine( 2 );
 		}
 		
-		Sys.println("Regression line is [intersect, slope, R] LT="+mTrendLT+" MT="+mTrendMT+" ST="+mTrendST);
+		Sys.println("Regression line is [intersect, slope, R, #] LT="+mTrendLT+" MT="+mTrendMT+" ST="+mTrendST);
 		
 		// HRV delta is difference between ST trend and actual value
 		// might need to range to see how flat...
 		
 		// what is expected for one week (max) trend
-		var _num = (mSortedRes.size() >= 7 ? 6 : mSortedRes.size() - 1);
-		var y = mTrendST[0]+ (mSortedRes.size()-1) * mTrendST[1];
+		// pre 0.6.5 - assume regression from start of array
+		//var _num = (mSortedRes.size() >= 7 ? 6 : mSortedRes.size() - 1);
+		//var y = mTrendST[0]+ (mSortedRes.size()-1) * mTrendST[1];
 		
-		HRVDelta = _HRV - y;
+		if (mTrendST[3] < 3){
+			// not enough actual samples for a trend
+			Sys.println("Trendgen: Not enough ST samples");
+			return [0.0, false];
+		} else {
+			var _num = (mSortedRes.size() >= 7 ? 7 : mSortedRes.size());
+			var y = mTrendST[0]+ _num * mTrendST[1];
+			HRVDelta = _HRV - y;
 
-		Sys.println("Measured HRV="+_HRV+" Expected trend HRV="+y+" gives delta:"+HRVDelta+" for "+_num+" samples");		
+			Sys.println("Measured HRV="+_HRV+" Expected trend HRV="+y+" gives delta:"+HRVDelta+" for "+_num+" samples");		
 
-		return [HRVDelta, true];
+			return [HRVDelta, true];
+		}
 	}
 	
 	// using data array slice calculate regression y=b+mx and fit coefficient
 	// any Y value of zero is skipped
 	// this function assumes there is enough data and this has already been calculated
-	// function is not called if inadequate data
+	// function is not called if inadequate overall number of days in data. Regression calc returns actual data points
+	// [mB, mM, mR, _NumSamp];
 	
 	// m (slope) = (n*(sum xy) - (sum x)*(sum y)) / (n*(sum x^2) - (sum x)^2)
 	// b (intercept) = (sum y - m * sum x) / n
@@ -382,27 +393,28 @@ module GlanceGen
 		var _sumY2 = 0.0; 
 		var _NumSamp = 0; // actual number of valid values (could use _tmp in this)
 		
-		var	_cnt = mSortedRes.size(); // how many entries
-		var _endIdx = _cnt-1 ; // end of array
+		//var	_cnt = mSortedRes.size(); // how many entries
+		var _endIdx = mSortedRes.size() -1 ; // end of array
 
 		if (_type == 0) { // LT 
 			_startIdx = 0; // start at beginning of array
 		} else if ( _type == 1) { // MT
-			_cnt = 28; // called with at least 28 entries
-			_startIdx = _endIdx - _cnt;
+			//_cnt = 28; // called with at least 28 entries
+			_startIdx = _endIdx - 28; // _cnt;
 		}  else if (_type == 2) { // ST
-			_cnt = mSortedRes.size() > 7 ? 7 : mSortedRes.size()-1; // called with at least 3 entries. Need -1 for case when less samples than 7
+			var _cnt = _endIdx >= 6 ? 6 : _endIdx; // called with at least 3 entries. Need -1 for case when less samples than 7
 			_startIdx = _endIdx - _cnt; 
 		}
 		
-		//Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type+" count of "+_cnt+"+1 entries");
+		//Sys.println("Regression line range: _startIdx="+_startIdx+" _endIdx="+_endIdx+" with type="+_type);
 
 		// check for how many non zero entires in range being used
 		var _tmp = 0;
+		var x = 0;
 		for (var i=_startIdx; i <= _endIdx; i++) {
 			// check how many valid entries
 			// index starts at 0 but want x to start at 1 otherwise lose a value as * 0
-			var x = i + 1;
+			x++;
 			var _val = mSortedRes[i];
 			if ( _val != 0.0) { // only use non zero values
 			 	_tmp++; 
@@ -416,7 +428,8 @@ module GlanceGen
 
 		if ( _tmp < 3) {
 			// no fit going to be possible for any period!!
-			return [mB, mM, mR];
+			Sys.println("No fit "+_type); // possible due to lack of data");
+			return [mB, mM, mR, _tmp];
 		}
 
 		// now get down to meat of linear regression!!!
@@ -440,14 +453,14 @@ module GlanceGen
 		
 		//Sys.println(" _sumY= "+_sumY+" _sumX="+_sumX+" _sumXY="+_sumXY+" _sumX^2="+_sumX2+" _sumY2="+_sumY2+" _NumSamp="+_NumSamp); 
 	
-		return [mB, mM, mR];
+		return [mB, mM, mR, _NumSamp];
 	}
     
     function generateResults( _stats) {
     	Sys.println("GR");
     	var mHRVExpected = new [2];
     	var mHRVFound = new [3];
-    	var mTrend = [0, false];
+    	var mTrend = [0.0, false];
     	var mAdvice = "Rest";
     	mLowAge = 0.0;
 		mHighAge = 0.0;	
