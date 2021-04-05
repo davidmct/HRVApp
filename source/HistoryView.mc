@@ -89,7 +89,7 @@ class HistoryView extends Ui.View {
 			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
 			// stepping for trends. Not setting to 3 then determines how many days we can show
 			// alternatively we could work out how many days available and increase pitch 
-			Sys.println("History display width = "+_cWidth);
+			Sys.println("Trend display width = "+_cWidth);
 			xStep = 4;		
 		}
 		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
@@ -372,8 +372,7 @@ class HistoryView extends Ui.View {
 		// Hopefully now mTrendXX setup
 		
 		// TEST CODE in TEST MODE
-		Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
-		
+		//Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);		
 		// END TEST CODE
 		
 		// Determine range of data - already done in load of data
@@ -408,24 +407,26 @@ class HistoryView extends Ui.View {
 		// - dates in range of interest = date of youngest sample - #days to plot TO date of youngest sample
 		
 		// X-SCALE imp
-		// Fixed pitch at 3 as xStep
+		// Fixed pitch at 4 as xStep
 		// We can then work out maximum number of days to plot
 		var numDaysMax = _cWidth / xStep;
 		
 		// plot of day values starts at this position
 		var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
 		var sDay; //this day is the day we must be greater than or equal to for plotting
+		var _eX; // how far do we draw regression lines for
 		
 		if (_listSize <= numDaysMax) {
 			// we have fewer days than we can display so start at start of day list
 			_index = 0;
 			// our search of results can start at _minDate
 			sDay = _minDate; // not x needs to start from 0
-
+			_eX = _listSize * xStep;
 		} else {
 			// we need to start from a point part way along day list
 			_index = _listSize - numDaysMax;
 			sDay = _minDate + _index * 86400; // move date along to align with day average plot
+			_eX = numDaysMax * xStep;
 		}
 
 		//if ( _listSize > numDaysMax) { 
@@ -480,19 +481,19 @@ class HistoryView extends Ui.View {
 		// - Use same day thresholds as in regression calc
 		// Regression starts at a nominal day 1
 
-		// #days in array: 45, 28, 3 are thresholds for regression to be calculated in glanceGen			
+		// #days in array: number of days found with actual data in regression calculated in glanceGen			
 		var _sX; // start X
 		var _sY; // start Y
-		var _eX;
+		//var _eX;
 		var _eY;
 		// Plot regression lines as should have some! Check each one for 0 entries
-		// pick colours for each
 
-		_eX = _listSize * xStep;
+		//_eX = _listSize * xStep;
+		
 		dc.setPenWidth(3);
 		// check data exists. 
 		// assume that regression test itself checks we have enough points in range of interest
-		// All we need are three data points for the trend. Could be anywhere over the days since first test
+		// All we need are three data points for the trend. Could be anywhere over the days since first test taken
 		if (GG.mTrendLT !=  null && GG.mTrendLT[3] >= 3 && GG.mTrendLT[0] != 0)  {
 			// we know that trend would not be created unless we had this much data
 			_sX = 0; // starts at earliest day
