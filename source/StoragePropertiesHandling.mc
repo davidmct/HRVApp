@@ -43,10 +43,10 @@ module HRVStorageHandler {
 		Properties.setValue("soundSet", true);
 		Properties.setValue("vibeSet", false);
 		Properties.setValue("testTypeSet", TYPE_TIMER);
-		Properties.setValue("timerTimeSet", 300);
+		Properties.setValue("timerTimeSet", 1200);
 		// 0.4.2
 		//Properties.setValue("MaxTimerTimeSet", 300);
-		Properties.setValue("ManualTimeSet", 300);
+		Properties.setValue("ManualTimeSet", 1200);
 		Properties.setValue("bgColSet", 3);
 		Properties.setValue("lblColSet", 10);
 		Properties.setValue("txtColSet", 9);

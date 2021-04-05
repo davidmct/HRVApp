@@ -101,7 +101,7 @@ const cHISTORYLABELLISTSIZE = 14;
 // SAMPLE PROCESSING
 const MIN_BPM = 35;
 const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
-const MAX_TIME = 8; // minutes
+const MAX_TIME = 20; // minutes
 const LOG_SCALE = 50.0; // scales ln(RMSSD)
 
 
@@ -118,9 +118,9 @@ enum {
 // STORAGE PROPERTIES
 
 // Glance Results memory locations. (X) <> (X - 99)
-const NUM_RESGL_ENTRIES = 100; // last 100 entries
+const NUM_RESGL_ENTRIES = 50; // last 100 entries
 const GL_SET_SIZE = 2; // each containing this number of entries
-const RESGL_ARRAY_SIZE = 200;
+const RESGL_ARRAY_SIZE = 100;
 const GL_RMSSD_INDEX = 1;
 
 // Results memory locations. (X) <> (X + 29)

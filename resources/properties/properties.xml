@@ -25,10 +25,10 @@
 	<property id="vibeSet" type="boolean">false</property>
 	<!--  testTypeSet true = Timer -->
 	<property id="testTypeSet" type="boolean">true</property>
-	<property id="timerTimeSet" type="number">300</property>
+	<property id="timerTimeSet" type="number">1200</property>
 	<!-- v0.4.2 Removed MaxTimerTimeSet and now CONST based on MAX_BPM*MAX_TIME -->
 	<!--  <property id="MaxTimerTimeSet" type="number">600</property> -->
-	<property id="ManualTimeSet" type="number">300</property>
+	<property id="ManualTimeSet" type="number">1200</property>
 		<!-- pNumberBeatsGraph maximum is set in constants file as AX_NUMBERBEATSGRAPH  -->	
 	<property id="pNumberBeatsGraph" type="number">10</property>
 	<property id="bgColSet" type="number">3</property>

@@ -34,10 +34,10 @@
 		<settingConfig type="boolean" />
 	</setting>		
 	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetT" prompt="@Strings.timerTimeSetP">
-		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="1" max="1200" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>	
 	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetT" prompt="@Strings.timerTimeSetP">
-		<settingConfig type="numeric" min="0" max="480" errorMessage="@Strings.TimeTooLargeError" />
+		<settingConfig type="numeric" min="1" max="1200" errorMessage="@Strings.TimeTooLargeError" />
 	</setting>	
 	<!-- pNumberBeatsGraph maximum is set in constants file as AX_NUMBERBEATSGRAPH  -->			
 	<setting propertyKey="@Properties.pNumberBeatsGraph" title="@Strings.lnumberBeatsGraph" prompt="@Strings.lnumberBeatsGraphP">
