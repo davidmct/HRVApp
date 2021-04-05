@@ -89,9 +89,10 @@ class HistoryView extends Ui.View {
 			_cWidth = ( _farX1 >= _farX2) ? _farX2.toNumber() : _farX1.toNumber();	
 			// stepping for trends. Not setting to 3 then determines how many days we can show
 			// alternatively we could work out how many days available and increase pitch 
+			Sys.println("History display width = "+_cWidth);
 			xStep = 4;		
 		}
-		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -319,9 +320,9 @@ class HistoryView extends Ui.View {
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD[i]).toNumber();
-			GG.resGL[i+1] = testD[i+1]; //HRV
+		for(var i = 0; i < testD2.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
+			GG.resGL[i+1] = testD2[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -371,10 +372,6 @@ class HistoryView extends Ui.View {
 		// Hopefully now mTrendXX setup
 		
 		// TEST CODE in TEST MODE
-		if ( $.mTestMode) {
-			if (GG.mTrendLT ==  null) {Sys.println("Null trend in History");}
-			Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
-		}
 		Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);
 		
 		// END TEST CODE
@@ -492,28 +489,29 @@ class HistoryView extends Ui.View {
 		// pick colours for each
 
 		_eX = _listSize * xStep;
-		dc.setPenWidth(2);
-		// check data exists. ie more than 45 days of data
-		if (GG.mTrendLT !=  null && GG.mTrendLT[3] >= 45 && GG.mTrendLT[0] != 0)  {
+		dc.setPenWidth(3);
+		// check data exists. 
+		// assume that regression test itself checks we have enough points in range of interest
+		// All we need are three data points for the trend. Could be anywhere over the days since first test
+		if (GG.mTrendLT !=  null && GG.mTrendLT[3] >= 3 && GG.mTrendLT[0] != 0)  {
 			// we know that trend would not be created unless we had this much data
 			_sX = 0; // starts at earliest day
 			//_eX = _listSize * xStep;
 			_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
 			_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
-			dc.setColor( Gfx.COLOR_PURPLE, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
 		}
 
 		// now do monthly
-		if (GG.mTrendMT !=  null && GG.mTrendMT[0] != 0 && GG.mTrendMT[3] >= 28) {
-			// Have a choice. Either start at last 28 days and go to end date or
-			// 
+		if (GG.mTrendMT !=  null && GG.mTrendMT[0] != 0 && GG.mTrendMT[3] >= 3) {
+			// trend for last 28 days
 			_sX = (_listSize-28) * xStep; // starts at earliest day
 			// _eX = _listSize * xStep;
 			// x for trend starts at 1 and goes for length ???
 			_sY = scale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
 			_eY = scale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
-			dc.setColor( Gfx.COLOR_ORANGE, Gfx.COLOR_TRANSPARENT);
+			dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 		}
 
