@@ -40,7 +40,38 @@ using Toybox.System as Sys;
 // Added another view version that shows full range of plot for all values of interval
 // axis range is 30 BPM 2000ms to 220 BPM 273ms .. however should be resting so HRM should be max say 120 BPM or 500ms
 
+(:Gaby)
+class PoincareView extends Ui.View {
+	hidden var viewToShow;
+	function initialize(viewNum) { 
+		viewToShow = viewNum;
+		//gg = $.$.
+		View.initialize();
+	}
+	
+	function onShow() {
+    }
+	
+	function onLayout(dc) {
+		return true;
+	}
+	
+	function onUpdate(dc) {
+		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
+		
+		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
+		dc.clear();
+		
+		dc.setColor( Gfx.COLOR_GREEN, Gfx.COLOR_TRANSPARENT);
+		dc.drawText( dc.getWidth()/2, dc.getHeight()/2, Gfx.FONT_MEDIUM, "Skipped", Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER);	
+	}
+	
+	function onHide() {}
+	
+	
+}
 
+(:notGaby)
 class PoincareView extends Ui.View {
 
 	// maybe updating every second is a little much
