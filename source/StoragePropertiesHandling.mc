@@ -61,8 +61,8 @@ module HRVStorageHandler {
 		
 		//0.4.6
 		Properties.setValue("pNumberBeatsGraph", 10);	
-		Properties.setValue("pLongThresholdIndex", 0.15); // nominal
-		Properties.setValue("pShortThresholdIndex", 0.15); // nominal	
+		Properties.setValue("pLongThresholdIndex", 15); // nominal
+		Properties.setValue("pShortThresholdIndex", 15); // nominal	
 		
 		//0.6.0
 		Properties.setValue("pLogScale", 50.0);
@@ -252,9 +252,11 @@ module HRVStorageHandler {
 			//$.vUpperThresholdSet = mLongThresholdMap[index];
 			//index = Properties.getValue("pShortThresholdIndex").toNumber();	
 			//$.vLowerThresholdSet = mShortThresholdMap[index];	
+		// 0.6.5 now stored as an INT to avoid different language issues
 		$.vUpperThresholdSet = Properties.getValue("pLongThresholdIndex").toFloat();
+		$.vUpperThresholdSet = $.vUpperThresholdSet / 100.0; 
 		$.vLowerThresholdSet = Properties.getValue("pShortThresholdIndex").toFloat();
-		
+		$.vLowerThresholdSet = $.vLowerThresholdSet / 100.0;
 		//0.6.0
 		$.mLogScale = Properties.getValue("pLogScale").toFloat();
 	}
@@ -341,8 +343,9 @@ module HRVStorageHandler {
 		//Properties.setValue("pLongThresholdIndex", res[0]);		
 		//Properties.setValue("pShortThresholdIndex", res[1]);
 		
-		Properties.setValue("pLongThresholdIndex", $.vUpperThresholdSet );		
-		Properties.setValue("pShortThresholdIndex", $.vLowerThresholdSet);
+		// 0.6.5 Integer in storage but floating fraction in code ie 15% = 0.15
+		Properties.setValue("pLongThresholdIndex", ($.vUpperThresholdSet * 100).toNumber() );		
+		Properties.setValue("pShortThresholdIndex", ($.vLowerThresholdSet *100).toNumber() );
 		
 		//0.6.0
 		Properties.setValue("pLogScale", $.mLogScale);
