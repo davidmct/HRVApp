@@ -60,6 +60,7 @@ module HRVStorageHandler {
 		Properties.setValue("pHistLabel3", 7);	
 		
 		//0.4.6
+		//0.6.5 changed Threshold to integer
 		Properties.setValue("pNumberBeatsGraph", 10);	
 		Properties.setValue("pLongThresholdIndex", 15); // nominal
 		Properties.setValue("pShortThresholdIndex", 15); // nominal	
@@ -254,9 +255,15 @@ module HRVStorageHandler {
 			//$.vLowerThresholdSet = mShortThresholdMap[index];	
 		// 0.6.5 now stored as an INT to avoid different language issues
 		$.vUpperThresholdSet = Properties.getValue("pLongThresholdIndex").toFloat();
-		$.vUpperThresholdSet = $.vUpperThresholdSet / 100.0; 
+		if ($.vUpperThresholdSet > 1) {
+			// cater for 1st read after changing format in 0.6.5. Original fraction eg 0.15
+			$.vUpperThresholdSet = $.vUpperThresholdSet / 100.0; 	
+		}
+
 		$.vLowerThresholdSet = Properties.getValue("pShortThresholdIndex").toFloat();
-		$.vLowerThresholdSet = $.vLowerThresholdSet / 100.0;
+		if ($.vLowerThresholdSet > 1) {
+			$.vLowerThresholdSet = $.vLowerThresholdSet / 100.0;
+		}
 		//0.6.0
 		$.mLogScale = Properties.getValue("pLogScale").toFloat();
 	}
