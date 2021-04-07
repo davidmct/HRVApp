@@ -52,8 +52,8 @@ class NumberPicker2Digit extends WatchUi.Picker {
         // allow for one 2 digit field
         var factories = new [1];
         // need to split initial number over four digits
-        if (Ulimit_v > 40) { throw new myException( "Number picker input > 40"); }
-        if (Llimit_v < 10) { throw new myException( "Number picker input < 10"); }
+        if (Ulimit_v > 90) { throw new myException( "Number picker input > 40"); }
+        if (Llimit_v < 1) { throw new myException( "Number picker input < 10"); }
       
         factories[0] = new NumberFactory(Llimit_v, Ulimit_v, inc_v, {:format=>DOUBLEDIGIT_FORMAT});
       

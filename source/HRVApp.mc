@@ -17,13 +17,13 @@ using HRVStorageHandler as mStorage;
 //17. Check download and setting online properties works
 
 //0.6.5
-// Adding second history screen with HRV data plot over as many days as fits
+// Adding second history screen with HRV data plot over as many days as fits on screen along with trend lines
 // Remove (I) indicator as now not needed and changed to FIT status
-// Added Ln(RMSSD) or RMSSD to test view via setting. Also changed range of scale factor.
+// Added ability to select Ln(RMSSD) or RMSSD on test view via setting. Also changed range of scale factor.
 // Fixed bug in glance data sortedDays. Used Count as gap in days but needed real days count as well for trend .. to put in Widget
 // Turn on backlight when HRV trend results shown
-
-// Regression needs checking to see if enough points ie more than 3
+// Threshold now stored as integer to stop language issues giving wrong values
+// 
 
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2

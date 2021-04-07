@@ -385,17 +385,18 @@ class HistoryView extends Ui.View {
 		
 		// Number of days covered by data found in results
 		var _minDate = (_resT[0] - _resT[0] % 86400); // Date format 
-		var _str2 = ( _minDate / 86400); // as actual days
+		//var _str2 = ( _minDate / 86400); // as actual days
 		var _maxDate = (_resT[1] - _resT[1] % 86400); 
-		var _str3 = ( _maxDate / 86400);
-		var days = _str3 - _str2 + 1;
+		//var _str3 = ( _maxDate / 86400);
+		//var days = _str3 - _str2 + 1;
 		
-		Sys.println("Days covered by tests = "+days);
+		//Sys.println("Days covered by tests = "+days);
 		
-		if (days <= 1) { return;}
-		days = null;
-		_str2 = null;
-		_str3 = null;
+		//if (days <= 1) { return;}
+		if ( _maxDate / 86400 -  _minDate / 86400 + 1 <= 1) { return;}
+		//days = null;
+		//_str2 = null;
+		//_str3 = null;
 
 		// this is number of total days we have in results
 		var _listSize = GG.mSortedRes.size();
@@ -428,19 +429,6 @@ class HistoryView extends Ui.View {
 			sDay = _minDate + _index * 86400; // move date along to align with day average plot
 			_eX = numDaysMax * xStep;
 		}
-
-		//if ( _listSize > numDaysMax) { 
-		//	days = numDaysMax; // number of days so not DATE format
-		//	_index = _listSize - days - 1;
-			// now need to work out first day in data. 
-			// - every day has an entry in ordered days and may contain zero entries
-			// - resGL list may not have entry on this day as only results days
-		//	sDay = _maxDate - numDaysMax * 86400; // in time format			
-		//} else {
-			// days has number of entries and we know it will fit on chart
-		//	sDay = _minDate; // start at earliest
-		//	_index = 0;
-		//}
 		
 		Sys.println("_index ="+_index+", listsize="+_listSize+
 			", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);
@@ -621,6 +609,11 @@ class HistoryView extends Ui.View {
 			yInit += yStep;
 		}
 		
+		// TEST CODE		
+		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 	}
 
 	function drawHistory(dc) {		
@@ -837,7 +830,7 @@ class HistoryView extends Ui.View {
 		while ( day != today);
 		
 		// TEST CODE		
-		//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//Sys.println("History-1 used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			
 		//	);
@@ -847,7 +840,7 @@ class HistoryView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
-    	Sys.println("History view:"+mView+" hide");
+    	//Sys.println("History view:"+mView+" hide");
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
     	//GG.resGL = null;
