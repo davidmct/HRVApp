@@ -24,7 +24,7 @@ class HistoryView extends Ui.View {
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
-	hidden var range;
+	//hidden var range;
 	hidden var ceil;
 	hidden var dispH;
 	hidden var dispW;
@@ -92,7 +92,7 @@ class HistoryView extends Ui.View {
 			Sys.println("Trend display width = "+_cWidth);
 			xStep = 4;		
 		}
-		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -400,6 +400,7 @@ class HistoryView extends Ui.View {
 	}
 	
 	function drawLongTerm(dc) {
+		var _prt = true; // assume printed already
 		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 	    //var _EnT = false; // enable trend if enough data
@@ -429,6 +430,7 @@ class HistoryView extends Ui.View {
 			GG.calcTrends( utcStart, 0.0, _resT[0]);
 			utcStart = null;
 			// want to see mTrendST, LT, MT values from this	
+			_prt = false;
 		}
 		// Hopefully now mTrendXX setup
 		
@@ -491,8 +493,13 @@ class HistoryView extends Ui.View {
 			_eX = numDaysMax * xStep;
 		}
 		
-		Sys.println("_index ="+_index+", listsize="+_listSize+
-			", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);
+		// do once
+		if (_prt == false) {
+			Sys.println("_index ="+_index+", listsize="+_listSize+
+				", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);				
+			Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
+			_prt = true;
+		}
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -505,9 +512,7 @@ class HistoryView extends Ui.View {
 		var yCoord;
 		var xDate;
 		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-		
-		Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
-		
+	
 		// x value of plot needs to start at zero to align with days plot
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
@@ -578,7 +583,7 @@ class HistoryView extends Ui.View {
 			// _eX = _listSize * xStep;
 			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
 			_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
-			Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
+			//Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
 			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 		}			
@@ -645,10 +650,11 @@ class HistoryView extends Ui.View {
 		if (test == 5) { 
 			ceil += 5;
 		} 
-		range = ceil - floor;
+		//range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale
-		scaleY = chartHeight / range.toFloat();
+		//scaleY = chartHeight / range.toFloat();
+		scaleY = chartHeight / (ceil - floor).toFloat();
 		
 		//var _lineStart = (dispH * 27) /100; //% of total height
 		//var _lineEnd = (dispH * 71) / 100;

@@ -228,8 +228,7 @@ module GlanceGen
 		
 		var _str2 = ((minUtc - minUtc % 86400) / 86400);
 		var _str3 = ((_utc - _utc % 86400) / 86400);
-		count = _str3 - _str2 + 1;
-		Sys.println("Days covered = "+count);		
+		count = _str3 - _str2 + 1;		
 		
 		//Sys.println("UTC delta in seconds across dates: "+count+" based on oldest date of:"+_str2+" days");
 		
@@ -283,7 +282,7 @@ module GlanceGen
 
 		mSortedCnt = null;
 		// Count is just the difference in dates between youngest and oldest. Actual entries may vary!!
-		Sys.println("Days with data = "+_real);
+		Sys.println("Days with data = "+_real+" out of "+count);
 		
 		// need three real points for trend				
 		if (_real < 3) { // was <=
@@ -457,7 +456,7 @@ module GlanceGen
 	}
     
     function generateResults( _stats) {
-    	Sys.println("GR");
+    	//Sys.println("GR");
     	var mHRVExpected = new [2];
     	var mHRVFound = new [3];
     	var mTrend = [0.0, false];
@@ -572,7 +571,7 @@ module GlanceGen
 	function resetResGLArray() {
 		resGL = null;
 		resGL = new [NUM_RESGL_ENTRIES * GL_SET_SIZE];
-		Sys.println("resetResGLArray() array created");
+		//Sys.println("resetResGLArray() array created");
 
 		for(var i = 0; i < (NUM_RESGL_ENTRIES * GL_SET_SIZE); i++) {
 			resGL[i] = 0;

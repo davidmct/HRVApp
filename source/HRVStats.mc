@@ -59,7 +59,7 @@ class HRVView extends Ui.View {
  		 	
  	//! Restore the state of the app and prepare the view to be shown
     function onShow() { 
-    	Sys.println("HRVView onShow()");
+    	//Sys.println("HRVView onShow()");
     	Toybox.Attention.backlight(true); // turn on backlight when result ready
 
     }

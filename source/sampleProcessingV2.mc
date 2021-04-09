@@ -654,7 +654,7 @@ class SampleProcessing {
 				mFlagToSet = c_mFlag;			
 			break;
 			default:
-				Sys.println("SampleProc: UNHANDLED BEAT CASE -- flags prev:"+previousIntMs[1]+" current:"+c_mFlag);
+				Sys.println("SP:UBC--flags P:"+previousIntMs[1]+" C:"+c_mFlag);
 			break;
 		} // end switch previous		
 		
