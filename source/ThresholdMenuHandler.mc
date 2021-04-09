@@ -46,13 +46,13 @@ class ThresholdMenuDelegate extends Ui.Menu2InputDelegate {
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setUpper), 0), Ui.SLIDE_IMMEDIATE );
 	        //Sys.println("Threshold upper before = "+$.vUpperThresholdSet);
-	        Ui.pushView(new NumberPicker2Digit(10, $.vUpperThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
+	        Ui.pushView(new NumberPicker2Digit(1, $.vUpperThresholdSet*100, 90, 1), new ThresholdPickerDelegate(self.method(:setUpper)), Ui.SLIDE_IMMEDIATE);
         } else if( id.equals("l"))  {
             //var menu = new Ui.Menu2({:title=>"Lower"});
             //AddThresholdItems( menu);
 	        //Ui.pushView(menu, new ThresholdListMenuDelegate(self.method(:setLower), 1), Ui.SLIDE_IMMEDIATE ); 
 	        //Sys.println("Threshold lower before = "+$.vLowerThresholdSet);
-	        Ui.pushView(new NumberPicker2Digit(10, $.vLowerThresholdSet*100, 40, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
+	        Ui.pushView(new NumberPicker2Digit(1, $.vLowerThresholdSet*100, 90, 1), new ThresholdPickerDelegate(self.method(:setLower)), Ui.SLIDE_IMMEDIATE);        	
         }
     }
     

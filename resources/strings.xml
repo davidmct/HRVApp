@@ -98,7 +98,7 @@
 	<string id="LongThresholdT">Long Threshold</string>
 	<string id="ShortThresholdT">Short Threshold</string> 
 	<string id="ThresholdP">Select Threshold %</string> 
-	<string id="ThresholdErrorT">Range 1-40</string>
+	<string id="ThresholdErrorT">Range 1%-90%</string>
 	<string id="LogT">Ln(RMSSD) scale</string> 
 	<string id="LogP">Select scale factor</string> 
 	<string id="LogErrorT">Range 1.0-1000.0</string>

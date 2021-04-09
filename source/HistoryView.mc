@@ -24,7 +24,7 @@ class HistoryView extends Ui.View {
 	hidden var scaleY;
 	hidden var xStep;
 	hidden var floor;
-	hidden var range;
+	//hidden var range;
 	hidden var ceil;
 	hidden var dispH;
 	hidden var dispW;
@@ -92,7 +92,7 @@ class HistoryView extends Ui.View {
 			Sys.println("Trend display width = "+_cWidth);
 			xStep = 4;		
 		}
-		Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
+		//Sys.println("Start: "+_lineStart+", end: "+_lineEnd+" leftX is "+leftX+", _cWidth is: "+_cWidth);
 				
 		return true;
 	}
@@ -207,6 +207,7 @@ class HistoryView extends Ui.View {
 	
 		var testD;
 		var testD2;
+		var testD3;
 		
 		Sys.println("loadTest utc base: "+_baseUtc);
 		
@@ -315,14 +316,74 @@ class HistoryView extends Ui.View {
 			259200,22,
 			259200,30,
 			172800,35 ];
+			
+		testD3 = [
+		4586400,48.85738026,
+		4500000,69.53196572,
+		4413600,58.45802115,
+		4327200,25.81688012,
+		4240800,1.618657153,
+		4154400,8.111086854,
+		4064400,39.3250593,
+		3985200,66.56259217,
+		3988800,66.56259217,
+		3996000,66.56259217,
+		3895200,64.78162336,
+		3812400,35.61956738,
+		3726000,5.887884008,
+		3639600,2.921745823,
+		3553200,29.44820659,
+		3466800,61.07896062,
+		3380400,68.73283852,
+		3294000,45.37290025,
+		3207600,12.47616533,
+		3121200,0.287740129,
+		3034800,20.01360657,
+		2948400,53.51789401,
+		2862000,69.9969151,
+		2775600,54.29993384,
+		2689200,20.85868241,
+		2602800,0.418893157,
+		2516400,11.77281405,
+		2430000,44.48170259,
+		2343600,68.47315749,
+		2257200,61.68954577,
+		2170800,30.36768875,
+		2170800,30.36768875,
+		2170800,30.36768875,
+		1911600,34.69020417,
+		1825200,64.28294735,
+		1738800,66.95308378,
+		1652400,40.24570234,
+		1566000,8.715446363,
+		1479600,1.351087784,
+		1393200,24.92338392,
+		1306800,57.76007441,
+		1220400,69.67125745,
+		1134000,49.70584629,
+		1047600,16.21994787,
+		961200,0.000342771,
+		874800,15.95926112,
+		788400,49.42414698,
+		702000,69.62753863,
+		615600,57.99453096,
+		529200,25.22045756,
+		442800,1.437650387,
+		442800,1.437650387,
+		345600,8.511912664,
+		259200,39.93920028,
+		259200,39.93920028,
+		172800,66.82540994,
+		97200,64.45148447
+		];
 		
 		
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD2[i]).toNumber();
-			GG.resGL[i+1] = testD[i+1]; //HRV
+		for(var i = 0; i < testD3.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD3[i]).toNumber();
+			GG.resGL[i+1] = testD3[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -339,6 +400,7 @@ class HistoryView extends Ui.View {
 	}
 	
 	function drawLongTerm(dc) {
+		var _prt = true; // assume printed already
 		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 	    //var _EnT = false; // enable trend if enough data
@@ -368,6 +430,7 @@ class HistoryView extends Ui.View {
 			GG.calcTrends( utcStart, 0.0, _resT[0]);
 			utcStart = null;
 			// want to see mTrendST, LT, MT values from this	
+			_prt = false;
 		}
 		// Hopefully now mTrendXX setup
 		
@@ -385,17 +448,18 @@ class HistoryView extends Ui.View {
 		
 		// Number of days covered by data found in results
 		var _minDate = (_resT[0] - _resT[0] % 86400); // Date format 
-		var _str2 = ( _minDate / 86400); // as actual days
+		//var _str2 = ( _minDate / 86400); // as actual days
 		var _maxDate = (_resT[1] - _resT[1] % 86400); 
-		var _str3 = ( _maxDate / 86400);
-		var days = _str3 - _str2 + 1;
+		//var _str3 = ( _maxDate / 86400);
+		//var days = _str3 - _str2 + 1;
 		
-		Sys.println("Days covered by tests = "+days);
+		//Sys.println("Days covered by tests = "+days);
 		
-		if (days <= 1) { return;}
-		days = null;
-		_str2 = null;
-		_str3 = null;
+		//if (days <= 1) { return;}
+		if ( _maxDate / 86400 -  _minDate / 86400 + 1 <= 1) { return;}
+		//days = null;
+		//_str2 = null;
+		//_str3 = null;
 
 		// this is number of total days we have in results
 		var _listSize = GG.mSortedRes.size();
@@ -428,22 +492,14 @@ class HistoryView extends Ui.View {
 			sDay = _minDate + _index * 86400; // move date along to align with day average plot
 			_eX = numDaysMax * xStep;
 		}
-
-		//if ( _listSize > numDaysMax) { 
-		//	days = numDaysMax; // number of days so not DATE format
-		//	_index = _listSize - days - 1;
-			// now need to work out first day in data. 
-			// - every day has an entry in ordered days and may contain zero entries
-			// - resGL list may not have entry on this day as only results days
-		//	sDay = _maxDate - numDaysMax * 86400; // in time format			
-		//} else {
-			// days has number of entries and we know it will fit on chart
-		//	sDay = _minDate; // start at earliest
-		//	_index = 0;
-		//}
 		
-		Sys.println("_index ="+_index+", listsize="+_listSize+
-			", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);
+		// do once
+		if (_prt == false) {
+			Sys.println("_index ="+_index+", listsize="+_listSize+
+				", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);				
+			Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
+			_prt = true;
+		}
 		
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
@@ -456,9 +512,7 @@ class HistoryView extends Ui.View {
 		var yCoord;
 		var xDate;
 		dc.setColor( Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-		
-		Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
-		
+	
 		// x value of plot needs to start at zero to align with days plot
 		for (var d=0; d < RESGL_ARRAY_SIZE; d+=2) {	
 		 	var _date =	GG.resGL[d];	
@@ -529,7 +583,7 @@ class HistoryView extends Ui.View {
 			// _eX = _listSize * xStep;
 			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
 			_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
-			Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
+			//Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
 			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 		}			
@@ -596,10 +650,11 @@ class HistoryView extends Ui.View {
 		if (test == 5) { 
 			ceil += 5;
 		} 
-		range = ceil - floor;
+		//range = ceil - floor;
 		
 		// chartHeight defines height of chart and sets scale
-		scaleY = chartHeight / range.toFloat();
+		//scaleY = chartHeight / range.toFloat();
+		scaleY = chartHeight / (ceil - floor).toFloat();
 		
 		//var _lineStart = (dispH * 27) /100; //% of total height
 		//var _lineEnd = (dispH * 71) / 100;
@@ -621,6 +676,11 @@ class HistoryView extends Ui.View {
 			yInit += yStep;
 		}
 		
+		// TEST CODE		
+		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 	}
 
 	function drawHistory(dc) {		
@@ -837,7 +897,7 @@ class HistoryView extends Ui.View {
 		while ( day != today);
 		
 		// TEST CODE		
-		//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//Sys.println("History-1 used, free, total: "+System.getSystemStats().usedMemory.toString()+
 		//	", "+System.getSystemStats().freeMemory.toString()+
 		//	", "+System.getSystemStats().totalMemory.toString()			
 		//	);
@@ -847,7 +907,7 @@ class HistoryView extends Ui.View {
     //! Called when this View is removed from the screen. Save the
     //! state of your app here.
     function onHide() {
-    	Sys.println("History view:"+mView+" hide");
+    	//Sys.println("History view:"+mView+" hide");
     	// free up all the arrays - NO as maybe switches without a new ...
     	mLabelFont = null;
     	//GG.resGL = null;

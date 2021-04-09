@@ -438,12 +438,12 @@ class TestView extends Ui.View {
 		// 0.4.04 - select which text area to use
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
-			if (mDebugging) { Sys.println("UI has TextArea");}
+			//if (mDebugging) { Sys.println("UI has TextArea");}
 			$.f_drawTextArea(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
-			if (mDebugging) {Sys.println("UI has Text not area");}
+			//if (mDebugging) {Sys.println("UI has Text not area");}
 			$.f_drawText(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
