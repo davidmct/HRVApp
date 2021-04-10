@@ -116,8 +116,6 @@ using HRVStorageHandler as mStorage;
 var mDebugging = false;
 //var mDebuggingANT = false;
 var mDumpIntervals = true;
-// dump results array on every call to view history
-var mDebuggingResults = false;
 
 // access App variables and classes
 //var _mApp;
@@ -306,10 +304,10 @@ class HRVAnalysis extends App.AppBase {
 	   	// now setup sensors as have created data structures
 	   	mSensor.SetUpSensors();
 	    
-	    if (mDebugging) {
-	    	Sys.println("HRVApp: sensor created: " + mSensor);
-	    	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
-	    }
+	    //if (mDebugging) {
+	    //	Sys.println("HRVApp: sensor created: " + mSensor);
+	    //	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
+	    //}
 
 		// 0.4.9 Don't do this unless needed
 		// Retrieve saved results from memory
