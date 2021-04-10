@@ -16,6 +16,8 @@
 	<!-- <property id="firstLoadEver" type ="boolean">false</property> -->
 	<property id="timestampSet" type="number">1447234278</property>
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
+	<property id="pTest" type ="boolean">false</property>
+	<property id="prMSSD" type ="boolean">false</property>
 	<!-- pSensorSelect true is external search -->
 	<!-- <property id="pSensorSelect" type="boolean">false</property> -->
 	<property id="pIIScale" type="boolean">false</property>
@@ -40,8 +42,8 @@
 	<property id="pHistLabel2" type="number">6</property> 
 	<property id="pHistLabel3" type="number">7</property> 	
 	
-	<property id="pLongThresholdIndex"  type="float">0.15</property>
-	<property id="pShortThresholdIndex" type="float">0.15</property>
+	<property id="pLongThresholdIndex"  type="number">15</property>
+	<property id="pShortThresholdIndex" type="number">15</property>
 	<property id="pLogScale" type="float">50.0</property>
 	<!-- 
 	<property id="pPaypalRef" type="string">https://www.paypal.com/paypalme/hrvapp</property>

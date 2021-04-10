@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.6.4</string>
+	<string id="AppVersion">0.6.5</string>
 <!--
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
@@ -97,11 +97,13 @@
 	
 	<string id="LongThresholdT">Long Threshold</string>
 	<string id="ShortThresholdT">Short Threshold</string> 
-	<string id="ThresholdP">Select Threshold</string> 
-	<string id="ThresholdErrorT">Range 0.1-0.4</string>
+	<string id="ThresholdP">Select Threshold %</string> 
+	<string id="ThresholdErrorT">Range 1%-90%</string>
 	<string id="LogT">Ln(RMSSD) scale</string> 
 	<string id="LogP">Select scale factor</string> 
-	<string id="LogErrorT">Range 1.0-50.0</string>
+	<string id="LogErrorT">Range 1.0-1000.0</string>
+	<string id="rT">rMSSD?</string>
+	<string id="rP">On for rMSSD</string>
 <!-- 
 	<string id="VTIGHT">Very tight</string> 
 	<string id="TIGHT">Tight</string> 

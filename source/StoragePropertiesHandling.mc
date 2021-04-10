@@ -35,6 +35,8 @@ module HRVStorageHandler {
 		Properties.setValue("pAuxHRAntID", 0);
 		//Storage.setValue("firstLoadEver", true);
 		Properties.setValue("pFitWriteEnabled", false);
+		Properties.setValue("pTest", false);
+		Properties.setValue("prMSSD", false);
 		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
 		Properties.setValue("pIIScale", false);
@@ -58,9 +60,10 @@ module HRVStorageHandler {
 		Properties.setValue("pHistLabel3", 7);	
 		
 		//0.4.6
+		//0.6.5 changed Threshold to integer
 		Properties.setValue("pNumberBeatsGraph", 10);	
-		Properties.setValue("pLongThresholdIndex", 0.15); // nominal
-		Properties.setValue("pShortThresholdIndex", 0.15); // nominal	
+		Properties.setValue("pLongThresholdIndex", 15); // nominal
+		Properties.setValue("pShortThresholdIndex", 15); // nominal	
 		
 		//0.6.0
 		Properties.setValue("pLogScale", 50.0);
@@ -211,6 +214,8 @@ module HRVStorageHandler {
 			//$.timestampSet = Storage.getValue("timestampSet");
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
+		$.mTestMode = Properties.getValue("pTest");
+		$.mRM = Properties.getValue("prMSSD");
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
 		$.mBoolScaleII = Properties.getValue("pIIScale");
 		$.soundSet = Properties.getValue("soundSet");
@@ -248,9 +253,26 @@ module HRVStorageHandler {
 			//$.vUpperThresholdSet = mLongThresholdMap[index];
 			//index = Properties.getValue("pShortThresholdIndex").toNumber();	
 			//$.vLowerThresholdSet = mShortThresholdMap[index];	
+		// 0.6.5 now stored as an INT to avoid different language issues
+		// As we are reading int rather than float do sanity check for first time user uses new code
 		$.vUpperThresholdSet = Properties.getValue("pLongThresholdIndex").toFloat();
+		if ($.vUpperThresholdSet >= 1 && $.vUpperThresholdSet <= 90 ) {
+			// cater for 1st read after changing format in 0.6.5. Original fraction eg 0.15
+			$.vUpperThresholdSet = $.vUpperThresholdSet / 100.0; 	
+		} else {
+			// force both to nominal value
+			Properties.setValue("pLongThresholdIndex", 15); // nominal
+			Properties.setValue("pShortThresholdIndex", 15); // nominal	
+		}
+
 		$.vLowerThresholdSet = Properties.getValue("pShortThresholdIndex").toFloat();
-		
+		if ($.vLowerThresholdSet >= 1 && $.vLowerThresholdSet <= 90) {
+			$.vLowerThresholdSet = $.vLowerThresholdSet / 100.0;
+		} else {
+			// force both to nominal value
+			Properties.setValue("pLongThresholdIndex", 15); // nominal
+			Properties.setValue("pShortThresholdIndex", 15); // nominal	
+		}
 		//0.6.0
 		$.mLogScale = Properties.getValue("pLogScale").toFloat();
 	}
@@ -298,6 +320,8 @@ module HRVStorageHandler {
 	function _CallSavePropStorage() {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
+		Properties.setValue("pTest", $.mTestMode);
+		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		
 		// user changable
@@ -335,8 +359,9 @@ module HRVStorageHandler {
 		//Properties.setValue("pLongThresholdIndex", res[0]);		
 		//Properties.setValue("pShortThresholdIndex", res[1]);
 		
-		Properties.setValue("pLongThresholdIndex", $.vUpperThresholdSet );		
-		Properties.setValue("pShortThresholdIndex", $.vLowerThresholdSet);
+		// 0.6.5 Integer in storage but floating fraction in code ie 15% = 0.15
+		Properties.setValue("pLongThresholdIndex", ($.vUpperThresholdSet * 100).toNumber() );		
+		Properties.setValue("pShortThresholdIndex", ($.vLowerThresholdSet *100).toNumber() );
 		
 		//0.6.0
 		Properties.setValue("pLogScale", $.mLogScale);

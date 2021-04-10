@@ -27,7 +27,7 @@ function mapColour(index) {
 	var mColours = Ui.loadResource(Rez.JsonData.jsonColourList); 
        
 	if (index < 0 || index > (mColours.size()-1) ) {
-		Sys.println("mapColour: index out of range");
+		//Sys.println("mapColour: index out of range");
 		col = 0;
 	} else {
 		col = index;

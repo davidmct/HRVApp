@@ -13,7 +13,7 @@ class TestView extends Ui.View {
 	hidden var mTitleLabels = ["HRV"];
 	
 	// label values
-	hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
+	//hidden var mLabels = [ "", "Ln(HRV)", "BPM", "TIMER", "" ];	
 		
 	hidden var mLabelFont = Gfx.FONT_XTINY;
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
@@ -122,10 +122,14 @@ class TestView extends Ui.View {
 		
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 
-		dc.drawText( mScreen[11], mScreen[16], mLabelFont, mLabels[1], mJust);
+		var _lbl = "Ln(HRV)";
+		if ( $.mRM ) {
+			_lbl = "HRV";
+		}
+		dc.drawText( mScreen[11], mScreen[16], mLabelFont, _lbl, mJust);
 		//0.4.01 - draw BPM in strapFont to make larger
-		dc.drawText( mScreen[12], mScreen[17], mStrapFont, mLabels[2], mJust);
-		dc.drawText( mScreen[13], mScreen[18], mLabelFont, mLabels[3], mJust);
+		dc.drawText( mScreen[12], mScreen[17], mStrapFont, "BPM", mJust);
+		dc.drawText( mScreen[13], mScreen[18], mLabelFont, "TIMER", mJust);
 		
 		dc.setColor( mapColour($.mSensor.mHRData.mHRMStatusCol), Gfx.COLOR_TRANSPARENT);
 		
@@ -146,14 +150,23 @@ class TestView extends Ui.View {
 		str = $.mSensor.mHRData.mHRMStatus;
 		dc.drawText( mScreen[20], mScreen[25], mStrapFont, str, mJust);
 		
+		// 0.6.5 As we've deleted E mode then remove this! Change to (FIT) in Circle code
 		//0.4.4 - Separate field for I/E
-		str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
-		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
-		dc.drawText( mScreen[14], mScreen[19], mLabelFont, str, mJust);		
+		//str = ($.mSensorTypeExt == SENSOR_INTERNAL) ? "(I)" : "(E)";
+		//dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
+		//dc.drawText( mScreen[14], mScreen[19], mLabelFont, str, mJust);		
 		
 		// now show values		
-		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);			
-		dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
+		
+		//0.6.5
+		var _vHrv = $.mSampleProc.mLnRMSSD.format("%d");
+		if ( $.mRM ) {
+			_vHrv = $.mSampleProc.mRMSSD.format("%.1f");	
+			// dc.drawText( mScreen[21], mScreen[26], mTimerFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
+		}
+		dc.drawText( mScreen[21], mScreen[26], mValueFont, _vHrv, mJust);
+		
 		// 0.4.00 release for approval
 		//dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mValueFont, $.mSensor.mHRData.livePulse.format("%d"), mJust);
 		// 0.4.01
@@ -180,23 +193,26 @@ class TestView extends Ui.View {
 		// draw red if FIT enabled and writing
 		// else don't draw	
 		// 0.4.1
-		if (mDebugging) {
-			var strDBG = $.mFitWriteEnabled + ", ";
-			if ( $.mFitControl.mSession == null) { 
-				strDBG = strDBG+"null"+" not recording";
-			}
-			if ($.mFitControl.mSession != null ) {
-				strDBG = strDBG + "Session, "+$.mFitControl.mSession.isRecording();
-			}
-			Sys.println("FIT enabled, mSession, recording: "+strDBG);
-		}
+		//if (mDebugging) {
+		//	var strDBG = $.mFitWriteEnabled + ", ";
+		//	if ( $.mFitControl.mSession == null) { 
+		//		strDBG = strDBG+"null"+" not recording";
+		//	}
+		//	if ($.mFitControl.mSession != null ) {
+		//		strDBG = strDBG + "Session, "+$.mFitControl.mSession.isRecording();
+		//	}
+		//	Sys.println("FIT enabled, mSession, recording: "+strDBG);
+		//}
 					
 		if ($.mFitWriteEnabled && $.mFitControl.mSession != null && $.mFitControl.mSession.isRecording()) {
 			dc.setColor( Gfx.COLOR_RED, Gfx.COLOR_TRANSPARENT);	
-			dc.fillCircle( mScreen[8], mScreen[9], 10);		
+			dc.fillCircle( mScreen[8], mScreen[9], 10);	
+			//0.6.5 provide FIT label
+			dc.drawText( mScreen[14], mScreen[19], mLabelFont, "FIT", mJust);	
 		} else if ($.mFitWriteEnabled) {
 			dc.setColor( mCircleCol, Gfx.COLOR_TRANSPARENT);	
-			dc.fillCircle( mScreen[8], mScreen[9], 10);				
+			dc.fillCircle( mScreen[8], mScreen[9], 10);	
+			dc.drawText( mScreen[14], mScreen[19], mLabelFont, "FIT", mJust);			
 		}
 		   		
    		// TEST CODE		
@@ -422,12 +438,12 @@ class TestView extends Ui.View {
 		// 0.4.04 - select which text area to use
 		//var x = 0;
 		if (Ui.WatchUi has :TextArea) {
-			if (mDebugging) { Sys.println("UI has TextArea");}
+			//if (mDebugging) { Sys.println("UI has TextArea");}
 			$.f_drawTextArea(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 
 		} else {
-			if (mDebugging) {Sys.println("UI has Text not area");}
+			//if (mDebugging) {Sys.println("UI has Text not area");}
 			$.f_drawText(dc, msgTxt, $.mValueColour, $.mBgColour, 
 				mMesssgeLocS[0], mMesssgeLocS[1], mMesssgeLocS[2], mMesssgeLocS[3]);		
 

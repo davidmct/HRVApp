@@ -16,6 +16,15 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.6.5
+// Adding second history screen with HRV data plot over as many days as fits on screen along with trend lines
+// Remove (I) indicator as now not needed and changed to FIT status
+// Added ability to select Ln(RMSSD) or RMSSD on test view via setting. Also changed range of scale factor.
+// Fixed bug in glance data sortedDays. Used Count as gap in days but needed real days count as well for trend .. to put in Widget
+// Turn on backlight when HRV trend results shown
+// Threshold now stored as integer to stop language issues giving wrong values
+// 
+
 // 0.6.4
 // Made sensor selection exclusive on CIQ > 3.2
 // Added VenuSQ
@@ -105,10 +114,8 @@ using HRVStorageHandler as mStorage;
 //   
 
 var mDebugging = false;
-var mDebuggingANT = false;
+//var mDebuggingANT = false;
 var mDumpIntervals = true;
-// dump results array on every call to view history
-var mDebuggingResults = false;
 
 // access App variables and classes
 //var _mApp;
@@ -126,6 +133,7 @@ class myException extends Lang.Exception {
 // Settings variables
 //var timestampSet;
 var appNameSet;
+var mTestMode = false; // add functions for testing
 
 var soundSet;
 var vibeSet;
@@ -186,6 +194,9 @@ var mFitControl;
 var vUpperThresholdSet; // long % over
 var vLowerThresholdSet; // short period under %
 
+// if true then display rMSSD otherwise LN version
+var mRM;
+
 // The device type
 var mDeviceType;
 //var customFont; // load in init if low res. saves load in every view
@@ -219,7 +230,10 @@ class HRVAnalysis extends App.AppBase {
 		//mAntID = Properties.getValue("pAuxHRAntID");
 		//mAuxHRAntID = mAntID; // default
 		
-		mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
+		$.mTestMode = Properties.getValue("pTest"); 
+		Sys.println("T:"+$.mTestMode);
+		
 		mSensorTypeExt = SENSOR_INTERNAL;
 		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
@@ -228,7 +242,6 @@ class HRVAnalysis extends App.AppBase {
     
     function initialize() {
     	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
-        
         //$._m$.pp.getApp();
         
         // Retrieve device type
@@ -291,10 +304,10 @@ class HRVAnalysis extends App.AppBase {
 	   	// now setup sensors as have created data structures
 	   	mSensor.SetUpSensors();
 	    
-	    if (mDebugging) {
-	    	Sys.println("HRVApp: sensor created: " + mSensor);
-	    	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
-	    }
+	    //if (mDebugging) {
+	    //	Sys.println("HRVApp: sensor created: " + mSensor);
+	    //	Sys.println("HRVApp: Sensor channel open? " + mSensor.mHRData.isChOpen);
+	    //}
 
 		// 0.4.9 Don't do this unless needed
 		// Retrieve saved results from memory

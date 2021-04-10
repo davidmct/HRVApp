@@ -280,6 +280,9 @@ function getView(newViewNum) {
 	else if (HISTORY_VIEW == $.viewNum) {
 		return new HistoryView(0);
 	}
+	else if (TREND_VIEW == $.viewNum) {
+		return new HistoryView(1);
+	}
 	else if (POINCARE_VIEW == $.viewNum) {
 		return new PoincareView(1);
 	}
