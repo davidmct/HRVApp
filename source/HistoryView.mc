@@ -413,6 +413,7 @@ class HistoryView extends Ui.View {
 		var _stats = [ 0, 0, 0, 0];
 		var startMoment = Time.now();
 		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
+		startMoment = null;
 		
 		loadTest( utcStart);
 
@@ -690,7 +691,7 @@ class HistoryView extends Ui.View {
 		var min = 1000;
 	
 		var labelList = new [MAX_DISPLAY_VAR];
-		var resultsIndexList = new [MAX_DISPLAY_VAR];
+		var resIndL = new [MAX_DISPLAY_VAR]; // resultsIndexList
 		
 		if ( $.results == null) {
 			prepResults();
@@ -699,18 +700,18 @@ class HistoryView extends Ui.View {
 		var mHistoryLabelList = Ui.loadResource(Rez.JsonData.jsonHistoryLabelList); 
 		
 		//0.4.3 - Now have list available to match label and colour!
-		// resultsIndexList to null if no data to display
+		// resIndL to null if no data to display
 		if ( $.mHistoryLabel1 == 0 && $.mHistoryLabel2 == 0 && $.mHistoryLabel3 == 0) {
 			mHistoryLabelList = null;
 			return;
 		}	
 		 
 		labelList[0] = mHistoryLabelList[$.mHistoryLabel1];
-        resultsIndexList[0] = ( $.mHistoryLabel1 == 0 ? null : $.mHistoryLabel1);
+        resIndL[0] = ( $.mHistoryLabel1 == 0 ? null : $.mHistoryLabel1);
 		labelList[1] = mHistoryLabelList[$.mHistoryLabel2];
-        resultsIndexList[1] = ( $.mHistoryLabel2 == 0 ? null : $.mHistoryLabel2);
+        resIndL[1] = ( $.mHistoryLabel2 == 0 ? null : $.mHistoryLabel2);
 		labelList[2] = mHistoryLabelList[$.mHistoryLabel3];
-        resultsIndexList[2] = ( $.mHistoryLabel3 == 0 ? null : $.mHistoryLabel3);   
+        resIndL[2] = ( $.mHistoryLabel3 == 0 ? null : $.mHistoryLabel3);   
         
         mHistoryLabelList = null;
                         	
@@ -730,7 +731,7 @@ class HistoryView extends Ui.View {
 		dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( _x, _y, mLabelFont, labelList[2], mJust);	
 		
-		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
+		//Sys.println("labelList = "+labelList+" resIndL = "+resIndL);
 		
 		//0.6.3 we could still have no array on first run
 		if ($.results == null) {
@@ -755,7 +756,7 @@ class HistoryView extends Ui.View {
 				// get values and check max/min
 				var cnt = 0;
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];					
+					var j = resIndL[i];					
 					if (j != null) {
 						var value = $.results[index+j].toNumber();
 						cnt++;
@@ -797,7 +798,7 @@ class HistoryView extends Ui.View {
 		if (dataCount == 1) {
 			// load values
 			for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-				var j = resultsIndexList[i];	
+				var j = resIndL[i];	
 				// up to MAX_DISPLAY_VAR to show - check valid entry			
 				if (j != null) {
 					firstData[i] = $.results[j].toNumber();
@@ -812,11 +813,11 @@ class HistoryView extends Ui.View {
 			
 			// now we should have a continuous set of points having found a non-zero entry
 			dc.setColor($.Label1Colour, $.mBgColour);
-			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
+			if (resIndL[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
 			dc.setColor($.Label2Colour, $.mBgColour);
-			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
+			if (resIndL[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
 			dc.setColor($.Label3Colour, $.mBgColour);
-			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
+			if (resIndL[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
 			
 			// TEST CODE		
 			//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
@@ -836,7 +837,7 @@ class HistoryView extends Ui.View {
 			if ($.results[index] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];	
+					var j = resIndL[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
 						firstData[i] = $.results[index+j].toNumber();
@@ -861,7 +862,7 @@ class HistoryView extends Ui.View {
 				//if ($.results[secondIndex] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];	
+					var j = resIndL[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
 						firstData[i] = $.results[secondIndex+j].toNumber();
@@ -873,14 +874,14 @@ class HistoryView extends Ui.View {
 	 			var mLabel2Val2 = scale(firstData[1]);
 	 			var mLabel3Val2 = scale(firstData[2]);	
 	 			
-	 			//Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
+	 			//Sys.println("#2 firstData, resIndL and #points, secondIndex :"+firstData+", "+resIndL+", #"+pointNumber+","+secondIndex);			
 
 				dc.setColor($.Label1Colour, $.mBgColour);
-				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+				if (resIndL[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
 				dc.setColor($.Label2Colour, $.mBgColour);
-				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
+				if (resIndL[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 				dc.setColor($.Label3Colour, $.mBgColour);
-				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+				if (resIndL[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 				
 				//Sys.println("LeftX: "+leftX+", x1: "+x1+", x2: "+x2+" floorY: "+floorY+" l1v1: "+mLabel1Val1+" l1v2: "+mLabel1Val2+
 				//	" l2v1: "+mLabel2Val1+" l2v2: "+mLabel2Val2+
@@ -938,7 +939,7 @@ class HistoryView extends Ui.View {
 	//hidden var numResultsToDisplay = 0;
 	
 	hidden var labelList = new [MAX_DISPLAY_VAR];
-	hidden var resultsIndexList = new [MAX_DISPLAY_VAR];
+	hidden var resIndL = new [MAX_DISPLAY_VAR];
     
     hidden var mTitleLoc = [50, 11]; // %
 	hidden var mTitleLocS = [0,0];	
@@ -1075,7 +1076,7 @@ class HistoryView extends Ui.View {
 	function findResultLabels(keys) {		
 		// init arrays
 		for ( var i=0; i < labelList.size(); i++) { labelList[i] = "";}
-		for ( var i=0; i < resultsIndexList.size(); i++) { resultsIndexList[i] = null;}
+		for ( var i=0; i < resIndL.size(); i++) { resIndL[i] = null;}
 		
 		// scan through flags looking for true and then get label
 		// find first N out of set
@@ -1088,7 +1089,7 @@ class HistoryView extends Ui.View {
 			if ($.mHistorySelectFlags & (1 << (bitPosition-1))) {
 				// found set bit, capture index in to dictionary
 				labelList[j] = possible;
-				resultsIndexList[j] = bitPosition;
+				resIndL[j] = bitPosition;
 				numResultsToDisplay++;
 				j++;
 				if (j >= MAX_DISPLAY_VAR) {
@@ -1183,22 +1184,22 @@ class HistoryView extends Ui.View {
 		//findResultLabels(mKeys);
 		
 		// CHECK OUTCOME
-		//Sys.println("HistoryView(): numResults, labelList, resultsIndexList :"
-		//	+numResultsToDisplay+","+labelList+","+resultsIndexList);
+		//Sys.println("HistoryView(): numResults, labelList, resIndL :"
+		//	+numResultsToDisplay+","+labelList+","+resIndL);
 		
 		//0.4.3 - Now have list available to match label and colour!
-		// resultsIndexList to null if no data to display
+		// resIndL to null if no data to display
 		if ( $.mHistoryLabel1 == 0 && $.mHistoryLabel2 == 0 && $.mHistoryLabel3 == 0) {
 			mHistoryLabelList = null;
 			return;
 		}	
 		 
 		labelList[0] = mHistoryLabelList[$.mHistoryLabel1];
-        resultsIndexList[0] = ( $.mHistoryLabel1 == 0 ? null : $.mHistoryLabel1);
+        resIndL[0] = ( $.mHistoryLabel1 == 0 ? null : $.mHistoryLabel1);
 		labelList[1] = mHistoryLabelList[$.mHistoryLabel2];
-        resultsIndexList[1] = ( $.mHistoryLabel2 == 0 ? null : $.mHistoryLabel2);
+        resIndL[1] = ( $.mHistoryLabel2 == 0 ? null : $.mHistoryLabel2);
 		labelList[2] = mHistoryLabelList[$.mHistoryLabel3];
-        resultsIndexList[2] = ( $.mHistoryLabel3 == 0 ? null : $.mHistoryLabel3);   
+        resIndL[2] = ( $.mHistoryLabel3 == 0 ? null : $.mHistoryLabel3);   
         
         mHistoryLabelList = null;
                         	
@@ -1211,7 +1212,7 @@ class HistoryView extends Ui.View {
 		dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mLabelValueLocXS[2], mLabelValueLocYS[2], mLabelFont, labelList[2], mJust);	
 		
-		//Sys.println("labelList = "+labelList+" resultsIndexList = "+resultsIndexList);
+		//Sys.println("labelList = "+labelList+" resIndL = "+resIndL);
 		
 		// TEST CODE..
 		// set results up to end point...
@@ -1241,13 +1242,12 @@ class HistoryView extends Ui.View {
 		var today = ($.resultsIndex + NUM_RESULT_ENTRIES - 1) % NUM_RESULT_ENTRIES;		
 		
 		// TEST CODE DUMP RESULTS AS getting weird type
-		if (mDebuggingResults) {
-			var dump = "";
-			for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
-				dump += $.results[i].toString() + ",";
-			}
-			Sys.println("History DUMP results : "+dump);
-		}
+			//var dump = "";
+			//for(var i = 0; i < NUM_RESULT_ENTRIES * DATA_SET_SIZE; i++) {
+			//	dump += $.results[i].toString() + ",";
+			//}
+			//Sys.println("History DUMP results : "+dump);
+		// END TEST CODE
 		
 		// Find result limits
 		// ASSUME THAT HISTORY IS LAST 30 samples on different days NOT that they have to be contiguous days!!!		
@@ -1259,7 +1259,7 @@ class HistoryView extends Ui.View {
 				// get values and check max/min
 				var cnt = 0;
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];					
+					var j = resIndL[i];					
 					if (j != null) {
 						var value = $.results[index+j].toNumber();
 						cnt++;
@@ -1334,7 +1334,7 @@ class HistoryView extends Ui.View {
 		if (dataCount == 1) {
 			// load values
 			for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-				var j = resultsIndexList[i];	
+				var j = resIndL[i];	
 				// up to MAX_DISPLAY_VAR to show - check valid entry			
 				if (j != null) {
 					firstData[i] = $.results[j].toNumber();
@@ -1349,11 +1349,11 @@ class HistoryView extends Ui.View {
 			
 			// now we should have a continuous set of points having found a non-zero entry
 			dc.setColor($.Label1Colour, $.mBgColour);
-			if (resultsIndexList[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
+			if (resIndL[0] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel1Val1, 2);}
 			dc.setColor($.Label2Colour, $.mBgColour);
-			if (resultsIndexList[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
+			if (resIndL[1] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel2Val1, 2);}					
 			dc.setColor($.Label3Colour, $.mBgColour);
-			if (resultsIndexList[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
+			if (resIndL[2] !=null ) {dc.fillCircle(leftX + 3, floorY - mLabel3Val1, 2);}	
 			
 			// TEST CODE		
 			//Sys.println("History view memory used, free, total: "+System.getSystemStats().usedMemory.toString()+
@@ -1373,7 +1373,7 @@ class HistoryView extends Ui.View {
 			if ($.results[index] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];	
+					var j = resIndL[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
 						firstData[i] = $.results[index+j].toNumber();
@@ -1398,7 +1398,7 @@ class HistoryView extends Ui.View {
 				//if ($.results[secondIndex] != 0) { // we have an entry that has been created	
 				// load values
 				for (var i=0; i < MAX_DISPLAY_VAR; i++) {
-					var j = resultsIndexList[i];	
+					var j = resIndL[i];	
 					// shouldn't need null test as have number of valid entries and already checked not zero			
 					if (j != null) {
 						firstData[i] = $.results[secondIndex+j].toNumber();
@@ -1410,14 +1410,14 @@ class HistoryView extends Ui.View {
 	 			var mLabel2Val2 = scale(firstData[1]);
 	 			var mLabel3Val2 = scale(firstData[2]);	
 	 			
-	 			//Sys.println("#2 firstData, resultsIndexList and #points, secondIndex :"+firstData+", "+resultsIndexList+", #"+pointNumber+","+secondIndex);			
+	 			//Sys.println("#2 firstData, resIndL and #points, secondIndex :"+firstData+", "+resIndL+", #"+pointNumber+","+secondIndex);			
 
 				dc.setColor($.Label1Colour, $.mBgColour);
-				if (resultsIndexList[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
+				if (resIndL[0] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel1Val1, leftX + x2, floorY - mLabel1Val2);}
 				dc.setColor($.Label2Colour, $.mBgColour);
-				if (resultsIndexList[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
+				if (resIndL[1] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel2Val1, leftX + x2, floorY - mLabel2Val2);}
 				dc.setColor($.Label3Colour, $.mBgColour);
-				if (resultsIndexList[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
+				if (resIndL[2] !=null ) {dc.drawLine(leftX + x1, floorY - mLabel3Val1, leftX + x2, floorY - mLabel3Val2);}
 
 				pointNumber++;	
 			} // found entry	

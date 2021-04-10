@@ -199,7 +199,7 @@ module GlanceGen
      	}     	
     	
     	mPos = mPos / 100.0;
-    	Sys.println("Position in range is "+mPos+" percent based on HRV of "+_HRV);
+    	Sys.println("Pos in range is "+mPos+"% based on HRV of "+_HRV);
 		
 		return mPos;
 	}
