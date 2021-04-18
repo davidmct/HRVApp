@@ -227,6 +227,7 @@ class HistoryView extends Ui.View {
 		var testD;
 		var testD2;
 		var testD3;
+		var testD4;
 		
 		Sys.println("loadTest utc base: "+_baseUtc);
 		
@@ -396,13 +397,31 @@ class HistoryView extends Ui.View {
 		97200,64.45148447
 		];
 		
+		testD4 = [
+			1821600,64.28294735,
+			1735200,66.95308378,
+			1648800,40.24570234,
+			1389600,24.92338392,
+			1220400,69.67125745,
+			1137600,49.70584629,
+			957600,0.000342771,
+			874800,15.95926112,
+			788400,49.42414698,
+			702000,69.62753863,
+			615600,57.99453096,
+			356400,8.511912664,
+			270000,39.93920028,
+			183600,66.82540994,
+			97200,64.45148447	
+		];
+		
 		
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD3.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD3[i]).toNumber();
-			GG.resGL[i+1] = testD3[i+1]; //HRV
+		for(var i = 0; i < testD4.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD4[i]).toNumber();
+			GG.resGL[i+1] = testD4[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -416,6 +435,8 @@ class HistoryView extends Ui.View {
 		GG.resGLIndex = 0;
 		testD = null;	
 		testD2 = null;	
+		testD3 = null;
+		testD4 = null;
 	}
 	
 	function initTrends() {

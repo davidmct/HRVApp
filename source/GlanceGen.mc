@@ -134,7 +134,8 @@ module GlanceGen
 		var mSrchWk = 0;
 		// now we need to look through results and see if entries fall in the right weeks!
 		
-		//Sys.println("calcHRVAvg: resGl size="+resGL.size());
+		//TEST
+		Sys.println("calcHRVAvg: resGl size="+resGL.size());
 		
 		for (var i=0; i < resGL.size(); i+=GL_SET_SIZE) {
 			// skip if no data
@@ -172,7 +173,7 @@ module GlanceGen
 		// Make it so we need four weeks
 		if (mMcnt == 4) { mMonthAvg = mMonthAvg / mMcnt.toFloat(); } else { mMonthAvg = 0;}
 		
-		//Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
+		Sys.println("Weekly averages="+mWeekly+" Monthly average="+mMonthAvg);
 			
 		return [ mMonthAvg, mWeekly[0] ];
 	}
