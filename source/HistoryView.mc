@@ -42,6 +42,18 @@ class HistoryView extends Ui.View {
 	
 	// original history = 0, long term history is 1
 	hidden var mView = 0;
+	
+	// X-SCALE imp
+	// Fixed pitch at 4 as xStep
+	// We can then work out maximum number of days to plot
+	hidden var numDaysMax;
+	
+	// plot of day values starts at this position
+	hidden var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
+	hidden var sDay; //this day is the day we must be greater than or equal to for plotting
+	hidden var _eX; // how far do we draw regression lines for
+	hidden var _listSize;
+	hidden var noDaysToTrend = true; // needs to be false to draw trend data no days found
    
 	function initialize( _mView) {
 	 	if (_mView > 1) { mView = 0;} else { mView = _mView;}
@@ -99,6 +111,13 @@ class HistoryView extends Ui.View {
 		
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
+    	//0.6.6 move out of update the resource intensive parts
+    	
+    	if (mView == 0) { return; } // conventional view
+    	
+    	// build arrays for trend view
+    	Sys.println("History onShow()");
+    	noDaysToTrend = initTrends();    
     }
 
     function scale(num) {
@@ -208,6 +227,7 @@ class HistoryView extends Ui.View {
 		var testD;
 		var testD2;
 		var testD3;
+		var testD4;
 		
 		Sys.println("loadTest utc base: "+_baseUtc);
 		
@@ -377,13 +397,31 @@ class HistoryView extends Ui.View {
 		97200,64.45148447
 		];
 		
+		testD4 = [
+			1821600,64.28294735,
+			1735200,66.95308378,
+			1648800,40.24570234,
+			1389600,24.92338392,
+			1220400,69.67125745,
+			1137600,49.70584629,
+			957600,0.000342771,
+			874800,15.95926112,
+			788400,49.42414698,
+			702000,69.62753863,
+			615600,57.99453096,
+			356400,8.511912664,
+			270000,39.93920028,
+			183600,66.82540994,
+			97200,64.45148447	
+		];
+		
 		
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD3.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD3[i]).toNumber();
-			GG.resGL[i+1] = testD3[i+1]; //HRV
+		for(var i = 0; i < testD4.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD4[i]).toNumber();
+			GG.resGL[i+1] = testD4[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -397,16 +435,11 @@ class HistoryView extends Ui.View {
 		GG.resGLIndex = 0;
 		testD = null;	
 		testD2 = null;	
+		testD3 = null;
+		testD4 = null;
 	}
 	
-	function drawLongTerm(dc) {
-		var _prt = true; // assume printed already
-		   
-	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
-	    //var _EnT = false; // enable trend if enough data
-	    var _x = ctrX;
-        var _y = (dispH * 88 ) / 100;		
-		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
+	function initTrends() {
 		
 		// Need to load required data
 		// can use existing function...		
@@ -414,7 +447,8 @@ class HistoryView extends Ui.View {
 		var startMoment = Time.now();
 		var utcStart = startMoment.value() + Sys.getClockTime().timeZoneOffset;
 		startMoment = null;
-		
+				
+		// stub if annotation disables test data load 
 		loadTest( utcStart);
 
     	// loads up resGL;		
@@ -431,21 +465,13 @@ class HistoryView extends Ui.View {
 			GG.calcTrends( utcStart, 0.0, _resT[0]);
 			utcStart = null;
 			// want to see mTrendST, LT, MT values from this	
-			_prt = false;
 		}
+	
 		// Hopefully now mTrendXX setup
 		
 		// TEST CODE in TEST MODE
 		//Sys.println("_res = "+_resT+"\n"+"resGL="+GG.resGL+"\n"+"LT="+GG.mTrendLT+"\n"+"MT="+GG.mTrendMT+"\n"+"ST="+GG.mTrendST);		
 		// END TEST CODE
-		
-		// Determine range of data - already done in load of data
-		// - count # samples, min/max, #days covered, date of latest sample = day N
-		// - output Y scale factor for data		
-		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
-		// need to look at data for last test date
-		// sets ceil, floor, range and scaleY then draws UY axis labels
-		defineRange( dc, _resT[4], _resT[2], _resT[3]);
 		
 		// Number of days covered by data found in results
 		var _minDate = (_resT[0] - _resT[0] % 86400); // Date format 
@@ -457,13 +483,15 @@ class HistoryView extends Ui.View {
 		//Sys.println("Days covered by tests = "+days);
 		
 		//if (days <= 1) { return;}
-		if ( _maxDate / 86400 -  _minDate / 86400 + 1 <= 1) { return;}
+		if ( _maxDate / 86400 -  _minDate / 86400 + 1 <= 1) { return true;} // no days found
 		//days = null;
 		//_str2 = null;
 		//_str3 = null;
 
 		// this is number of total days we have in results
-		var _listSize = GG.mSortedRes.size();
+		_listSize = GG.mSortedRes.size();
+		
+		Sys.println("Days array="+GG.mSortedRes);
 				
 		// Work out X scale - limited by pixel number and dot size
 		// - assume dot is 2x2 pixel and chartWidth = W. Min pitch = 3 pixels
@@ -474,12 +502,12 @@ class HistoryView extends Ui.View {
 		// X-SCALE imp
 		// Fixed pitch at 4 as xStep
 		// We can then work out maximum number of days to plot
-		var numDaysMax = _cWidth / xStep;
+		numDaysMax = _cWidth / xStep;
 		
 		// plot of day values starts at this position
-		var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
-		var sDay; //this day is the day we must be greater than or equal to for plotting
-		var _eX; // how far do we draw regression lines for
+		//var _index; // = _listSize - days - 1; // plot point at x=0 so get additional point				
+		//var sDay; //this day is the day we must be greater than or equal to for plotting
+		//var _eX; // how far do we draw regression lines for
 		
 		if (_listSize <= numDaysMax) {
 			// we have fewer days than we can display so start at start of day list
@@ -494,14 +522,33 @@ class HistoryView extends Ui.View {
 			_eX = numDaysMax * xStep;
 		}
 		
-		// do once
-		if (_prt == false) {
-			Sys.println("_index ="+_index+", listsize="+_listSize+
-				", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax);				
-			Sys.println("_minDate as day ="+_minDate/86400+" sDay as days="+sDay/86400);
-			_prt = true;
-		}
+		Sys.println("_index ="+_index+", listsize="+_listSize+
+				", Date info: sDay="+sDay+", _minDate:"+_minDate+", _maxDate:"+_maxDate+", max days in chart W:"+numDaysMax+				
+				", _minDate as day="+_minDate/86400+" sDay as days="+sDay/86400);
+				
+		return false;
+	
+	}
+	
+	function drawLongTerm(dc) {
+		var _maxY = 0;
+		   
+	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
+	    //var _EnT = false; // enable trend if enough data
+	    var _x = ctrX;
+        var _y = (dispH * 88 ) / 100;		
+		dc.drawText( _x, _y, mLabelFont, "RMSSD", mJust);	
 		
+		// Determine range of data - already done in load of data
+		// - count # samples, min/max, #days covered, date of latest sample = day N
+		// - output Y scale factor for data		
+		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
+		// need to look at data for last test date
+		// sets ceil, floor, range and scaleY then draws UY axis labels
+		_maxY = defineRange( dc, _resT[4], _resT[2], _resT[3]);
+		
+		if (noDaysToTrend) { return;} 
+				
 		// Plot X data
 		// - Run through whole results array looking for dates in range of interest
 		// - Scatter plot using scaled HRV data on Y axis, X axis = pitch * day number
@@ -582,8 +629,14 @@ class HistoryView extends Ui.View {
 			_sX = _listSize - _index - 7;
 			_sX = _sX < 0 ? 0 : _sX * xStep;
 			// _eX = _listSize * xStep;
-			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
-			_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);			
+			var _val =  GG.mTrendST[1] * 7 + GG.mTrendST[0];
+			
+			// cap _eY at top of chart			
+			_eY = _val > _maxY ? scale ( _maxY) : scale (_eY);
+			
+			//_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+
 			//Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
 			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
@@ -623,6 +676,12 @@ class HistoryView extends Ui.View {
 			//Sys.println("_ind="+_ind);
 			_ind++;
 		} 
+		
+		// TEST CODE		
+		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 	
 	}
 	
@@ -630,6 +689,7 @@ class HistoryView extends Ui.View {
 	// Work out data range for Y axis then draw labels assuming 7 lines ie 6 gaps
 	// _dataCnt : number of points we have. Check we have some otherwise default range
 	// _min/_max : min and max of dataset
+	// returns maximum Y value in range allowed 
 	function defineRange( dc, _dataCnt, _min, _max) { 
 		// If no results then set min & max to create a nice graph scale
 		var min = (_min+0.5).toNumber();
@@ -669,19 +729,16 @@ class HistoryView extends Ui.View {
 		// Built new font instead
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
+
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
 			var str = format(" $1$ ",[num.format("%d")] );	
 			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
 			yInit += yStep;
-		}
+		}	
 		
-		// TEST CODE		
-		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
-		//	", "+System.getSystemStats().freeMemory.toString()+
-		//	", "+System.getSystemStats().totalMemory.toString()			
-		//	);	
+		return ceil;	
 	}
 
 	function drawHistory(dc) {		
