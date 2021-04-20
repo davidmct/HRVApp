@@ -135,7 +135,7 @@ module GlanceGen
 		// now we need to look through results and see if entries fall in the right weeks!
 		
 		//TEST
-		Sys.println("calcHRVAvg: resGl size="+resGL.size());
+		Sys.println("calcHRVAvg: resGl size="+resGL.size()+", data:"+resGL);
 		
 		for (var i=0; i < resGL.size(); i+=GL_SET_SIZE) {
 			// skip if no data

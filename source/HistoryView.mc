@@ -531,6 +531,7 @@ class HistoryView extends Ui.View {
 	}
 	
 	function drawLongTerm(dc) {
+		var _maxY = 0;
 		   
 	    dc.setColor( $.Label3Colour, Gfx.COLOR_TRANSPARENT);
 	    //var _EnT = false; // enable trend if enough data
@@ -544,7 +545,7 @@ class HistoryView extends Ui.View {
 		// probably should check we have a count! Also might want to check whether if a test wasn't done today that date measure works - might 
 		// need to look at data for last test date
 		// sets ceil, floor, range and scaleY then draws UY axis labels
-		defineRange( dc, _resT[4], _resT[2], _resT[3]);
+		_maxY = defineRange( dc, _resT[4], _resT[2], _resT[3]);
 		
 		if (noDaysToTrend) { return;} 
 				
@@ -628,8 +629,14 @@ class HistoryView extends Ui.View {
 			_sX = _listSize - _index - 7;
 			_sX = _sX < 0 ? 0 : _sX * xStep;
 			// _eX = _listSize * xStep;
-			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
-			_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);			
+			var _val =  GG.mTrendST[1] * 7 + GG.mTrendST[0];
+			
+			// cap _eY at top of chart			
+			_eY = _val > _maxY ? scale ( _maxY) : scale (_eY);
+			
+			//_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+
 			//Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
 			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
@@ -669,6 +676,12 @@ class HistoryView extends Ui.View {
 			//Sys.println("_ind="+_ind);
 			_ind++;
 		} 
+		
+		// TEST CODE		
+		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
+		//	", "+System.getSystemStats().freeMemory.toString()+
+		//	", "+System.getSystemStats().totalMemory.toString()			
+		//	);	
 	
 	}
 	
@@ -676,6 +689,7 @@ class HistoryView extends Ui.View {
 	// Work out data range for Y axis then draw labels assuming 7 lines ie 6 gaps
 	// _dataCnt : number of points we have. Check we have some otherwise default range
 	// _min/_max : min and max of dataset
+	// returns maximum Y value in range allowed 
 	function defineRange( dc, _dataCnt, _min, _max) { 
 		// If no results then set min & max to create a nice graph scale
 		var min = (_min+0.5).toNumber();
@@ -715,19 +729,16 @@ class HistoryView extends Ui.View {
 		// Built new font instead
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		var gap = (ceil-floor);	
+
 		for (var i=0; i<7; i++) {
 			var num = ceil - ((i * gap) / 6.0); // may need to be 7.0
 			// just use whole numbers
 			var str = format(" $1$ ",[num.format("%d")] );	
 			dc.drawText( xPos, yInit, mLabelFont, str, mJust);
 			yInit += yStep;
-		}
+		}	
 		
-		// TEST CODE		
-		//Sys.println("History-2 used, free, total: "+System.getSystemStats().usedMemory.toString()+
-		//	", "+System.getSystemStats().freeMemory.toString()+
-		//	", "+System.getSystemStats().totalMemory.toString()			
-		//	);	
+		return ceil;	
 	}
 
 	function drawHistory(dc) {		

@@ -508,6 +508,16 @@ class InternalSensor {
     	
     	//0.6.3 remove disabling of sensors to keep already attached ones alive
 		//Sensor.setEnabledSensors( [] );
+		
+		//0.6.6 aim to stop just strap if CIQ3.2
+		var _ans = false;
+		if (Sensor has :disableSensorType) {
+			Sys.println("Stop: >=CIQ 3.2");
+			_ans = disableSensorType( Sensor.SENSOR_HEARTRATE);
+			if (_ans) { 
+				Sys.println("Strap disabled"); 
+			} 
+		}
 	}
 
 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
