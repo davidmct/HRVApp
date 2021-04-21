@@ -64,9 +64,11 @@ class HistoryView extends Ui.View {
 
 		var a = Ui.loadResource(Rez.Strings.HistoryGridWidth);
 		cGridWidth = a.toNumber();
-		a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
-		chartHeight = a.toNumber();
-		a = null;
+		
+		// chartHeight now a calculated value in 0.6.6
+		//a = Ui.loadResource(Rez.Strings.HistoryGridHeight);
+		//chartHeight = a.toNumber();
+		//a = null;
 
 		// chartHeight defines height of chart and sets scale
 		// impacts all layout numbers!
@@ -88,7 +90,7 @@ class HistoryView extends Ui.View {
 		// 0.6.6 lets see if chartHeight can come from actual display 
 		chartHeight = _lineEnd - _lineStart;
 		
-		Sys.println("_lineStart="+_lineStart+", _lineEnd="+_lineEnd+" means height ="+chartHeight);
+		//Sys.println("_lineStart="+_lineStart+", _lineEnd="+_lineEnd+" means height ="+chartHeight);
 		
 		// find intersect on X axis of bounding circle
 		var _farX1 = cGridWidth / 2 + Math.sqrt( Math.pow(dispW /2, 2) - Math.pow(ctrY - _lineStart, 2) );
@@ -424,9 +426,9 @@ class HistoryView extends Ui.View {
 		GG.resetResGLArray();
 			
 		// Write data into array as much as we have
-		for(var i = 0; i < testD4.size(); i = i+2) {
-			GG.resGL[i] = (_baseUtc - testD4[i]).toNumber();
-			GG.resGL[i+1] = testD4[i+1]; //HRV
+		for(var i = 0; i < testD3.size(); i = i+2) {
+			GG.resGL[i] = (_baseUtc - testD3[i]).toNumber();
+			GG.resGL[i+1] = testD3[i+1]; //HRV
 			GG.resGLIndex++;
 		}
 		
@@ -535,6 +537,23 @@ class HistoryView extends Ui.View {
 	
 	}
 	
+	// check Y in range of chart and return coord for plot
+	function checknScale( inY) {
+		var _outY;
+			
+		// cap _eY at top of chart and _sY at bottom	
+		// take off 1 to cater for rounding
+		if ( inY < floor) {
+			_outY = scale (floor);
+		} else if ( inY > ce_ceil) {
+			_outY = scale (ce_ceil-1);
+		} else {
+			_outY = scale (inY);
+		}
+	
+		return _outY;
+	}
+	
 	function drawLongTerm(dc) {
 		var _maxY = 0;
 		   
@@ -604,8 +623,8 @@ class HistoryView extends Ui.View {
 		if (GG.mTrendLT !=  null && GG.mTrendLT[3] >= 3 && GG.mTrendLT[0] != 0)  {
 			// we know that trend would not be created unless we had this much data
 			_sX = 0; // starts at earliest day
-			_sY = scale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
-			_eY = scale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
+			_sY = checknScale( GG.mTrendLT[1] * 1 + GG.mTrendLT[0]);
+			_eY = checknScale( GG.mTrendLT[1] * _listSize + GG.mTrendLT[0]); 
 			dc.setColor( Gfx.COLOR_BLUE, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);
 		}
@@ -618,8 +637,8 @@ class HistoryView extends Ui.View {
 			_sX = _sX < 0 ? 0 : _sX * xStep;
 			
 			// x for trend starts at 1 and goes for length ???
-			_sY = scale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
-			_eY = scale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
+			_sY = checknScale( GG.mTrendMT[1] * 1 + GG.mTrendMT[0]);
+			_eY = checknScale( GG.mTrendMT[1] * 28 + GG.mTrendMT[0]); 
 			dc.setColor( Gfx.COLOR_PINK, Gfx.COLOR_TRANSPARENT);
 			dc.drawLine(leftX + _sX, floorY - _sY, leftX + _eX, floorY - _eY);			
 		}
@@ -632,16 +651,17 @@ class HistoryView extends Ui.View {
 			_sX = _listSize - _index - 7;
 			_sX = _sX < 0 ? 0 : _sX * xStep;
 			// _eX = _listSize * xStep;
-			_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);			
-			var _val =  GG.mTrendST[1] * 7 + GG.mTrendST[0];
-			
+			//_sY = scale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);		
+			_sY = checknScale( GG.mTrendST[1] * 1 + GG.mTrendST[0]);
+						
+			//_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 				
+			var _val2 =  GG.mTrendST[1] * 7 + GG.mTrendST[0];			
 			// cap _eY at top of chart			
 			// take off 1 to cater for rounding
-			_eY = _val > ce_ceil ? scale ( ce_ceil - 1) : scale (_eY);
-								
-			Sys.println("_val:"+_val+", ce_ceil:"+ce_ceil+", floor:"+floor+", eY:"+_eY+", floorY:"+floorY+", scaleY:"+scaleY);
-			
-			//_eY = scale( GG.mTrendST[1] * 7 + GG.mTrendST[0]); 	
+			//_eY = _val2 > ce_ceil ? scale ( ce_ceil - 1) : scale (_eY);			
+			_eY = checknScale( _val2);
+											
+			//Sys.println("_val2:"+_val2+", ce_ceil:"+ce_ceil+", floor:"+floor+", eY:"+_eY+", floorY:"+floorY+", scaleY:"+scaleY);	
 
 			//Sys.println("ST plot: _sX= "+_sX+" _sY= "+_sY+" end X= "+_eX+" _eY: "+_eY);
 			dc.setColor( Gfx.COLOR_YELLOW, Gfx.COLOR_TRANSPARENT);
