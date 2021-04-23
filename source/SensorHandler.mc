@@ -3,6 +3,7 @@ using Toybox.Time as Time;
 using Toybox.System as Sys;
 using Toybox.Math;
 using Toybox.Graphics as Gfx;
+using Toybox.Sensor;
 
 // Sample processing changes
 // 1. Each batch update
@@ -83,7 +84,7 @@ class SensorHandler {
   		if (sensor has :stopExtSensor) {
     		sensor.stopExtSensor();
     	} else if (sensor has :stopIntSensor) {
-    		sensor.stopIntSensor();
+    		sensor.stopIntSensor( self);
     	}
     }
 
@@ -498,16 +499,28 @@ class InternalSensor {
 		SensorSetup();
 	}
 
-	function stopIntSensor() {
+	function stopIntSensor( _self) {
 		Sys.println("Stopping internal sensors");
-		Sensor.unregisterSensorDataListener( );
-		//0.4.5
-    	$.mSensor.mSearching = true;
+
     	// suspicion that having no sensors kills optical after testing until long timeout
     	// Note CIQ ignores off state of ANT HRM. See if this line of code releases it.
     	
     	//0.6.3 remove disabling of sensors to keep already attached ones alive
 		//Sensor.setEnabledSensors( [] );
+		
+		//0.6.6 aim to stop just strap if CIQ3.2
+		var _ans = false;
+		if (_self has :disableSensorType) {
+			Sys.println("Stop: >=CIQ 3.2");
+			_ans = disableSensorType( Sensor.SENSOR_HEARTRATE);
+			if (_ans) { 
+				Sys.println("Strap disabled"); 
+			} 
+		}
+		
+		Sensor.unregisterSensorDataListener( );
+		//0.4.5
+    	$.mSensor.mSearching = true;
 	}
 
 	// lets see if we can use sensor Toybox to get RR from both optical and ANT+
