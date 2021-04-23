@@ -19,7 +19,7 @@ using HRVStorageHandler as mStorage;
 // 0.6.6
 // Turn off Strap if on and CIQ >=3.2
 // Fixed trend draw bug
-// Aligned when month data shown on trend views
+// Note: trends are drawn after 3 days for a week, 28 for month and 45 for long term
 
 //0.6.5
 // Adding second history screen with HRV data plot over as many days as fits on screen along with trend lines
