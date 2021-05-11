@@ -17,7 +17,7 @@ using HRVStorageHandler as mStorage;
 //17. Check download and setting online properties works
 
 // 0.6.7
-// added venu2 and venu2S
+// added enduro, venu2 and venu2S
 
 // 0.6.6
 // Turn off Strap if on and CIQ >=3.2
