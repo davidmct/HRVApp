@@ -16,6 +16,9 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// 0.6.8
+// added Descent Mk2s
+
 // 0.6.7
 // added enduro, venu2 and venu2S
 
