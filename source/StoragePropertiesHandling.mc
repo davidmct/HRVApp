@@ -33,7 +33,7 @@ module HRVStorageHandler {
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
 		Properties.setValue("pAuxHRAntID", 0);
-		//Storage.setValue("firstLoadEver", true);
+		Storage.setValue("firstLoadEver", false);
 		Properties.setValue("pFitWriteEnabled", false);
 		Properties.setValue("pTest", false);
 		Properties.setValue("prMSSD", false);

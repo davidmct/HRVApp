@@ -18,6 +18,8 @@ using HRVStorageHandler as mStorage;
 
 // 0.6.8
 // added Descent Mk2s
+// Setting LnRMSD mult from connectseems to crash watch
+// Need to change trends screen plot point if background is white
 
 // 0.6.7
 // added enduro, venu2 and venu2S
@@ -206,7 +208,7 @@ var vUpperThresholdSet; // long % over
 var vLowerThresholdSet; // short period under %
 
 // if true then display rMSSD otherwise LN version
-var mRM;
+var mRM = false;
 
 // The device type
 var mDeviceType;
@@ -257,7 +259,14 @@ class HRVAnalysis extends App.AppBase {
         
         // Retrieve device type
 		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
-         
+		
+		// defensive programming to ensure all variables initialised
+		if (Store.getValue("firstLoadEver")) {
+			// this also resets flag
+			mStorage.resetSettings();
+			Sys.println("First run reset");
+		}
+		        
         //mStorage = new HRVStorageHandler(self);
         // ensure we have all parameters setup before needed
         mStorage.readProperties();  
