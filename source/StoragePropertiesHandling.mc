@@ -33,7 +33,7 @@ module HRVStorageHandler {
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
 		Properties.setValue("pAuxHRAntID", 0);
-		//Storage.setValue("firstLoadEver", true);
+		Properties.setValue("firstLoadEver", false);
 		Properties.setValue("pFitWriteEnabled", false);
 		Properties.setValue("pTest", false);
 		Properties.setValue("prMSSD", false);
@@ -214,8 +214,25 @@ module HRVStorageHandler {
 			//$.timestampSet = Storage.getValue("timestampSet");
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
+
 		$.mTestMode = Properties.getValue("pTest");
-		$.mRM = Properties.getValue("prMSSD");
+		
+		//0.6.8
+		// Seems connectIQ corrupts data on this element
+		try {
+			  $.mRM = Properties.getValue("prMSSD");
+		}			
+		catch (exception) {
+			  Sys.println("Read failure prMSSD");
+			  $.mRM = false;
+			  Properties.setValue("prMSSD", false);
+		}			
+		finally {
+
+		}
+		
+		//$.mRM = Properties.getValue("prMSSD");
+		
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
 		$.mBoolScaleII = Properties.getValue("pIIScale");
 		$.soundSet = Properties.getValue("soundSet");
@@ -321,6 +338,7 @@ module HRVStorageHandler {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
 		Properties.setValue("pTest", $.mTestMode);
+		Properties.setValue("firstLoadEver", false);
 		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		

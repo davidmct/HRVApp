@@ -60,6 +60,7 @@ class TestView extends Ui.View {
 		// load JSON
 		mScreen = Ui.loadResource(Rez.JsonData.jsonTestD);
 		$.mTestControl.setObserver(self.method(:onNotify));	
+
 	
 	}
         
@@ -79,6 +80,8 @@ class TestView extends Ui.View {
 			//Sys.println("Test View live pulse: " + $.mSensor.mHRData.livePulse.toString());
 			//Sys.println("Test state = "+ $.mTestControl.mTestState);
 		}
+		
+		//Sys.println("Screen width="+dc.getWidth());
 		
 		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($.bgColSet));
 
@@ -102,6 +105,8 @@ class TestView extends Ui.View {
 			dc.drawRectangle(mScreen[31], mScreen[32+i], mScreen[30], 2);
 		}
 
+		//Sys.println("mScreen="+mScreen+", mTitleFont"+mTitleFont+", lable="+mTitleLabels);
+		
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
 		dc.drawText( mScreen[2], mScreen[3], mTitleFont, mTitleLabels[0], mJust);
 		mBitMap.draw(dc);
