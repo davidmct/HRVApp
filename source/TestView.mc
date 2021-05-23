@@ -81,7 +81,7 @@ class TestView extends Ui.View {
 			//Sys.println("Test state = "+ $.mTestControl.mTestState);
 		}
 		
-		Sys.println("Screen width="+dc.getWidth());
+		//Sys.println("Screen width="+dc.getWidth());
 		
 		//Sys.println(" mValueColour, mLabelColour, background : "+mLabelColour+","+mValueColour+","+mapColour($.bgColSet));
 

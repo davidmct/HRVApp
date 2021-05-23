@@ -216,7 +216,23 @@ module HRVStorageHandler {
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
 
 		$.mTestMode = Properties.getValue("pTest");
-		$.mRM = Properties.getValue("prMSSD");
+		
+		//0.6.8
+		// Seems connectIQ corrupts data on this element
+		try {
+			  $.mRM = Properties.getValue("prMSSD");
+		}			
+		catch (exception) {
+			  Sys.println("Read failure prMSSD");
+			  $.mRM = false;
+			  Properties.setValue("prMSSD", false);
+		}			
+		finally {
+
+		}
+		
+		//$.mRM = Properties.getValue("prMSSD");
+		
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
 		$.mBoolScaleII = Properties.getValue("pIIScale");
 		$.soundSet = Properties.getValue("soundSet");
