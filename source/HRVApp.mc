@@ -261,11 +261,15 @@ class HRVAnalysis extends App.AppBase {
 		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
 		
 		// defensive programming to ensure all variables initialised
-		if (Store.getValue("firstLoadEver")) {
+		Sys.println("first="+Properties.getValue("firstLoadEver"));
+		
+		if (Properties.getValue("firstLoadEver") == true) {
 			// this also resets flag
 			mStorage.resetSettings();
 			Sys.println("First run reset");
 		}
+		
+		Sys.println("first="+Properties.getValue("firstLoadEver"));
 		        
         //mStorage = new HRVStorageHandler(self);
         // ensure we have all parameters setup before needed

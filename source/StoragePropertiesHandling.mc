@@ -33,7 +33,7 @@ module HRVStorageHandler {
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
 		Properties.setValue("pAuxHRAntID", 0);
-		Storage.setValue("firstLoadEver", false);
+		Properties.setValue("firstLoadEver", false);
 		Properties.setValue("pFitWriteEnabled", false);
 		Properties.setValue("pTest", false);
 		Properties.setValue("prMSSD", false);
@@ -214,6 +214,7 @@ module HRVStorageHandler {
 			//$.timestampSet = Storage.getValue("timestampSet");
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
+
 		$.mTestMode = Properties.getValue("pTest");
 		$.mRM = Properties.getValue("prMSSD");
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
@@ -321,6 +322,7 @@ module HRVStorageHandler {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
 		Properties.setValue("pTest", $.mTestMode);
+		Properties.setValue("firstLoadEver", false);
 		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		
