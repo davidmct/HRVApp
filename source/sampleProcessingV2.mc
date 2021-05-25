@@ -276,11 +276,16 @@ class SampleProcessing {
 			else if (intervalMs < minIntervalFound) { minIntervalFound = intervalMs;}
 		}
 		
+		// 0.7.1 
+		// if buffer overflows return true and stop accepting
+		if ( mSampleIndex >= $.mIntervalSampleBuffer.size()-1) { return true;}
+		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing
-		if ( mSampleIndex > $.mIntervalSampleBuffer.size()-1) {
-			new $.myException("Buffer limit reached in sample Processing");
-		}
+		//if ( mSampleIndex > $.mIntervalSampleBuffer.size()-1) {
+		//	throw new $.myException("Buffer limit reached in sample Processing");
+		//}
+				
 		$.mIntervalSampleBuffer[mSampleIndex] = intervalMs; // | (mFlag << 12);	
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
@@ -527,7 +532,8 @@ class SampleProcessing {
 			// Now main handling of samples
 			newAvg = mFilter7( mSampleProc, intMs);
 			// always add sample to II buffer
-			addSample(intMs, 1);
+			//0.7.1 if buffer overflows then abort new samples
+			if ( addSample(intMs, 1) ) { return; } // buffer overrun
 		} else {
 			Sys.println(" Sample out of nominal range: "+intMs+" at index:"+mSampleIndex+" with pulse:"+livePulse);
 			return;		
