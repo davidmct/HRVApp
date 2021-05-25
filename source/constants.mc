@@ -99,11 +99,14 @@ var mHistorySelect = {  "avgBPM"=> AVG_PULSE_INDEX,
 const cHISTORYLABELLISTSIZE = 14;					
 
 // SAMPLE PROCESSING
-const MIN_BPM = 35;
+//const MIN_BPM = 35;
 const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
 const MAX_TIME = 8; // minutes
 const LOG_SCALE = 50.0; // scales ln(RMSSD)
 
+// auto scale limits for interval plot and poincare
+const FAST_II = 430; // 140 bpm 
+const SLOW_II = 1800; // 33bpm - move to one based on resting HR
 
 // sample types
 enum {

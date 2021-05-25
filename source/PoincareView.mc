@@ -206,9 +206,14 @@ class PoincareView extends Ui.View {
     	if ( viewToShow == 1) {
 			max = $.mSampleProc.maxIntervalFound;
 			min = $.mSampleProc.minIntervalFound;
-		} else {
-			max = 60000/MIN_BPM; // 35 BPM in ms
-			min = 60000/MAX_BPM; // 150 BPM
+		} else {		
+			if (!$.mBoolScaleII) {
+				max = $.mRestingHR_II;
+				min = $.mZone1TopHR_II;
+			} else {
+				max = SLOW_II; // 35 BPM in ms
+				min = FAST_II; // 150 BPM
+			}
 		}
 		
 		//Sys.println("Poincare: max, min "+max+" , "+min);
