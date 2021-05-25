@@ -90,42 +90,6 @@ class IntervalView extends Ui.View {
 		
 		// Decide how many samples to plot across
 		cNumPoints = chartHeight / X_INC_VALUE;
-		
-		// get resting heart rate
-		var restingHR = UserProfile.getProfile().restingHeartRate;
-		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
-		
-		// average resting is 3.2.0 feature so remove
-		//Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
-		
-		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
-		
-		// RANGE CHECK restingHeart rate and zone 1 to make sure sensible		
-		//mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
-		var mTemp = 60000;
-		if (restingHR == null) {
-			mRestingHR_II = SLOW_II;
-		} else if (restingHR == 0) {
-			mRestingHR_II = SLOW_II;
-		} else {
-			mRestingHR_II = (mTemp.toFloat() / (restingHR.toFloat() * 0.95)).toNumber();
-		}
-		
-		//mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR.toFloat() * 0.95)).toNumber());
-		
-		if (zones != null && zones[1] != null) {
-			mZone1TopHR_II = (mTemp.toFloat() / (zones[1] * 1.05)).toNumber();
-		} else {		
-			mZone1TopHR_II = FAST_II;
-		}
-		
-		//profile = null;
-		restingHR = null;
-		zones = null;
-		mTemp = null;
-				
-		Sys.println("Floor HR ms = "+mRestingHR_II+" BPM: "+60000/mRestingHR_II);
-		Sys.println("Top HR ms = "+mZone1TopHR_II+" BPM: "+60000/mZone1TopHR_II);
 										
 		return true;
 	}
@@ -191,8 +155,8 @@ class IntervalView extends Ui.View {
     			
 		// True if auto scaling on 
 		if (!$.mBoolScaleII) {
-			Ymax = mRestingHR_II;
-			Ymin = mZone1TopHR_II;
+			Ymax = $.mRestingHR_II;
+			Ymin = $.mZone1TopHR_II;
 		} else {
 	    	// scan array to be plotted looking for min and max
 	    	// Could reduce to viewed portion

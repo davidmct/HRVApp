@@ -16,6 +16,13 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.7.1
+// Reorder initialisation to read properties etc in onStart() not initialize()
+// Made HR range for user a function run at start and used to scale charts as needed
+
+//0.7.0
+// tried to fix startup crash
+
 // 0.6.8
 // added Descent Mk2s
 // Setting LnRMSD mult from connectseems to crash watch
@@ -231,6 +238,10 @@ var mGData = false;
 var mArcCol = [0xff0000, 0xffff00, 0x00ff00, 0x0055ff];
 // colour of arrow display
 var mCircColSel;
+
+// 0.7.1
+var mRestingHR_II;
+var mZone1TopHR_II;
 		
 class HRVAnalysis extends App.AppBase {
   
@@ -253,8 +264,61 @@ class HRVAnalysis extends App.AppBase {
 		Auth.init();		      
     }   
     
-    function initialize() {
-    	Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
+    function initialize() {	
+    	AppBase.initialize();
+    }
+    
+    //! Return the initial view of your application here
+    function getInitialView() {
+    		    
+    	if (mDebugging) { Sys.println("HRVApp: getInitialView() called"); }   	
+    	viewNum = 0;
+		lastViewNum = 0;
+		return [ new TestView(), new HRVBehaviourDelegate() ];
+    }
+    
+    function scaleRangeHR() {
+    	// get resting heart rate
+		var restingHR = UserProfile.getProfile().restingHeartRate;
+		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
+		
+		// average resting is 3.2.0 feature so remove
+		//Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
+		
+		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
+		
+		// RANGE CHECK restingHeart rate and zone 1 to make sure sensible		
+		//mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
+		var mTemp = 60000;
+		if (restingHR == null) {
+			$.mRestingHR_II = SLOW_II;
+		} else if (restingHR == 0) {
+			$.mRestingHR_II = SLOW_II;
+		} else {
+			$.mRestingHR_II = (mTemp.toFloat() / (restingHR.toFloat() * 0.95)).toNumber();
+		}
+		
+		//mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR.toFloat() * 0.95)).toNumber());
+		
+		if (zones != null && zones[1] != null) {
+			$.mZone1TopHR_II = (mTemp.toFloat() / (zones[1] * 1.05)).toNumber();
+		} else {		
+			$.mZone1TopHR_II = FAST_II;
+		}
+		
+		//profile = null;
+		restingHR = null;
+		zones = null;
+		mTemp = null;
+				
+		Sys.println("Floor HR ms = "+$.mRestingHR_II+" BPM: "+60000/$.mRestingHR_II);
+		Sys.println("Top HR ms = "+$.mZone1TopHR_II+" BPM: "+60000/$.mZone1TopHR_II);   
+    
+    }
+    
+    //! onStart() is called on application start up
+    function onStart(state) {
+        Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
         //$._m$.pp.getApp();
         
         // Retrieve device type
@@ -297,26 +361,11 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("HRVApp: SensorType = "+mSensorTypeExt);
 		//Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
-		
+    			
 		Auth.UpdateTrialState();
 		
 		//Menu title size
-		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();		
-						
-    	AppBase.initialize();
-    }
-    
-    //! Return the initial view of your application here
-    function getInitialView() {
-    		    
-    	if (mDebugging) { Sys.println("HRVApp: getInitialView() called"); }   	
-    	viewNum = 0;
-		lastViewNum = 0;
-		return [ new TestView(), new HRVBehaviourDelegate() ];
-    }
-    
-    //! onStart() is called on application start up
-    function onStart(state) {
+		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	
 		// Retrieve device type
 		//mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
 
@@ -355,6 +404,9 @@ class HRVAnalysis extends App.AppBase {
 		
 		// No glance data available
 		mGData = false;
+		
+		//0.7.1 - work out HR range of user for defined range on scales
+		scaleRangeHR();
 
 		// Init timers
 		_uiTimer = new Timer.Timer();
