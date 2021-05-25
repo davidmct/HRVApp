@@ -19,6 +19,8 @@ using HRVStorageHandler as mStorage;
 //0.7.1
 // Reorder initialisation to read properties etc in onStart() not initialize()
 // Made HR range for user a function run at start and used to scale charts as needed
+// fixed overlong timer on manual test
+// reduced memory usage on 4.x.x devices as OS seems to take more
 
 //0.7.0
 // tried to fix startup crash

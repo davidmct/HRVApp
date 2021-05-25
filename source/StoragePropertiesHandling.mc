@@ -240,7 +240,8 @@ module HRVStorageHandler {
 		$.testTypeSet = Properties.getValue("testTypeSet");
 		$.timerTimeSet = Properties.getValue("timerTimeSet").toNumber();
 		// 0.4.2
-		$.mMaxTimerTimeSet = MAX_TIME * MAX_BPM;	
+		//0.7.1 - should be x60 for seconds rather than MAX_BPM
+		$.mMaxTimerTimeSet = MAX_TIME * 60;	
 		//$.mMaxTimerTimeSet = Properties.getValue("MaxTimerTimeSet").toNumber();
 		$.mManualTimeSet = Properties.getValue("ManualTimeSet").toNumber();
       

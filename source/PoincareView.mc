@@ -211,8 +211,8 @@ class PoincareView extends Ui.View {
 				max = $.mRestingHR_II;
 				min = $.mZone1TopHR_II;
 			} else {
-				max = 60000/MIN_BPM; // 35 BPM in ms
-				min = 60000/MAX_BPM; // 150 BPM
+				max = SLOW_II; // 35 BPM in ms
+				min = FAST_II; // 150 BPM
 			}
 		}
 		

@@ -17,8 +17,6 @@ const X_INC_VALUE = 4;
 
 class IntervalView extends Ui.View {
 	// INTERVAL PLOT
-	const FAST_II = 430; // 140 bpm 
-	const SLOW_II = 1800; // 33bpm - move to one based on resting HR
 
 	hidden var startTimeP;
 	hidden var mProcessingTime;
@@ -53,8 +51,8 @@ class IntervalView extends Ui.View {
 	hidden var cNumPoints = null;
 	//hidden var gg;
 	
-	hidden var mRestingHR_II;
-	hidden var mZone1TopHR_II;
+	//hidden var mRestingHR_II;
+	//hidden var mZone1TopHR_II;
 
 	function initialize() { 
 		//gg = $._m$.	
