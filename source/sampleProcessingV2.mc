@@ -293,6 +293,8 @@ class SampleProcessing {
 		mSampleIndex++;	
 		// may need more input to clean up the signal eg if beatCount gap larger than 1		
 		//Sys.println("Sample count: "+mSampleIndex);
+		
+		return false;
 	}
 	
 	// updates flag at mSampleProc and increments pointer
