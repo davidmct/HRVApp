@@ -261,7 +261,7 @@ class AntHandler extends Ant.GenericChannel {
 	            Ant.NETWORK_PLUS);
 		}
 		finally {
-			if (mChanAssign == null) { var mErr = new myException( "No ANT channels available");}
+			if (mChanAssign == null) { throw new $.myException( "No ANT channels available");}
 		}
        	GenericChannel.initialize(method(:onAntMsg), mChanAssign);
 

@@ -32,9 +32,9 @@ class IntervalView extends Ui.View {
 	hidden var ceilY;
 	hidden var floorY;
     
-    hidden var mTitleLoc = [50,11]; // %
-	hidden var mTitleLocS = [0, 0];	
-	hidden var mTitleLabels = ["II Plot"];
+    //hidden var mTitleLoc = [50,11]; // %
+	//hidden var mTitleLocS = [0, 0];	
+	//hidden var mTitleLabels = ["II Plot"];
 		
 	hidden var mLabelFont = null;
 	hidden var mValueFont = Gfx.FONT_XTINY;
@@ -44,8 +44,8 @@ class IntervalView extends Ui.View {
 		
 	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
 	
-	hidden var mScaleY;
-	hidden var mScaleX;
+	//hidden var mScaleY;
+	//hidden var mScaleX;
 	
 	// points to plot
 	hidden var cNumPoints = null;
@@ -80,11 +80,11 @@ class IntervalView extends Ui.View {
 		ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
-		mScaleY = dc.getHeight();
-		mScaleX = dc.getWidth();
+		//mScaleY = dc.getHeight();
+		//mScaleX = dc.getWidth();
 		
 		// convert % to numbers based on screen size
-		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+		//mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
 		
 		// Decide how many samples to plot across
 		cNumPoints = chartHeight / X_INC_VALUE;
@@ -113,7 +113,9 @@ class IntervalView extends Ui.View {
 		
 		// draw lines
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		
+		// dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, "II Plot", mJust);
+		dc.drawText( (50 * dc.getWidth()) / 100, (11 * dc.getHeight()) / 100, mTitleFont, "II Plot", mJust);
 		
 		// X range is unscaled and just point number out of range
     	  	
@@ -253,8 +255,9 @@ class IntervalView extends Ui.View {
 			mOffText = leftX+25;
 		}
 		
-		dc.drawText( mOffText, mOffTextY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		var newJust = Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER;
+		dc.drawText( mOffText, mOffTextY, mLabelFont, format("$1$",[ceil.format("%4d")]), newJust );
+		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), newJust );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
 		// performance check only on real devices
