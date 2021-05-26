@@ -22,6 +22,7 @@ using HRVStorageHandler as mStorage;
 // fixed overlong timer on manual test
 // reduced memory usage on 4.x.x devices as OS seems to take more
 // if interval buffer fills then it will stop capturing samples but run the test to completion. Some displays will stop updating
+// max test time 6mins at 160BPM
 
 //0.7.0
 // tried to fix startup crash
