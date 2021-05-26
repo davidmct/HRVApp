@@ -278,7 +278,10 @@ class SampleProcessing {
 		
 		// 0.7.1 
 		// if buffer overflows return true and stop accepting
-		if ( mSampleIndex >= $.mIntervalSampleBuffer.size()-1) { return true;}
+		if ( mSampleIndex >= $.mIntervalSampleBuffer.size()-1) { 
+			//Sys.println("Sample Buffer full");
+			return true;
+		}
 		
 		// Might want to implement circular buffer to avoid this...
 		// also can notify testControl to stop testing

@@ -21,6 +21,7 @@ using HRVStorageHandler as mStorage;
 // Made HR range for user a function run at start and used to scale charts as needed
 // fixed overlong timer on manual test
 // reduced memory usage on 4.x.x devices as OS seems to take more
+// if interval buffer fills then it will stop capturing samples but run the test to completion. Some displays will stop updating
 
 //0.7.0
 // tried to fix startup crash
@@ -349,7 +350,9 @@ class HRVAnalysis extends App.AppBase {
 		//A unique alphanumeric device identifier.
 		//The value is unique for every app, but is stable on a device across uninstall and reinstall. 
 		//Any use of this value for tracking user information must be in compliance with international privacy law.
-		var mySettings = Sys.getDeviceSettings();
+		//0.7.1 removed as not used except for trial mode etc
+		//var mySettings = Sys.getDeviceSettings();
+        
         //mDeviceID = mySettings.uniqueIdentifier;
         //mDeviceID = null;
              
