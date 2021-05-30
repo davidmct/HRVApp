@@ -19,7 +19,7 @@ using HRVStorageHandler as mStorage;
 //0.7.1
 // Reorder initialisation to read properties etc in onStart() not initialize()
 // Made HR range for user a function run at start and used to scale charts as needed
-// fixed overlong timer on manual test
+// fixed overlong timer on manual test. Auto and manual max now 6 mins
 // reduced memory usage on 4.x.x devices as OS seems to take more
 // if interval buffer fills then it will stop capturing samples but run the test to completion. Some displays will stop updating
 // max test time 6mins at 160BPM
@@ -233,8 +233,9 @@ var mAuxHRAntID; // found sensor ID
 // 1 = true, 0 = false and INTERNAL_SENSOR
 var mSensorTypeExt;
 
-// Auto scale when true otherwise fixed range
-var mBoolScaleII;
+// Auto scale when true - use data range in II or max set by constants in Poincare
+// False = zone based. resting to max Zone 1
+var mBoolScale;
 
 var glanceData = new [12];
 var mGData = false;

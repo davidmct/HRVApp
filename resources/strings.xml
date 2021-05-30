@@ -50,8 +50,8 @@
 	<string id="pSensorSelectT">Use unregistered HRM</string> 
 	<string id="pSensorSelectP">True for unregistered/disabled strap</string>
 -->
-	<string id="pIIScaleT">Auto Scale II</string>
-	<string id="pIIScaleP">On or Off</string>
+	<string id="pScaleT">Auto Scale</string>
+	<string id="pScaleP">On or Off</string>
 	<string id="soundSetT">Sound?</string>
 	<string id="soundSetP">On or Off</string>
 	<string id="vibeSetT">Vibrate?</string>
@@ -59,9 +59,9 @@
 	<string id="testTypeSetT">Use timer based test</string>
 	<string id="testTypeSetP">set for timer, unset for manual</string>
 	<string id="timerTimeSetT">Timer based test time</string>
-	<string id="timerTimeSetP">Length of test (secs) - default 300 (5mins)</string>
+	<string id="timerTimeSetP">Test Length (secs) - default 300</string>
 	<!--v0.4.2: 480 = MAX_TIME * MAX_BPM -->
-	<string id="TimeTooLargeError">Max value is 480 seconds</string>
+	<string id="TimeTooLargeError">Max 360 seconds</string>
 	<string id="ManualTimeSetT">Manual test time</string> 
 	<!--  <string id="ManualTimeSetP">Maximum allowed manual time 600 seconds</string> -->
 	<string id="lnumberBeatsGraph">Beats to show in graph</string>

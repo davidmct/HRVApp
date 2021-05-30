@@ -20,7 +20,7 @@
 	<property id="prMSSD" type ="boolean">false</property>
 	<!-- pSensorSelect true is external search -->
 	<!-- <property id="pSensorSelect" type="boolean">false</property> -->
-	<property id="pIIScale" type="boolean">false</property>
+	<property id="pScale" type="boolean">false</property>
 	<property id="soundSet" type="boolean">true</property>
 	<property id="vibeSet" type="boolean">false</property>
 	<!--  testTypeSet true = Timer -->

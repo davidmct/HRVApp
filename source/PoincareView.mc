@@ -202,7 +202,7 @@ class PoincareView extends Ui.View {
 			max = $.mSampleProc.maxIntervalFound;
 			min = $.mSampleProc.minIntervalFound;
 		} else {		
-			if (!$.mBoolScaleII) {
+			if (!$.mBoolScale) {
 				max = $.mRestingHR_II;
 				min = $.mZone1TopHR_II;
 			} else {
@@ -551,7 +551,7 @@ class PoincareView extends Ui.View {
 			max = $.mSampleProc.maxIntervalFound;
 			min = $.mSampleProc.minIntervalFound;
 		} else {		
-			if (!$.mBoolScaleII) {
+			if (!$.mBoolScale) {
 				max = $.mRestingHR_II;
 				min = $.mZone1TopHR_II;
 			} else {
