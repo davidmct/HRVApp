@@ -39,7 +39,7 @@ module HRVStorageHandler {
 		Properties.setValue("prMSSD", false);
 		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
-		Properties.setValue("pIIScale", false);
+		Properties.setValue("pScale", false);
 		Properties.setValue("soundSet", true);
 		Properties.setValue("vibeSet", false);
 		Properties.setValue("testTypeSet", TYPE_TIMER);
@@ -234,7 +234,8 @@ module HRVStorageHandler {
 		//$.mRM = Properties.getValue("prMSSD");
 		
 		//$.mSensorTypeExt = Properties.getValue("pSensorSelect");
-		$.mBoolScaleII = Properties.getValue("pIIScale");
+		$.mBoolScale = Properties.getValue("pScale");
+		//$.mBSP = = Properties.getValue("pPScale");
 		$.soundSet = Properties.getValue("soundSet");
 		$.vibeSet = Properties.getValue("vibeSet");
 		$.testTypeSet = Properties.getValue("testTypeSet");
@@ -344,7 +345,8 @@ module HRVStorageHandler {
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);
 		
 		// user changable
-		Properties.setValue("pIIScale", $.mBoolScaleII);
+		Properties.setValue("pScale", $.mBoolScale);
+		//Properties.setValue("pPScale", $.mBSP);
 		Properties.setValue("soundSet", $.soundSet);
 		Properties.setValue("vibeSet", $.vibeSet);
 		Properties.setValue("testTypeSet", $.testTypeSet);

@@ -72,13 +72,13 @@ class TestTypeMenuDelegate extends Ui.Menu2InputDelegate {
             $.mTestControl.fCheckSwitchType( :FitType, oldFitWrite);
         }
         else if( mId == :autoS)  {
-            $.mBoolScaleII = true;
+            $.mBoolScale = true;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:fixedS)).setSelected(false);
             //Sys.println("Interval Auto ON");
         }
         else if( mId == :fixedS)  {
-            $.mBoolScaleII = false;
+            $.mBoolScale = false;
             item.setSelected(true);
             mSrcMenu.getItem(mSrcMenu.findItemById(:autoS)).setSelected(false);
             //Sys.println("Interval Auto OFF");
