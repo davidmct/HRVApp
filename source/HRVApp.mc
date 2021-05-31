@@ -19,10 +19,11 @@ using HRVStorageHandler as mStorage;
 //0.7.1
 // Reorder initialisation to read properties etc in onStart() not initialize()
 // Made HR range for user a function run at start and used to scale charts as needed
-// fixed overlong timer on manual test. Auto and manual max now 6 mins
+// fixed overlong timer on manual test. Auto and manual max now 6 mins @ 160 BPM
 // reduced memory usage on 4.x.x devices as OS seems to take more
 // if interval buffer fills then it will stop capturing samples but run the test to completion. Some displays will stop updating
-// max test time 6mins at 160BPM
+// Auto scale when true - use data range in II or max set by constants in Poincare
+// False = zone based. Used resting HR to max Zone 1 as set on watch for default activity
 
 //0.7.0
 // tried to fix startup crash
