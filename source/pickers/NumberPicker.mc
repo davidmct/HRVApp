@@ -15,7 +15,7 @@ class NumberPicker extends WatchUi.Picker {
         // allow for two 2 digit fields
         var factories = new [3];
         // need to split initial number over four digits
-        if (limit_v > 5959) { throw new myException( "Number picker input > 5959"); }
+        if (limit_v > 5959) { error ("NP too large"); } //{ throw new myException( "Number picker input > 5959"); }
         
         // test as putting these in NumFac didn't work
         // format now mm:ss
@@ -52,8 +52,8 @@ class NumberPicker2Digit extends WatchUi.Picker {
         // allow for one 2 digit field
         var factories = new [1];
         // need to split initial number over four digits
-        if (Ulimit_v > 90) { throw new myException( "Number picker input > 90"); }
-        if (Llimit_v < 1) { throw new myException( "Number picker input < 1"); }
+        if (Ulimit_v > 90) { Ulimit_v = 90;} //{ throw new myException( "Number picker input > 90"); }
+        if (Llimit_v < 1) { Llimit_v = 1;} //{ throw new myException( "Number picker input < 1"); }
       
         factories[0] = new NumberFactory(Llimit_v, Ulimit_v, inc_v, {:format=>DOUBLEDIGIT_FORMAT});
       

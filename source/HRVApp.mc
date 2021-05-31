@@ -5,7 +5,7 @@ using Toybox.WatchUi as Ui;
 using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
-using AuthCode as Auth;
+//using AuthCode as Auth;
 
 using HRVStorageHandler as mStorage;
 
@@ -20,6 +20,7 @@ using HRVStorageHandler as mStorage;
 // Reorder initialisation to read properties etc in onStart() not initialize()
 // Made HR range for user a function run at start and used to scale charts as needed
 // fixed overlong timer on manual test. Auto and manual max now 6 mins @ 160 BPM
+// Fixed bug on duration entry - now limited to 5:59 (max buffer length)
 // reduced memory usage on 4.x.x devices as OS seems to take more
 // if interval buffer fills then it will stop capturing samples but run the test to completion. Some displays will stop updating
 // Auto scale when true - use data range in II or max set by constants in Poincare
@@ -147,13 +148,13 @@ var mDumpIntervals = true;
 
 using Toybox.Lang;
 
-class myException extends Lang.Exception {
-    function initialize(message) {
-    	Sys.println(message);
-        Exception.initialize();
-		//Exception.printStackTrace;
-    }
-}
+//class myException extends Lang.Exception {
+//    function initialize(message) {
+//    	Sys.println(message);
+//        Exception.initialize();
+//		//Exception.printStackTrace;
+//    }
+//}
 
 // Settings variables
 //var timestampSet;
@@ -229,7 +230,7 @@ var mDeviceType;
 //var mApp;
 var mSensor;
 var mAntID;
-var mAuxHRAntID; // found sensor ID
+//var mAuxHRAntID; // found sensor ID
 // true if external unknown strap ie not enabled in watch
 // 1 = true, 0 = false and INTERNAL_SENSOR
 var mSensorTypeExt;
@@ -267,7 +268,7 @@ class HRVAnalysis extends App.AppBase {
 		mSensorTypeExt = SENSOR_INTERNAL;
 		//mSensorTypeExt = Properties.getValue("pSensorSelect");	
 		
-		Auth.init();		      
+		//Auth.init();		      
     }   
     
     function initialize() {	
@@ -370,7 +371,7 @@ class HRVAnalysis extends App.AppBase {
 		//Sys.println("Is app in trial mode? "+AppBase.isTrial());
 		//Sys.println("Trial properties: "+mTrialMode+","+mTrialStartDate+","+mTrialStarted+","+mAuthorised+","+mTrailPeriod);
     			
-		Auth.UpdateTrialState();
+		//Auth.UpdateTrialState();
 		
 		//Menu title size
 		mMenuTitleSize = Ui.loadResource(Rez.Strings.MenuTitleSize).toNumber();	

@@ -21,13 +21,13 @@
 		<settingConfig type="boolean" />
 	</setting>	
 -->
-	<setting propertyKey="@Properties.pScale" title="@Strings.pScaleT" prompt="@Strings.pScaleP">
+	<setting propertyKey="@Properties.pScale" title="@Strings.pScaleT" prompt="@Strings.OnOrOff">
 		<settingConfig type="boolean" />
 	</setting>	
-	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetT" prompt="@Strings.soundSetP">
+	<setting propertyKey="@Properties.soundSet" title="@Strings.soundSetT" prompt="@Strings.OnOrOff">
 		<settingConfig type="boolean" />
 	</setting>	
-	<setting propertyKey="@Properties.vibeSet" title="@Strings.vibeSetT" prompt="@Strings.vibeSetP">
+	<setting propertyKey="@Properties.vibeSet" title="@Strings.vibeSetT" prompt="@Strings.OnOrOff">
 		<settingConfig type="boolean" />
 	</setting>	
 	<setting propertyKey="@Properties.testTypeSet" title="@Strings.testTypeSetT" prompt="@Strings.testTypeSetP">
