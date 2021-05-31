@@ -148,13 +148,13 @@ var mDumpIntervals = true;
 
 using Toybox.Lang;
 
-class myException extends Lang.Exception {
-    function initialize(message) {
-    	Sys.println(message);
-        Exception.initialize();
-		//Exception.printStackTrace;
-    }
-}
+//class myException extends Lang.Exception {
+//    function initialize(message) {
+//    	Sys.println(message);
+//        Exception.initialize();
+//		//Exception.printStackTrace;
+//    }
+//}
 
 // Settings variables
 //var timestampSet;
@@ -230,7 +230,7 @@ var mDeviceType;
 //var mApp;
 var mSensor;
 var mAntID;
-var mAuxHRAntID; // found sensor ID
+//var mAuxHRAntID; // found sensor ID
 // true if external unknown strap ie not enabled in watch
 // 1 = true, 0 = false and INTERNAL_SENSOR
 var mSensorTypeExt;
