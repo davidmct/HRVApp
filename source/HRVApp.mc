@@ -17,7 +17,7 @@ using HRVStorageHandler as mStorage;
 //17. Check download and setting online properties works
 
 //0.7.1
-// Bug Fixes:
+// Bug Fixes: 
 	// Trial fix for settings crash when app not running: Reorder initialisation to read properties etc in onStart() not initialize()
 	// Fixed overlong timer on manual test. Auto and manual max now 6 mins @ 160 BPM
 	// Fixed bug on duration entry - now limited to 5:59 (max buffer length)
