@@ -17,7 +17,8 @@ class ColourListMenuDelegate extends Ui.Menu2InputDelegate {
         
         if (value < 0 || value >= ColStringDict.size()) {
         	// opps
-        	var mErr = new myException( "ColourListMenuDelegate: colour out of range");
+            error ("Colour out of range");
+        	//var mErr = new myException( "ColourListMenuDelegate: colour out of range");
         } else {
         	//Sys.println("ColourListMenuDelegate: colour picked = " + value);
         	mFunc.invoke( value);   

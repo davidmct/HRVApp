@@ -17,8 +17,6 @@ const X_INC_VALUE = 4;
 
 class IntervalView extends Ui.View {
 	// INTERVAL PLOT
-	const FAST_II = 430; // 140 bpm 
-	const SLOW_II = 1800; // 33bpm - move to one based on resting HR
 
 	hidden var startTimeP;
 	hidden var mProcessingTime;
@@ -34,9 +32,9 @@ class IntervalView extends Ui.View {
 	hidden var ceilY;
 	hidden var floorY;
     
-    hidden var mTitleLoc = [50,11]; // %
-	hidden var mTitleLocS = [0, 0];	
-	hidden var mTitleLabels = ["II Plot"];
+    //hidden var mTitleLoc = [50,11]; // %
+	//hidden var mTitleLocS = [0, 0];	
+	//hidden var mTitleLabels = ["II Plot"];
 		
 	hidden var mLabelFont = null;
 	hidden var mValueFont = Gfx.FONT_XTINY;
@@ -46,15 +44,15 @@ class IntervalView extends Ui.View {
 		
 	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
 	
-	hidden var mScaleY;
-	hidden var mScaleX;
+	//hidden var mScaleY;
+	//hidden var mScaleX;
 	
 	// points to plot
 	hidden var cNumPoints = null;
 	//hidden var gg;
 	
-	hidden var mRestingHR_II;
-	hidden var mZone1TopHR_II;
+	//hidden var mRestingHR_II;
+	//hidden var mZone1TopHR_II;
 
 	function initialize() { 
 		//gg = $._m$.	
@@ -82,50 +80,14 @@ class IntervalView extends Ui.View {
 		ceilY = ctrY - chartHeight/2;
 		floorY = ctrY + chartHeight/2;
 		
-		mScaleY = dc.getHeight();
-		mScaleX = dc.getWidth();
+		//mScaleY = dc.getHeight();
+		//mScaleX = dc.getWidth();
 		
 		// convert % to numbers based on screen size
-		mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
+		//mTitleLocS = [ (mTitleLoc[0]*mScaleX)/100, (mTitleLoc[1]*mScaleY)/100];	
 		
 		// Decide how many samples to plot across
 		cNumPoints = chartHeight / X_INC_VALUE;
-		
-		// get resting heart rate
-		var restingHR = UserProfile.getProfile().restingHeartRate;
-		var zones = UserProfile.getHeartRateZones(UserProfile.HR_ZONE_SPORT_GENERIC);
-		
-		// average resting is 3.2.0 feature so remove
-		//Sys.println("Resting HR = "+profile.restingHeartRate+", avg ="+profile.averageRestingHeartRate);
-		
-		// set floor on fixed scaling for II - provide a little headroom of 5bpm as mine varies below watch value 5%
-		
-		// RANGE CHECK restingHeart rate and zone 1 to make sure sensible		
-		//mRestingHR_II = ( profile.restingHeartRate == null ? SLOW_II : (60000 / (profile.restingHeartRate * 0.95)).toNumber());
-		var mTemp = 60000;
-		if (restingHR == null) {
-			mRestingHR_II = SLOW_II;
-		} else if (restingHR == 0) {
-			mRestingHR_II = SLOW_II;
-		} else {
-			mRestingHR_II = (mTemp.toFloat() / (restingHR.toFloat() * 0.95)).toNumber();
-		}
-		
-		//mRestingHR_II = ( restingHR == null ? SLOW_II : (60000 / (restingHR.toFloat() * 0.95)).toNumber());
-		
-		if (zones != null && zones[1] != null) {
-			mZone1TopHR_II = (mTemp.toFloat() / (zones[1] * 1.05)).toNumber();
-		} else {		
-			mZone1TopHR_II = FAST_II;
-		}
-		
-		//profile = null;
-		restingHR = null;
-		zones = null;
-		mTemp = null;
-				
-		Sys.println("Floor HR ms = "+mRestingHR_II+" BPM: "+60000/mRestingHR_II);
-		Sys.println("Top HR ms = "+mZone1TopHR_II+" BPM: "+60000/mZone1TopHR_II);
 										
 		return true;
 	}
@@ -151,7 +113,9 @@ class IntervalView extends Ui.View {
 		
 		// draw lines
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-		dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, mTitleLabels[0], mJust);
+		
+		// dc.drawText( mTitleLocS[0], mTitleLocS[1], mTitleFont, "II Plot", mJust);
+		dc.drawText( (50 * dc.getWidth()) / 100, (11 * dc.getHeight()) / 100, mTitleFont, "II Plot", mJust);
 		
 		// X range is unscaled and just point number out of range
     	  	
@@ -187,12 +151,12 @@ class IntervalView extends Ui.View {
     	
     	//Sys.println("IntervalPlot: Ploting: "+mSampleNum+" samples starting from "+mStartIndex+" Entries ="+mNumberEntries+" and allowed pts ="+cNumPoints);
     	
-    	//Sys.println("IntervalPlot: mBoolScaleII = "+$.mBoolScaleII);
+    	//Sys.println("IntervalPlot: mBoolScale = "+$.mBoolScale);
     			
 		// True if auto scaling on 
-		if (!$.mBoolScaleII) {
-			Ymax = mRestingHR_II;
-			Ymin = mZone1TopHR_II;
+		if (!$.mBoolScale) {
+			Ymax = $.mRestingHR_II;
+			Ymin = $.mZone1TopHR_II;
 		} else {
 	    	// scan array to be plotted looking for min and max
 	    	// Could reduce to viewed portion
@@ -291,8 +255,9 @@ class IntervalView extends Ui.View {
 			mOffText = leftX+25;
 		}
 		
-		dc.drawText( mOffText, mOffTextY, mLabelFont, format("$1$",[ceil.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );
-		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER );		
+		var newJust = Gfx.TEXT_JUSTIFY_RIGHT | Gfx.TEXT_JUSTIFY_VCENTER;
+		dc.drawText( mOffText, mOffTextY, mLabelFont, format("$1$",[ceil.format("%4d")]), newJust );
+		dc.drawText( ctrX, floorY+10, mLabelFont, format("$1$",[floor.format("%4d")]), newJust );		
 		//dc.drawLine( leftX+5, ctrY, rightX, ctrY);
 			
 		// performance check only on real devices

@@ -7,21 +7,21 @@ using Toybox.Lang;
 using Toybox.Time;
 using Toybox.Time.Gregorian;
 
-(:notAuthCode)
-module AuthCode {
+//(:notAuthCode)
+//module AuthCode {
 	// Trial mode variables!!
-	var mTrialMode;
-	var mTrialStarted;
-	var mAuthorised;
-	var mTrailPeriod;
-	var mTrialStartDate; 
-	var mAuthID = null;
-	var mTrialMessage;
+	//var mTrialMode;
+	//var mTrialStarted;
+	//var mAuthorised;
+	//var mTrailPeriod;
+	//var mTrialStartDate; 
+	//var mAuthID = null;
+	//var mTrialMessage;
 
-	function init() {}
-	function UpdateTrialState() {}
+	//function init() {}
+	//function UpdateTrialState() {}
 
-}
+//}
 
 (:AuthCode)
 module AuthCode {

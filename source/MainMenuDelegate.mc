@@ -110,7 +110,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 	        //menu.addItem(new Ui.MenuItem("Yes", null, "1", null));
 	        //menu.addItem(new Ui.MenuItem("No", null, "2", null));
  	        //Ui.pushView(menu, new ChoiceMenu2Delegate(self.method(:setScale)), Ui.SLIDE_IMMEDIATE );
- 	        var mAutoState = $.mBoolScaleII;
+ 	        var mAutoState = $.mBoolScale;
 		    var customMenu = new BasicCustomMenu(35,Graphics.COLOR_WHITE,
 		    	{
 		        :focusItemHeight=>45,
@@ -118,8 +118,10 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
 		        :title=>new DrawableMenuTitle("Auto scale", false),
 		        :footer=>new DrawableMenuFooter()
 		    	});
-		    customMenu.addItem(new CustomItem(:autoS, "Auto", mAutoState == true) );
-		    customMenu.addItem(new CustomItem(:fixedS, "Fixed", mAutoState == false) );
+			// Data: Data set range in II, limits in CONST for Poincare
+			// Zone: HR resting to Zone 1 max  
+		    customMenu.addItem(new CustomItem(:autoS, "Data", mAutoState == true) );
+		    customMenu.addItem(new CustomItem(:fixedS, "Zone", mAutoState == false) );
      		Ui.pushView(customMenu, new TestTypeMenuDelegate(customMenu), Ui.SLIDE_IMMEDIATE );
         }
         else if ( id.equals("so"))  {
@@ -160,7 +162,7 @@ class MainMenuDelegate extends Ui.Menu2InputDelegate {
     }
 
     function setScale(value) {
-		if (value == 1) { $.mBoolScaleII = true;} else { $.mBoolScaleII = false;}
+		if (value == 1) { $.mBoolScale = true;} else { $.mBoolScale = false;}
     }
 
     function setVibe(value) {

@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.7.0</string>
+	<string id="AppVersion">0.7.1</string>
 <!--
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
@@ -10,21 +10,21 @@
 	<string id="pAuxHRAntIDP">0 for any or ID of strap</string>
 -->
 	<string id="mFitWrET">FIT Write</string> 
-	<string id="mFitWrEP">True to write FIT</string>	
-	<string id="lAvgPulseCT">Average Pulse</string>
+	<string id="mFitWrEP">True for FIT</string>	
+	<string id="lAvgPulseCT">Avg Pulse</string>
 	<string id="lRMSSDCT">RMSSD</string>
 	<string id="lLnRMSSDCT">Ln(RMSSD)</string>
 	<string id="lSDNNCT">SDNN-II SD</string>
-	<string id="lSDSDCT">SDSD-II difference SD</string>
+	<string id="lSDSDCT">SDSD-II diff SD</string>
 	<string id="lNN50CT">II delta > 50ms</string>
-	<string id="lpNN50CT">NN50 as % of samples</string>
+	<string id="lpNN50CT">NN50 % of samples</string>
 	<string id="lNN20CT">II delta > 20ms</string>
-	<string id="lpNN20CT">NN20 as % of samples</string>
+	<string id="lpNN20CT">NN20 % of samples</string>
 	<string id="lLongT">Long beats #</string>
 	<string id="lShortT">Short beats #</string>	
 	<string id="lET">Type of beat</string>        <!--Count of Ectopic beats</string>	-->
 	<string id="lHistoryNull">None</string>
-	<string id="lHeartRate">Average bpm</string>
+	<string id="lHeartRate">Avg bpm</string>
 	<string id="lMinInterval">Min II</string>
 	<string id="lMaxInterval">Max II</string>
 	<string id="lRMSSD">RMSSD</string>
@@ -50,18 +50,18 @@
 	<string id="pSensorSelectT">Use unregistered HRM</string> 
 	<string id="pSensorSelectP">True for unregistered/disabled strap</string>
 -->
-	<string id="pIIScaleT">Auto Scale II</string>
-	<string id="pIIScaleP">On or Off</string>
+	<string id="pScaleT">Auto Scale</string>
+	<string id="OnOrOff">On or Off</string>
 	<string id="soundSetT">Sound?</string>
-	<string id="soundSetP">On or Off</string>
+	<!-- <string id="soundSetP">On or Off</string> -->
 	<string id="vibeSetT">Vibrate?</string>
-	<string id="vibeSetP">On or Off</string>
+	<!-- <string id="vibeSetP">On or Off</string> -->
 	<string id="testTypeSetT">Use timer based test</string>
 	<string id="testTypeSetP">set for timer, unset for manual</string>
 	<string id="timerTimeSetT">Timer based test time</string>
-	<string id="timerTimeSetP">Length of test (secs) - default 300 (5mins)</string>
+	<string id="timerTimeSetP">Test Length (secs) - default 300</string>
 	<!--v0.4.2: 480 = MAX_TIME * MAX_BPM -->
-	<string id="TimeTooLargeError">Max value is 480 seconds</string>
+	<string id="TimeTooLargeError">Max 360 secs</string>
 	<string id="ManualTimeSetT">Manual test time</string> 
 	<!--  <string id="ManualTimeSetP">Maximum allowed manual time 600 seconds</string> -->
 	<string id="lnumberBeatsGraph">Beats to show in graph</string>
