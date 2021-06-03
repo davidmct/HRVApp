@@ -17,7 +17,7 @@ using HRVStorageHandler as mStorage;
 //17. Check download and setting online properties works
 
 //0.7.2
-// Added Forerunner 945 LTE
+// Added Forerunner 945LTE
 
 //0.7.1
 // Bug Fixes: 
