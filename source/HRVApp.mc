@@ -16,6 +16,9 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+//0.7.2
+// Added Forerunner 945LTE
+
 //0.7.1
 // Bug Fixes: 
 	// Trial fix for settings crash when app not running: Reorder initialisation to read properties etc in onStart() not initialize()
