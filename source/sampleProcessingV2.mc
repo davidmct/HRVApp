@@ -185,7 +185,7 @@ class SampleProcessing {
 		// do we keep big buffer of intervals here?
 		// for moment define it in global space as need to use it in views
 		// if we make a circular buffer then will need to make lots of calls to get data
-		$.mIntervalSampleBuffer = new [MAX_BPM * MAX_TIME];
+		$.mIntervalSampleBuffer = new [$.mMaxBuf];
 		clearAvgBuffer();		
 		resetSampleBuffer();
 		resetHRVData();

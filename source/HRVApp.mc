@@ -20,6 +20,7 @@ using HRVStorageHandler as mStorage;
 // Added ability to select which zone max to use to scale plots
 // Memory optimisation... remove some constants
 // Reorder STATS view data to be more logical
+// Colour #II purple if >= storage length
 
 //0.7.2
 // Added Forerunner 945LTE
@@ -225,6 +226,11 @@ var mFitWriteEnabled;
 //var mStorage;
 var mTestControl;
 var mIntervalSampleBuffer; // buffer in app space for intervals
+
+// MAX_TIME * MAX_BPM = 6 minutes * 160 at the moment
+// need to change if time changes
+var mMaxBuf = 960; 
+
 var mSampleProc; // instance of sample processor
 var mFitControl;
 
