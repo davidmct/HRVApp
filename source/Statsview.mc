@@ -22,9 +22,14 @@ class StatsView extends Ui.View {
 	//hidden var mLabelValueLocY = [ 32, 32, 53, 53, 75, 75 ];
 		
 	// label values
-	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "Ectopic" ];
-	hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Long", "Short" ];
-	hidden var mLabel3Labels = [ "II","#II", "L_%", "L-ms", "S_%", "S-ms" ];
+	//hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "SDSD", "SDNN", "Ectopic" ];
+	//hidden var mLabel2Labels = [ "NN50","pNN50", "NN20", "pNN20", "Long", "Short" ];
+	//hidden var mLabel3Labels = [ "II","#II", "L_%", "L-ms", "S_%", "S-ms" ];
+
+	//1.0.0
+	hidden var mLabel1Labels = [ "rMSSD", "Ln(HRV)", "avgBPM", "Ectopic", "II", "#II" ];
+	hidden var mLabel2Labels = [ "SDSD", "SDNN", "NN50", "pNN50", "NN20", "pNN20" ];
+	hidden var mLabel3Labels = [ "Long", "Short", "L_%", "S_%", "L-ms", "S-ms" ];	
 	
 	// font missing %, _, (, ), #
 
@@ -120,22 +125,16 @@ class StatsView extends Ui.View {
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel1Labels[i], mJust);		
 			}
 			dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);	
+
 			//0.4.3 set to 0.1f from %d for rMSSD - does it fit?		
 			dc.drawText( mScreen[14], mScreen[15], mValueFont, $.mSampleProc.mRMSSD.format("%.1f"), mJust);
 			dc.drawText( mScreen[16], mScreen[17], mValueFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
 			dc.drawText( mScreen[18], mScreen[19], mValueFont, $.mSampleProc.avgPulse.format("%d"), mJust);
+			dc.drawText( mScreen[20], mScreen[21], mValueFont, $.mSampleProc.vEBeatCnt.format("%d"), mJust);
 			
-			// next two are floats
-			var trunc = ($.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
-			var str = "";
-			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}
-			dc.drawText( mScreen[20], mScreen[21], mValueFont, str, mJust);			
-			
-			trunc = ($.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
-			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
-			dc.drawText( mScreen[22], mScreen[23], mValueFont, str, mJust);		
-			
-			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.vEBeatCnt.format("%d"), mJust);
+			var mTmp = $.mSampleProc.getCurrentEntry(); 						
+			dc.drawText( mScreen[22], mScreen[23], mValueFont, mTmp[0].format("%d"), mJust);
+			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.getNumberOfSamples().format("%d"), mJust);
 											
 		} else if (viewToShow == 2) {
 			// draw second set of labels and values
@@ -146,13 +145,22 @@ class StatsView extends Ui.View {
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel2Labels[i], mJust);		
 			}
 			
-			dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mScreen[14], mScreen[15], mValueFont, $.mSampleProc.mNN50.format("%d"), mJust);
-			dc.drawText( mScreen[16], mScreen[17], mValueFont, $.mSampleProc.mpNN50.format("%.0f"), mJust);
-			dc.drawText( mScreen[18], mScreen[19], mValueFont, $.mSampleProc.mNN20.format("%d"), mJust);
-			dc.drawText( mScreen[20], mScreen[21], mValueFont, $.mSampleProc.mpNN20.format("%.0f"), mJust);	
-			dc.drawText( mScreen[22], mScreen[23], mValueFont, $.mSampleProc.vLongBeatCnt.format("%d"), mJust);
-			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.vShortBeatCnt.format("%d"), mJust);									
+			dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);
+
+			// next two are floats
+			var trunc = ($.mSampleProc.mSDSD*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+			var str = "";
+			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}
+			dc.drawText( mScreen[14], mScreen[15], mValueFont, str, mJust);			
+			
+			trunc = ($.mSampleProc.mSDNN*10).toNumber().toFloat()/10; // truncate to 1 decimal places
+			if (trunc > 100.0) { str = trunc.format("%.0f"); } else {str = trunc.format("%.1f");}	
+			dc.drawText( mScreen[16], mScreen[17], mValueFont, str, mJust);	
+
+			dc.drawText( mScreen[18], mScreen[19], mValueFont, $.mSampleProc.mNN50.format("%d"), mJust);
+			dc.drawText( mScreen[20], mScreen[21], mValueFont, $.mSampleProc.mpNN50.format("%.0f"), mJust);
+			dc.drawText( mScreen[22], mScreen[23], mValueFont, $.mSampleProc.mNN20.format("%d"), mJust);
+			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.mpNN20.format("%.0f"), mJust);	
 		
 		} else if (viewToShow == 3) {
 			// draw third set of labels and values
@@ -161,16 +169,14 @@ class StatsView extends Ui.View {
 			dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[2], mJust);
 			for (var i=0; i < 6; i++) {		
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel3Labels[i], mJust);		
-			}
+			}	
 			
-			
-			var mTmp = $.mSampleProc.getCurrentEntry(); 
-			dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);				
-			dc.drawText( mScreen[14], mScreen[15], mValueFont, mTmp[0].format("%d"), mJust);
-			dc.drawText( mScreen[16], mScreen[17], mValueFont, $.mSampleProc.getNumberOfSamples().format("%d"), mJust);
+			dc.setColor( $.mValueColour, Gfx.COLOR_TRANSPARENT);
+			dc.drawText( mScreen[14], mScreen[15], mValueFont, $.mSampleProc.vLongBeatCnt.format("%d"), mJust);
+			dc.drawText( mScreen[16], mScreen[17], mValueFont, $.mSampleProc.vShortBeatCnt.format("%d"), mJust);									
 			dc.drawText( mScreen[18], mScreen[19], mValueFont, ($.mSampleProc.mpLongMax*100).format("%d"), mJust);
-			dc.drawText( mScreen[20], mScreen[21], mValueFont, $.mSampleProc.mLongMax.format("%d"), mJust);	
-			dc.drawText( mScreen[22], mScreen[23], mValueFont, ($.mSampleProc.mpShortMax*100).format("%d"), mJust);
+			dc.drawText( mScreen[20], mScreen[21], mValueFont, ($.mSampleProc.mpShortMax*100).format("%d"), mJust);
+			dc.drawText( mScreen[22], mScreen[23], mValueFont, $.mSampleProc.mLongMax.format("%d"), mJust);	
 			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.mShortMax.format("%d"), mJust);				
 
 		}		

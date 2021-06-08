@@ -16,6 +16,11 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// 1.0.0
+// Added ability to select which zone max to use to scale plots
+// Memory optimisation... remove some constants
+// Reorder STATS view data to be more logical
+
 //0.7.2
 // Added Forerunner 945LTE
 
