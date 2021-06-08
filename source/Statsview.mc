@@ -10,7 +10,7 @@ class StatsView extends Ui.View {
 	
 	// title location %
 	//hidden var mTitleLoc = [50,10];
-	hidden var mTitleLabels = ["Stats #1", "Stats #2", "Stats #3"];
+	//hidden var mTitleLabels = ["Stats #1", "Stats #2", "Stats #3"];
 	
 	// coordinates of first and second set of labels as %
 	// split to 1D array to save memory
@@ -120,7 +120,8 @@ class StatsView extends Ui.View {
 			// draw 1st set of labels and values
 			// x, y, font, text, just
 			dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-			dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[0], mJust);
+			//dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[0], mJust);
+			dc.drawText( mScreen[0], mScreen[1], mTitleFont, "Stats #1", mJust);
 			for (var i=0; i < 6; i++) {		
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel1Labels[i], mJust);		
 			}
@@ -131,16 +132,26 @@ class StatsView extends Ui.View {
 			dc.drawText( mScreen[16], mScreen[17], mValueFont, $.mSampleProc.mLnRMSSD.format("%d"), mJust);
 			dc.drawText( mScreen[18], mScreen[19], mValueFont, $.mSampleProc.avgPulse.format("%d"), mJust);
 			dc.drawText( mScreen[20], mScreen[21], mValueFont, $.mSampleProc.vEBeatCnt.format("%d"), mJust);
-			
-			var mTmp = $.mSampleProc.getCurrentEntry(); 						
+
+						
+			var mTmp = $.mSampleProc.getCurrentEntry(); 									
 			dc.drawText( mScreen[22], mScreen[23], mValueFont, mTmp[0].format("%d"), mJust);
-			dc.drawText( mScreen[24], mScreen[25], mValueFont, $.mSampleProc.getNumberOfSamples().format("%d"), mJust);
+			
+			// Check not overflowed buffer. Birght red
+			var mT1 = $.mSampleProc.getNumberOfSamples();
+			// subtract a number from buffer size as update at least a second behind
+			if ( mT1 >= ($.mMaxBuf - 6)) { 
+				dc.setColor( 0xff0055, Gfx.COLOR_TRANSPARENT);
+			}
+			dc.drawText( mScreen[24], mScreen[25], mValueFont, mT1.format("%d"), mJust);
 											
 		} else if (viewToShow == 2) {
 			// draw second set of labels and values
 			// x, y, font, text, just
 			dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);
-			dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[1], mJust);
+			//dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[1], mJust);
+			dc.drawText( mScreen[0], mScreen[1], mTitleFont, "Stats #2", mJust);
+			
 			for (var i=0; i < 6; i++) {		
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel2Labels[i], mJust);		
 			}
@@ -166,7 +177,9 @@ class StatsView extends Ui.View {
 			// draw third set of labels and values
 			// x, y, font, text, just
 			dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);			
-			dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[2], mJust);
+			//dc.drawText( mScreen[0], mScreen[1], mTitleFont, mTitleLabels[2], mJust);
+			dc.drawText( mScreen[0], mScreen[1], mTitleFont, "Stats #3", mJust);
+			
 			for (var i=0; i < 6; i++) {		
 				dc.drawText( mScreen[2+i*2], mScreen[3+i*2], mLabelFont, mLabel3Labels[i], mJust);		
 			}	
