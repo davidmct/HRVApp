@@ -247,10 +247,10 @@ class TestController {
 			break;
 			case TS_ABORT:
 				// go back to ready or maybe INIT if new sensors
-				mTestMessage = "Results available until next test";
-				mTestState = TS_PAUSE;
-				resetTest();
-			break;
+				//mTestMessage = "Results available until next test";
+				//mTestState = TS_PAUSE;
+				//resetTest();
+			//break;
 			case TS_CLOSE:
 				// go back to ready or maybe INIT if new sensors
 				// maybe TestView is popped at this point?
