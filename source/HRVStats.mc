@@ -93,11 +93,12 @@ class HRVView extends Ui.View {
 			if ($.mGData == true && $.glanceData != null) {
 				// Need to draw green circle around like test view. Check not overwritten or add to code			
 				resultsShow(dc, true);
-			} else if ($.mGData == false ) {
+			// 1.0.0 could have mGData true but have reset buffer	
+			} else { //if ($.mGData == false ) {
 				 if ($.glanceData == null || $.glanceData[0] == null) {
 				 	// Try to load data and display
 				 	_dataOK = $.loadGResultsFromStore();	
-				 } else if ($.glanceData != null || $.glanceData[0] != null) {
+				 } else if ($.glanceData != null && $.glanceData[0] != null) {
 				 	// we have previous loaded
 				 	_dataOK = true;				 
 				 }

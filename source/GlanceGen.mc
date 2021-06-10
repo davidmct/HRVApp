@@ -591,6 +591,8 @@ module GlanceGen
 			resGL = null;
 			//0.6.4 force glance to null as well
 			$.glanceData = null;
+			//v1.0.0
+			$.mGData = false; // flag no current data
 			$.saveGResultsToStore(); 
 		}
 	}

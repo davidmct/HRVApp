@@ -16,13 +16,16 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-// 1.0.0
+// v1.0.1 NOT DONE YET
 // Added ability to select which zone max to use to scale plots
+
+// 1.0.0
 // Memory optimisation... remove some constants
 // Reorder STATS view data to be more logical
 // Colour #II purple if >= storage length
 // Fixed reset glance data bug (trying to write null as data fails though in API should be OK
 // Change first load to storage not property
+// fix bug: after menu reset of results mGData left true causing blank display on dial view
 
 //0.7.2
 // Added Forerunner 945LTE
