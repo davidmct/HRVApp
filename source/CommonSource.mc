@@ -14,10 +14,15 @@ function saveGResultsToStore() {
 	//Sys.println("saveGResultsToStore() called");
 
 	try {
-		if (Toybox.Application has :Storage) {	
-			Storage.setValue("GlanceSummary", glanceData);		
+		if (Toybox.Application has :Storage) {
+			// reseting store so delete key. API doc says read of this will then be null
+			if ( $.glanceData == null) {
+				Storage.deleteValue("GlanceSummary");
+			} else {
+				Storage.setValue("GlanceSummary", $.glanceData);
+			}		
 		}
-	} catch (ex) {
+	} catch (e) {
 		// storage error - most likely not written
 		//Sys.println("saveGResultsToStore(): ERROR failed to save");
 		return false;
@@ -34,15 +39,16 @@ function loadGResultsFromStore() {
 	
 	try {
 		if (Toybox.Application has :Storage) {	
-			glanceData = Storage.getValue("GlanceSummary");		
+			$.glanceData = Storage.getValue("GlanceSummary");		
 		}
 	} catch (ex) {
 		// storage error - most likely not written
 		//Sys.println("ERROR loadGResultsFromStore");
+		$.glanceData = null;
 		return false;
 	}
 	finally {
-		if (glanceData == null) {
+		if ($.glanceData == null) {
 			// not been written yet
 			return false;
 		} else {
