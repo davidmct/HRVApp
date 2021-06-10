@@ -13,7 +13,7 @@
 	<property id="pAuxHRAntID" type="number">0</property>
 	<!--  <property id="pDeviceID" type="string">null</property>
 	<property id="pAuthID" type="string">Not Set</property> -->
-	<property id="firstLoadEver" type ="boolean">true</property>
+	<!-- <property id="firstLoadEver" type ="boolean">true</property> -->
 	<!-- <property id="timestampSet" type="number">1447234278</property> -->
 	<property id="pFitWriteEnabled" type ="boolean">false</property>
 	<property id="pTest" type ="boolean">false</property>
