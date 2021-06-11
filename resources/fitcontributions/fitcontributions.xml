@@ -43,9 +43,9 @@
       sortOrder="20" precision="0" dataLabel="@Strings.lHeartRate" unitLabel="@Strings.lHeartRateUnits" />
 <!-- 
     <fitField id="21" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
-      sortOrder="21" precision="0" dataLabel="@Strings.lMinInterval" unitLabel="@Strings.lMsUnits" />      
+      sortOrder="21" precision="0" dataLabel="@Strings.lMI" unitLabel="@Strings.lMsUnits" />      
     <fitField id="22" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
-      sortOrder="22" precision="0" dataLabel="@Strings.lMaxInterval" unitLabel="@Strings.lMsUnits" />  
+      sortOrder="22" precision="0" dataLabel="@Strings.lMaxI" unitLabel="@Strings.lMsUnits" />  
 -->        
     <fitField id="23" displayInChart="false" displayInActivityLaps="false" displayInActivitySummary="true"
       sortOrder="23" precision="1" dataLabel="@Strings.lRMSSD" unitLabel="@Strings.lMsUnits" />

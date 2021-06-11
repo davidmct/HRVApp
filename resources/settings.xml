@@ -102,8 +102,8 @@
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
 			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="2">@Strings.lMI</listEntry>
+			<listEntry value="3">@Strings.lMaxI</listEntry>
 			<listEntry value="4">@Strings.lMinDiff</listEntry>
 			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
 			<listEntry value="6">@Strings.lRMSSD</listEntry>
@@ -139,8 +139,8 @@
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
 			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="2">@Strings.lMI</listEntry>
+			<listEntry value="3">@Strings.lMaxI</listEntry>
 			<listEntry value="4">@Strings.lMinDiff</listEntry>
 			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
 			<listEntry value="6">@Strings.lRMSSD</listEntry>
@@ -176,8 +176,8 @@
 			<!--  the values MUST match the CONST definition for dictionary -->
 			<listEntry value="0">@Strings.lHistoryNull</listEntry>
 			<listEntry value="1">@Strings.lHeartRate</listEntry>
-			<listEntry value="2">@Strings.lMinInterval</listEntry>
-			<listEntry value="3">@Strings.lMaxInterval</listEntry>
+			<listEntry value="2">@Strings.lMI</listEntry>
+			<listEntry value="3">@Strings.lMaxI</listEntry>
 			<listEntry value="4">@Strings.lMinDiff</listEntry>
 			<listEntry value="5">@Strings.lMaxDiff</listEntry>		
 			<listEntry value="6">@Strings.lRMSSD</listEntry>

@@ -1,6 +1,6 @@
 <resources>
 	<string id="AppName">HRV Analysis</string>
-	<string id="AppVersion">0.7.2</string>
+	<string id="AppVersion">1.0.0</string>
 <!--
 	<string id="pDeviceIDT">Device ID</string> 
 	<string id="pDeviceIDP">Set by APP</string>
@@ -25,8 +25,8 @@
 	<string id="lET">Type of beat</string>        <!--Count of Ectopic beats</string>	-->
 	<string id="lHistoryNull">None</string>
 	<string id="lHeartRate">Avg bpm</string>
-	<string id="lMinInterval">Min II</string>
-	<string id="lMaxInterval">Max II</string>
+	<string id="lMI">Min II</string>
+	<string id="lMaxI">Max II</string>
 	<string id="lRMSSD">RMSSD</string>
 	<string id="lLnRMSSD">Ln(RMSSD)</string>
 	<string id="lSDNN">SDNN</string>

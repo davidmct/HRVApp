@@ -16,6 +16,19 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
+// v1.0.1 NOT DONE YET
+// Added ability to select which zone max to use to scale plots 1..5
+// Possible user range selection on poincare full and II chart. max bpm and min bpm
+// maybe avriable buffer length depending on memory - and hence max time???
+
+// 1.0.0 
+// Memory optimisation... remove some constants
+// Reorder STATS view data to be more logical
+// Colour #II purple if >= storage length
+// Fixed reset glance data bug (trying to write null as data fails though in API should be OK
+// Change first load to storage not property
+// fix bug: after menu reset of results mGData left true causing blank display on dial view
+
 //0.7.2
 // Added Forerunner 945LTE
 
@@ -220,6 +233,11 @@ var mFitWriteEnabled;
 //var mStorage;
 var mTestControl;
 var mIntervalSampleBuffer; // buffer in app space for intervals
+
+// MAX_TIME * MAX_BPM = 6 minutes * 160 at the moment
+// need to change if time changes
+var mMaxBuf = 960; 
+
 var mSampleProc; // instance of sample processor
 var mFitControl;
 
@@ -339,16 +357,40 @@ class HRVAnalysis extends App.AppBase {
 		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();
 		
 		// defensive programming to ensure all variables initialised
-		Sys.println("first="+Properties.getValue("firstLoadEver"));
 		
-		if (Properties.getValue("firstLoadEver") == true) {
-			// this also resets flag
-			mStorage.resetSettings();
-			Sys.println("First run reset");
+		// This fails on some devices occasionally!!
+// REMOVED in v1.0.0		
+		//Sys.println("first="+Properties.getValue("firstLoadEver"));
+		
+		//if (Properties.getValue("firstLoadEver") == true) {
+		//	// this also resets flag
+		//	mStorage.resetSettings();
+		//	Sys.println("First run reset");
+		//}
+		
+		//Sys.println("first="+Properties.getValue("firstLoadEver"));
+// END OF REMOVED CODE
+
+// revised version using storage v1.0.0
+		var mFirst = true;
+		
+		try {
+			// should return null if not in store
+			mFirst = Storage.getValue("FS");		
+		} catch (e) {
+			// should fall through to finally with mFirst = true
+			Sys.println("FL err");
+		} finally {
+			if ((mFirst == null)|| (mFirst == true)) {
+				 mStorage.resetSettings();
+				 Sys.println("FL");
+				 Storage.setValue("FS", false);
+			} else {
+				Sys.println("!FL");
+			}
 		}
-		
-		Sys.println("first="+Properties.getValue("firstLoadEver"));
-		        
+// END Revised code
+	        
         //mStorage = new HRVStorageHandler(self);
         // ensure we have all parameters setup before needed
         mStorage.readProperties();  
