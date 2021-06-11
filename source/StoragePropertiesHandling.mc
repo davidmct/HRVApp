@@ -32,10 +32,10 @@ module HRVStorageHandler {
 (:storageMethod)
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
-		Properties.setValue("pAuxHRAntID", 0);
+		//Properties.setValue("pAuxHRAntID", 0);
 		//Properties.setValue("firstLoadEver", false);
 		Properties.setValue("pFitWriteEnabled", false);
-		Properties.setValue("pTest", false);
+		Storage.setValue("pTest", false);
 		Properties.setValue("prMSSD", false);
 		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
@@ -215,7 +215,7 @@ module HRVStorageHandler {
 		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
 
-		$.mTestMode = Properties.getValue("pTest");
+		$.mTestMode = Storage.getValue("pTest");
 		
 		//0.6.8
 		// Seems connectIQ corrupts data on this element
@@ -339,7 +339,7 @@ module HRVStorageHandler {
 	function _CallSavePropStorage() {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
-		Properties.setValue("pTest", $.mTestMode);
+		Storage.setValue("pTest", $.mTestMode);
 		//Properties.setValue("firstLoadEver", false);
 		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);

@@ -287,7 +287,7 @@ class HRVAnalysis extends App.AppBase {
 		//mAuxHRAntID = mAntID; // default
 		
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
-		$.mTestMode = Properties.getValue("pTest"); 
+		$.mTestMode = Store.getValue("pTest"); 
 		Sys.println("T:"+$.mTestMode);
 		
 		mSensorTypeExt = SENSOR_INTERNAL;
@@ -376,7 +376,7 @@ class HRVAnalysis extends App.AppBase {
 		
 		try {
 			// should return null if not in store
-			mFirst = Storage.getValue("FS");		
+			mFirst = Store.getValue("FS");		
 		} catch (e) {
 			// should fall through to finally with mFirst = true
 			Sys.println("FL err");
