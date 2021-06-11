@@ -32,10 +32,10 @@ module HRVStorageHandler {
 (:storageMethod)
 	function fresetPropertiesStorage() {
 		// use Storage.get/setValue("", value) for storage or properties not used in settings			
-		Properties.setValue("pAuxHRAntID", 0);
+		//Properties.setValue("pAuxHRAntID", 0);
 		//Properties.setValue("firstLoadEver", false);
 		Properties.setValue("pFitWriteEnabled", false);
-		Properties.setValue("pTest", false);
+		Storage.setValue("pTest", false);
 		Properties.setValue("prMSSD", false);
 		//Properties.setValue("pSensorSelect", SENSOR_INTERNAL);
 		// Auto scale if true
@@ -208,15 +208,12 @@ module HRVStorageHandler {
 
 (:storageMethod)	
 	function _CallReadPropStorage() {
-		//Property.getValue(name as string);
-		// On very first use of app don't read in properties!
-		//try {
-			//$.timestampSet = Storage.getValue("timestampSet");
-		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
-		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
-
-		$.mTestMode = Properties.getValue("pTest");
-		
+	
+		$.mTestMode = Storage.getValue("pTest");		
+		// 0.4.2
+		//0.7.1 - should be x60 for seconds rather than MAX_BPM
+		$.mMaxTimerTimeSet = MAX_TIME * 60;	
+		//$.mMaxTimerTimeSet = Properties.getValue("MaxTimerTimeSet").toNumber();
 		//0.6.8
 		// Seems connectIQ corrupts data on this element
 		try {
@@ -226,10 +223,14 @@ module HRVStorageHandler {
 			  Sys.println("Read failure prMSSD");
 			  $.mRM = false;
 			  Properties.setValue("prMSSD", false);
+			  resetSettings(); // force reset
 		}			
 		finally {
 
-		}
+		}	
+						
+		$.appNameSet = Ui.loadResource(Rez.Strings.AppName);
+		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled");
 		
 		//$.mRM = Properties.getValue("prMSSD");
 		
@@ -240,10 +241,6 @@ module HRVStorageHandler {
 		$.vibeSet = Properties.getValue("vibeSet");
 		$.testTypeSet = Properties.getValue("testTypeSet");
 		$.timerTimeSet = Properties.getValue("timerTimeSet").toNumber();
-		// 0.4.2
-		//0.7.1 - should be x60 for seconds rather than MAX_BPM
-		$.mMaxTimerTimeSet = MAX_TIME * 60;	
-		//$.mMaxTimerTimeSet = Properties.getValue("MaxTimerTimeSet").toNumber();
 		$.mManualTimeSet = Properties.getValue("ManualTimeSet").toNumber();
       
 		// ColSet are index into colour map
@@ -260,10 +257,7 @@ module HRVStorageHandler {
 		$.mHistoryLabel3 = Properties.getValue("pHistLabel3").toNumber();	
 		
 		mapIndexToColours();
-			
-		//} catch (e) {
-		//	Sys.println(e.getErrorMessage() );
-		//}
+		
 		$.mNumberBeatsGraph = Properties.getValue("pNumberBeatsGraph").toNumber();	
 			
 			//var index = Properties.getValue("pLongThresholdIndex").toNumber();
@@ -339,7 +333,7 @@ module HRVStorageHandler {
 	function _CallSavePropStorage() {
 		//Storage.setValue("timestampSet", $.timestampSet);
 		Properties.setValue("pFitWriteEnabled", $.mFitWriteEnabled);
-		Properties.setValue("pTest", $.mTestMode);
+		Storage.setValue("pTest", $.mTestMode);
 		//Properties.setValue("firstLoadEver", false);
 		Properties.setValue("prMSSD", $.mRM);
 		//Properties.setValue("pSensorSelect", $.mSensorTypeExt);

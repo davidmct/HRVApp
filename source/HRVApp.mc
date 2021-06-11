@@ -16,12 +16,12 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-// v1.0.1 NOT DONE YET
+// v1.0.2 NOT DONE YET
 // Added ability to select which zone max to use to scale plots 1..5
 // Possible user range selection on poincare full and II chart. max bpm and min bpm
 // maybe avriable buffer length depending on memory - and hence max time???
 
-// 1.0.0 
+// 1.0.0 / 1.0.1 as .0 not published
 // Memory optimisation... remove some constants
 // Reorder STATS view data to be more logical
 // Colour #II purple if >= storage length
@@ -287,7 +287,7 @@ class HRVAnalysis extends App.AppBase {
 		//mAuxHRAntID = mAntID; // default
 		
 		$.mFitWriteEnabled = Properties.getValue("pFitWriteEnabled"); 
-		$.mTestMode = Properties.getValue("pTest"); 
+		$.mTestMode = Store.getValue("pTest"); 
 		Sys.println("T:"+$.mTestMode);
 		
 		mSensorTypeExt = SENSOR_INTERNAL;
@@ -376,7 +376,7 @@ class HRVAnalysis extends App.AppBase {
 		
 		try {
 			// should return null if not in store
-			mFirst = Storage.getValue("FS");		
+			mFirst = Store.getValue("FS");		
 		} catch (e) {
 			// should fall through to finally with mFirst = true
 			Sys.println("FL err");
