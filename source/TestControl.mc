@@ -355,7 +355,9 @@ class TestController {
     function endTest() {
     	Sys.println("endTest()");
     	testTimer.stop();
-    	Toybox.Attention.backlight(true);
+		if( Attention has :backlight ) {
+    		Attention.backlight(true);
+		}
     }
 
     function alert(type)

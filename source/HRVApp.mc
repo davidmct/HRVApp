@@ -24,6 +24,7 @@ using HRVStorageHandler as mStorage;
 // 1.0.2 in dev
 // Added dump of history and HRV to log file
 // Bug fixed was saving MAX_DIFF in History twice
+// fixed bug on backlight trun on for Venu2S - doesn't exist
 
 // 1.0.0 / 1.0.1 as .0 not published
 // Memory optimisation... remove some constants
