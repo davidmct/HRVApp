@@ -573,6 +573,7 @@ class HistoryView extends Ui.View {
 		// sets ce_ceilfloor, range and scaleY then draws UY axis labels
 		_maxY = defineRange( dc, _resT[4], _resT[2], _resT[3]);
 		
+		// need at least one day between samples
 		if (noDaysToTrend) { return;} 
 				
 		// Plot X data
@@ -599,7 +600,7 @@ class HistoryView extends Ui.View {
 				dc.fillRectangle(leftX+xDate, floorY-yCoord, 3, 3);			
 			}		
 		}
-		
+
 		// need to TEST FOR not enough entries for a line
 		if (_listSize < 2) { return;}	
 				
