@@ -16,10 +16,15 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-// v1.0.2 NOT DONE YET
+// v1.0.3 NOT DONE YET
 // Added ability to select which zone max to use to scale plots 1..5
 // Possible user range selection on poincare full and II chart. max bpm and min bpm
 // maybe avriable buffer length depending on memory - and hence max time???
+
+// 1.0.2 in dev
+// Added dump of history and HRV to log file
+// Bug fixed was saving MAX_DIFF in History twice
+// fixed bug on backlight turn on for Venu2S - doesn't exist. test for capability
 
 // 1.0.0 / 1.0.1 as .0 not published
 // Memory optimisation... remove some constants
@@ -162,6 +167,7 @@ using HRVStorageHandler as mStorage;
 var mDebugging = false;
 //var mDebuggingANT = false;
 var mDumpIntervals = true;
+var mDumpHist = true; //also HRV list
 
 // access App variables and classes
 //var _mApp;
@@ -504,6 +510,7 @@ class HRVAnalysis extends App.AppBase {
 		
 		// Dump all interval data to txt file on device
 		if (mDumpIntervals == true) {DumpIntervals();}
+		if (mDumpHist == true) {DumpHist(); DumpHRV();}
 		
 		//0.6.3 No point saving interval strings to storage as not separate from app. Already in Interval Array 
 		//mStorage.saveIntervalStrings();
@@ -614,7 +621,68 @@ class HRVAnalysis extends App.AppBase {
 		writeStrings(0, mNumBlocks, mRemainder);
 		
 		writeStrings(1, mNumBlocks, mRemainder);
+	}
+	
+	// put all valid History entries into LOG
+	function DumpHist() {
+	
+		var mMsg =  "";
+		// load results array from store
+		// returns true if successful and $.resultsIndex != 0 
+		mStorage.retrieveResults();
+		if ( $.results == null || $.resultsIndex ==0) {Sys.println("no Hist dump"); return;}
+
+		// Labels
+		mMsg = "History: time; Avg HR, Min_II, Max_II, Min Diff, Max Diff, RMSSD, LogHRV, SDNN, SDSD, NN50, pNN50, NN20, pNN20";
+		Sys.println(mMsg);		
+		
+		// dump all data -- could just do this but format unfriendly for table
+		//Sys.println( $.results);
+						
+		// Now iterate through the non-zero time stamps
+		var index = 0;
+		for (var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+			index = i * DATA_SET_SIZE;
+			mMsg = "";
+			if ($.results[index] == 0) {
+				// no entry in array
+				continue;
+			}
+			for ( var j = 0; j < DATA_SET_SIZE; j++) {
+				mMsg = mMsg+ $.results[index+j]+", ";
+			} 
+			Sys.println(mMsg);		
+		}
+			
+		mMsg = null;
+		$.results = null;		
+		return;	
+			
 	}		
+	
+	function DumpHRV() {
+		var mHRV;
+		var mMsg =  "";
+		
+		if (Toybox.Application has :Storage) {
+			mHRV = Store.getValue("resultsArrayW");
+		} else {
+			return;
+		}
+		
+		if (mHRV == null) { return;}
+		Sys.println("Dump HRV log [date, value]:");
+		
+		for (var i=0; i < mHRV.size(); i += 2) {
+			if (mHRV[i] == 0) { continue;}
+			mMsg = mHRV[i]+ ", " + mHRV[i+1] + ", ";
+			Sys.println(mMsg);	
+		}
+		
+		mMsg = null;
+		mHRV = null;
+	
+	}
 	
 }
 

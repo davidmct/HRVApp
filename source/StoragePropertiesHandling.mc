@@ -504,10 +504,10 @@ Sys.println("retrieveResults memory used, free, total: "+System.getSystemStats()
 		
 	function storeResults() {
 	    // Save results to memory
-Sys.println("STres memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
-			", "+Sys.getSystemStats().freeMemory.toString()+
-			", "+Sys.getSystemStats().totalMemory.toString()			
-			);	
+//Sys.println("STres memory used, free, total: "+Sys.getSystemStats().usedMemory.toString()+
+//			", "+Sys.getSystemStats().freeMemory.toString()+
+//			", "+Sys.getSystemStats().totalMemory.toString()			
+//			);	
 		Storage.setValue("resultsArray", $.results);
 		Storage.setValue("resultIndex", $.resultsIndex);
 	}
@@ -576,8 +576,9 @@ Sys.println("STres memory used, free, total: "+Sys.getSystemStats().usedMemory.t
 		$.results[index + TIME_STAMP_INDEX] = utcStart;
 		$.results[index + AVG_PULSE_INDEX] = $.mSampleProc.avgPulse;
 		$.results[index + MIN_II_INDEX] = $.mSampleProc.minIntervalFound;
-		$.results[index + MAX_II_INDEX] = $.mSampleProc.maxIntervalFound;		
-		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.minDiffFound;
+		$.results[index + MAX_II_INDEX] = $.mSampleProc.maxIntervalFound;	
+		// 1.0.2 BUG was MAX not MIN	
+		$.results[index + MIN_DIFF_INDEX] = $.mSampleProc.minDiffFound;
 		$.results[index + MAX_DIFF_INDEX] = $.mSampleProc.maxDiffFound;				
 		$.results[index + RMSSD_INDEX] = $.mSampleProc.mRMSSD;
 		$.results[index + LNRMSSD_INDEX] = $.mSampleProc.mLnRMSSD;
