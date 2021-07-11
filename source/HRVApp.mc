@@ -242,7 +242,7 @@ var mIntervalSampleBuffer; // buffer in app space for intervals
 
 // MAX_TIME * MAX_BPM = 6 minutes * 160 at the moment
 // need to change if time changes
-var mMaxBuf = 960; 
+var mMaxBuf = MAX_BUF; 
 
 var mSampleProc; // instance of sample processor
 var mFitControl;
@@ -358,6 +358,8 @@ class HRVAnalysis extends App.AppBase {
     function onStart(state) {
         Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
         //$._m$.pp.getApp();
+
+		Sys.println("Small memory="+SMALL);
         
         // Retrieve device type
 		mDeviceType = Ui.loadResource(Rez.Strings.Device).toNumber();

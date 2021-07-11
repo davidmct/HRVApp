@@ -103,7 +103,7 @@ const cHISTORYLABELLISTSIZE = 14;
 //v 1.0.0 - removed const and made variable for STATS check
 //const MAX_BPM = 160; // max that will fill buffer in time below. Could be 200!!
 // 0.7.1 was 8 .. Enduro runs out of memory when saving intervals
-const MAX_TIME = 6; // minutes. Need to change mMaxBuf if this changes
+//const MAX_TIME = 6; // minutes. Need to change mMaxBuf if this changes
 const LOG_SCALE = 50.0; // scales ln(RMSSD)
 
 // auto scale limits for interval plot and poincare

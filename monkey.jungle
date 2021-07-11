@@ -6,11 +6,26 @@ resBase=resources
 
 # setup base as fenix6xpro
 # base.sourcePath=$(fenix6xpro.sourcePath) fails with base qualifier property cannot be evaluated.
-base.sourcePath=$(srcBase)
-base.resourcePath=$(resBase)
+base.sourcePath=$(srcBase); source-large
+base.resourcePath=$(resBase); resources-large
 
-#fenix5x.sourcePath = $(srcBase);source-maps
-#fenix5x.resourcePath = $(resBase);resources-maps
+enduro.sourcePath = $(srcBase); source-small
+enduro.resourcePath = $(resBase); resources-small; resources-round-280x280
+
+fenix5.sourcePath = $(srcBase); source-small
+fenix5.resourcePath = $(resBase); resources-small; resources-round-240x240
+
+fenix6.sourcePath = $(srcBase); source-small
+fenix6.resourcePath = $(resBase); resources-small; resources-round-260x260
+
+fr245.sourcePath = $(srcBase); source-small
+fr245.resourcePath = $(resBase); resources-small; resources-round-240x240
+
+fr645.sourcePath = $(srcBase); source-small
+fr645.resourcePath = $(resBase); resources-small;  resources-round-240x240
+
+fr935.sourcePath = $(srcBase); source-small
+fr935.resourcePath = $(resBase); resources-small; resources-round-240x240
 
 # we can have multi excludes in code as (:label1 :label2)
 # need to include base so decompile works
@@ -21,6 +36,8 @@ base.excludeAnnotations = $(base.excludeAnnotations);oldSampleProcessing;preCIQ2
 # exTrialParamProperty: specific code change in HRVApp.mc for trial mode from properties to storage
 # oldResults - removes code setting results array as permanent global. Now loaded as needed
 base.excludeAnnotations = $(base.excludeAnnotations);exTrialParamProperty;noCurrentView;oldThreshold;oldResults;TestVersion;notUseJson;TestVersionGL
+
+enduro.excludeAnnotations = $(base.excludeAnnotations)
 
 # can make one line as above
 # Only add specific exclusions here for types or device or specific devices!!
