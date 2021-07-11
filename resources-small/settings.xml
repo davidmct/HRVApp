@@ -1,0 +1,8 @@
+<settings>
+	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetT" prompt="@Strings.timerTimeSetP">
+		<settingConfig type="numeric" min="0" max="360" errorMessage="@Strings.TimeTooLargeError" />
+	</setting>	
+	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetT" prompt="@Strings.timerTimeSetP">
+		<settingConfig type="numeric" min="0" max="360" errorMessage="@Strings.TimeTooLargeError" />
+	</setting>
+</settings>

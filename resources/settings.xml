@@ -32,13 +32,7 @@
 	</setting>	
 	<setting propertyKey="@Properties.testTypeSet" title="@Strings.testTypeSetT" prompt="@Strings.testTypeSetP">
 		<settingConfig type="boolean" />
-	</setting>		
-	<setting propertyKey="@Properties.timerTimeSet" title="@Strings.timerTimeSetT" prompt="@Strings.timerTimeSetP">
-		<settingConfig type="numeric" min="0" max="360" errorMessage="@Strings.TimeTooLargeError" />
-	</setting>	
-	<setting propertyKey="@Properties.ManualTimeSet" title="@Strings.ManualTimeSetT" prompt="@Strings.timerTimeSetP">
-		<settingConfig type="numeric" min="0" max="360" errorMessage="@Strings.TimeTooLargeError" />
-	</setting>	
+	</setting>			
 	<!-- pNumberBeatsGraph maximum is set in constants file as AX_NUMBERBEATSGRAPH  -->			
 	<setting propertyKey="@Properties.pNumberBeatsGraph" title="@Strings.lnumberBeatsGraph" prompt="@Strings.lnumberBeatsGraphP">
 		<settingConfig type="numeric" min="2" max="10" errorMessage="@Strings.lnumberBeatsGraphP" />
