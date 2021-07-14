@@ -127,6 +127,7 @@ class PoincareView extends Ui.View {
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
+    	Sys.println("Size of data ="+ $.mSampleProc.getNumberOfSamples()+" array size="+$.mIntervalSampleBuffer.size());
     }
 	
 	function onLayout(dc) {
