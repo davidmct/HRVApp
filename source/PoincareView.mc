@@ -323,7 +323,7 @@ class PoincareView extends Ui.View {
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
-
+		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
    		return true;
     }
     
