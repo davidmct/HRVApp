@@ -559,37 +559,67 @@ class HRVAnalysis extends App.AppBase {
 		Ui.requestUpdate();
 	}
 
+	function partWrite( _type, base, mLen) {
+		var mString ="";
+		var mSp;
+		var separator = ",";
+		var index = base;
+		
+		switch( _type) {
+		case 0: 
+			for (var j=0; j< mLen; j++) {
+				mSp = $.mIntervalSampleBuffer[index] & 0x0FFF;
+				index++;			
+				mString += mSp.toString()+separator;				
+			}		
+			break;
+		case 1:
+			for (var j=0; j< mLen; j++) {
+				mSp = ($.mIntervalSampleBuffer[index] >> 12) & 0xF;
+				index++;			
+				mString += mSp.toString()+separator;				
+			}		
+			break;
+		}
+
+		//for (var j=0; j< mBlockS; j++) {
+		//	mSp = mIntervalSampleBuffer[index];
+		//	index++;
+		//	mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+		//	mString += mSp.toString()+separator;				
+		//}
+		
+		Sys.println(mString);
+		//mString = "";	
+	}
 	
-	function writeStrings(_type, _mNumBlocks, _mRemainder) {
+	function writeStrings(_type, _mNumBlocks, _mRemainder, mBlockS) {
 	    // Block size for dump to debug of intervals
-  		var BLOCK_SIZE = 40;
+  		//var BLOCK_SIZE = 40;
 		var mString;
-		var base;
+		var base = 0;
 		var mSp;
 		var separator = ",";
 	
-		mString = ( _type == 0 ? "II:," : "Flags:,");
+		mString = ( _type == 0 ? "II:" : "Flags:");
+		Sys.println(mString);
 
 		for (var i=0; i < _mNumBlocks; i++) {
-			base = i*BLOCK_SIZE;
-			var j;
-			for (j=0; j< BLOCK_SIZE; j++) {
-				mSp = mIntervalSampleBuffer[base+j];
-				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;				
-			}
-			Sys.println(mString);
-			mString = "";		
+			partWrite( _type, base, mBlockS);
+			base += mBlockS;
 		}
-		mString = "";
+		
+		//mString = "";
 		// Write tail end of buffer
-		base = BLOCK_SIZE * _mNumBlocks;
-		for (var i=0; i < _mRemainder; i++) {	
-				mSp = mIntervalSampleBuffer[base+i];
-				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;						
-		}	
-		Sys.println(mString);
+		base = mBlockS * _mNumBlocks;
+		partWrite( _type, base, _mRemainder);
+		
+		//for (var i=0; i < _mRemainder; i++) {	
+		//		mSp = $.mIntervalSampleBuffer[base+i];
+		//		mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+		//		mString += mSp.toString()+separator;						
+		//}	
+		//Sys.println(mString);
 	
 	}
 	
@@ -609,12 +639,16 @@ class HRVAnalysis extends App.AppBase {
 		}
 		if (mNumEntries <= 0) { return;}
 		
+		// TEST CODE FORCE mNumEntries to buffer size
+		mNumEntries = $.mIntervalSampleBuffer.size() - 1;
+		// END FORCE TEST CODE
+		
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
-		var mString = "II:, ";
-		var i;
-		var base;
-		var mSp;		
+		//var mString = "II:, ";
+		//var i;
+		//var base;
+		//var mSp;		
 
 		Sys.println("Dumping intervals");
 		
@@ -624,9 +658,9 @@ class HRVAnalysis extends App.AppBase {
 		
 		// save memory by removing code lines
 		// type 0 = II, 1 = flags
-		writeStrings(0, mNumBlocks, mRemainder);
+		writeStrings(0, mNumBlocks, mRemainder, BLOCK_SIZE);
 		
-		writeStrings(1, mNumBlocks, mRemainder);
+		writeStrings(1, mNumBlocks, mRemainder, BLOCK_SIZE);
 	}
 	
 	// put all valid History entries into LOG

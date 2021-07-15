@@ -19,7 +19,7 @@ class TestView extends Ui.View {
 	hidden var mValueFont = Gfx.FONT_MEDIUM;
 	hidden var mTitleFont = Gfx.FONT_MEDIUM;
 	hidden var mStrapFont = Gfx.FONT_TINY;
-	hidden var mTimerFont = Gfx.FONT_NUMBER_MILD; // for L(HRV) as well
+	hidden var mTimerFont = mValueFont; //v1.0.3 Gfx.FONT_NUMBER_MILD; // for L(HRV) as well
 	hidden var mRectColour = Gfx.COLOR_RED;
 	hidden var mJust = Gfx.TEXT_JUSTIFY_CENTER|Gfx.TEXT_JUSTIFY_VCENTER;
 	
