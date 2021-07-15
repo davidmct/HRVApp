@@ -319,7 +319,7 @@ class PoincareView extends Ui.View {
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			// 2x2 rectangle too small on real screen
 			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
-			Sys.println("x="+x+", y="+y);
+			//Sys.println("x="+x+", y="+y);
 			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";
 			//debugPlot += "("+(x).toString()+","+(y).toString()+"), ";			
 			//mPrevY = y;  //previousSample = sampleN1;
@@ -331,7 +331,7 @@ class PoincareView extends Ui.View {
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
-		Sys.println("Poincare "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
+		//Sys.println("Poincare "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
 		//Sys.println("Size of data ="+ $.mSampleProc.getNumberOfSamples()+" array size="+$.mIntervalSampleBuffer.size());
    		return true;
     }
