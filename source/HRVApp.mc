@@ -23,6 +23,7 @@ using HRVStorageHandler as mStorage;
 
 // 1.0.3 Memory model change
 // Split devices with less than 128kB of app memory
+// Had to duplicate Poincare as watchdog timeout on more than 2400 samples
 
 // 1.0.2 in dev
 // Added dump of history and HRV to log file

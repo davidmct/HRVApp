@@ -1,3 +1,6 @@
+// LARGE MEMORY DEVICES
+// only difference is in dot draw
+
 using Toybox.Application as App;
 using Toybox.WatchUi as Ui;
 using Toybox.Graphics as Gfx;
@@ -127,7 +130,7 @@ class PoincareView extends Ui.View {
 	
     //! Restore the state of the app and prepare the view to be shown
     function onShow() {
-    	Sys.println("Size of data ="+ $.mSampleProc.getNumberOfSamples()+" array size="+$.mIntervalSampleBuffer.size());
+
     }
 	
 	function onLayout(dc) {
@@ -276,12 +279,14 @@ class PoincareView extends Ui.View {
 		
 		// iterate through available data drawing rectangles as less expensive than circles
 		// reduce number of array accesses
-		var previousSample = $.mIntervalSampleBuffer[0];
+		
+		//var previousSample = $.mIntervalSampleBuffer[0];
+		
 		// can't do same with x value as maybe different scale factors
 		
 		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
 		// assume scaleX and ScaleY are the SAME
-		var mPrevY = ((previousSample - floor) * scaleX).toNumber();
+		//var mPrevY = ((previousSample - floor) * scaleX).toNumber();
 		
 		// try integer algo
 		//var intScale = (scaleX * 64).toNumber();
@@ -293,7 +298,7 @@ class PoincareView extends Ui.View {
 		
 		//var debugPlot = "x, y: ";
 		var sampleN1;
-		var x;
+		var x  = (($.mIntervalSampleBuffer[0] - floor) * scaleX).toNumber();
 		var y;
 		//var mgg = gg;
 
@@ -303,7 +308,7 @@ class PoincareView extends Ui.View {
 			// should use getSample() in case of circular buffer implemented
 			sampleN1 = $.mIntervalSampleBuffer[i]; // y axis value to plot
 			// work out x and y from numbers and scales
-			x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
+			//x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
 			y = ((sampleN1 - floor) * scaleY).toNumber(); 
 			
 			// Ranging issue as rectangles drawn downwards and hence go over axis
@@ -314,16 +319,20 @@ class PoincareView extends Ui.View {
 			//var y = ((sampleN1 - floor) * intScale) >> 5;
 			// 2x2 rectangle too small on real screen
 			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
+			Sys.println("x="+x+", y="+y);
 			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";
 			//debugPlot += "("+(x).toString()+","+(y).toString()+"), ";			
-			mPrevY = y;  //previousSample = sampleN1;
+			//mPrevY = y;  //previousSample = sampleN1;
+			// shouldn't above just be x???? ie x= y; need to change 1st var mPrevY to setting x
+			x=y;
 		}
 		
 		//Sys.println(debugPlot);
 		
 		// performance check only on real devices
 		mProcessingTime = Sys.getTimer()-startTimeP;
-		Sys.println("Poincare executes in "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
+		Sys.println("Poincare "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
+		//Sys.println("Size of data ="+ $.mSampleProc.getNumberOfSamples()+" array size="+$.mIntervalSampleBuffer.size());
    		return true;
     }
     
