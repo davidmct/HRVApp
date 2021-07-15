@@ -607,7 +607,10 @@ class HRVAnalysis extends App.AppBase {
 		for (var i=0; i < _mNumBlocks; i++) {
 			partWrite( _type, base, mBlockS);
 			base += mBlockS;
+Sys.println("base="+base);
 		}
+		
+Sys.println("Do tail");
 		
 		//mString = "";
 		// Write tail end of buffer
@@ -640,6 +643,10 @@ class HRVAnalysis extends App.AppBase {
 		if (mNumEntries <= 0) { return;}
 		
 		// TEST CODE FORCE mNumEntries to buffer size
+		// fill backend of buffer
+		for( var ab=mNumEntries; ab < $.mIntervalSampleBuffer.size(); ab++) {
+			$.mIntervalSampleBuffer[ab] = 123;
+		}
 		mNumEntries = $.mIntervalSampleBuffer.size() - 1;
 		// END FORCE TEST CODE
 		
@@ -653,7 +660,7 @@ class HRVAnalysis extends App.AppBase {
 		Sys.println("Dumping intervals");
 		
 		//if (mDebugging == true) {
-		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
+		Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
 		//}
 		
 		// save memory by removing code lines
