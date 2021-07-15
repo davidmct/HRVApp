@@ -349,6 +349,12 @@ class PoincareView extends Ui.View {
     }
 }
 
+
+//
+// FUNCTIONALITY IS NOT UP TO DATE IN THIS PART OF CODE
+//
+
+
 (:notUseJson)
 class PoincareView extends Ui.View {
 

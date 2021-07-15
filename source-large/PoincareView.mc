@@ -49,7 +49,7 @@ using Toybox.System as Sys;
 class PoincareView extends Ui.View {
 
 	// maybe updating every second is a little much
-	const UPDATE_VIEW_SECONDS = 5;
+	//const UPDATE_VIEW_SECONDS = 5;
 	hidden var mShowCount;
 	hidden var startTimeP;
 	hidden var mProcessingTime;
@@ -124,7 +124,6 @@ class PoincareView extends Ui.View {
 	// >0.4.1 add alternate view 
 	function initialize(viewNum) { 
 		viewToShow = viewNum;
-		//gg = $.$.
 		View.initialize();
 	}
 	
@@ -179,7 +178,7 @@ class PoincareView extends Ui.View {
 			mLabelFont = Gfx.FONT_XTINY;
 		}
 		
-		if(dc has :setAntiAlias) {dc.setAntiAlias(true);}
+		if (dc has :setAntiAlias) {dc.setAntiAlias(true);}
 		
 		dc.setColor( Gfx.COLOR_TRANSPARENT, $.mBgColour);
 		dc.clear();
@@ -243,17 +242,6 @@ class PoincareView extends Ui.View {
 		var mid = floor + (ceil - floor) / 2;
 		// as display area is tight on Y axis ONLY draw mid value
 		
-				
-			// layout of screen
-		// 0, 1 TitleLox X, Y
-		// 2..15 [mLabelValueLocXS, mLabelValueLocYS] 7 values
-		// 16..18 mRectHorizYS[3]
-		// 19 mRectHorizWHS
-		// 20 mRectHorizXS
-		// 21..23 mRectVertXS[3]
-		// 24 mRectVertWHS
-		// 25 mRectVertYS
-		
 		dc.setColor( $.mLabelColour, Gfx.COLOR_TRANSPARENT);			
 		//dc.drawText( mLabelValueLocXS[1], mLabelValueLocYS[1], mLabelFont, format(" $1$ ",[ceil.format("%d")]), mJust);
 		dc.drawText( mScr[6], mScr[7], mLabelFont, format(" $1$ ",[mid.format("%d")]), mJust);	
@@ -279,52 +267,15 @@ class PoincareView extends Ui.View {
 		
 		// iterate through available data drawing rectangles as less expensive than circles
 		// reduce number of array accesses
-		
-		//var previousSample = $.mIntervalSampleBuffer[0];
-		
-		// can't do same with x value as maybe different scale factors
-		
 		// global access is up to 8x slower than local. Could potentially copy in as temp. but we only read each sample once!
 		// assume scaleX and ScaleY are the SAME
-		//var mPrevY = ((previousSample - floor) * scaleX).toNumber();
 		
-		// try integer algo
-		//var intScale = (scaleX * 64).toNumber();
-		
-		// DEBUG
-		//var a = (1000 * intScale) >> 6;
-		//var error = 1000*scaleX - a.toFloat();
-		//Sys.println("a, IntScale, error = "+a+","+intScale+","+error);
-		
-		//var debugPlot = "x, y: ";
-		var sampleN1;
-		var x  = (($.mIntervalSampleBuffer[0] - floor) * scaleX).toNumber();
-		var y;
-		//var mgg = gg;
-
-		// buffer starts from zero
-		for( var i=1; i < mNumberEntries; i++ ){
-			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
-			// should use getSample() in case of circular buffer implemented
-			sampleN1 = $.mIntervalSampleBuffer[i]; // y axis value to plot
-			// work out x and y from numbers and scales
-			//x = mPrevY; //((previousSample - floor) * scaleX).toNumber();
-			y = ((sampleN1 - floor) * scaleY).toNumber(); 
-			
-			// Ranging issue as rectangles drawn downwards and hence go over axis
-			//if ( y <= 0) {
-			//	Sys.println("whoops y below floor: SampleN1, y, floorY, floor "+sampleN1+", "+y+", "+floorY+", "+floor);
-			//}
-			// avoid floating point numbers
-			//var y = ((sampleN1 - floor) * intScale) >> 5;
-			// 2x2 rectangle too small on real screen
-			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
-			Sys.println("x="+x+", y="+y);
-			//debugPlot += "("+(leftX+x).toString()+","+(floorY-y).toString()+"), ";
-			//debugPlot += "("+(x).toString()+","+(y).toString()+"), ";			
-			//mPrevY = y;  //previousSample = sampleN1;
-			// shouldn't above just be x???? ie x= y; need to change 1st var mPrevY to setting x
-			x=y;
+		if ( mNumberEntries < 1000) {
+			PlotLoop1( dc, mNumberEntries, scaleX, scaleY, floor);
+		} else if ( mNumberEntries < 2000) {
+			PlotLoop2( dc, mNumberEntries, 4, scaleX, scaleY, floor);
+		} else {
+			PlotLoop2( dc, mNumberEntries, 8, scaleX, scaleY, floor);
 		}
 		
 		//Sys.println(debugPlot);
@@ -334,6 +285,57 @@ class PoincareView extends Ui.View {
 		Sys.println("Poincare "+mProcessingTime+"ms for "+$.mSampleProc.getNumberOfSamples()+" dots");	
 		//Sys.println("Size of data ="+ $.mSampleProc.getNumberOfSamples()+" array size="+$.mIntervalSampleBuffer.size());
    		return true;
+    }
+    
+    function PlotLoop1( dc, numSamp, sX, sY, mFl) {
+    	var sampleN1;
+		var x  = (($.mIntervalSampleBuffer[0] - mFl) * sX).toNumber();
+		var y;
+
+		// buffer starts from zero
+		for( var i=1; i < numSamp; i++ ){
+			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
+			// should use getSample() in case of circular buffer implemented
+			sampleN1 = $.mIntervalSampleBuffer[i]; // y axis value to plot
+			// work out x and y from numbers and scales
+			y = ((sampleN1 - mFl) * sY).toNumber(); 
+			
+			// Ranging issue as rectangles drawn downwards and hence go over axis
+			//if ( y <= 0) {
+			//	Sys.println("whoops y below floor: SampleN1, y, floorY, floor "+sampleN1+", "+y+", "+floorY+", "+floor);
+			//}
+			// avoid floating point numbers
+			//var y = ((sampleN1 - floor) * intScale) >> 5;
+			// 2x2 rectangle too small on real screen
+			dc.fillRectangle(leftX+x, floorY-y, 4, 4);		
+
+			x=y;
+		}   
+    }
+    
+    function PlotLoop2( dc, numSamp, mInc, sX, sY, mFl) {
+    
+    	Sys.println("PL2: "+mInc);
+    	
+		var x  = (($.mIntervalSampleBuffer[0] - mFl) * sX).toNumber();
+		var y;
+		var cnt = numSamp - mInc - 1; // avoid overflow of buffer
+
+		// buffer starts from zero
+		for( var i=0; i < cnt; i=i+mInc ){
+			// Plot y = RR(i+1), x = RR(i) (or i and i-1)
+			// work out x and y from numbers and scales			
+			x = (($.mIntervalSampleBuffer[i] - mFl) * sX).toNumber();
+			y = (($.mIntervalSampleBuffer[i+1] - mFl) * sY).toNumber(); 
+			
+			// 2x2 rectangle too small on real screen
+			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
+
+			// plot second pair 
+			x=y;
+			y = (($.mIntervalSampleBuffer[i+2] - mFl) * sY).toNumber(); 
+			dc.fillRectangle(leftX+x, floorY-y, 4, 4);
+		}   
     }
     
     function onHide() {
@@ -348,6 +350,11 @@ class PoincareView extends Ui.View {
     	mLabelFont = null;
     }
 }
+
+
+//
+// FUNCTIONALITY IS NOT UP TO DATE IN THIS PART OF CODE
+//
 
 (:notUseJson)
 class PoincareView extends Ui.View {
