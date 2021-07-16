@@ -14,6 +14,147 @@ module DumpData {
 		if ($.mDumpHist == true) {DumpHist(); DumpHRV();}
 	}
 
+	function writeStrings(_type, _mNumBlocks, _mRemainder) {
+	    // Block size for dump to debug of intervals
+  		var BLOCK_SIZE = 40;
+		var mString;
+		var base;
+		var mSp;
+		var separator = ",";
+	
+		mString = ( _type == 0 ? "II:," : "Flags:,");
+
+		for (var i=0; i < _mNumBlocks; i++) {
+			base = i*BLOCK_SIZE;
+			var j;
+			for (j=0; j< BLOCK_SIZE; j++) {
+				mSp = mIntervalSampleBuffer[base+j];
+				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+				mString += mSp.toString()+separator;				
+			}
+			Sys.println(mString);
+			mString = "";		
+		}
+		mString = "";
+		// Write tail end of buffer
+		base = BLOCK_SIZE * _mNumBlocks;
+		for (var i=0; i < _mRemainder; i++) {	
+				mSp = mIntervalSampleBuffer[base+i];
+				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
+				mString += mSp.toString()+separator;						
+		}	
+		Sys.println(mString);
+	
+	}
+	
+	function DumpIntervals() {
+		// to reduce write time group up the data
+		var BLOCK_SIZE = 40;
+		
+		if (mSampleProc == null) { return;}
+		
+		var mNumEntries = mSampleProc.getNumberOfSamples();
+
+		mStorage.PrintStats();
+				
+		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
+			Sys.println("Buffer overrun - no dump");
+			return;
+		}
+		if (mNumEntries <= 0) { return;}
+		
+		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
+		var mRemainder = mNumEntries % BLOCK_SIZE ;
+		var mString = "II:, ";
+		var i;
+		var base;
+		var mSp;		
+
+		Sys.println("Dumping intervals");
+		
+		//if (mDebugging == true) {
+		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
+		//}
+		
+		// save memory by removing code lines
+		// type 0 = II, 1 = flags
+		writeStrings(0, mNumBlocks, mRemainder);
+		
+		writeStrings(1, mNumBlocks, mRemainder);
+	}
+	
+	// put all valid History entries into LOG
+	function DumpHist() {
+	
+		var mMsg =  "";
+		// load results array from store
+		// returns true if successful and $.resultsIndex != 0 
+		mStorage.retrieveResults();
+		if ( $.results == null || $.resultsIndex ==0) {Sys.println("no Hist dump"); return;}
+
+		// Labels
+		mMsg = "History: time; Avg HR, Min_II, Max_II, Min Diff, Max Diff, RMSSD, LogHRV, SDNN, SDSD, NN50, pNN50, NN20, pNN20";
+		Sys.println(mMsg);		
+		
+		// dump all data -- could just do this but format unfriendly for table
+		//Sys.println( $.results);
+						
+		// Now iterate through the non-zero time stamps
+		var index = 0;
+		for (var i = 0; i < NUM_RESULT_ENTRIES; i++) {
+			index = i * DATA_SET_SIZE;
+			mMsg = "";
+			if ($.results[index] == 0) {
+				// no entry in array
+				continue;
+			}
+			for ( var j = 0; j < DATA_SET_SIZE; j++) {
+				mMsg = mMsg+ $.results[index+j]+", ";
+			} 
+			Sys.println(mMsg);		
+		}
+			
+		mMsg = null;
+		$.results = null;		
+		return;	
+			
+	}		
+	
+	function DumpHRV() {
+		var mHRV;
+		var mMsg =  "";
+		
+		if (Toybox.Application has :Storage) {
+			mHRV = Store.getValue("resultsArrayW");
+		} else {
+			return;
+		}
+		
+		if (mHRV == null) { return;}
+		Sys.println("Dump HRV log [date, value]:");
+		
+		for (var i=0; i < mHRV.size(); i += 2) {
+			if (mHRV[i] == 0) { continue;}
+			mMsg = mHRV[i]+ ", " + mHRV[i+1] + ", ";
+			Sys.println(mMsg);	
+		}
+		
+		mMsg = null;
+		mHRV = null;
+	
+	}
+}
+
+
+(:SmallExclude)
+// Version for large memory devices to dump strings
+module DumpData {
+
+	// stub for HRVApp when using large devices
+    function f_dumpData(){
+    	return;
+	}
+
 	function partWrite( _type, base, mLen) {
 		var mString ="";
 		var mSp;
@@ -186,11 +327,11 @@ module DumpData {
 		mHRV = null;
 	
 	}
+
 }
 
-
-(:SmallExclude)
-// Version for large memory devices to dump strings
+(:discard)
+// Save of old code
 module DumpData {
 
 	// stub for HRVApp when using large devices
