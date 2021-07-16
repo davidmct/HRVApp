@@ -607,10 +607,10 @@ class HRVAnalysis extends App.AppBase {
 		for (var i=0; i < _mNumBlocks; i++) {
 			partWrite( _type, base, mBlockS);
 			base += mBlockS;
-Sys.println("base="+base);
+//Sys.println("base="+base);
 		}
 		
-Sys.println("Do tail");
+//Sys.println("Do tail");
 		
 		//mString = "";
 		// Write tail end of buffer
