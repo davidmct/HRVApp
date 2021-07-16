@@ -87,6 +87,9 @@ class TestController {
 
 	// probably need to modify Sensor to notify statemachine when found strap etc
 	// sets mSensorReady = true or false
+	
+// VERSION FOR SMALL MEMORY DEVICES IE AS NOW
+(:LargeExclude)
 	function StateMachine(caller) {
 		// we have a set of callers who can influence state
 		// :enterPressed - obvious
