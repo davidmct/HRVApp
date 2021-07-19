@@ -23,11 +23,15 @@ using Toybox.System as Sys;
 
 using HRVStorageHandler as mStorage;
 using GlanceGen as GG;
+using DumpData as Dump;
 
 class TestController {
 
 	var timerTime;
 	hidden var testTimer;
+	hidden var dumpTimer;
+	hidden var mBlk; // block number
+	hidden var mDType; // 0 = intervals, 1 = flags
 
 	var mTestState;
 	var mTestMessage;
@@ -40,6 +44,7 @@ class TestController {
 	hidden var mFunc;
 	hidden var mFuncCurrent;
 	hidden var mHRmsgTxt;
+	hidden var mWaitDump = false;
 
 	function initialize() {
 		testTimer = new Timer.Timer();
@@ -54,6 +59,7 @@ class TestController {
 		mManualTestStopTime = 0;
 		mSensorReady = false;
 		mHRmsgTxt = "";
+		mWaitDump = false;
 	}
 
 
@@ -87,9 +93,6 @@ class TestController {
 
 	// probably need to modify Sensor to notify statemachine when found strap etc
 	// sets mSensorReady = true or false
-	
-// VERSION FOR SMALL MEMORY DEVICES IE AS NOW
-(:LargeExclude)
 	function StateMachine(caller) {
 		// we have a set of callers who can influence state
 		// :enterPressed - obvious
@@ -263,7 +266,8 @@ class TestController {
 			break;
 			case TS_PAUSE:
 				// allow one update cycle to show close and and abort messages
-				mTestState = TS_PAUSE2;
+				// only move state if on large devices string dump finished
+				if (!mWaitDump) {mTestState = TS_PAUSE2;}
 			break;
 			case TS_PAUSE2:
 				// allow one update cycle to show close and and abort messages
@@ -380,6 +384,7 @@ class TestController {
     	testTimer.stop();
     	// reseting utcStart here overwrites when we about test but have enough samples
 		//utcStart = 0;
+		mWaitDump = false;
     }
 
     function discardTest() {
@@ -476,11 +481,71 @@ class TestController {
 		$.mGData = true;
 		_stats = null;
 		
+		//v1.0.3 on large devices we trigger saving
+		mWaitDump = false; // don't wait for dump to complete on small devices
+		fDumpSetup();
+		
 		//0.6.3 switch to new view
 		Ui.switchToView($.getView(GLANCE_VIEW ), new HRVBehaviourDelegate(), Ui.SLIDE_IMMEDIATE);
 
     } // end save test
 
+
+(:LargeExclude) // small devices
+	function fDumpSetup() {return;}
+
+(:SmallExclude) // large devices
+	function fDumpSetup() {
+	
+		// no samples!
+		if ($.mSampleProc == null) { mWaitDump = false; return;}
+			
+		mStorage.PrintStats();
+
+		Sys.println("Dumping intervals");
+		
+		// if no data then exit
+		if (!Dump.sizeBlocks()) {return;}
+	
+		// setup timer for test dump
+		dumpTimer = new Timer.Timer();
+		dumpTimer.start(method(:DumpTiEnded),100,true); // repeat
+		// setup other variables
+		mWaitDump = true; // hold state machine until strings output
+		mBlk = 0; // walker for array
+		mDType = 0; // intervals then flags
+    }
+
+(:SmallExclude) // large devices
+	// Dump timer has triggered so we need to chek progress and write next block if needed
+	// if reached end turn off timer and allow s/m to progress
+	// to separate intervals and flags going to have to do in two halves
+	// first write will be intervals, second block of flags
+	function DumpTiEnded() {
+		// see which type we are writing - end only when done second set of data
+		var mDone;
+		
+		// failsafe if spurious tick
+		if (mWaitDump == false) {return;}
+		
+		if (mDType == 0) {
+			// returns true if completed array dump
+			mDone = Dump.writeStrings( mDType, mBlk);
+			mBlk++;
+			if (mDone) { mBlk = 0; mDType = 1; }
+		} else {
+			mDone = Dump.writeStrings( mDType, mBlk);
+			mBlk++;
+			if (mDone) { 
+				// end state code
+				dumpTimer.stop();
+				mWaitDump = false;
+				Dump.DumpHist(); 
+				Dump.DumpHRV();
+			}
+		}
+	}
+    
 	// called by startTest() to initial test timers etc
     function start() {
 		Sys.println("start() ENTERED");
