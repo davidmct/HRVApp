@@ -1,4 +1,4 @@
 <properties>
-	<property id="timerTimeSet" type="number">360</property>
-	<property id="ManualTimeSet" type="number">360</property>
+	<property id="timerTimeSet" type="number">1200</property>
+	<property id="ManualTimeSet" type="number">1200</property>
 </properties>

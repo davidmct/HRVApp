@@ -188,7 +188,7 @@ module HRVStorageHandler {
 		} catch (ex) {
 			// storage error - most likely not written
 			Sys.println("ERROR loadIntervalsFromStore");
-			return false;
+			//v1.0.3 return false;
 		}
 		finally {
 			// any null entries means we haven't written anything yet

@@ -6,6 +6,7 @@ using Toybox.Timer;
 using Toybox.System as Sys;
 using Toybox.Sensor;
 //using AuthCode as Auth;
+using DumpData as Dump;
 
 using HRVStorageHandler as mStorage;
 
@@ -16,10 +17,14 @@ using HRVStorageHandler as mStorage;
 //13. When using optical should call it PRV not HRV
 //17. Check download and setting online properties works
 
-// v1.0.3 NOT DONE YET
+// v1.0.4 NOT DONE YET
 // Added ability to select which zone max to use to scale plots 1..5
 // Possible user range selection on poincare full and II chart. max bpm and min bpm
 // maybe avriable buffer length depending on memory - and hence max time???
+
+// 1.0.3 Memory model change
+// Split devices with less than 128kB of app memory
+// Had to duplicate Poincare as watchdog timeout on more than 2400 samples
 
 // 1.0.2 in dev
 // Added dump of history and HRV to log file
@@ -166,8 +171,8 @@ using HRVStorageHandler as mStorage;
 
 var mDebugging = false;
 //var mDebuggingANT = false;
-var mDumpIntervals = true;
-var mDumpHist = true; //also HRV list
+//var mDumpIntervals = true;
+//var mDumpHist = true; //also HRV list
 
 // access App variables and classes
 //var _mApp;
@@ -357,7 +362,7 @@ class HRVAnalysis extends App.AppBase {
     //! onStart() is called on application start up
     function onStart(state) {
         Sys.println("HRVApp INIT for version: "+Ui.loadResource(Rez.Strings.AppVersion));
-        //$._m$.pp.getApp();
+        //$._mApp= App.getApp();
 
 		Sys.println("Small memory="+SMALL);
         
@@ -500,7 +505,7 @@ class HRVAnalysis extends App.AppBase {
     	
     	// update views
         Ui.requestUpdate();
-    }
+    }    
     
     //! onStop() is called when your application is exiting
     function onStop(state) {		
@@ -511,8 +516,7 @@ class HRVAnalysis extends App.AppBase {
 		_uiTimer.stop();
 		
 		// Dump all interval data to txt file on device
-		if (mDumpIntervals == true) {DumpIntervals();}
-		if (mDumpHist == true) {DumpHist(); DumpHRV();}
+		Dump.f_dumpData();
 		
 		//0.6.3 No point saving interval strings to storage as not separate from app. Already in Interval Array 
 		//mStorage.saveIntervalStrings();
@@ -553,137 +557,6 @@ class HRVAnalysis extends App.AppBase {
 		mTestControl.StateMachine(:RestartControl);
 		
 		Ui.requestUpdate();
-	}
-
-	
-	function writeStrings(_type, _mNumBlocks, _mRemainder) {
-	    // Block size for dump to debug of intervals
-  		var BLOCK_SIZE = 40;
-		var mString;
-		var base;
-		var mSp;
-		var separator = ",";
-	
-		mString = ( _type == 0 ? "II:," : "Flags:,");
-
-		for (var i=0; i < _mNumBlocks; i++) {
-			base = i*BLOCK_SIZE;
-			var j;
-			for (j=0; j< BLOCK_SIZE; j++) {
-				mSp = mIntervalSampleBuffer[base+j];
-				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;				
-			}
-			Sys.println(mString);
-			mString = "";		
-		}
-		mString = "";
-		// Write tail end of buffer
-		base = BLOCK_SIZE * _mNumBlocks;
-		for (var i=0; i < _mRemainder; i++) {	
-				mSp = mIntervalSampleBuffer[base+i];
-				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;						
-		}	
-		Sys.println(mString);
-	
-	}
-	
-	function DumpIntervals() {
-		// to reduce write time group up the data
-		var BLOCK_SIZE = 40;
-		
-		if (mSampleProc == null) { return;}
-		
-		var mNumEntries = mSampleProc.getNumberOfSamples();
-
-		mStorage.PrintStats();
-				
-		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
-			Sys.println("Buffer overrun - no dump");
-			return;
-		}
-		if (mNumEntries <= 0) { return;}
-		
-		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
-		var mRemainder = mNumEntries % BLOCK_SIZE ;
-		var mString = "II:, ";
-		var i;
-		var base;
-		var mSp;		
-
-		Sys.println("Dumping intervals");
-		
-		//if (mDebugging == true) {
-		//	Sys.println("DumpIntervals: mNumEntries, blocks, remainder: " + mNumEntries+","+ mNumBlocks+","+ mRemainder);				
-		//}
-		
-		// save memory by removing code lines
-		// type 0 = II, 1 = flags
-		writeStrings(0, mNumBlocks, mRemainder);
-		
-		writeStrings(1, mNumBlocks, mRemainder);
-	}
-	
-	// put all valid History entries into LOG
-	function DumpHist() {
-	
-		var mMsg =  "";
-		// load results array from store
-		// returns true if successful and $.resultsIndex != 0 
-		mStorage.retrieveResults();
-		if ( $.results == null || $.resultsIndex ==0) {Sys.println("no Hist dump"); return;}
-
-		// Labels
-		mMsg = "History: time; Avg HR, Min_II, Max_II, Min Diff, Max Diff, RMSSD, LogHRV, SDNN, SDSD, NN50, pNN50, NN20, pNN20";
-		Sys.println(mMsg);		
-		
-		// dump all data -- could just do this but format unfriendly for table
-		//Sys.println( $.results);
-						
-		// Now iterate through the non-zero time stamps
-		var index = 0;
-		for (var i = 0; i < NUM_RESULT_ENTRIES; i++) {
-			index = i * DATA_SET_SIZE;
-			mMsg = "";
-			if ($.results[index] == 0) {
-				// no entry in array
-				continue;
-			}
-			for ( var j = 0; j < DATA_SET_SIZE; j++) {
-				mMsg = mMsg+ $.results[index+j]+", ";
-			} 
-			Sys.println(mMsg);		
-		}
-			
-		mMsg = null;
-		$.results = null;		
-		return;	
-			
-	}		
-	
-	function DumpHRV() {
-		var mHRV;
-		var mMsg =  "";
-		
-		if (Toybox.Application has :Storage) {
-			mHRV = Store.getValue("resultsArrayW");
-		} else {
-			return;
-		}
-		
-		if (mHRV == null) { return;}
-		Sys.println("Dump HRV log [date, value]:");
-		
-		for (var i=0; i < mHRV.size(); i += 2) {
-			if (mHRV[i] == 0) { continue;}
-			mMsg = mHRV[i]+ ", " + mHRV[i+1] + ", ";
-			Sys.println(mMsg);	
-		}
-		
-		mMsg = null;
-		mHRV = null;
-	
 	}
 	
 }
