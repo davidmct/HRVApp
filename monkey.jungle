@@ -34,6 +34,10 @@ fenix6.sourcePath = $(srcBase); source-small
 fenix6.resourcePath = $(resBase); resources-small; resources-round-260x260
 fenix6.excludeAnnotations = $(common_excludes); SmallExclude
 
+fenix6s.sourcePath = $(srcBase); source-small
+fenix6s.resourcePath = $(resBase); resources-small; resources-round-240x240
+fenix6s.excludeAnnotations = $(common_excludes); SmallExclude
+
 fr245.sourcePath = $(srcBase); source-small
 fr245.resourcePath = $(resBase); resources-small; resources-round-240x240
 fr245.excludeAnnotations = $(common_excludes); SmallExclude

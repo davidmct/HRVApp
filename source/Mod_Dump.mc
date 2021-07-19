@@ -169,11 +169,12 @@ module DumpData {
 		
 // TEST CODE FORCE mNumEntries to buffer size
 		// fill backend of buffer
-		Sys.println("******************TEST VERSION OF DUMP******************");
-		for( var ab=mNumEntries; ab < $.mIntervalSampleBuffer.size(); ab++) {
-			$.mIntervalSampleBuffer[ab] = 123;
-		}
-		mNumEntries = $.mIntervalSampleBuffer.size() - 1;
+		//var mTESTLEN = mBlkSize+1;
+		//Sys.println("******************TEST VERSION OF DUMP******************");
+		//for( var ab=mNumEntries; ab < mTESTLEN; ab++) {
+		//	$.mIntervalSampleBuffer[ab] = 123;
+		//}
+		//mNumEntries = mTESTLEN;
 // END FORCE TEST CODE
 				
 		mNumBlocks = mNumEntries / mBlkSize ;
@@ -190,6 +191,8 @@ module DumpData {
 
 		var index = _mBlk * mBlkSize; 
 		var mString ="";
+														
+		Sys.println("wrStrings: type "+_type+", _mBlk="+_mBlk+", indx="+index+", mNumBlocks="+mNumBlocks+", mRem="+mRemainder);
 								
 		if (_mBlk == 0) {
 			// write string prefix
@@ -198,7 +201,7 @@ module DumpData {
 		}	
 	
 		// are we doing a full block or remainder if it exists
-		if (_mBlk <= mNumBlocks) {
+		if (_mBlk < mNumBlocks) {
 			partWrite( _type, index, mBlkSize);
 		} else {
 			partWrite( _type, index, mRemainder);
