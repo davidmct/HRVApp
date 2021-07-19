@@ -10,38 +10,37 @@ module DumpData {
 
     function f_dumpData(){
 		// Dump all interval data to txt file on device
-		if ($.mDumpIntervals == true) {DumpIntervals();}
-		if ($.mDumpHist == true) {DumpHist(); DumpHRV();}
+		DumpIntervals();
+		DumpHist(); 
+		DumpHRV();
 	}
 
-	function writeStrings(_type, _mNumBlocks, _mRemainder) {
-	    // Block size for dump to debug of intervals
-  		var BLOCK_SIZE = 40;
+	function writeStrings(_type, _mNumBlocks, _mRemainder, _size) {
 		var mString;
-		var base;
+		var index = 0;
 		var mSp;
 		var separator = ",";
 	
 		mString = ( _type == 0 ? "II:," : "Flags:,");
 
 		for (var i=0; i < _mNumBlocks; i++) {
-			base = i*BLOCK_SIZE;
-			var j;
-			for (j=0; j< BLOCK_SIZE; j++) {
-				mSp = mIntervalSampleBuffer[base+j];
+			for (var j=0; j< _size; j++) {
+				mSp = mIntervalSampleBuffer[index];
 				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;				
+				mString += mSp.toString()+separator;	
+				index++;			
 			}
 			Sys.println(mString);
 			mString = "";		
 		}
 		mString = "";
 		// Write tail end of buffer
-		base = BLOCK_SIZE * _mNumBlocks;
+		index = _size * _mNumBlocks;
 		for (var i=0; i < _mRemainder; i++) {	
-				mSp = mIntervalSampleBuffer[base+i];
+				mSp = mIntervalSampleBuffer[index];
 				mSp = ( _type == 0) ? mSp & 0x0FFF : (mSp >> 12) & 0xF;				
-				mString += mSp.toString()+separator;						
+				mString += mSp.toString()+separator;
+				index++;						
 		}	
 		Sys.println(mString);
 	
@@ -58,17 +57,13 @@ module DumpData {
 		mStorage.PrintStats();
 				
 		if (mNumEntries > $.mIntervalSampleBuffer.size() - 1) {
-			Sys.println("Buffer overrun - no dump");
-			return;
+			// v1.0.3 used to stop print - now dump full buffer instead
+			mNumEntries = $.mIntervalSampleBuffer.size() - 1;
 		}
 		if (mNumEntries <= 0) { return;}
 		
 		var mNumBlocks = mNumEntries / BLOCK_SIZE ;
 		var mRemainder = mNumEntries % BLOCK_SIZE ;
-		var mString = "II:, ";
-		var i;
-		var base;
-		var mSp;		
 
 		Sys.println("Dumping intervals");
 		
@@ -78,9 +73,8 @@ module DumpData {
 		
 		// save memory by removing code lines
 		// type 0 = II, 1 = flags
-		writeStrings(0, mNumBlocks, mRemainder);
-		
-		writeStrings(1, mNumBlocks, mRemainder);
+		writeStrings(0, mNumBlocks, mRemainder, BLOCK_SIZE);		
+		writeStrings(1, mNumBlocks, mRemainder, BLOCK_SIZE);
 	}
 	
 	// put all valid History entries into LOG

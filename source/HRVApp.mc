@@ -171,8 +171,8 @@ using HRVStorageHandler as mStorage;
 
 var mDebugging = false;
 //var mDebuggingANT = false;
-var mDumpIntervals = true;
-var mDumpHist = true; //also HRV list
+//var mDumpIntervals = true;
+//var mDumpHist = true; //also HRV list
 
 // access App variables and classes
 //var _mApp;
